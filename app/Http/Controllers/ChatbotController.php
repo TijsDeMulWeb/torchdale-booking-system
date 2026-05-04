@@ -57,6 +57,6 @@ class ChatbotController extends Controller
         $response = $result->choices[0]->message->content;
 
 
-        return response()->json(['success' => true, 'message' => $response]);
+        return response()->json(['success' => true, 'message' => $response]);        
     }
 }

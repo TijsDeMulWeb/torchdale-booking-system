@@ -30,13 +30,13 @@
                             <li>
                                 <ul role="list" class="-mx-2 space-y-1">
                                     <li>
-                                        <a href="{{ route('dashboard.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-white {{ Route::currentRouteName() === 'dashboard.show'
-    ? 'bg-white/5 text-white'
-    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                                }}">
+                                        <a href="{{ route('dashboard.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'dashboard.show'
+    ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
+    : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+}}">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" data-slot="icon" aria-hidden="true"
-                                                class="size-6 shrink-0 text-indigo-600 dark:text-white">
+                                                class="size-6 shrink-0 dark:text-white">
                                                 <path
                                                     d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
                                                     stroke-linecap="round" stroke-linejoin="round" />
@@ -45,10 +45,10 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('chatbot.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-white {{ Route::currentRouteName() === 'chatbot.show'
-    ? 'bg-white/5 text-white'
-    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                                }}">
+                                        <a href="{{ route('chatbot.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'chatbot.show'
+    ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
+    : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+}}">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" data-slot="icon" aria-hidden="true"
                                                 class="size-6 shrink-0">

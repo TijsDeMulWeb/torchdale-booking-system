@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Chatbot;
 use App\Models\Country;
 use App\Models\Escaperoom;
 use App\Models\EscaperoomAddress;
@@ -78,6 +79,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'tijs.de.mul@gmail.com',
             'password' => 'testtest',
             'escaperoom_id' => 1,
+        ]);
+
+        Chatbot::create([
+            'escaperoom_id' => 1,
+            'name' => 'Torchdale Support',
+            'prompt' => 'lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate.',
         ]);
     }
 }

@@ -20,4 +20,9 @@ class Escaperoom extends Model
     {
         return $this->hasOne(EscaperoomSetting::class);
     }
+
+    public function chatbots()
+    {
+        return $this->hasMany(Chatbot::class);
+    }
 }

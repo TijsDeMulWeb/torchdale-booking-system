@@ -22,6 +22,7 @@ class StoreLoginController extends Controller
                 'last_name' => Auth::user()->last_name,
             ]);
 
+            return redirect()->route('dashboard.show');
         }
 
         return back()->withErrors([

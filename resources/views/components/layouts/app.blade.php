@@ -13,7 +13,9 @@
 
 <body class="h-full">
     <x-navigation.sidebar />
-    {{ $slot }}
+    <x-navigation.top-nav>
+        {{ $slot }}
+    </x-navigation.top-nav>
 </body>
 
 </html>

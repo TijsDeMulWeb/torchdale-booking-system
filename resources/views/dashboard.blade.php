@@ -1,1 +1,3 @@
-<x-layouts.app></x-layouts.app>
+<x-layouts.app>
+    hello HIER KOMT DAN OOIT IETS LATER DE CALENDAR ZOALS ONLINE AFSPRAKEN. KHEB EERST CHATBOT PAGE GEMAAKT VOOR NU REST MAAK IK LATER NOG 
+</x-layouts.app>

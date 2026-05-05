@@ -17,7 +17,6 @@
                     </button>
                 </div>
 
-                <!-- Sidebar component, swap this element with another sidebar if you like -->
                 <div
                     class="relative flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4 dark:bg-gray-900 dark:ring dark:ring-white/10 dark:before:pointer-events-none dark:before:absolute dark:before:inset-0 dark:before:bg-black/10">
                     <div class="relative flex h-16 shrink-0 items-center">
@@ -86,7 +85,6 @@
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
                         <li>
-                            <!-- Current: "bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white", Default: "text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5" -->
                             <a href="{{ route('dashboard.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ Route::currentRouteName() === 'dashboard.show'
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'

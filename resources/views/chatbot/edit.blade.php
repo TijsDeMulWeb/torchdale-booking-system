@@ -4,7 +4,7 @@
         ['name' => 'Edit', 'url' => route('chatbot.edit')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form  method="POST">
+        <form action="{{ route('chatbot.update') }}" method="POST">
             @csrf
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
@@ -19,8 +19,8 @@
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="name" type="text" name="name" value="{{ old('name', $chatbot->name) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-2xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                <x-form.error name="name" />
                             </div>
-                            <x-form.error name="name" />
                         </div>
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
@@ -29,7 +29,9 @@
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <textarea id="prompt" name="prompt" rows="20"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-2xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500">{{ old('prompt', $chatbot->prompt) }}</textarea>
-                                <p class="mt-3 text-sm/6 text-gray-600 dark:text-gray-400">Probeer een zo duidelijk mogelijk prompt te schrijven. Liefst in het Engels</p>
+                                <p class="mt-3 text-sm/6 text-gray-600 dark:text-gray-400">Probeer een zo duidelijk
+                                    mogelijk prompt te schrijven. Liefst in het Engels</p>
+                                <x-form.error name="prompt" />
                             </div>
                         </div>
 
@@ -54,7 +56,8 @@
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                <a href="{{ route('chatbot.show') }}" class="text-sm/6 font-semibold text-gray-900 dark:text-white">Annuleren</a>
+                <a href="{{ route('chatbot.show') }}"
+                    class="text-sm/6 font-semibold text-gray-900 dark:text-white">Annuleren</a>
                 <button type="submit"
                     class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Opslaan</button>
             </div>

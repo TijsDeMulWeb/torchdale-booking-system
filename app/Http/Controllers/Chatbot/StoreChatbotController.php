@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Controllers\Chatbot;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreChatbotRequest;
+use App\Models\Chatbot;
+
+class StoreChatbotController extends Controller
+{
+    /**
+     * Handle the incoming request.
+     */
+    public function __invoke(StoreChatbotRequest $request)
+    {
+        Chatbot::where('escaperoom_id', auth()->user()->escaperoom_id)->update($request->validated());
+        return redirect()->route('chatbot.show')->with('success', 'Chatbot updated successfully.');
+    }
+}

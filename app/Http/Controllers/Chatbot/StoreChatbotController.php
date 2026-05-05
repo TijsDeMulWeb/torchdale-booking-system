@@ -14,6 +14,6 @@ class StoreChatbotController extends Controller
     public function __invoke(StoreChatbotRequest $request)
     {
         Chatbot::where('escaperoom_id', auth()->user()->escaperoom_id)->update($request->validated());
-        return redirect()->route('chatbot.show')->with('success', 'Chatbot updated successfully.');
+        return redirect()->route('chatbot.show')->with('message', 'Chatbot updated successfully.');
     }
 }

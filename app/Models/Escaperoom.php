@@ -10,4 +10,14 @@ class Escaperoom extends Model
     {
         return $this->hasMany(EscaperoomAddress::class);
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function escaperoomSetting()
+    {
+        return $this->hasOne(EscaperoomSetting::class);
+    }
 }

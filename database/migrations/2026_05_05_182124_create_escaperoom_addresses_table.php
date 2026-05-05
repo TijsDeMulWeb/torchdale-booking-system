@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('escaperoom_id')->constrained()->onDelete('cascade');
             $table->string('street', 255);
-            $table->string('street_number', 10);
+            $table->string('street_number', 10)->nullable();
             $table->string('postal_code', 10);
             $table->string('city', 100);
             $table->foreignId('country_id')->constrained()->onDelete('cascade');
-            $table->tinyInteger('is_primary')->default(0);
+            $table->boolean('is_primary')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

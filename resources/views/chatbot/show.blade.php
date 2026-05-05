@@ -9,7 +9,7 @@
                     <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">Chatbot Informatie</h3>
                     <p class="mt-1 max-w-2xl text-sm/6 text-gray-500 dark:text-gray-400">Informatie over de chatbot.</p>
                 </div>
-                <a href="{{ route('chatbot.show') }}"
+                <a href="{{ route('chatbot.edit') }}"
                     class="mt-4 sm:mt-0 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500">
                     Bewerken
                 </a>

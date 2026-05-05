@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
 use App\Http\Controllers\Login\ShowLoginController;
@@ -14,4 +15,5 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', ShowDashboardController::class)->name('dashboard.show');
     Route::get('/chatbot', ShowChatbotController::class)->name('chatbot.show');
+    Route::get('/chatbot/edit', EditChatbotController::class)->name('chatbot.edit');
 });

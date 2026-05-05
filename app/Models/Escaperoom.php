@@ -23,6 +23,6 @@ class Escaperoom extends Model
 
     public function chatbots()
     {
-        return $this->hasMany(Chatbot::class);
+        return $this->hasOne(Chatbot::class);
     }
 }

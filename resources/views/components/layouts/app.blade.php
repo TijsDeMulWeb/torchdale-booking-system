@@ -11,7 +11,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="h-full">
+<body class="h-full bg-white dark:bg-gray-900">
     <x-navigation.sidebar />
     <x-navigation.top-nav>
         {{ $slot }}

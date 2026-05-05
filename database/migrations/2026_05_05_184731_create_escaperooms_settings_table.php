@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('escaperooms_settings', function (Blueprint $table) {
+        Schema::create('escaperoom_settings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('escaperoom_id')->constrained()->onDelete('cascade');
             $table->text('mollie_api_key')->nullable();
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('escaperooms_settings');
+        Schema::dropIfExists('escaperoom_settings');
     }
 };

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Country;
 use App\Models\Escaperoom;
 use App\Models\EscaperoomAddress;
+use App\Models\EscaperoomSetting;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -19,12 +20,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
         Country::create([
             'name' => 'België',
         ]);
@@ -69,6 +64,20 @@ class DatabaseSeeder extends Seeder
             'postal_code' => '2980',
             'city' => 'Zoersel',
             'country_id' => 1,
+        ]);
+
+        EscaperoomSetting::create([
+            'escaperoom_id' => 1,
+            'mollie_api_key' => null,
+            'openai_api_key' => env('OPENAI_API_KEY'),
+        ]);
+
+        User::create([
+            'first_name' => 'Tijs',
+            'last_name' => 'De Mul',
+            'email' => 'tijs.de.mul@gmail.com',
+            'password' => 'testtest',
+            'escaperoom_id' => 1,
         ]);
     }
 }

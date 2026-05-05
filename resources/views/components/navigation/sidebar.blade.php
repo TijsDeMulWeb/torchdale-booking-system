@@ -100,6 +100,21 @@
                                 Dashboard
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('chatbot.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
+                                {{ Route::currentRouteName() === 'chatbot.show'
+    ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
+    : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+                                }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    data-slot="icon" aria-hidden="true" class="size-6 shrink-0">
+                                    <path
+                                        d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Chatbot
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="mt-auto">

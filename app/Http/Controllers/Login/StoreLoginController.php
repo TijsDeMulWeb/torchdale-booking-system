@@ -20,6 +20,7 @@ class StoreLoginController extends Controller
             session([
                 'first_name' => Auth::user()->first_name,
                 'last_name' => Auth::user()->last_name,
+                'profile_picture' => Auth::user()->profile_picture,
             ]);
 
             return redirect()->route('dashboard.show');

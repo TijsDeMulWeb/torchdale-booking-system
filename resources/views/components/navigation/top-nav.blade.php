@@ -48,7 +48,8 @@
                             class="size-8 rounded-full bg-gray-50 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10" />
                         <span class="hidden lg:flex lg:items-center">
                             <span aria-hidden="true"
-                                class="ml-4 text-sm/6 font-semibold text-gray-900 dark:text-white">{{ session('first_name') }} {{ session('last_name') }}</span>
+                                class="ml-4 text-sm/6 font-semibold text-gray-900 dark:text-white">{{ session('first_name') }}
+                                {{ session('last_name') }}</span>
                             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"
                                 class="ml-2 size-5 text-gray-400 dark:text-gray-500">
                                 <path
@@ -60,7 +61,8 @@
                     <el-menu anchor="bottom end" popover
                         class="w-32 origin-top-right rounded-md bg-white py-2 shadow-lg outline-1 outline-gray-900/5 transition transition-discrete [--anchor-gap:--spacing(2.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
                         <a href="#"
-                            class="block px-3 py-1 text-sm/6 text-gray-900 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:focus:bg-white/5">Jouw profiel</a>
+                            class="block px-3 py-1 text-sm/6 text-gray-900 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:focus:bg-white/5">Jouw
+                            profiel</a>
                         <a href="#"
                             class="block px-3 py-1 text-sm/6 text-gray-900 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:focus:bg-white/5">Uitloggen</a>
                     </el-menu>
@@ -69,9 +71,7 @@
         </div>
     </div>
 
-    <main class="py-10">
-        <div class="px-4 sm:px-6 lg:px-8">
-            {{ $slot }}
-        </div>
+    <main>
+        {{ $slot }}
     </main>
 </div>

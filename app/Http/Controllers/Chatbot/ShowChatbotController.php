@@ -12,6 +12,7 @@ class ShowChatbotController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('chatbot.show');
+        return view('chatbot.show', [
+        ]);
     }
 }

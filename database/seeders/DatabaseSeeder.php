@@ -52,7 +52,7 @@ class DatabaseSeeder extends Seeder
         EscaperoomAddress::create([
             'escaperoom_id' => 1,
             'street' => 'Herentalsebaan',
-            'street_number' => '47',
+            'house_number' => '47',
             'postal_code' => '2980',
             'city' => 'Zoersel',
             'country_id' => 1,

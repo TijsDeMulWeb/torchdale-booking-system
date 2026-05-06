@@ -29,6 +29,6 @@ class StoreEscaperoomAddressController extends Controller
 
         EscaperoomAddress::create([...$validated, 'escaperoom_id' => auth()->user()->escaperoom_id]);
 
-        return redirect()->route('escaperoom.show')->with('message', 'Address added successfully.');
+        return redirect()->route('escaperoom.show')->with('message', 'Address succesvol toegevoegd.');
     }
 }

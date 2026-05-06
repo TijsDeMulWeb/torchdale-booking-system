@@ -24,6 +24,6 @@ class UpdateEscaperoomAddressController extends Controller
 
         $address->update($request->validated());
 
-        return redirect()->route('escaperoom.show')->with('message', 'Address updated successfully.');
+        return redirect()->route('escaperoom.show')->with('message', 'Address succesvol bijgewerkt.');
     }
 }

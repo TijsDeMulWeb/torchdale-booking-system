@@ -10,6 +10,8 @@ use App\Models\EscaperoomSetting;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -88,5 +90,13 @@ class DatabaseSeeder extends Seeder
             'name' => 'Torchdale Support',
             'prompt' => 'lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate.',
         ]);
+
+        Permission::create(['name' => 'view chatbot']);
+        Permission::create(['name' => 'edit chatbot']);
+
+        $admin = Role::create(['name' => 'admin']);
+        $admin->givePermissionTo(Permission::all());
+
+        User::find(1)->assignRole('admin');
     }
 }

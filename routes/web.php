@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
-use App\Http\Controllers\Chatbot\StoreChatbotController;
+use App\Http\Controllers\Chatbot\UpdateChatbotController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
 use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
-use App\Http\Controllers\Escaperoom\StoreEscaperoomController;
+use App\Http\Controllers\Escaperoom\UpdateEscaperoomController;
 use App\Http\Controllers\EscaperoomAddress\CreateEscaperoomAddressController;
 use App\Http\Controllers\EscaperoomAddress\DeleteEscaperoomAddressController;
 use App\Http\Controllers\EscaperoomAddress\EditEscaperoomAddressController;
@@ -29,12 +29,12 @@ Route::middleware('auth')->group(function () {
     // Chatbot routes
     Route::get('/chatbot', ShowChatbotController::class)->name('chatbot.show');
     Route::get('/chatbot/edit', EditChatbotController::class)->name('chatbot.edit');
-    Route::put('/chatbot/edit', StoreChatbotController::class)->name('chatbot.update');
+    Route::put('/chatbot/edit', UpdateChatbotController::class)->name('chatbot.update');
 
     // Escaperoom routes
     Route::get('/escaperoom', ShowEscaperoomController::class)->name('escaperoom.show');
     Route::get('/escaperoom/edit', EditEscaperoomController::class)->name('escaperoom.edit');
-    Route::put('/escaperoom/edit', StoreEscaperoomController::class)->name('escaperoom.update');
+    Route::put('/escaperoom/edit', UpdateEscaperoomController::class)->name('escaperoom.update');
 
     // EscaperoomAddress routes
     Route::get('/escaperoom-address/create', CreateEscaperoomAddressController::class)->name('escaperoomAddress.create');

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreChatbotRequest;
 use App\Models\Chatbot;
 
-class StoreChatbotController extends Controller
+class UpdateChatbotController extends Controller
 {
     /**
      * Handle the incoming request.

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Escaperoom;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEscaperoomRequest;
 
-class StoreEscaperoomController extends Controller
+class UpdateEscaperoomController extends Controller
 {
     /**
      * Handle the incoming request.

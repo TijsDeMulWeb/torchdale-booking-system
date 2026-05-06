@@ -8,9 +8,8 @@
             @csrf
             <div class="space-y-12 sm:space-y-16">
                 <div>
-                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Escaperoom</h2>
-                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Deze informatie bevat alle info
-                        over jouw bedrijf.</p>
+                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Escaperoom Adres</h2>
+                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Vul hier het adres in van jouw escaperoom. Dit adres wordt gebruikt om bezoekers te laten zien waar ze moeten zijn.</p>
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
@@ -18,7 +17,7 @@
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Straat</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="street" type="text" name="street" placeholder="Straat"
-                                    value="{{ old('street', $escaperoomAddress->street) }}"
+                                    value="{{ old('street') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="street" />
                             </div>
@@ -29,7 +28,7 @@
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Huisnummer</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="house_number" type="text" name="house_number" placeholder="Huisnummer"
-                                    value="{{ old('house_number', $escaperoomAddress->house_number) }}"
+                                    value="{{ old('house_number') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="house_number" />
                             </div>
@@ -39,7 +38,7 @@
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Postcode</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="postal_code" type="text" name="postal_code" placeholder="Postcode"
-                                    value="{{ old('postal_code', $escaperoomAddress->postal_code) }}"
+                                    value="{{ old('postal_code') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="postal_code" />
                             </div>
@@ -49,7 +48,7 @@
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Stad</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="city" type="text" name="city" placeholder="Stad"
-                                    value="{{ old('city', $escaperoomAddress->city) }}"
+                                    value="{{ old('city') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="city" />
                             </div>
@@ -62,7 +61,7 @@
                                     <select id="country" name="country_id" autocomplete="country-name"
                                         class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500">
                                         @foreach ($countries as $country)
-                                            <option value="{{ $country->id }}" {{ old('country_id', $escaperoomAddress->country_id) == $country->id ? 'selected' : '' }}>
+                                            <option value="{{ $country->id }}" {{ old('country_id') == $country->id ? 'selected' : '' }}>
                                                 {{ $country->name }}
                                             </option>
                                         @endforeach
@@ -88,7 +87,7 @@
                                             <div class="flex h-6 shrink-0 items-center">
                                                 <div class="group grid size-4 grid-cols-1">
                                                     <input type="hidden" name="is_primary" value="0" />
-                                                    <input id="isPrimary" type="checkbox" name="is_primary" value="1" {{ old('is_primary', $escaperoomAddress->is_primary) == true ? 'checked' : '' }} aria-describedby="comments-description"
+                                                    <input id="isPrimary" type="checkbox" name="is_primary" value="1" {{ old('is_primary') == true ? 'checked' : '' }} aria-describedby="comments-description"
                                                         class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 dark:border-white/10 dark:bg-white/5 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:indeterminate:border-indigo-500 dark:indeterminate:bg-indigo-500 dark:focus-visible:outline-indigo-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:checked:bg-white/10 forced-colors:appearance-auto" />
                                                     <svg viewBox="0 0 14 14" fill="none"
                                                         class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 dark:group-has-disabled:stroke-white/25">

@@ -170,22 +170,18 @@
                     @endforeach
                     <div
                         class="rounded-lg border-2 border-dashed border-gray-300 dark:border-white/20 flex flex-col items-center justify-center text-center px-6 py-10 hover:border-indigo-500 transition">
-
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             class="h-10 w-10 text-gray-400 mb-4">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                 d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
-
                         <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
                             Nieuw adres
                         </h3>
-
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                             Voeg een nieuw adres toe
                         </p>
-
-                        <a href="#"
+                        <a href="{{ route('escaperoomAddress.create') }}"
                             class="mt-4 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
                             Toevoegen
                         </a>

@@ -3,7 +3,7 @@
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => $escaperoom->name, 'url' => route('escaperoom.show')],
     ]" />
-    <div class="px-4 sm:px-6 lg:px-8 my-10">
+    <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         <div>
             <div class="px-4 sm:px-0 sm:flex sm:items-center sm:justify-between">
                 <div>

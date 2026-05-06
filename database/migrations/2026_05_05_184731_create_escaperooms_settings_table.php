@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('escaperoom_settings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('escaperoom_id')->constrained()->onDelete('cascade');
+            $table->text('escaperoom_api_key')->nullable();
             $table->text('mollie_api_key')->nullable();
             $table->text('openai_api_key')->nullable();
             $table->timestamps();

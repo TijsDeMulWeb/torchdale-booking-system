@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EscaperoomSetting extends Model
 {
     protected $casts = [
+        'escaperoom_api_key' => 'encrypted',
         'mollie_api_key' => 'encrypted',
         'openai_api_key' => 'encrypted',
     ];

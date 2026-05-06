@@ -16,7 +16,7 @@ class EditEscaperoomAddressController extends Controller
     {
         $address = EscaperoomAddress::findOrFail($id);
 
-        abort_if($address->escaperoom_id !== Auth()->user()->escaperoom_id, 403);
+        abort_if($address->escaperoom_id !== auth()->user()->escaperoom_id, 403);
         
         return view('escaperoomAddress.edit', [
             'escaperoomAddress' => $address,

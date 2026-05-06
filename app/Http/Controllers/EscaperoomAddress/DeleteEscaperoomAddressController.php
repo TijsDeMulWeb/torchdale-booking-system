@@ -18,9 +18,9 @@ class DeleteEscaperoomAddressController extends Controller
             return redirect()->route('escaperoom.show')->withErrors(['message' => 'Je moet minimaal 1 adres hebben.']);
         }
 
-        $escaperoomAddress = EscaperoomAddress::findOrFail($id);
+        $escaperoomAddress = EscaperoomAddress::where('escaperoom_id', Auth()->user()->escaperoom_id)->where('id', $id)->firstOrFail();
 
-        if($escaperoomAddress->is_primary) {
+        if ($escaperoomAddress->is_primary) {
             return redirect()->route('escaperoom.show')->withErrors(['message' => 'Je kunt het primaire adres niet verwijderen.']);
         }
 

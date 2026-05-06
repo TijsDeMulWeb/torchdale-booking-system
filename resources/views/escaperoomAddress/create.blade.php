@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Instellingen: ' . Auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
+        ['name' => 'Instellingen: ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
         ['name' => 'Adres toevoegen', 'url' => route('escaperoomAddress.create')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">

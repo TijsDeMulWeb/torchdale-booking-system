@@ -69,6 +69,8 @@ class DatabaseSeeder extends Seeder
 
         EscaperoomSetting::create([
             'escaperoom_id' => 1,
+            'escaperoom_api_key' => 'torchdale',
+            'escaperoom_api_key_hash' => hash('sha256', 'torchdale'),
             'mollie_api_key' => null,
             'openai_api_key' => env('OPENAI_API_KEY'),
         ]);

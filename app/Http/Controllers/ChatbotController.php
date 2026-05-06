@@ -14,10 +14,10 @@ class ChatbotController extends Controller
 
     public function __invoke(Request $request)
     {
-        $escaperoomId = $request->escaperoomId;
+        $escaperoom = $request->escaperoom;
         $messages = $request->chatHistory;
 
-        $prompt = Chatbot::where('escaperoom_id', $escaperoomId)->firstOrFail()->prompt;
+        $prompt = Chatbot::where('escaperoom_id', $escaperoom->id)->firstOrFail()->prompt;
 
         $result = OpenAI::chat()->create([
             'model' => 'gpt-4o-mini',

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('escaperoom_id')->constrained()->onDelete('cascade');
             $table->text('escaperoom_api_key')->nullable();
+            $table->text('escaperoom_api_key_hash')->nullable();
             $table->text('mollie_api_key')->nullable();
             $table->text('openai_api_key')->nullable();
             $table->timestamps();

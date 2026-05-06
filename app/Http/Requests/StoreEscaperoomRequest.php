@@ -39,7 +39,6 @@ class StoreEscaperoomRequest extends FormRequest
                 'string',
                 'max:150',
                 'email',
-                'exists:escaperooms,email'
             ],
             'vat_number' => [
                 'required',

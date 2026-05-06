@@ -11,14 +11,14 @@ class UpdateEscaperoomAddressController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(StoreEscaperoomAddressRequest $request, $id = null)
+    public function __invoke(StoreEscaperoomAddressRequest $request, $id)
     {
         $address = EscaperoomAddress::findOrFail($id);
 
-        abort_if($address->escaperoom_id !== Auth()->user()->escaperoom_id, 403);
+        abort_if($address->escaperoom_id !== auth()->user()->escaperoom_id, 403);
 
         if ($address->is_primary) {
-            EscaperoomAddress::where('escaperoom_id', Auth()->user()->escaperoom_id)
+            EscaperoomAddress::where('escaperoom_id', auth()->user()->escaperoom_id)
                 ->where('id', '!=', $address->id)->first()->update(['is_primary' => true]);
         }
 

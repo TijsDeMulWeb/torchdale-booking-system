@@ -37,7 +37,7 @@ class StoreEscaperoomRequest extends FormRequest
             'email' => [
                 'required',
                 'string',
-                'max:150', 
+                'max:150',
                 'email',
                 'exists:escaperooms,email'
             ],
@@ -51,6 +51,33 @@ class StoreEscaperoomRequest extends FormRequest
                 'string',
                 'max:20'
             ],
+            'mollie_api_key' => [
+                'nullable',
+                'string',
+            ],
+            'openai_api_key' => [
+                'nullable',
+                'string',
+            ],
         ];
+    }
+
+    public function escaperoomData(): array
+    {
+        return $this->only([
+            'name',
+            'phone',
+            'email',
+            'vat_number',
+            'registration_number',
+        ]);
+    }
+
+    public function escaperoomSettingsData(): array
+    {
+        return $this->only([
+            'mollie_api_key',
+            'openai_api_key',
+        ]);
     }
 }

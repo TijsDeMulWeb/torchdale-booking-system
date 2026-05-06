@@ -100,8 +100,20 @@
                 <h2 class="sr-only">Summary</h2>
                 @foreach ($escaperoomAddresses as $escaperoomAddress)
                     <div
-                        class="rounded-lg bg-gray-50 shadow-xs outline-1 outline-gray-900/5 dark:bg-gray-800/50 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-                        <dl class="flex flex-wrap pb-6">
+                        class="relative rounded-lg bg-gray-50 shadow-xs outline-1 outline-gray-900/5 dark:bg-gray-800/50 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+                        <form method="POST" action="{{ route('escaperoomAddress.destroy', $escaperoomAddress->id) }}" class="absolute top-4 right-4">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="text-red-500 hover:text-red-700 dark:hover:text-red-400 cursor-pointer">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="h-5 w-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </form>
+                        <dl class="flex flex-wrap">
                             <div class="flex-auto pt-6 pl-6">
                                 <dt class="text-sm/6 font-semibold text-gray-900 dark:text-gray-100">Adres</dt>
                                 <dd class="mt-1 text-base font-semibold text-gray-900 dark:text-white">
@@ -146,8 +158,35 @@
                                 </dd>
                             </div>
                         </dl>
+                        <div class="mt-6 border-t border-gray-900/5 px-6 py-6 dark:border-white/5">
+                            <a href="#"
+                                class="text-sm/6 font-semibold text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bewerken
+                                <span aria-hidden="true">&rarr;</span></a>
+                        </div>
                     </div>
                 @endforeach
+                <div
+                    class="rounded-lg border-2 border-dashed border-gray-300 dark:border-white/20 flex flex-col items-center justify-center text-center px-6 py-10 hover:border-indigo-500 transition">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="h-10 w-10 text-gray-400 mb-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
+                        Nieuw adres
+                    </h3>
+
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Voeg een nieuw adres toe
+                    </p>
+
+                    <a href="#"
+                        class="mt-4 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+                        Toevoegen
+                    </a>
+                </div>
             </div>
         </div>
     </div>

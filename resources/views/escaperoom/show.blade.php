@@ -11,7 +11,7 @@
                     <p class="mt-1 max-w-2xl text-sm/6 text-gray-500 dark:text-gray-400">Informatie over het escaperoom.
                     </p>
                 </div>
-                <a href="{{ route('chatbot.edit') }}"
+                <a href="{{ route('escaperoom.edit') }}"
                     class="mt-4 sm:mt-0 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500">
                     Bewerken
                 </a>

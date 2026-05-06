@@ -8,6 +8,7 @@ use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
 use App\Http\Controllers\Escaperoom\StoreEscaperoomController;
 use App\Http\Controllers\EscaperoomAddress\DeleteEscaperoomAddressController;
+use App\Http\Controllers\EscaperoomAddress\EditEscaperoomAddressController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
@@ -32,5 +33,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/escaperoom/edit', EditEscaperoomController::class)->name('escaperoom.edit');
     Route::put('/escaperoom/edit', StoreEscaperoomController::class)->name('escaperoom.update');
 
+    Route::get('/escaperoom-address/{id}/edit', EditEscaperoomAddressController::class)->name('escaperoomAddress.edit');
     Route::delete('/escaperoom-address/{id}/delete', DeleteEscaperoomAddressController::class)->name('escaperoomAddress.destroy');
 });

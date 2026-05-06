@@ -162,7 +162,7 @@
                                 </div>
                             </dl>
                             <div class="mt-6 border-t border-gray-900/5 px-6 py-6 dark:border-white/5">
-                                <a href="#"
+                                <a href="{{ route('escaperoomAddress.edit', $escaperoomAddress->id) }}"
                                     class="text-sm/6 font-semibold text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bewerken
                                     <span aria-hidden="true">&rarr;</span></a>
                             </div>

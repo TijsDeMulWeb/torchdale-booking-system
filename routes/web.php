@@ -4,6 +4,7 @@ use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
 use App\Http\Controllers\Chatbot\StoreChatbotController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
+use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
@@ -26,4 +27,5 @@ Route::middleware('auth')->group(function () {
 
     // Escaperoom routes
     Route::get('/escaperoom', ShowEscaperoomController::class)->name('escaperoom.show');
+    Route::get('/escaperoom/edit', EditEscaperoomController::class)->name('escaperoom.edit');
 });

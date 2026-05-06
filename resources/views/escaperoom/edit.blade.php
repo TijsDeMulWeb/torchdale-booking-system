@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => $escaperoom->name, 'url' => route('escaperoom.show')],
+        ['name' => 'Instellingen: ' . Auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
         ['name' => 'Edit', 'url' => route('escaperoom.edit')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
@@ -108,7 +108,8 @@
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-x-6">
-                <a href="{{ route('escaperoom.show') }}" class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
+                <a href="{{ route('escaperoom.show') }}"
+                    class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
                 <button type="submit"
                     class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Save</button>
             </div>

@@ -2,7 +2,7 @@
     <x-success :message="session('message')" />
     <x-error name="message" />
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => $escaperoom->name, 'url' => route('escaperoom.show')],
+        ['name' => 'Instellingen: ' . Auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         <div>

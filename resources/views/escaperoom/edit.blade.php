@@ -4,7 +4,9 @@
         ['name' => 'Edit', 'url' => route('escaperoom.edit')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form>
+        <form method="POST" action="{{ route('escaperoom.update') }}">
+            @csrf
+            @method('PUT')
             <div class="space-y-12 sm:space-y-16">
                 <div>
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Escaperoom</h2>

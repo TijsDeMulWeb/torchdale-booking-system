@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+#[Fillable(['name', 'phone', 'email', 'vat_number', 'registration_number'])]
 class Escaperoom extends Model
 {
     public function escaperoomAddresses()

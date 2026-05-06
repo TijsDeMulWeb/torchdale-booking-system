@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Chatbot;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chatbot;
+use App\Models\EscaperoomSetting;
 use Illuminate\Http\Request;
 
 class ShowChatbotController extends Controller
@@ -15,6 +16,7 @@ class ShowChatbotController extends Controller
     {
         return view('chatbot.show', [
             'chatbot' => Chatbot::where('escaperoom_id', auth()->user()->escaperoom_id)->firstOrFail(),
+            'setting' => EscaperoomSetting::where('escaperoom_id', auth()->user()->escaperoom_id)->firstOrFail(),
         ]);
     }
 }

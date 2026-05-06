@@ -133,7 +133,7 @@
                     </ul>
                 </li>
                 <li class="mt-auto">
-                    <a href="#"
+                    <a href="{{ route('escaperoom.show') }}"
                         class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon"
                             aria-hidden="true"

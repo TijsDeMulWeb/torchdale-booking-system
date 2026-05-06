@@ -14,8 +14,12 @@ class EditEscaperoomAddressController extends Controller
      */
     public function __invoke(Request $request, $id)
     {
+        $address = EscaperoomAddress::findOrFail($id);
+
+        abort_if($address->escaperoom_id !== Auth()->user()->escaperoom_id, 403);
+        
         return view('escaperoomAddress.edit', [
-            'escaperoomAddress' => EscaperoomAddress::where('escaperoom_id', Auth()->user()->escaperoom_id)->where('id', $id)->firstOrFail(),
+            'escaperoomAddress' => $address,
             'countries' => Country::orderBy('name')->get()
         ]);
     }

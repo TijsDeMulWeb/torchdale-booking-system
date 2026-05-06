@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Instellingen: ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
-        ['name' => $escaperoomAddress->street . ' ' . $escaperoomAddress->house_number, 'url' => route('escaperoom.show')],
+        ['name' => $escaperoomAddress->street . ' ' . $escaperoomAddress->house_number, 'url' => route('escaperoomAddress.edit', $escaperoomAddress->id)],
         ['name' => 'Edit', 'url' => route('escaperoomAddress.edit', $escaperoomAddress->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">

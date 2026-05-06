@@ -43,13 +43,13 @@
                     <button class="relative flex items-center">
                         <span class="absolute -inset-1.5"></span>
                         <span class="sr-only">Open user menu</span>
-                        <img src="{{ session('profile_picture') ? Storage::url(session('profile_picture')) : 'https://placehold.co/400x400' }}"
-                            alt="Profile picture of {{ session('first_name') }} {{ session('last_name') }}"
+                        <img src="{{ Auth::user()->profile_picture ? Storage::url(Auth::user()->profile_picture) : 'https://placehold.co/400x400' }}"
+                            alt="Profile picture of {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}"
                             class="size-8 rounded-full bg-gray-50 outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10" />
                         <span class="hidden lg:flex lg:items-center">
                             <span aria-hidden="true"
-                                class="ml-4 text-sm/6 font-semibold text-gray-900 dark:text-white">{{ session('first_name') }}
-                                {{ session('last_name') }}</span>
+                                class="ml-4 text-sm/6 font-semibold text-gray-900 dark:text-white">{{ Auth::user()->first_name }}
+                                {{ Auth::user()->last_name }}</span>
                             <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"
                                 class="ml-2 size-5 text-gray-400 dark:text-gray-500">
                                 <path

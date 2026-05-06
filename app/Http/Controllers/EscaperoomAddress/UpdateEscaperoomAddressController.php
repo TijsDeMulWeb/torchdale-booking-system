@@ -17,6 +17,11 @@ class UpdateEscaperoomAddressController extends Controller
 
         abort_if($address->escaperoom_id !== Auth()->user()->escaperoom_id, 403);
 
+        if ($address->is_primary) {
+            EscaperoomAddress::where('escaperoom_id', Auth()->user()->escaperoom_id)
+                ->where('id', '!=', $address->id)->first()->update(['is_primary' => true]);
+        }
+
         $address->update($request->validated());
 
         return redirect()->route('escaperoom.show')->with('message', 'Address updated successfully.');

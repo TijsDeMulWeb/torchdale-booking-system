@@ -16,8 +16,8 @@ class ShowEscaperoomController extends Controller
     public function __invoke(Request $request)
     {
         return view('escaperoom.show', [
-            'escaperoom' => Auth()->user()->escaperoom()->firstOrFail(),
-            'escaperoomAddresses' => EscaperoomAddress::where('escaperoom_id', Auth()->user()->escaperoom_id)->get(),
+            'escaperoom' => auth()->user()->escaperoom()->firstOrFail(),
+            'escaperoomAddresses' => EscaperoomAddress::where('escaperoom_id', auth()->user()->escaperoom_id)->get(),
         ]);
     }
 }

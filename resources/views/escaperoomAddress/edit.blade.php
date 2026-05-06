@@ -2,10 +2,10 @@
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => Auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
         ['name' => $escaperoomAddress->street . ' ' . $escaperoomAddress->house_number, 'url' => route('escaperoom.show')],
-        ['name' => 'Edit', 'url' => route('escaperoom.edit')],
+        ['name' => 'Edit', 'url' => route('escaperoomAddress.edit', $escaperoomAddress->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('escaperoom.update') }}">
+        <form method="POST" action="{{ route('escaperoomAddress.update', $escaperoomAddress->id) }}">
             @csrf
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
@@ -61,10 +61,10 @@
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Country</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <div class="grid grid-cols-1 sm:max-w-md">
-                                    <select id="country" name="country" autocomplete="country-name"
+                                    <select id="country" name="country_id" autocomplete="country-name"
                                         class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500">
                                         @foreach ($countries as $country)
-                                            <option value="{{ $country->id }}" {{ old('country', $escaperoomAddress->country_id) == $country->id ? 'selected' : '' }}>
+                                            <option value="{{ $country->id }}" {{ old('country_id', $escaperoomAddress->country_id) == $country->id ? 'selected' : '' }}>
                                                 {{ $country->name }}
                                             </option>
                                         @endforeach
@@ -75,20 +75,21 @@
                                             d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
                                             clip-rule="evenodd" fill-rule="evenodd" />
                                     </svg>
+                                    <x-form.error name="country_id" />
                                 </div>
                             </div>
                         </div>
                         <fieldset>
                             <legend class="sr-only">Hoofdlocatie</legend>
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
-                                <div aria-hidden="true" class="text-sm/6 font-semibold text-gray-900 dark:text-white">Hoofdlocatie</div>
+                                <div aria-hidden="true" class="text-sm/6 font-semibold text-gray-900 dark:text-white">
+                                    Hoofdlocatie</div>
                                 <div class="mt-4 sm:col-span-2 sm:mt-0">
                                     <div class="max-w-lg space-y-6">
                                         <div class="flex gap-3">
                                             <div class="flex h-6 shrink-0 items-center">
                                                 <div class="group grid size-4 grid-cols-1">
-                                                    <input id="isPrimary" type="checkbox" name="is_primary" {{ old('is_primary', $escaperoomAddress->is_primary) == true ? 'checked' : '' }}
-                                                        aria-describedby="comments-description"
+                                                    <input id="isPrimary" type="checkbox" name="is_primary" {{ old('is_primary', $escaperoomAddress->is_primary) == true ? 'checked' : '' }} aria-describedby="comments-description"
                                                         class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 dark:border-white/10 dark:bg-white/5 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:indeterminate:border-indigo-500 dark:indeterminate:bg-indigo-500 dark:focus-visible:outline-indigo-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:checked:bg-white/10 forced-colors:appearance-auto" />
                                                     <svg viewBox="0 0 14 14" fill="none"
                                                         class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 dark:group-has-disabled:stroke-white/25">
@@ -105,7 +106,9 @@
                                                 <label for="isPrimary"
                                                     class="font-medium text-gray-900 dark:text-white">Hoofdlocatie</label>
                                                 <p id="isPrimary-description" class="text-gray-500 dark:text-gray-400">
-                                                    Is dit de hoofdlocatie? Dit adres wordt gebruikt voor facturatie.</p>
+                                                    Is dit de hoofdlocatie? Dit adres wordt gebruikt voor facturatie.
+                                                </p>
+                                                <x-form.error name="is_primary" />
                                             </div>
                                         </div>
                                     </div>

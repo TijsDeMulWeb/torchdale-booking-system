@@ -15,6 +15,6 @@ class UpdateEscaperoomController extends Controller
         auth()->user()->escaperoom->update($request->escaperoomData());
         auth()->user()->escaperoom->escaperoomSetting->update($request->escaperoomSettingsData());
 
-        return redirect()->route('escaperoom.show')->with('message', 'Escaperoom updated successfully.');
+        return redirect()->route('escaperoom.show')->with('message', 'Escaperoom succesvol bijgewerkt.');
     }
 }

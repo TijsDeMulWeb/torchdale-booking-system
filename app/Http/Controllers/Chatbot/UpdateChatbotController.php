@@ -15,6 +15,6 @@ class UpdateChatbotController extends Controller
     {
         Chatbot::where('escaperoom_id', auth()->user()->escaperoom_id)->firstOrFail()->update($request->validated());
 
-        return redirect()->route('chatbot.show')->with('message', 'Chatbot updated successfully.');
+        return redirect()->route('chatbot.show')->with('message', 'Chatbot succesvol bijgewerkt.');
     }
 }

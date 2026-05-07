@@ -23,11 +23,11 @@ class StoreEscaperoomAddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            ['street' => 'required|string|max:255'],
-            ['house_number' => 'nullable|string|max:10'],
-            ['postal_code' => 'required|string|max:10'],
-            ['city' => 'required|string|max:100'],
-            ['country_id' => 'required|exists:countries,id'],
+            ['street' => 'required', 'string', 'max:255'],
+            ['house_number' => 'nullable', 'string', 'max:10'],
+            ['postal_code' => 'required', 'string', 'max:10'],
+            ['city' => 'required', 'string', 'max:100'],
+            ['country_id' => 'required', 'exists:countries,id'],
             ['is_primary' => 'boolean'],
         ];
     }

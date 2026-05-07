@@ -13,7 +13,7 @@ class IndexProductController extends Controller
     public function __invoke(Request $request)
     {
         return view('products.index', [
-            'products' => auth()->user()->escaperoom->products()->with('category')->get(),
+            'products' => auth()->user()->escaperoom->products()->with('category')->paginate(5),
         ]);
     }
 }

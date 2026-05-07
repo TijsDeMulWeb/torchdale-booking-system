@@ -14,7 +14,7 @@
 
             @if(!is_null($count))
                 <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                    {{ $count }} gebruikers
+                    {{ $count }} {{ Str::lower($title) }}
                 </span>
             @endif
         </div>

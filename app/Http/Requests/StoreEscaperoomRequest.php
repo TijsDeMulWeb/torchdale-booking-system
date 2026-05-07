@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreEscaperoomRequest extends FormRequest
 {
@@ -27,7 +28,7 @@ class StoreEscaperoomRequest extends FormRequest
                 'required',
                 'string',
                 'max:100',
-                'exists:escaperooms,name'
+                Rule::unique('escaperooms', 'name')->ignore(auth()->user()->escaperoom_id),
             ],
             'phone' => [
                 'required',

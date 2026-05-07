@@ -1,18 +1,19 @@
 import '@tailwindplus/elements';
-const closeNotification = document.querySelector('#closeNotification') ?? null;
 
-setTimeout(() => {
-    const notification = document.querySelector('#notification');
+function fadeOutNotification(notification) {
     if (!notification) return;
     notification.style.transition = 'opacity 0.5s ease';
     notification.style.opacity = '0';
-}, 3000);
+    notification.addEventListener('transitionend', () => {
+        notification.remove();
+    }, { once: true });
+}
 
-if (closeNotification) {
-    closeNotification.addEventListener('click', () => {
-        const notification = document.querySelector('#notification');
-        if (!notification) return;
-        notification.style.transition = 'opacity 0.5s ease';
-        notification.style.opacity = '0';
-    });
-};
+document.querySelectorAll('.notification').forEach(notification => {
+    setTimeout(() => fadeOutNotification(notification), 3000);
+
+    const closeBtn = notification.querySelector('.closeNotification');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => fadeOutNotification(notification));
+    }
+});

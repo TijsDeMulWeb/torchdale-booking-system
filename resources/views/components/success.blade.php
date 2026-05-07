@@ -1,8 +1,8 @@
 @props(['message' => null])
 
 @if (session('message'))
-    <div id="notification" aria-live="assertive"
-        class="pointer-events-none fixed inset-0 top-16 flex items-end px-4 py-6 sm:items-start sm:p-6">
+    <div aria-live="assertive"
+        class="notification pointer-events-none fixed inset-0 top-16 flex items-end px-4 py-6 sm:items-start sm:p-6">
         <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
             <div
                 class="pointer-events-auto w-full max-w-sm translate-y-0 transform rounded-lg bg-white opacity-100 shadow-lg outline-1 outline-black/5 transition duration-300 ease-out sm:translate-x-0 dark:bg-gray-800 dark:-outline-offset-1 dark:outline-white/10 starting:translate-y-2 starting:opacity-0 starting:sm:translate-x-2 starting:sm:translate-y-0">
@@ -20,8 +20,8 @@
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $message }}</p>
                         </div>
                         <div class="ml-4 flex shrink-0">
-                            <button id='closeNotification' type="button"
-                                class="inline-flex rounded-md text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:hover:text-white dark:focus:outline-indigo-500">
+                            <button type="button"
+                                class="closeNotification inline-flex rounded-md text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:hover:text-white dark:focus:outline-indigo-500">
                                 <span class="sr-only">Close</span>
                                 <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"
                                     class="size-5">

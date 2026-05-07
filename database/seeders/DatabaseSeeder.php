@@ -91,12 +91,12 @@ class DatabaseSeeder extends Seeder
             'prompt' => 'lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate.',
         ]);
 
-        Permission::create(['name' => 'view chatbot']);
-        Permission::create(['name' => 'edit chatbot']);
+        // Permission::create(['name' => 'view chatbot']);
+        // Permission::create(['name' => 'edit chatbot']);
 
-        $admin = Role::create(['name' => 'admin']);
-        $admin->givePermissionTo(Permission::all());
+        // $admin = Role::create(['name' => 'admin']);
+        // $admin->givePermissionTo(Permission::all());
 
-        User::find(1)->assignRole('admin');
+        // User::find(1)->assignRole('admin');
     }
 }

@@ -14,7 +14,7 @@ class ShowChatbotController extends Controller
      */
     public function __invoke(Request $request)
     {
-        abort_if(!auth()->user()->can('view chatbot'), 403);
+        // abort_if(!auth()->user()->can('view chatbot'), 403);
 
         return view('chatbot.show', [
             'chatbot' => Chatbot::where('escaperoom_id', auth()->user()->escaperoom_id)->firstOrFail(),

@@ -17,6 +17,7 @@ use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\Profile\DeleteProfileController;
 use App\Http\Controllers\Profile\ShowProfileController;
+use App\Http\Controllers\Profile\UpdatePasswordController;
 use App\Http\Controllers\Profile\UpdateProfileController;
 use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
@@ -63,5 +64,6 @@ Route::middleware('auth')->group(function () {
     // Profile routes
     Route::get('/profile', ShowProfileController::class)->name('profile.show');
     Route::put('/profile/{id}/edit', UpdateProfileController::class)->name('profile.update');
+    Route::put('/profile/{id}/password', UpdatePasswordController::class)->name('profile.password');
     Route::delete('/profile/{id}/delete', DeleteProfileController::class)->name('profile.destroy');
 });

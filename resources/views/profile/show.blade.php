@@ -41,7 +41,8 @@
                             <label for="firstName"
                                 class="block text-sm/6 font-medium text-gray-900 dark:text-white">Voornaam</label>
                             <div class="mt-2">
-                                <input id="firstName" type="text" name="first_name" autocomplete="given-name" value="{{ old('first_name', $user->first_name) }}"
+                                <input id="firstName" type="text" name="first_name" autocomplete="given-name"
+                                    value="{{ old('first_name', $user->first_name) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="first_name" />
                             </div>
@@ -51,7 +52,8 @@
                             <label for="lastName"
                                 class="block text-sm/6 font-medium text-gray-900 dark:text-white">Achternaam</label>
                             <div class="mt-2">
-                                <input id="lastName" type="text" name="last_name" autocomplete="family-name" value="{{ old('last_name', $user->last_name) }}"
+                                <input id="lastName" type="text" name="last_name" autocomplete="family-name"
+                                    value="{{ old('last_name', $user->last_name) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="last_name" />
                             </div>
@@ -61,7 +63,8 @@
                             <label for="email"
                                 class="block text-sm/6 font-medium text-gray-900 dark:text-white">Email</label>
                             <div class="mt-2">
-                                <input id="email" type="email" name="email" autocomplete="email" value="{{ old('email', $user->email) }}"
+                                <input id="email" type="email" name="email" autocomplete="email"
+                                    value="{{ old('email', $user->email) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="email" />
                             </div>
@@ -70,7 +73,8 @@
                             <label for="phone"
                                 class="block text-sm/6 font-medium text-gray-900 dark:text-white">Telefoonnummer</label>
                             <div class="mt-2">
-                                <input id="phone" type="tel" name="phone" autocomplete="tel" value="{{ old('phone', $user->phone) }}"
+                                <input id="phone" type="tel" name="phone" autocomplete="tel"
+                                    value="{{ old('phone', $user->phone) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="phone" />
                             </div>
@@ -87,27 +91,34 @@
             <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
                 <div>
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Wijzig wachtwoord</h2>
-                    <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Update jouw wachtwoord voor jouw account hier.</p>
+                    <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Update jouw wachtwoord voor jouw account
+                        hier.</p>
                 </div>
 
-                <form class="md:col-span-2">
+                <form class="md:col-span-2" method="POST" action="{{ route('profile.password', $user->id) }}">
+                    @csrf
+                    @method('PUT')
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
                         <div class="col-span-full">
                             <label for="currentPassword"
-                                class="block text-sm/6 font-medium text-gray-900 dark:text-white">Huidig wachtwoord</label>
+                                class="block text-sm/6 font-medium text-gray-900 dark:text-white">Huidig
+                                wachtwoord</label>
                             <div class="mt-2">
                                 <input id="currentPassword" type="password" name="current_password"
                                     autocomplete="current-password"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                <x-form.error name="current_password" />
                             </div>
                         </div>
 
                         <div class="col-span-full">
                             <label for="newPassword"
-                                class="block text-sm/6 font-medium text-gray-900 dark:text-white">Nieuw wachtwoord</label>
+                                class="block text-sm/6 font-medium text-gray-900 dark:text-white">Nieuw
+                                wachtwoord</label>
                             <div class="mt-2">
                                 <input id="newPassword" type="password" name="new_password" autocomplete="new-password"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                <x-form.error name="new_password" />
                             </div>
                         </div>
 
@@ -119,6 +130,7 @@
                                 <input id="confirmPassword" type="password" name="confirm_password"
                                     autocomplete="new-password"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                <x-form.error name="confirm_password" />
                             </div>
                         </div>
                     </div>
@@ -133,10 +145,13 @@
             <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
                 <div>
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Verwijder account</h2>
-                    <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Geen nood meer aan torchdaleplanner? Je kan jouw account hier verwijderen. Deze actie is niet omkeerbaar. Alle informatie gerelateerd tot dit account zal permanent verwijderd worden.</p>
+                    <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Geen nood meer aan torchdaleplanner? Je
+                        kan jouw account hier verwijderen. Deze actie is niet omkeerbaar. Alle informatie gerelateerd
+                        tot dit account zal permanent verwijderd worden.</p>
                 </div>
 
-                <form class="flex items-start md:col-span-2" method="POST" action="{{ route('profile.destroy', $user->id) }}">
+                <form class="flex items-start md:col-span-2" method="POST"
+                    action="{{ route('profile.destroy', $user->id) }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit"

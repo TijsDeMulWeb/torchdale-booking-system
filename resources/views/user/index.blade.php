@@ -5,7 +5,7 @@
         ['name' => 'Gebruikers', 'url' => route('users.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <x-page-header title="Gebruikers" :create="route('users.index')" createTitle="Nieuwe Gebruiker" count="{{ $users->count() }}"/>
+        <x-page-header title="Gebruikers" :create="route('users.create')" createTitle="Nieuwe Gebruiker" count="{{ $users->count() }}"/>
 
         <ul role="list" class="mt-3 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($users as $user)

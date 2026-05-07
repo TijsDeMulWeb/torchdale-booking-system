@@ -15,6 +15,7 @@ use App\Http\Controllers\EscaperoomAddress\UpdateEscaperoomAddressController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
 use App\Http\Controllers\User\EditUserController;
 use App\Http\Controllers\User\IndexUserController;
@@ -49,6 +50,7 @@ Route::middleware('auth')->group(function () {
 
     // Employees routes
     Route::get('/users', IndexUserController::class)->name('users.index');
+    Route::get('/users/create', CreateUserController::class)->name('users.create');
     Route::get('/users/{id}/edit', EditUserController::class)->name('users.edit');
     Route::put('/users/{id}/edit', UpdateUserController::class)->name('users.update');
     Route::delete('/users/{id}/delete', DeleteUserController::class)->name('users.destroy');

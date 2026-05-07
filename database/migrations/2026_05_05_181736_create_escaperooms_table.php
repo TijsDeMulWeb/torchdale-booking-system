@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name', 100)->unique();
             $table->string('phone', 15);
             $table->string('email', 150)->unique();
+            $table->string('invoice_email', 150)->unique()->nullable();
             $table->string('vat_number', 20);
             $table->string('registration_number', 20)->nullable();
             $table->timestamps();

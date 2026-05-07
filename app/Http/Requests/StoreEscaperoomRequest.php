@@ -40,6 +40,12 @@ class StoreEscaperoomRequest extends FormRequest
                 'max:150',
                 'email',
             ],
+            'invoice_email' => [
+                'nullable',
+                'string',
+                'max:150',
+                'email',
+            ],
             'vat_number' => [
                 'required',
                 'string',
@@ -67,6 +73,7 @@ class StoreEscaperoomRequest extends FormRequest
             'name',
             'phone',
             'email',
+            'invoice_email',
             'vat_number',
             'registration_number',
         ]);

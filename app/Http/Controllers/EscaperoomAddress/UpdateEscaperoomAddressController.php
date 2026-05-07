@@ -11,7 +11,7 @@ class UpdateEscaperoomAddressController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(StoreEscaperoomAddressRequest $request, $id)
+    public function __invoke(StoreEscaperoomAddressRequest $request, int $id)
     {
         $address = EscaperoomAddress::findOrFail($id);
 

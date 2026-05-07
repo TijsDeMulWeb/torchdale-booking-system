@@ -11,7 +11,7 @@ class DeleteEscaperoomAddressController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, $id)
+    public function __invoke(Request $request, int $id)
     {
         $address = EscaperoomAddress::findOrFail($id);
 

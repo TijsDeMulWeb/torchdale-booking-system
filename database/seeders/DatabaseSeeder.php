@@ -7,6 +7,8 @@ use App\Models\Country;
 use App\Models\Escaperoom;
 use App\Models\EscaperoomAddress;
 use App\Models\EscaperoomSetting;
+use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -91,12 +93,42 @@ class DatabaseSeeder extends Seeder
             'prompt' => 'lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate.',
         ]);
 
-        // Permission::create(['name' => 'view chatbot']);
-        // Permission::create(['name' => 'edit chatbot']);
+        ProductCategory::create([
+            'escaperoom_id' => 1,
+            'name' => 'Bordspellen',
+        ]);
 
-        // $admin = Role::create(['name' => 'admin']);
-        // $admin->givePermissionTo(Permission::all());
+        ProductCategory::create([
+            'escaperoom_id' => 1,
+            'name' => 'Shirts',
+        ]);
 
-        // User::find(1)->assignRole('admin');
+        Product::create([
+            'escaperoom_id' => 1,
+            'category_id' => 1,
+            'name' => 'Escape Room in a Box',
+            'cost_price' => 15.00,
+            'selling_price' => 30.00,
+            'vat_percentage' => 21.00,
+            'stock_quantity' => 50,
+        ]);
+
+        Product::create([
+            'escaperoom_id' => 1,
+            'category_id' => 2,
+            'name' => 'Torchdale T-Shirt',
+            'cost_price' => 10.00,
+            'selling_price' => 20.00,
+            'vat_percentage' => 6.00,
+            'stock_quantity' => 100,
+        ]);
+
+        Permission::create(['name' => 'view chatbot']);
+        Permission::create(['name' => 'edit chatbot']);
+
+        $admin = Role::create(['name' => 'admin']);
+        $admin->givePermissionTo(Permission::all());
+
+        User::find(1)->assignRole('admin');
     }
 }

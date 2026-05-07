@@ -17,7 +17,7 @@ class DeleteProfileController extends Controller
 
         abort_if(auth()->id() !== $id, 403);
 
-        $user->delete();
+        $user->forceDelete();
 
         return redirect()->route('login')->with('message', 'Je account is succesvol verwijderd.');
     }

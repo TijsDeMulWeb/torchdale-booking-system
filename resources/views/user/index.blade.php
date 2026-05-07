@@ -5,7 +5,9 @@
         ['name' => 'Gebruikers', 'url' => route('users.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <x-page-header title="Gebruikers" :create="route('users.index')" createTitle="Nieuwe Gebruiker" count="{{ $users->count() }}"/>
+
+        <ul role="list" class="mt-3 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($users as $user)
                 <li
                     class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow-sm dark:divide-white/10 dark:bg-gray-800/50 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
@@ -18,11 +20,13 @@
                                 <span
                                     class="inline-flex shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20 dark:bg-green-500/10 dark:text-green-500 dark:inset-ring-green-500/10">{{ $user->getRoleNames()->first() }}</span>
                             </div>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                {{ $user->email }}
                             </p>
                         </div>
                         <img src="{{ Auth::user()->profile_picture ? Storage::url(Auth::user()->profile_picture) : 'https://placehold.co/400x400' }}"
                             alt="Profile picture of {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" class=" size-10 shrink-0 rounded-full bg-gray-300 outline -outline-offset-1 outline-black/5
-                                                                    dark:bg-gray-700 dark:outline-white/10" />
+                                                                        dark:bg-gray-700 dark:outline-white/10" />
                     </div>
                     <div>
                         <div class="-mt-px flex divide-x divide-gray-200 dark:divide-white/10">

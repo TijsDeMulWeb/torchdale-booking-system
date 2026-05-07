@@ -13,8 +13,11 @@ class IndexUserController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $users = User::where('escaperoom_id', $request->user()->escaperoom_id)->paginate(9);
+        $userCount = User::where('escaperoom_id', $request->user()->escaperoom_id)->count();
         return view('user.index', [
-            'users' => User::where('escaperoom_id', $request->user()->escaperoom_id)->paginate(9),
+            'users' => $users,
+            'userCount' => $userCount,
         ]);
     }
 }

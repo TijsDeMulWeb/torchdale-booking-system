@@ -39,7 +39,7 @@
                                 </div>
                             @endif
                             <div class="flex w-0 flex-1">
-                                <a href="#"
+                                <a href="{{ route('users.edit', $user) }}"
                                     class="relative -mr-px inline-flex w-0 flex-1 items-center justify-center gap-x-2 rounded-bl-lg border border-transparent py-4 text-sm font-semibold text-indigo-600 hover:bg-gray-50 dark:text-indigo-400 dark:hover:bg-white/5">
                                     <svg viewBox="0 0 20 20" fill="currentColor" class="size-5 text-indigo-500">
                                         <path

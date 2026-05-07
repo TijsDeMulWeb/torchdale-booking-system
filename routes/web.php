@@ -15,6 +15,7 @@ use App\Http\Controllers\EscaperoomAddress\UpdateEscaperoomAddressController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\Product\IndexProductController;
 use App\Http\Controllers\Profile\DeleteProfileController;
 use App\Http\Controllers\Profile\ShowProfileController;
 use App\Http\Controllers\Profile\UpdatePasswordController;
@@ -66,4 +67,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile/{id}/edit', UpdateProfileController::class)->name('profile.update');
     Route::put('/profile/{id}/password', UpdatePasswordController::class)->name('profile.password');
     Route::delete('/profile/{id}/delete', DeleteProfileController::class)->name('profile.destroy');
+
+    // Products routes
+    Route::get('/products', IndexProductController::class)->name('products.index');
 });

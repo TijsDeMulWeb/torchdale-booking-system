@@ -4,7 +4,7 @@
         ['name' => 'Edit', 'url' => route('escaperoom.edit')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('escaperoom.update') }}">
+        <form method="POST" action="{{ route('escaperoom.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
@@ -49,7 +49,8 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="invoiceEmail"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Factuur Email</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Factuur
+                                Email</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="invoiceEmail" type="email" name="invoice_email" placeholder="Factuur Email"
                                     value="{{ old('invoice_email', $escaperoom->invoice_email) }}"
@@ -84,6 +85,32 @@
                         </div>
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">
+                                Logo
+                            </label>
+                            <div class="mt-2 flex items-center gap-x-3">
+                                <img id="logo-preview" src="{{ $escaperoom->logo_url ? Storage::url($escaperoom->logo_url) : 'https://placehold.co/400x400' }}" alt="Logo preview"
+                                    class="max-h-24 w-auto rounded-lg object-contain border border-gray-200 dark:border-white/10">
+
+                                <input id="logo" name="logo" type="file" class="hidden" onchange="previewLogo(event)">
+
+                                <button type="button" onclick="document.getElementById('logo').click()"
+                                    class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">
+                                    Aanpassen
+                                </button>
+                                <x-form.error name="logo" />
+                            </div>
+                        </div>
+                        <script>
+                            function previewLogo(event) {
+                                const file = event.target.files[0];
+                                if (!file) return;
+
+                                const img = document.getElementById('logo-preview');
+                                img.src = URL.createObjectURL(file);
+                            }
+                        </script>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="mollie_api_key"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Mollie API
                                 Key</label>
@@ -108,21 +135,14 @@
                                 <x-form.error name="openai_api_key" />
                             </div>
                         </div>
+                        <div class="my-6 flex items-center justify-end gap-x-6">
+                            <a href="{{ route('escaperoom.show') }}"
+                                class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
+                            <button type="submit"
+                                class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Save</button>
+                        </div>
                     </div>
                 </div>
-
-                <div>
-                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Adres Informatie</h2>
-                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Verander hier jouw
-                        adresinformatie.</p>
-                </div>
-            </div>
-
-            <div class="mt-6 flex items-center justify-end gap-x-6">
-                <a href="{{ route('escaperoom.show') }}"
-                    class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
-                <button type="submit"
-                    class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Save</button>
             </div>
         </form>
     </div>

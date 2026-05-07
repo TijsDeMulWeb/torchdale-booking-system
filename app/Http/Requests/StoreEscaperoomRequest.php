@@ -57,6 +57,11 @@ class StoreEscaperoomRequest extends FormRequest
                 'string',
                 'max:20'
             ],
+            'logo' => [
+                'nullable',
+                'image',
+                'max:2048',
+            ],
             'mollie_api_key' => [
                 'nullable',
                 'string',
@@ -77,6 +82,7 @@ class StoreEscaperoomRequest extends FormRequest
             'invoice_email',
             'vat_number',
             'registration_number',
+            'logo'
         ]);
     }
 

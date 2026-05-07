@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('invoice_email', 150)->unique()->nullable();
             $table->string('vat_number', 20);
             $table->string('registration_number', 20)->nullable();
+            $table->string('logo_url')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

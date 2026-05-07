@@ -132,16 +132,16 @@
 
             <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
                 <div>
-                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Delete account</h2>
-                    <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">No longer want to use our service? You
-                        can delete your account here. This action is not reversible. All information related to this
-                        account will be deleted permanently.</p>
+                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Verwijder account</h2>
+                    <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Geen nood meer aan torchdaleplanner? Je kan jouw account hier verwijderen. Deze actie is niet omkeerbaar. Alle informatie gerelateerd tot dit account zal permanent verwijderd worden.</p>
                 </div>
 
-                <form class="flex items-start md:col-span-2">
+                <form class="flex items-start md:col-span-2" method="POST">
+                    @csrf
+                    @method('DELETE')
                     <button type="submit"
-                        class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 dark:bg-red-500 dark:shadow-none dark:hover:bg-red-400">Yes,
-                        delete my account</button>
+                        class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-red-500 dark:bg-red-500 dark:shadow-none dark:hover:bg-red-400">Ja,
+                        verwijder mijn account</button>
                 </form>
             </div>
         </div>

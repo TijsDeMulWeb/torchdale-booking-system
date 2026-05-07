@@ -14,7 +14,7 @@ class IndexUserController extends Controller
     public function __invoke(Request $request)
     {
         return view('user.index', [
-            'users' => User::where('escaperoom_id', $request->user()->escaperoom_id)->get(),
+            'users' => User::where('escaperoom_id', $request->user()->escaperoom_id)->paginate(9),
         ]);
     }
 }

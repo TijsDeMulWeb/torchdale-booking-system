@@ -23,7 +23,7 @@
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $message }}</p>
                         </div>
                         <div class="ml-4 flex shrink-0">
-                            <button type="button"
+                            <button id='closeNotification' type="button"
                                 class="inline-flex rounded-md text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:hover:text-white dark:focus:outline-indigo-500">
                                 <span class="sr-only">Close</span>
                                 <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"

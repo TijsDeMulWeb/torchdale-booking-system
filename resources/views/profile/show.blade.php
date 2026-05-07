@@ -136,7 +136,7 @@
                     <p class="mt-1 text-sm/6 text-gray-500 dark:text-gray-400">Geen nood meer aan torchdaleplanner? Je kan jouw account hier verwijderen. Deze actie is niet omkeerbaar. Alle informatie gerelateerd tot dit account zal permanent verwijderd worden.</p>
                 </div>
 
-                <form class="flex items-start md:col-span-2" method="POST">
+                <form class="flex items-start md:col-span-2" method="POST" action="{{ route('profile.destroy', $user->id) }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit"

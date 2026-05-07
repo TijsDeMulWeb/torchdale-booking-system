@@ -4,7 +4,7 @@
         ['name' => 'Nieuwe Gebruiker', 'url' => route('users.create')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('users.index') }}">
+        <form method="POST" action="{{ route('users.store') }}">
             @csrf
             <div class="space-y-12 sm:space-y-16">
                 <div>

@@ -19,6 +19,7 @@ use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
 use App\Http\Controllers\User\EditUserController;
 use App\Http\Controllers\User\IndexUserController;
+use App\Http\Controllers\User\StoreUserController;
 use App\Http\Controllers\User\UpdateUserController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +52,7 @@ Route::middleware('auth')->group(function () {
     // Employees routes
     Route::get('/users', IndexUserController::class)->name('users.index');
     Route::get('/users/create', CreateUserController::class)->name('users.create');
+    Route::post('/users/create', StoreUserController::class)->name('users.store');
     Route::get('/users/{id}/edit', EditUserController::class)->name('users.edit');
     Route::put('/users/{id}/edit', UpdateUserController::class)->name('users.update');
     Route::delete('/users/{id}/delete', DeleteUserController::class)->name('users.destroy');

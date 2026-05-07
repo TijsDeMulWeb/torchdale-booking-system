@@ -60,7 +60,7 @@
                     </button>
                     <el-menu anchor="bottom end" popover
                         class="w-32 origin-top-right rounded-md bg-white py-2 shadow-lg outline-1 outline-gray-900/5 transition transition-discrete [--anchor-gap:--spacing(2.5)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
-                        <a href="#"
+                        <a href="{{ route('profile.show') }}"
                             class="block px-3 py-1 text-sm/6 text-gray-900 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:focus:bg-white/5">Jouw
                             profiel</a>
                         <form action="{{ route('logout') }}" method="POST">

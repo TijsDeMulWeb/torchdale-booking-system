@@ -11,28 +11,28 @@
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Persoonlijke Informatie</h2>
                 </div>
 
-                <form class="md:col-span-2" method="POST" action="{{ route('profile.update', $user->id) }}">
+                <form class="md:col-span-2" method="POST" action="{{ route('profile.update', $user->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
                         <div class="col-span-full flex items-center gap-x-8">
-                            <img id="logo-preview"
-                                src="{{ $user->logo_url ? Storage::url($user->logo_url) : 'https://placehold.co/400x400' }}"
+                            <img id="profilePicturePreview"
+                                src="{{ $user->profile_picture ? Storage::url($user->profile_picture) : 'https://placehold.co/400x400' }}"
                                 alt="Profile picture"
                                 class="size-24 flex-none rounded-lg bg-gray-100 object-cover outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10" />
-                            <input id="logo" name="logo" type="file" class="hidden" onchange="previewLogo(event)">
+                            <input id="profilePicture" name="profile_picture" type="file" class="hidden" onchange="previewLogo(event)">
 
-                            <button type="button" onclick="document.getElementById('logo').click()"
+                            <button type="button" onclick="document.getElementById('profilePicture').click()"
                                 class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-100 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">Aanpassen</button>
                             <p class="mt-2 text-xs/5 text-gray-500 dark:text-gray-400">JPG, GIF or PNG. 1MB max.</p>
-                            <x-form.error name="logo" />
+                            <x-form.error name="profile_picture" />
                         </div>
                         <script>
                             function previewLogo(event) {
                                 const file = event.target.files[0];
                                 if (!file) return;
 
-                                const img = document.getElementById('logo-preview');
+                                const img = document.querySelector('#profilePicturePreview');
                                 img.src = URL.createObjectURL(file);
                             }
                         </script>

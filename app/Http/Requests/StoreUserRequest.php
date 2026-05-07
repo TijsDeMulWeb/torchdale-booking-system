@@ -28,6 +28,7 @@ class StoreUserRequest extends FormRequest
             'last_name' => ['required', 'string', 'max:75'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore(auth()->id()),],
             'phone' => ['nullable', 'string', 'max:20'],
+            'profile_picture' => ['nullable', 'image', 'max:2048'],
         ];
     }
 }

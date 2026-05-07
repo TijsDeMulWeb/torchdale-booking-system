@@ -1,5 +1,6 @@
 <x-layouts.app>
     <x-success :message="session('message')" />
+    <x-error name="message" />
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Gebruikers', 'url' => route('users.index')],
     ]" />
@@ -21,7 +22,7 @@
                         </div>
                         <img src="{{ Auth::user()->profile_picture ? Storage::url(Auth::user()->profile_picture) : 'https://placehold.co/400x400' }}"
                             alt="Profile picture of {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" class=" size-10 shrink-0 rounded-full bg-gray-300 outline -outline-offset-1 outline-black/5
-                                                                dark:bg-gray-700 dark:outline-white/10" />
+                                                                    dark:bg-gray-700 dark:outline-white/10" />
                     </div>
                     <div>
                         <div class="-mt-px flex divide-x divide-gray-200 dark:divide-white/10">

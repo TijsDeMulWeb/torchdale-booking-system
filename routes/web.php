@@ -15,6 +15,7 @@ use App\Http\Controllers\EscaperoomAddress\UpdateEscaperoomAddressController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\Profile\ShowProfileController;
 use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
 use App\Http\Controllers\User\EditUserController;
@@ -56,4 +57,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', EditUserController::class)->name('users.edit');
     Route::put('/users/{id}/edit', UpdateUserController::class)->name('users.update');
     Route::delete('/users/{id}/delete', DeleteUserController::class)->name('users.destroy');
+
+    // Profile routes
+    Route::get('/profile', ShowProfileController::class)->name('profile.show');
 });

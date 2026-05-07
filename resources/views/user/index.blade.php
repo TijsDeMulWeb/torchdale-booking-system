@@ -50,7 +50,7 @@
                                 </a>
                             </div>
                             <div class="-ml-px flex w-0 flex-1">
-                                <form action="#" method="POST" class="w-full">
+                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="w-full">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"

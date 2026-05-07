@@ -17,6 +17,7 @@ use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\User\EditUserController;
 use App\Http\Controllers\User\IndexUserController;
+use App\Http\Controllers\User\UpdateUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -48,4 +49,5 @@ Route::middleware('auth')->group(function () {
     // Employees routes
     Route::get('/users', IndexUserController::class)->name('users.index');
     Route::get('/users/{id}/edit', EditUserController::class)->name('users.edit');
+    Route::put('/users/{id}/edit', UpdateUserController::class)->name('users.update');
 });

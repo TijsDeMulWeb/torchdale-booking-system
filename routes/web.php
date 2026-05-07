@@ -15,6 +15,7 @@ use App\Http\Controllers\EscaperoomAddress\UpdateEscaperoomAddressController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\User\IndexUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -25,7 +26,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', ShowDashboardController::class)->name('dashboard.show');
     Route::post('/', LogoutController::class)->name('logout');
-    
+
     // Chatbot routes
     Route::get('/chatbot', ShowChatbotController::class)->name('chatbot.show');
     Route::get('/chatbot/edit', EditChatbotController::class)->name('chatbot.edit');
@@ -42,4 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/escaperoom-address/{id}/edit', EditEscaperoomAddressController::class)->name('escaperoomAddress.edit');
     Route::put('/escaperoom-address/{id}/edit', UpdateEscaperoomAddressController::class)->name('escaperoomAddress.update');
     Route::delete('/escaperoom-address/{id}/delete', DeleteEscaperoomAddressController::class)->name('escaperoomAddress.destroy');
+
+    // Employees routes
+    Route::get('/users', IndexUserController::class)->name('users.index');
 });

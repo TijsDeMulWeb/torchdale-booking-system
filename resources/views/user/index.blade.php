@@ -5,7 +5,8 @@
         ['name' => 'Gebruikers', 'url' => route('users.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <x-page-header title="Gebruikers" :create="route('users.create')" createTitle="Nieuwe Gebruiker" count="{{ $users->count() }}"/>
+        <x-page-header title="Gebruikers" :create="route('users.create')" createTitle="Nieuwe Gebruiker"
+            count="{{ $users->count() }}" />
 
         <ul role="list" class="mt-3 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($users as $user)
@@ -24,9 +25,9 @@
                                 {{ $user->email }}
                             </p>
                         </div>
-                        <img src="{{ Auth::user()->profile_picture ? Storage::url(Auth::user()->profile_picture) : 'https://placehold.co/400x400' }}"
-                            alt="Profile picture of {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}" class=" size-10 shrink-0 rounded-full bg-gray-300 outline -outline-offset-1 outline-black/5
-                                                                        dark:bg-gray-700 dark:outline-white/10" />
+                        <img src="{{ $user->profile_picture ? Storage::url($user->profile_picture) : 'https://placehold.co/400x400' }}"
+                            alt="Profile picture of {{ $user->first_name }} {{ $user->last_name }}" class=" size-10 shrink-0 rounded-full bg-gray-300 outline -outline-offset-1 outline-black/5
+                                                                            dark:bg-gray-700 dark:outline-white/10" />
                     </div>
                     <div>
                         <div class="-mt-px flex divide-x divide-gray-200 dark:divide-white/10">

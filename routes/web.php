@@ -18,6 +18,7 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\Product\CreateProductController;
 use App\Http\Controllers\Product\IndexProductController;
 use App\Http\Controllers\Product\EditProductController;
+use App\Http\Controllers\Product\StoreProductController;
 use App\Http\Controllers\Product\UpdateProductController;
 use App\Http\Controllers\Profile\DeleteProfileController;
 use App\Http\Controllers\Profile\ShowProfileController;
@@ -76,4 +77,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/{id}/edit', EditProductController::class)->name('products.edit');
     Route::put('/products/{id}/edit', UpdateProductController::class)->name('products.update');
     Route::get('/products/create', CreateProductController::class)->name('products.create');
+    Route::post('/products/create', StoreProductController::class)->name('products.store');
 });

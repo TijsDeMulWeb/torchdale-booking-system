@@ -9,6 +9,7 @@ use App\Models\EscaperoomAddress;
 use App\Models\EscaperoomSetting;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductImage;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -122,6 +123,14 @@ class DatabaseSeeder extends Seeder
             'vat_percentage' => 6.00,
             'stock_quantity' => 100,
         ]);
+
+        ProductImage::create([
+            'product_id' => 2,
+            'url' => 'https://placehold.co/400x400',
+            'alt_text' => 'Torchdale T-Shirt',
+            'is_primary' => true,
+        ]);
+
 
         Permission::create(['name' => 'view chatbot']);
         Permission::create(['name' => 'edit chatbot']);

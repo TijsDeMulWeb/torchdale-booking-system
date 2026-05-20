@@ -20,7 +20,7 @@ class Product extends Model
 
     public function product_images()
     {
-        return $this->hasMany(ProductImage::class, 'products');
+        return $this->hasMany(ProductImage::class);
     }
 
     protected function casts(): array

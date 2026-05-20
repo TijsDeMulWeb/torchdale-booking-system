@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Products;
+namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateProductRequest;
-use Illuminate\Http\Request;
 
 class UpdateProductController extends Controller
 {

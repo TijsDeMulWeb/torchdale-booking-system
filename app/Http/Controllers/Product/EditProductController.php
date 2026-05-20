@@ -13,7 +13,7 @@ class EditProductController extends Controller
      */
     public function __invoke(Request $request, int $id)
     {
-        $product = auth()->user()->escaperoom->products()->with('category')->findOrFail($id);
+        $product = auth()->user()->escaperoom->products()->with('category')->with('product_images')->findOrFail($id);
         $categories = ProductCategory::where('escaperoom_id', auth()->user()->escaperoom_id)->get();
         abort_if($product->escaperoom_id !== auth()->user()->escaperoom_id, 403);
 

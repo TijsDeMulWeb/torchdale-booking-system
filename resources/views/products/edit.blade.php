@@ -5,7 +5,7 @@
         ['name' => 'Edit', 'url' => route('products.edit', $product->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('products.edit', $product->id) }}">
+        <form method="POST" action="{{ route('products.update', $product->id) }}">
             @csrf
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
@@ -16,14 +16,14 @@
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                            <label for="firstName"
+                            <label for="name"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Product
                                 Naam</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="firstName" type="text" name="first_name" placeholder="Product Naam"
-                                    value="{{ old('first_name', $product->name) }}"
+                                <input id="name" type="text" name="name" placeholder="Product Naam"
+                                    value="{{ old('name', $product->name) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
-                                <x-form.error name="first_name" />
+                                <x-form.error name="name" />
                             </div>
                         </div>
 
@@ -115,9 +115,9 @@
                                 <div class="grid grid-cols-1 sm:max-w-md">
                                     <select id="discountType" name="discount_type"
                                         class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500">
-                                        <option value="" {{ old('discount_type', $product->discount_type) == null ? 'selected' : '' }}>Geen Korting</option>
-                                        <option value="fixed" {{ old('discount_type', $product->discount_type) == 'fixed' ? 'selected' : '' }}>Fixed</option>
-                                        <option value="percentage" {{ old('discount_type', $product->discount_type) == 'percentage' ? 'selected' : '' }}>Percentage
+                                        <option value="" {{ old('discount_type', $product->discount_type) === null ? 'selected' : '' }}>Geen Korting</option>
+                                        <option value="fixed" {{ old('discount_type', $product->discount_type) === 'fixed' ? 'selected' : '' }}>Fixed</option>
+                                        <option value="percentage" {{ old('discount_type', $product->discount_type) === 'percentage' ? 'selected' : '' }}>Percentage
                                         </option>
                                     </select>
                                     <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true"

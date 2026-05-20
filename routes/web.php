@@ -17,6 +17,7 @@ use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\Product\IndexProductController;
 use App\Http\Controllers\Product\EditProductController;
+use App\Http\Controllers\Products\UpdateProductController;
 use App\Http\Controllers\Profile\DeleteProfileController;
 use App\Http\Controllers\Profile\ShowProfileController;
 use App\Http\Controllers\Profile\UpdatePasswordController;
@@ -72,4 +73,5 @@ Route::middleware('auth')->group(function () {
     // Products routes
     Route::get('/products', IndexProductController::class)->name('products.index');
     Route::get('/products/{id}/edit', EditProductController::class)->name('products.edit');
+    Route::put('/products/{id}/edit', UpdateProductController::class)->name('products.update');
 });

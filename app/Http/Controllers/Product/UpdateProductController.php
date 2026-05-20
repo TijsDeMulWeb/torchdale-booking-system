@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\ProductRequest;
 
 class UpdateProductController extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(UpdateProductRequest $request, int $id)
+    public function __invoke(ProductRequest $request, int $id)
     {
         $product = auth()->user()->escaperoom->products()->findOrFail($id);
         abort_if($product->escaperoom_id !== auth()->user()->escaperoom_id, 403);

@@ -46,7 +46,7 @@
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
                                             Voorraad</th>
                                         <th scope="col" class="py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8">
-                                            <span class="sr-only">Edit</span>
+                                            <span class="sr-only">Acties</span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -76,9 +76,24 @@
                                             </td>
                                             <td
                                                 class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
-                                                <a href="{{ route('products.edit', $product->id) }}"
-                                                    class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit<span
-                                                        class="sr-only">, {{ $product->name }}</span></a>
+
+                                                <div class="flex items-center justify-end gap-4">
+
+                                                    <a href="{{ route('products.edit', $product->id) }}"
+                                                        class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                                        Wijzigen
+                                                        <span class="sr-only">, {{ $product->name }}</span>
+                                                    </a>
+
+                                                    <form method="POST" action="{{ route('products.destroy', $product->id) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="text-red-600 cursor-pointer hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                                            Verwijderen
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

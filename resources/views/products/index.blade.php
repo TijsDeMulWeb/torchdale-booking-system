@@ -76,9 +76,9 @@
                                             </td>
                                             <td
                                                 class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
-                                                <a href="#"
+                                                <a href="{{ route('products.edit', $product->id) }}"
                                                     class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit<span
-                                                        class="sr-only">, Lindsay Walton</span></a>
+                                                        class="sr-only">, {{ $product->name }}</span></a>
                                             </td>
                                         </tr>
                                     @endforeach

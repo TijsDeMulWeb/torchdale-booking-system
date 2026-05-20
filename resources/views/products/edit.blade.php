@@ -4,7 +4,7 @@
         ['name' => $product->name, 'url' => route('products.edit', $product->id)],
         ['name' => 'Edit', 'url' => route('products.edit', $product->id)],
     ]" />
-    <div class="px-4 sm:px-6 lg:px-8 my-10">
+    <div class="px-4 py-1 sm:px-6 lg:px-8 my-10">
         <form method="POST" action="{{ route('products.update', $product->id) }}">
             @csrf
             @method('PUT')
@@ -171,5 +171,65 @@
                 </div>
             </div>
         </form>
+        <div class="px-4 sm:px-0 lg:px-0 my-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h2 class="sr-only">Afbeeldingen</h2>
+                @foreach ($product->product_images as $productImage)
+                    <div
+                        class="relative rounded-lg bg-gray-50 shadow-xs outline-1 outline-gray-900/5 dark:bg-gray-800/50 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
+                        <form method="POST" action="{{ route('products.index', $productImage->id) }}"
+                            class="absolute top-4 right-4">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="text-red-500 hover:text-red-700 dark:hover:text-red-400 cursor-pointer">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="h-5 w-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </form>
+                        <dl class="flex flex-wrap">
+                            <div class="flex-none self-end px-6 pt-4">
+                                <dt class="sr-only">Status</dt>
+                                @if ($productImage->is_primary)
+                                    <dd
+                                        class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20 dark:bg-green-500/15 dark:text-green-400 dark:inset-ring-green-500/20">
+                                        Primary</dd>
+                                @endif
+                            </div>
+                            <img src="{{ Storage::url($productImage->url) }}"
+                                alt="{{ $productImage->alt ?? $product->name }}"
+                                class="w-full h-48 object-cover rounded-t-lg">
+                            <dl class="flex flex-wrap"></dl>
+                        </dl>
+                        <div class="mt-6 border-t border-gray-900/5 px-6 py-6 dark:border-white/5">
+                            <a href="{{ route('escaperoomAddress.edit', $escaperoomAddress->id) }}"
+                                class="text-sm/6 font-semibold text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bewerken
+                                <span aria-hidden="true">&rarr;</span></a>
+                        </div>
+                    </div>
+                @endforeach
+                <div
+                    class="rounded-lg border-2 border-dashed border-gray-300 dark:border-white/20 flex flex-col items-center justify-center text-center px-6 py-10 hover:border-indigo-500 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                        class="h-10 w-10 text-gray-400 mb-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
+                        Nieuwe Afbeelding
+                    </h3>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        Voeg een nieuwe afbeelding toe
+                    </p>
+                    <a href="{{ route('escaperoomAddress.create') }}"
+                        class="mt-4 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+                        Toevoegen
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </x-layouts.app>

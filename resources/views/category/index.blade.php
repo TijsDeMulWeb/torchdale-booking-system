@@ -51,9 +51,15 @@
                                 <a href="{{ route('categories.edit', $category->id) }}"
                                     class="block px-3 py-1 text-sm/6 text-gray-900 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:focus:bg-white/5">Edit
                                     Category<span class="sr-only">, {{ $category->name }}</span></a>
-                                <a href="#"
-                                    class="block px-3 py-1 text-sm/6 text-gray-900 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:focus:bg-white/5">Verwijder<span
-                                        class="sr-only">, {{ $category->name }}</span></a>
+                                <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="block w-full px-3 py-1 text-left text-sm/6 text-gray-900 hover:bg-gray-50 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:hover:bg-white/5 dark:focus:bg-white/5">
+                                        Verwijder
+                                        <span class="sr-only">, {{ $category->name }}</span>
+                                    </button>
+                                </form>
                             </el-menu>
                         </el-dropdown>
                     </div>

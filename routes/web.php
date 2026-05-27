@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Category\EditCategoryController;
 use App\Http\Controllers\Category\StoreCategoryController;
 use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
@@ -85,5 +86,6 @@ Route::middleware('auth')->group(function () {
 
     // Categories routes
     Route::get('/categories', IndexCategoryController::class)->name('categories.index');
+    Route::get('/categories/{id}/edit', EditCategoryController::class)->name('categories.edit');
     Route::post('/categories/create', StoreCategoryController::class)->name('categories.store');
 });

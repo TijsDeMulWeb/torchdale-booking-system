@@ -12,8 +12,12 @@ class StoreCategoryController extends Controller
      */
     public function __invoke(CategoryRequest $request)
     {
+        if(ProductCategory::where('name', $request->name)->where('escaperoom_id', auth()->user()->escaperoom_id)->exists()) {
+            return redirect()->route('categories.index')->withErrors(['message' => 'A category with this name already exists.']);
+        }
+
         Auth()->user()->escaperoom->categories()->create($request->validated());
 
-        return redirect()->route('products.index')->with('message', 'Category created successfully.');
+        return redirect()->route('categories.index')->with('message', 'Category created successfully.');
     }
 }

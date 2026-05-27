@@ -16,6 +16,12 @@ class UpdateCategoryController extends Controller
         $category = ProductCategory::findOrFail($id);
         abort_if($category->escaperoom_id !== auth()->user()->escaperoom_id, 403);
 
+        if (ProductCategory::where('name', $request->name)->where('escaperoom_id', auth()->user()->escaperoom_id)->where('id', '!=', $id)->exists()) {
+            return redirect()
+                ->route('categories.edit', $id)
+                ->withErrors(['name' => 'A category with this name already exists.']);
+        }
+
         $category->update($request->validated());
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully.');

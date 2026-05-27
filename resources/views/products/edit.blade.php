@@ -191,9 +191,13 @@
                         @endif
 
                         <div class="border-t border-gray-900/5 px-6 py-6 dark:border-white/5">
-                            <a href="{{ route('products.edit', $productImage->id) }}"
-                                class="text-sm/6 font-semibold text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bewerken
-                                <span aria-hidden="true">&rarr;</span></a>
+                            <form action="{{ route('products.images.destroy', ['id' => $product->id, 'imageId' => $productImage->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="text-sm/6 font-semibold text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-300 cursor-pointer">Verwijderen
+                                    <span aria-hidden="true">&rarr;</span></button>
+                            </form>
                         </div>
                     </div>
                 @endforeach

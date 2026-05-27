@@ -4,7 +4,7 @@
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Profiel: ' . $user->first_name . ' ' . $user->last_name, 'url' => route('escaperoom.show')],
     ]" />
-    <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
+    <div class="px-4 sm:px-6 lg:px-8 pb-4">
         <div class="divide-y divide-gray-200 dark:divide-white/10">
             <div class="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 py-16 sm:px-6 md:grid-cols-3 lg:px-8">
                 <div>

@@ -178,7 +178,9 @@
                 @foreach ($product->product_images as $productImage)
                     <div
                         class="relative rounded-lg overflow-hidden bg-gray-50 shadow-xs outline-1 outline-gray-900/5 dark:bg-gray-800/50 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10 flex flex-col">
-                        <img class="w-full object-cover" src="{{ $productImage->url }}" alt="Product afbeelding">
+                        <img class="w-full object-cover"
+                            src="{{ $productImage->url ? Storage::url($productImage->url) : 'https://placehold.co/400x400' }}"
+                            alt="{{ $productImage->alt_text ?? 'Product Afbeelding' }}">
                         @if ($productImage->is_primary)
                             <div class="flex-none px-6 py-4">
                                 <dt class="sr-only">Status</dt>
@@ -292,7 +294,8 @@
                 <div tabindex="0" class="absolute inset-0 pl-10 focus:outline-none sm:pl-16">
                     <el-dialog-panel
                         class="ml-auto block size-full max-w-2xl transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700">
-                        <form method="POST" action="{{ route('products.images.store', $product->id) }}" enctype="multipart/form-data"
+                        <form method="POST" action="{{ route('products.images.store', $product->id) }}"
+                            enctype="multipart/form-data"
                             class="relative flex h-full flex-col overflow-y-auto bg-white shadow-xl dark:bg-gray-800 dark:after:absolute dark:after:inset-y-0 dark:after:left-0 dark:after:w-px dark:after:bg-white/10">
                             @csrf
                             <div class="flex-1">
@@ -349,6 +352,20 @@
                                                 JPG, GIF of PNG. Max 1MB.
                                             </p>
                                             <x-form.error name="product_image" />
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                        <div>
+                                            <label for="altText"
+                                                class="block text-sm/6 font-medium text-gray-900 sm:mt-1.5 dark:text-white">Alt
+                                                Text</label>
+                                        </div>
+                                        <div class="sm:col-span-2">
+                                            <input id="altText" type="text" name="alt_text" placeholder="Alt Text"
+                                                value="{{ old('alt_text') }}"
+                                                class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus-visible:outline-indigo-500" />
                                         </div>
                                     </div>
 

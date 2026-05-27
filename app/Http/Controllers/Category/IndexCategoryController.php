@@ -17,6 +17,7 @@ class IndexCategoryController extends Controller
                 ->escaperoom
                 ->categories()
                 ->withCount('products')
+                ->orderBy('name')
                 ->paginate(5),
         ]);
     }

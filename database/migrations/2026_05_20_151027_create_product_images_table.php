@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('url');
-            $table->string('alt_text');
+            $table->string('alt_text', 100);
             $table->boolean('is_primary')->default(false);
             $table->timestamps();
         });

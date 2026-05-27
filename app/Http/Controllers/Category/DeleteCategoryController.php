@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Category;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductCategory;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class DeleteCategoryController extends Controller
@@ -14,6 +15,11 @@ class DeleteCategoryController extends Controller
     public function __invoke(Request $request, int $id)
     {
         $category = ProductCategory::findOrFail($id);
+
+        if(Product::where('category_id', $id)->exists()) {
+            return redirect()->route('categories.index')->withErrors(['message' => 'Categorie kan niet worden verwijderd omdat er nog producten aan gekoppeld zijn.']);
+        }
+
         abort_if($category->escaperoom_id !== auth()->user()->escaperoom_id, 403);
         $category->delete();
         return redirect()->route('categories.index')->with('message', 'Categorie succesvol verwijderd.');

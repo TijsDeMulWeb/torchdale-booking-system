@@ -13,7 +13,7 @@
                         <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Een lijst van alle producten.</p>
                     </div>
                     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
-                        <a href="{{ route('products.index') }}"
+                        <a href="{{ route('categories.index') }}"
                             class="block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:inset-ring-white/20 dark:hover:bg-white/20">
                             Categorieën
                         </a>

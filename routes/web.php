@@ -22,6 +22,7 @@ use App\Http\Controllers\Product\IndexProductController;
 use App\Http\Controllers\Product\EditProductController;
 use App\Http\Controllers\Product\StoreProductController;
 use App\Http\Controllers\Product\UpdateProductController;
+use App\Http\Controllers\Category\IndexCategoryController;
 use App\Http\Controllers\Profile\DeleteProfileController;
 use App\Http\Controllers\Profile\ShowProfileController;
 use App\Http\Controllers\Profile\UpdatePasswordController;
@@ -83,5 +84,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/products/{id}/delete', DeleteProductController::class)->name('products.destroy');
 
     // Categories routes
+    Route::get('/categories', IndexCategoryController::class)->name('categories.index');
     Route::post('/categories/create', StoreCategoryController::class)->name('categories.store');
 });

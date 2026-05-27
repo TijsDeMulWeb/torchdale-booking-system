@@ -1,4 +1,6 @@
 <x-layouts.app>
+    <x-success :message="session('message')" />
+    <x-error name="message" />
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Categories', 'url' => route('categories.index')],
     ]" />

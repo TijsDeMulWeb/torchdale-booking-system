@@ -208,10 +208,10 @@
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         Voeg een nieuwe afbeelding toe
                     </p>
-                    <a href="{{ route('escaperoomAddress.create') }}"
+                    <button command="show-modal" commandfor="add-image"
                         class="mt-4 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
                         Toevoegen
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -279,6 +279,149 @@
                                         class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:inset-ring-white/20 dark:hover:bg-white/20">Annuleren</button>
                                     <button type="submit"
                                         class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Aanmaken</button>
+                                </div>
+                            </div>
+                        </form>
+                    </el-dialog-panel>
+                </div>
+            </dialog>
+        </el-dialog>
+        <el-dialog>
+            <dialog id="add-image" aria-labelledby="drawer-title"
+                class="fixed inset-0 size-auto max-h-none max-w-none overflow-hidden bg-transparent backdrop:bg-transparent">
+                <div tabindex="0" class="absolute inset-0 pl-10 focus:outline-none sm:pl-16">
+                    <el-dialog-panel
+                        class="ml-auto block size-full max-w-2xl transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700">
+                        <form method="POST" action="{{ route('products.images.store', $product->id) }}" enctype="multipart/form-data"
+                            class="relative flex h-full flex-col overflow-y-auto bg-white shadow-xl dark:bg-gray-800 dark:after:absolute dark:after:inset-y-0 dark:after:left-0 dark:after:w-px dark:after:bg-white/10">
+                            @csrf
+                            <div class="flex-1">
+                                <!-- Header -->
+                                <div class="bg-gray-50 px-4 py-6 sm:px-6 dark:bg-gray-800/50">
+                                    <div class="flex items-start justify-between space-x-3">
+                                        <div class="space-y-1">
+                                            <h2 id="drawer-title"
+                                                class="text-base font-semibold text-gray-900 dark:text-white">Nieuwe
+                                                Afbeelding</h2>
+                                            <p class="text-sm text-gray-500 dark:text-gray-400">Voeg een nieuwe
+                                                afbeelding toe voor dit product</p>
+                                        </div>
+                                        <div class="flex h-7 items-center">
+                                            <button type="button" command="close" commandfor="add-image"
+                                                class="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:hover:text-white dark:focus-visible:outline-indigo-500">
+                                                <span class="absolute -inset-2.5"></span>
+                                                <span class="sr-only">Close panel</span>
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="1.5" data-slot="icon" aria-hidden="true"
+                                                    class="size-6">
+                                                    <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Product image -->
+                                <div
+                                    class="space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0 dark:sm:divide-white/10">
+                                    <div
+                                        class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                        <div>
+                                            <label for="productImage"
+                                                class="block text-sm/6 font-medium text-gray-900 sm:mt-1.5 dark:text-white">
+                                                Product afbeelding
+                                            </label>
+                                        </div>
+                                        <div class="sm:col-span-2 space-y-4">
+                                            <img id="productImagePreview"
+                                                src="https://placehold.co/200x200?text=Preview" alt="Preview"
+                                                class="size-24 rounded-xl bg-gray-100 object-cover shadow-sm ring-1 ring-black/5 dark:bg-gray-800 dark:ring-white/10" />
+
+                                            <input id="productImage" name="product_image" type="file" accept="image/*"
+                                                class="hidden" onchange="previewImage(event)">
+                                            <button type="button"
+                                                onclick="document.getElementById('productImage').click()"
+                                                class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:ring-white/10 dark:hover:bg-white/20">
+                                                Afbeelding kiezen
+                                            </button>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                JPG, GIF of PNG. Max 1MB.
+                                            </p>
+                                            <x-form.error name="product_image" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Primary image -->
+                                    <div
+                                        class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                        <div>
+                                            <label for="isPrimary"
+                                                class="block text-sm/6 font-medium text-gray-900 sm:mt-1.5 dark:text-white">
+                                                Primary afbeelding
+                                            </label>
+                                        </div>
+
+                                        <div class="sm:col-span-2">
+                                            <div class="mt-4 sm:col-span-2 sm:mt-0">
+                                                <div class="max-w-lg space-y-6">
+                                                    <div class="flex gap-3">
+                                                        <div class="flex h-6 shrink-0 items-center">
+                                                            <div class="group grid size-4 grid-cols-1">
+                                                                <input type="hidden" name="is_primary" value="0" />
+                                                                <input id="isPrimary" type="checkbox" name="is_primary"
+                                                                    value="1" {{ old('is_primary') == true ? 'checked' : '' }} aria-describedby="comments-description"
+                                                                    class="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 dark:border-white/10 dark:bg-white/5 dark:checked:border-indigo-500 dark:checked:bg-indigo-500 dark:indeterminate:border-indigo-500 dark:indeterminate:bg-indigo-500 dark:focus-visible:outline-indigo-500 dark:disabled:border-white/5 dark:disabled:bg-white/10 dark:disabled:checked:bg-white/10 forced-colors:appearance-auto" />
+                                                                <svg viewBox="0 0 14 14" fill="none"
+                                                                    class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 dark:group-has-disabled:stroke-white/25">
+                                                                    <path d="M3 8L6 11L11 3.5" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="opacity-0 group-has-checked:opacity-100" />
+                                                                    <path d="M3 7H11" stroke-width="2"
+                                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                                        class="opacity-0 group-has-indeterminate:opacity-100" />
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-sm/6">
+                                                            <label for="isPrimary"
+                                                                class="font-medium text-gray-900 dark:text-white">Primaire
+                                                                afbeelding</label>
+                                                            <p id="isPrimary-description"
+                                                                class="text-gray-500 dark:text-gray-400">
+                                                                Is dit de eerste afbeelding die getoont moet worden?
+                                                                Deze afbeelding wordt gebruikt als eerste afbeelding in
+                                                                de widget.
+                                                            </p>
+                                                            <x-form.error name="is_primary" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <script>
+                                    function previewImage(event) {
+                                        const file = event.target.files[0];
+
+                                        if (!file) return;
+
+                                        const img = document.getElementById('productImagePreview');
+
+                                        img.src = URL.createObjectURL(file);
+                                    }
+                                </script>
+                            </div>
+
+                            <!-- Action buttons -->
+                            <div class="shrink-0 border-t border-gray-200 px-4 py-5 sm:px-6 dark:border-white/10">
+                                <div class="flex justify-end space-x-3">
+                                    <button type="button" command="close" commandfor="add-image"
+                                        class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-gray-100 dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">Cancel</button>
+                                    <button type="submit"
+                                        class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Create</button>
                                 </div>
                             </div>
                         </form>

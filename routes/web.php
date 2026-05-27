@@ -26,6 +26,7 @@ use App\Http\Controllers\Product\EditProductController;
 use App\Http\Controllers\Product\StoreProductController;
 use App\Http\Controllers\Product\UpdateProductController;
 use App\Http\Controllers\Category\IndexCategoryController;
+use App\Http\Controllers\ProductImage\StoreProductImageController;
 use App\Http\Controllers\Profile\DeleteProfileController;
 use App\Http\Controllers\Profile\ShowProfileController;
 use App\Http\Controllers\Profile\UpdatePasswordController;
@@ -85,6 +86,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/create', CreateProductController::class)->name('products.create');
     Route::post('/products/create', StoreProductController::class)->name('products.store');
     Route::delete('/products/{id}/delete', DeleteProductController::class)->name('products.destroy');
+
+    // Product Images routes
+    Route::post('/products/{id}/images/create', StoreProductImageController::class)->name('products.images.store');
 
     // Categories routes
     Route::get('/categories', IndexCategoryController::class)->name('categories.index');

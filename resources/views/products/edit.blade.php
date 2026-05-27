@@ -13,6 +13,7 @@
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Product</h2>
                     <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Deze informatie bevat alle info
                         over het product {{ $product->name }}.</p>
+                    <x-last-updated :model="$product" />
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
@@ -263,8 +264,8 @@
                                                 Naam</label>
                                         </div>
                                         <div class="sm:col-span-2">
-                                            <input id="categoryName" type="text" name="name" placeholder="Categorie Naam"
-                                                 value="{{ old('name') }}"
+                                            <input id="categoryName" type="text" name="name"
+                                                placeholder="Categorie Naam" value="{{ old('name') }}"
                                                 class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus-visible:outline-indigo-500" />
                                         </div>
                                     </div>

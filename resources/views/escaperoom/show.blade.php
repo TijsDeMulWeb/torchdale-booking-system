@@ -11,6 +11,7 @@
                     <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">Escaperoom Informatie</h3>
                     <p class="mt-1 max-w-2xl text-sm/6 text-gray-500 dark:text-gray-400">Informatie over het escaperoom.
                     </p>
+                    <x-last-updated :model="$escaperoom" />
                 </div>
                 <a href="{{ route('escaperoom.edit') }}"
                     class="mt-4 sm:mt-0 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500">
@@ -85,7 +86,8 @@
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
                             @if($escaperoom->logo_url)
-                                <img src="{{ $escaperoom->logo_url ? Storage::url($escaperoom->logo_url) : 'https://placehold.co/400x400' }}" alt="Logo {{ $escaperoom->name }}"
+                                <img src="{{ $escaperoom->logo_url ? Storage::url($escaperoom->logo_url) : 'https://placehold.co/400x400' }}"
+                                    alt="Logo {{ $escaperoom->name }}"
                                     class="max-h-24 w-auto rounded-lg object-contain border border-gray-200 dark:border-white/10">
                             @endif
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Category\EditCategoryController;
 use App\Http\Controllers\Category\StoreCategoryController;
+use App\Http\Controllers\Category\UpdateCategoryController;
 use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
 use App\Http\Controllers\Chatbot\UpdateChatbotController;
@@ -87,5 +88,6 @@ Route::middleware('auth')->group(function () {
     // Categories routes
     Route::get('/categories', IndexCategoryController::class)->name('categories.index');
     Route::get('/categories/{id}/edit', EditCategoryController::class)->name('categories.edit');
+    Route::put('/categories/{id}/edit', UpdateCategoryController::class)->name('categories.update');
     Route::post('/categories/create', StoreCategoryController::class)->name('categories.store');
 });

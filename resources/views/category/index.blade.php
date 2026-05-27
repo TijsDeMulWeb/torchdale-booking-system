@@ -68,6 +68,7 @@
                 </li>
             @endforeach
         </ul>
+        {{ $categories->links() }}
         <el-dialog>
             <dialog id="drawer" aria-labelledby="drawer-title"
                 class="fixed inset-0 size-auto max-h-none max-w-none overflow-hidden bg-transparent backdrop:bg-transparent">

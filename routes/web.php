@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Category\DeleteCategoryController;
 use App\Http\Controllers\Category\EditCategoryController;
 use App\Http\Controllers\Category\StoreCategoryController;
 use App\Http\Controllers\Category\UpdateCategoryController;
@@ -90,4 +91,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories/{id}/edit', EditCategoryController::class)->name('categories.edit');
     Route::put('/categories/{id}/edit', UpdateCategoryController::class)->name('categories.update');
     Route::post('/categories/create', StoreCategoryController::class)->name('categories.store');
+    Route::delete('/categories/{id}/delete', DeleteCategoryController::class)->name('categories.destroy');
 });

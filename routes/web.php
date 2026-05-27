@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Category\StoreCategoryController;
 use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
 use App\Http\Controllers\Chatbot\UpdateChatbotController;
@@ -80,4 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/create', CreateProductController::class)->name('products.create');
     Route::post('/products/create', StoreProductController::class)->name('products.store');
     Route::delete('/products/{id}/delete', DeleteProductController::class)->name('products.destroy');
+
+    // Categories routes
+    Route::post('/categories/create', StoreCategoryController::class)->name('categories.store');
 });

@@ -60,9 +60,8 @@
                                     </svg>
                                 </div>
                                 <button command="show-modal" commandfor="drawer" type="button"
-                                    class="mt-1 inline-block text-xs text-gray-500 hover:text-indigo-500 dark:text-gray-400">
-                                    Categorie niet gevonden? <span class="text-indigo-600 dark:text-indigo-400">+ Nieuwe
-                                        categorie</span>
+                                    class="mt-1 inline-block text-xs text-gray-500 dark:text-gray-400">
+                                    Categorie niet gevonden? <span class="text-indigo-600 dark:text-indigo-400 cursor-pointer">+ Nieuwe categorie</span>
                                 </button>
                             </div>
                         </div>
@@ -300,11 +299,11 @@
                         class="ml-auto block size-full max-w-2xl transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700">
                         <form method="POST" action="{{ route('products.images.store', $product->id) }}"
                             enctype="multipart/form-data"
-                            class="relative flex h-full flex-col overflow-y-auto bg-white shadow-xl dark:bg-gray-800 dark:after:absolute dark:after:inset-y-0 dark:after:left-0 dark:after:w-px dark:after:bg-white/10">
+                            class="relative flex h-full flex-col overflow-y-auto bg-white shadow-xl dark:bg-gray-900">
                             @csrf
                             <div class="flex-1">
                                 <!-- Header -->
-                                <div class="bg-gray-50 px-4 py-6 sm:px-6 dark:bg-gray-800/50">
+                                <div class="bg-gray-50 px-4 py-6 sm:px-6 dark:bg-gray-800">
                                     <div class="flex items-start justify-between space-x-3">
                                         <div class="space-y-1">
                                             <h2 id="drawer-title"
@@ -315,7 +314,7 @@
                                         </div>
                                         <div class="flex h-7 items-center">
                                             <button type="button" command="close" commandfor="add-image"
-                                                class="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:hover:text-white dark:focus-visible:outline-indigo-500">
+                                                class="relative rounded-md text-gray-400 hover:text-gray-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:text-gray-500 dark:hover:text-gray-400">
                                                 <span class="absolute -inset-2.5"></span>
                                                 <span class="sr-only">Close panel</span>
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"

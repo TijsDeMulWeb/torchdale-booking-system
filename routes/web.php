@@ -22,6 +22,7 @@ use App\Http\Controllers\EscaperoomAddress\DeleteEscaperoomAddressController;
 use App\Http\Controllers\EscaperoomAddress\EditEscaperoomAddressController;
 use App\Http\Controllers\EscaperoomAddress\StoreEscaperoomAddressController;
 use App\Http\Controllers\EscaperoomAddress\UpdateEscaperoomAddressController;
+use App\Http\Controllers\GiftCard\IndexGiftCardController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
@@ -112,4 +113,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/coupons/{id}/edit', EditCouponController::class)->name('coupons.edit');
     Route::put('/coupons/{id}/edit', UpdateCouponController::class)->name('coupons.update');
     Route::delete('/coupons/{id}/delete', DeleteCouponController::class)->name('coupons.destroy');
+
+    // GiftCards routes
+    Route::get('/gift-cards', IndexGiftCardController::class)->name('giftCards.index');
 });

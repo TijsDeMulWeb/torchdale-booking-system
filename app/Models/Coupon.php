@@ -13,4 +13,12 @@ class Coupon extends Model
     {
         return $this->belongsTo(Escaperoom::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'valid_from' => 'datetime',
+            'valid_to' => 'datetime',
+        ];
+    }
 }

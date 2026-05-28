@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('code', 50);
             $table->decimal('amount', 10, 2);
+            $table->dateTime('valid_from');
+            $table->dateTime('valid_until')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

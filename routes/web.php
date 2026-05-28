@@ -7,6 +7,7 @@ use App\Http\Controllers\Category\UpdateCategoryController;
 use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
 use App\Http\Controllers\Chatbot\UpdateChatbotController;
+use App\Http\Controllers\Coupon\IndexCouponController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
 use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
@@ -98,4 +99,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/categories/{id}/edit', UpdateCategoryController::class)->name('categories.update');
     Route::post('/categories/create', StoreCategoryController::class)->name('categories.store');
     Route::delete('/categories/{id}/delete', DeleteCategoryController::class)->name('categories.destroy');
+
+    // Coupons routes
+    Route::get('/coupons', IndexCouponController::class)->name('coupons.index');
 });

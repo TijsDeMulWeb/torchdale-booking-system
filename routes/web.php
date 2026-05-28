@@ -11,6 +11,7 @@ use App\Http\Controllers\Coupon\CreateCouponController;
 use App\Http\Controllers\Coupon\EditCouponController;
 use App\Http\Controllers\Coupon\IndexCouponController;
 use App\Http\Controllers\Coupon\StoreCouponController;
+use App\Http\Controllers\Coupon\UpdateCouponController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
 use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
@@ -108,4 +109,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/coupons/create', CreateCouponController::class)->name('coupons.create');
     Route::post('/coupons/create', StoreCouponController::class)->name('coupons.store');
     Route::get('/coupons/{id}/edit', EditCouponController::class)->name('coupons.edit');
+    Route::put('/coupons/{id}/edit', UpdateCouponController::class)->name('coupons.update');
 });

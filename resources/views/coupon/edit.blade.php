@@ -5,7 +5,7 @@
         ['name' => 'Edit', 'url' => route('coupons.edit', $coupon->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('coupons.store') }}">
+        <form method="POST" action="{{ route('coupons.update', $coupon->id) }}">
             @csrf
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">

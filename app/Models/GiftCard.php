@@ -18,4 +18,12 @@ class GiftCard extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'valid_from' => 'datetime',
+            'valid_until' => 'datetime',
+        ];
+    }
 }

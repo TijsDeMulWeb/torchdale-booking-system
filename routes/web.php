@@ -8,6 +8,7 @@ use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
 use App\Http\Controllers\Chatbot\UpdateChatbotController;
 use App\Http\Controllers\Coupon\CreateCouponController;
+use App\Http\Controllers\Coupon\EditCouponController;
 use App\Http\Controllers\Coupon\IndexCouponController;
 use App\Http\Controllers\Coupon\StoreCouponController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
@@ -106,4 +107,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/coupons', IndexCouponController::class)->name('coupons.index');
     Route::get('/coupons/create', CreateCouponController::class)->name('coupons.create');
     Route::post('/coupons/create', StoreCouponController::class)->name('coupons.store');
+    Route::get('/coupons/{id}/edit', EditCouponController::class)->name('coupons.edit');
 });

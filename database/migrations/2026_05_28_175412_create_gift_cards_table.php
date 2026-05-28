@@ -18,8 +18,6 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('code', 50);
             $table->decimal('amount', 10, 2);
-            $table->dateTime('expires_at')->nullable();
-            $table->dateTime('redeemed_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

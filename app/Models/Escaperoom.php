@@ -42,4 +42,9 @@ class Escaperoom extends Model
     {
         return $this->hasMany(ProductCategory::class);
     }
+
+    public function coupons()
+    {
+        return $this->hasMany(Coupon::class);
+    }
 }

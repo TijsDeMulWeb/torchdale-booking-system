@@ -58,7 +58,7 @@
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 @if (!empty($coupon->discount_type))
                                                     @if ($coupon->discount_type == 'fixed')
-                                                        &euro;{{ number_format($coupon->discount_amount, 2) }}
+                                                        &euro;{{ number_format($coupon->discount_value, 2) }}
                                                     @endif
                                                     @if ($coupon->discount_type == 'percentage')
                                                         {{ number_format($coupon->discount_value, 0) }}%
@@ -106,7 +106,7 @@
                 </div>
             </div>
         @else
-            <x-empty-state name='product' :route="route('products.create')" />
+            <x-empty-state name='coupon' :route="route('coupons.create')" />
         @endif
         {{ $coupons->links() }}
     </div>

@@ -104,7 +104,7 @@
 
                                                 <div class="flex items-center justify-end gap-4">
 
-                                                    <a href="{{ route('products.edit', $coupon->id) }}"
+                                                    <a href="{{ route('coupons.edit', $coupon->id) }}"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                         Wijzigen
                                                         <span class="sr-only">, {{ $coupon->name }}</span>

@@ -37,7 +37,6 @@
                 </div>
             </div>
             @if ($giftCards->count() > 0)
-
                 <div class="mt-8 flow-root">
                     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div class="inline-block min-w-full py-2 align-middle">
@@ -46,22 +45,13 @@
                                     <tr>
                                         <th scope="col"
                                             class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8 dark:text-white">
-                                            Koper</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
                                             Naam</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                                            Code</th>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
                                             Waarde</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Ontvanger</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Methode</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Aangekocht op</th>
                                         <th scope="col" class="py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8">
                                             <span class="sr-only">Acties</span>
                                         </th>
@@ -72,29 +62,20 @@
                                         <tr>
                                             <td
                                                 class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8 dark:text-white">
-                                                {{ $giftCard->customer->first_name }} {{ $giftCard->customer->last_name }}
-                                            </td>
-                                            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 {{ $giftCard->name }}
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                                {{ $giftCard->code }}
+                                            </td>
+                                            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 &euro;{{ $giftCard->amount }}
-                                            </td>
-                                            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                {{ $giftCard->recipient_first_name }} {{ $giftCard->recipient_last_name }}
-                                            </td>
-                                            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                Email
-                                            </td>
-                                            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                {{ $giftCard->created_at->format('d-m-Y') }}
                                             </td>
                                             <td
                                                 class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
 
                                                 <div class="flex items-center justify-end gap-4">
 
-                                                    <a href="{{ route('coupons.edit', $giftCard->id) }}"
+                                                    <a href="{{ route('giftCards.edit', $giftCard->id) }}"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                         Wijzigen
                                                         <span class="sr-only">, {{ $giftCard->name }}</span>

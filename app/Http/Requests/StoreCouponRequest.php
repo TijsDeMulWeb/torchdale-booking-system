@@ -30,10 +30,9 @@ class StoreCouponRequest extends FormRequest
                 'required',
                 'string',
                 'max:50',
-                Rule::unique('coupons')->where(
-                    fn($query) =>
-                    $query->where('escaperoom_id', auth()->user()->escaperoom->id)
-                ),
+                Rule::unique('coupons')
+                    ->where(fn($query) => $query->where('escaperoom_id', auth()->user()->escaperoom->id))
+                    ->ignore($this->route('id')),
             ],
             'discount_type' => ['required', 'in:fixed,percentage'],
             'discount_value' => ['required', 'numeric', 'min:0'],

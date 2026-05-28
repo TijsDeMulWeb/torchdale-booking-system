@@ -20,7 +20,7 @@ class Coupon extends Model
     {
         return [
             'valid_from' => 'datetime',
-            'valid_to' => 'datetime',
+            'valid_until' => 'datetime',
         ];
     }
 }

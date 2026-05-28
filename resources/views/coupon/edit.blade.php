@@ -109,7 +109,7 @@
                                 tot</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="availableUntil" type="date" name="valid_until"
-                                    value="{{ old('valid_until', $coupon->valid_until) }}"
+                                    value="{{ old('valid_until', $coupon->valid_until?->format('Y-m-d')) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:focus:outline-indigo-500" />
                                 <x-form.error name="valid_until" />
                             </div>

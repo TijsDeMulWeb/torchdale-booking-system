@@ -16,7 +16,6 @@ return new class extends Migration
             $table->foreignId('escaperoom_id')->constrained()->onDelete('cascade');
             $table->string('name', 100);
             $table->string('description')->nullable();
-            $table->string('code', 50);
             $table->decimal('amount', 10, 2);
             $table->dateTime('valid_from');
             $table->dateTime('valid_until')->nullable();

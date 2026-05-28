@@ -110,7 +110,7 @@
                                                         <span class="sr-only">, {{ $coupon->name }}</span>
                                                     </a>
 
-                                                    <form method="POST" action="{{ route('products.destroy', $coupon->id) }}">
+                                                    <form method="POST" action="{{ route('coupons.destroy', $coupon->id) }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"

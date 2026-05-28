@@ -109,7 +109,7 @@
                 </div>
             </div>
         @else
-            geen producten gevonden
+            <x-empty-state name='product' :route="route('products.create')" />
         @endif
         {{ $products->links() }}
     </div>

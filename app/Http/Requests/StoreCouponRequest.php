@@ -38,7 +38,7 @@ class StoreCouponRequest extends FormRequest
             'discount_type' => ['required', 'in:fixed,percentage'],
             'discount_value' => ['required', 'numeric', 'min:0'],
             'usage_limit' => ['nullable', 'integer', 'min:1'],
-            'valid_from' => ['required', 'date', 'before:valid_until'],
+            'valid_from' => ['required', 'date'],
             'valid_until' => ['nullable', 'date', 'after:valid_from'],
         ];
     }

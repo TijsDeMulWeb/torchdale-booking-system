@@ -36,4 +36,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Escaperoom::class);
     }
+
+    public function giftCards()
+    {
+        return $this->hasMany(GiftCard::class, 'customer_id');
+    }
 }

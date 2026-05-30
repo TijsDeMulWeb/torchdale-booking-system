@@ -24,6 +24,7 @@ use App\Http\Controllers\EscaperoomAddress\StoreEscaperoomAddressController;
 use App\Http\Controllers\EscaperoomAddress\UpdateEscaperoomAddressController;
 use App\Http\Controllers\GiftCard\IndexGiftCardController;
 use App\Http\Controllers\GiftCard\EditGiftCardController;
+use App\Http\Controllers\GiftCard\UpdateGiftCardController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;
@@ -118,4 +119,5 @@ Route::middleware('auth')->group(function () {
     // GiftCards routes
     Route::get('/gift-cards', IndexGiftCardController::class)->name('giftCards.index');
     Route::get('/gift-cards/{id}/edit', EditGiftCardController::class)->name('giftCards.edit');
+    Route::put('/gift-cards/{id}/edit', UpdateGiftCardController::class)->name('giftCards.update');
 });

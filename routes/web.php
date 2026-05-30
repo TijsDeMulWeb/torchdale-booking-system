@@ -44,6 +44,7 @@ use App\Http\Controllers\Profile\DeleteProfileController;
 use App\Http\Controllers\Profile\ShowProfileController;
 use App\Http\Controllers\Profile\UpdatePasswordController;
 use App\Http\Controllers\Profile\UpdateProfileController;
+use App\Http\Controllers\Room\IndexRoomController;
 use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
 use App\Http\Controllers\User\EditUserController;
@@ -126,4 +127,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/gift-cards/create', CreateGiftCardController::class)->name('giftCards.create');
     Route::post('/gift-cards/create', StoreGiftCardController::class)->name('giftCards.store');
     Route::delete('/gift-cards/{id}/delete', DeleteGiftCardController::class)->name('giftCards.destroy');
+
+    // Rooms routes
+    Route::get('/rooms', IndexRoomController::class)->name('rooms.index');
 });

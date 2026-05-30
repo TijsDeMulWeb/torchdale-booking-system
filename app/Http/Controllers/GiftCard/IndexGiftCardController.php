@@ -12,8 +12,14 @@ class IndexGiftCardController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $giftCards = auth()->user()->escaperoom->giftCards()->paginate(10);
-            
+        $giftCards = auth()->user()->escaperoom
+            ->giftCards()
+            ->when($request->search, function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            })
+            ->paginate(10)
+            ->withQueryString();
+
         return view('giftCard.index', [
             'giftCards' => $giftCards,
         ]);

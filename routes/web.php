@@ -25,6 +25,7 @@ use App\Http\Controllers\EscaperoomAddress\UpdateEscaperoomAddressController;
 use App\Http\Controllers\GiftCard\IndexGiftCardController;
 use App\Http\Controllers\GiftCard\CreateGiftCardController;
 use App\Http\Controllers\GiftCard\EditGiftCardController;
+use App\Http\Controllers\GiftCard\DeleteGiftCardController;
 use App\Http\Controllers\GiftCard\UpdateGiftCardController;
 use App\Http\Controllers\GiftCard\StoreGiftCardController;
 use App\Http\Controllers\Login\ShowLoginController;
@@ -124,4 +125,5 @@ Route::middleware('auth')->group(function () {
     Route::put('/gift-cards/{id}/edit', UpdateGiftCardController::class)->name('giftCards.update');
     Route::get('/gift-cards/create', CreateGiftCardController::class)->name('giftCards.create');
     Route::post('/gift-cards/create', StoreGiftCardController::class)->name('giftCards.store');
+    Route::delete('/gift-cards/{id}/delete', DeleteGiftCardController::class)->name('giftCards.destroy');
 });

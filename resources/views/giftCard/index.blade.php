@@ -75,7 +75,7 @@
                                                         <span class="sr-only">, {{ $giftCard->name }}</span>
                                                     </a>
 
-                                                    <form method="POST" action="{{ route('coupons.destroy', $giftCard->id) }}">
+                                                    <form method="POST" action="{{ route('giftCards.destroy', $giftCard->id) }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"

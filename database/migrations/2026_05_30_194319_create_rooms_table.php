@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->datetime('active_from');
             $table->datetime('active_until')->nullable();
             $table->integer('max_booking_advance')->nullable();
+            $table->string('color', 7)->nullable(); 
             $table->timestamps();
             $table->softDeletes();
         });

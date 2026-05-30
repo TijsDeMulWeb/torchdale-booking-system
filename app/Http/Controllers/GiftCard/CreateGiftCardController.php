@@ -12,6 +12,6 @@ class CreateGiftCardController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return view('giftCards.create');
+        return view('giftCard.create');
     }
 }

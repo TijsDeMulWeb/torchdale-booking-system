@@ -134,11 +134,21 @@
                                 tot</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="activeUntil" type="date" name="active_until"
-                                    value="{{ old('active_until', now()->format('Y-m-d')) }}"
+                                    value="{{ old('active_until') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:focus:outline-indigo-500" />
                                 <x-form.error name="active_until" />
                             </div>
                         </div>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label for="maxBookingAdvance"
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Maximmale bookings tijd in toekomst ofzo (in dagen)</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <input id="maxBookingAdvance" type="text" name="max_booking_advance" placeholder="30"
+                                    value="{{ old('maxBookingAdvance') }}"
+                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                <x-form.error name="maxBookingAdvance" />
+                            </div>
+                        </div>  
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="color"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">
@@ -146,8 +156,7 @@
                             </label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <div class="flex items-center gap-3">
-                                    <input id="color" type="color" name="color"
-                                        value="{{ old('color') }}"
+                                    <input id="color" type="color" name="color" value="{{ old('color') }}"
                                         class="h-10 w-16 cursor-pointer rounded-md border border-gray-300 bg-white p-1 dark:border-white/10 dark:bg-white/5" />
                                     <span id="colorHex" class="text-sm text-gray-500 dark:text-gray-400">
                                         {{ old('color') }}

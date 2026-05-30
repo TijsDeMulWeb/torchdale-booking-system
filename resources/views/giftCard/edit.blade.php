@@ -13,6 +13,7 @@
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Cadeaubon</h2>
                     <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Deze informatie bevat alle info
                         over de Cadeaubon.</p>
+                    <x-last-updated :model="$giftCard" />
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">

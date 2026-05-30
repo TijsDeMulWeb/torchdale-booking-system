@@ -5,7 +5,7 @@
         ['name' => 'Edit', 'url' => route('giftCards.edit', $giftCard->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('coupons.update', $giftCard->id) }}">
+        <form method="POST" action="{{ route('giftCards.update', $giftCard->id) }}">
             @csrf
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
@@ -26,7 +26,6 @@
                                 <x-form.error name="name" />
                             </div>
                         </div>
-
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="description"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Beschrijving</label>
@@ -40,10 +39,10 @@
                             <label for="discountValue"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Cadeaubonwaarde</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="discountValue" type="text" name="discount_value" placeholder="Cadeaubonwaarde"
-                                    value="{{ old('discount_value', $giftCard->amount) }}"
+                                <input id="discountValue" type="text" name="amount" placeholder="Cadeaubonwaarde"
+                                    value="{{ old('amount', $giftCard->amount) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
-                                <x-form.error name="discount_value" />
+                                <x-form.error name="amount" />
                             </div>
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">

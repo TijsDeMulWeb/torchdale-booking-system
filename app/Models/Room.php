@@ -15,4 +15,12 @@ class Room extends Model
     {
         return $this->belongsTo(EscaperoomAddress::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'active_from' => 'datetime',
+            'active_until' => 'datetime',
+        ];
+    }
 }

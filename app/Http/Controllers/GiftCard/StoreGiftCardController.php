@@ -12,7 +12,7 @@ class StoreGiftCardController extends Controller
      */
     public function __invoke(StoreGiftCardRequest $request)
     {
-        auth()->user()->escaperoom()->giftCards()->create($request->validated());
+        auth()->user()->escaperoom->giftCards()->create($request->validated());
         return redirect()->route('giftCards.index')->with('message', 'Cadeaubon succesvol aangemaakt.');
     }
 }

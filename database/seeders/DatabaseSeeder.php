@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImage;
 use App\Models\User;
+use App\Models\Room;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -129,6 +130,18 @@ class DatabaseSeeder extends Seeder
             'url' => 'https://placehold.co/400x400',
             'alt_text' => 'Torchdale T-Shirt',
             'is_primary' => true,
+        ]);
+
+        Room::create([
+            'escaperoom_id' => 1,
+            'escaperoom_address_id' => 1,
+            'name' => 'The Toy Factory',
+            'duration' => 75,
+            'min_players' => 2,
+            'max_players' => 6,
+            'min_age' => 16,
+            'url' => 'https://torchdale.be/rooms/the-toy-factory',
+            'active_from' => now(),
         ]);
 
 

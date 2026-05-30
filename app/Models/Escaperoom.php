@@ -52,4 +52,9 @@ class Escaperoom extends Model
     {
         return $this->hasMany(GiftCard::class);
     }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
 }

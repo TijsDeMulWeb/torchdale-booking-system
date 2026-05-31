@@ -49,6 +49,7 @@ use App\Http\Controllers\Room\DeleteRoomController;
 use App\Http\Controllers\Room\EditRoomController;
 use App\Http\Controllers\Room\IndexRoomController;
 use App\Http\Controllers\Room\ShowRoomPricesController;
+use App\Http\Controllers\Room\ShowRoomTimeSlotsController;
 use App\Http\Controllers\Room\StoreRoomController;
 use App\Http\Controllers\Room\StoreRoomPricesController;
 use App\Http\Controllers\Room\UpdateRoomController;
@@ -146,4 +147,7 @@ Route::middleware('auth')->group(function () {
     // Rooms prices routes
     Route::get('/rooms/{id}/prices', ShowRoomPricesController::class)->name('rooms.prices.show');
     Route::post('/rooms/{id}/prices', StoreRoomPricesController::class)->name('rooms.prices.store');
+
+    // Rooms time slots routes
+    Route::get('/rooms/{id}/timeslots', ShowRoomTimeSlotsController::class)->name('rooms.timeslots.show');
 });

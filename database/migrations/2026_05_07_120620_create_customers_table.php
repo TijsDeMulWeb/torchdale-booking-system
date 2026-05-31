@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('last_name', 75);
             $table->string('email')->unique();
             $table->string('phone', 20)->nullable();
+            $table->string('street', 255);
+            $table->string('postal_code', 20);
+            $table->string('city', 100);
+            $table->string('country', 100);
             $table->dateTime('banned_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

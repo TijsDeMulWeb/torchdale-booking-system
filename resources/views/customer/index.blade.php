@@ -24,10 +24,6 @@
                                 d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 5.4 5.4a7.5 7.5 0 0 0 11.25 11.25Z" />
                         </svg>
                     </form>
-                    <a href="{{ route('rooms.create') }}"
-                        class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
-                        Klant Toevoegen
-                    </a>
                 </div>
             </div>
             @if ($customers->count() > 0)
@@ -111,7 +107,7 @@
                     </div>
                 </div>
             @else
-            <x-empty-state name='customer' :route="route('rooms.create')" />
+            <x-empty-state name='customer' />
         @endif
         {{ $customers->links() }}
     </div>

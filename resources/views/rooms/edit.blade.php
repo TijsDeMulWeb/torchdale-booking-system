@@ -5,8 +5,9 @@
         ['name' => 'Bewerken', 'url' => route('rooms.edit', $room->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('rooms.store') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('rooms.update', $room->id) }}" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <div class="space-y-12 sm:space-y-16">
                 <div>
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Kamer</h2>
@@ -99,7 +100,6 @@
                             <div class="mt-2 flex items-center gap-x-3">
                                 <img id="logo-preview" src="{{ $room->url ? Storage::url($room->url) : 'https://placehold.co/400x400' }}" alt="Logo preview"
                                     class="max-h-24 w-auto rounded-lg object-contain border border-gray-200 dark:border-white/10">
-
                                 <input id="logo" name="url" type="file" class="hidden" onchange="previewLogo(event)">
 
                                 <button type="button" onclick="document.getElementById('logo').click()"

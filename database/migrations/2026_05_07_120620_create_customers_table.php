@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('escaperoom_id')->constrained()->onDelete('cascade');
             $table->string('first_name', 75);
             $table->string('last_name', 75);
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('phone', 20)->nullable();
             $table->string('street', 255);
             $table->string('house_number', 20);

@@ -15,6 +15,11 @@ class Customer extends Model
         return $this->belongsTo(Escaperoom::class);
     }
 
+    public function blacklisted_customer()
+    {
+        return $this->hasOne(BlacklistedCustomer::class);
+    }
+
     protected function casts(): array
     {
         return [

@@ -12,8 +12,12 @@ class ProductCategoryController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $categories = $request->escaperoom->categories()->with('products')->get();
+        if ($request->category_id) {
+            $categories = $request->escaperoom->categories()->where('id', $request->category_id)->with('products')->get();
+            return response()->json(['success' => true, 'categories' => $categories]);
+        }
 
+        $categories = $request->escaperoom->categories()->with('products')->get();
         return response()->json(['success' => true, 'categories' => $categories]);
     }
 }

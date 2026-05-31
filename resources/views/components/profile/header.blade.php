@@ -10,13 +10,21 @@
                 </div>
             </div>
             <div class="mt-5 flex justify-center sm:mt-0">
-                <form method="POST" action="{{ route('customers.show.overview', $customer->id) }}">
-                    @csrf
-                    @method('PATCH')
-                    <button type="submit"
-                        class="flex items-center justify-center rounded-md bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring inset-ring-white/5 hover:bg-white/20">Ban
-                        profile</button>
-                </form>
+                @if (empty($customer->banned_at))
+                    <form method="POST" action="{{ route('customers.ban', $customer->id) }}">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-500">Ban
+                            profile</button>
+                    </form>
+                @else
+                    <form method="POST" action="{{ route('customers.unban', $customer->id) }}">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-700">Unban
+                            profile</button>
+                    </form>
+                @endif
             </div>
         </div>
     </div>

@@ -32,16 +32,25 @@
         <!-- Tabs at small breakpoint and up -->
         <div class="hidden sm:block">
             <nav class="-mb-px flex space-x-8">
-                <a href="{{ route('customers.show.overview', $customer->id) }}" aria-current="page"
-                    class="border-b-2 border-transparent px-1 pb-4 text-sm font-medium whitespace-nowrap text-gray-400 hover:border-white/20 hover:text-white">Overzicht</a>
-                <a href="{{ route('customers.show.appointments', $customer->id) }}"
-                    class="border-b-2 border-indigo-400 px-1 pb-4 text-sm font-medium whitespace-nowrap text-indigo-400">Afspraken</a>
-                <a href="{{ route('customers.show.messages', $customer->id) }}"
-                    class="border-b-2 border-transparent px-1 pb-4 text-sm font-medium whitespace-nowrap text-gray-400 hover:border-white/20 hover:text-white">Berichten</a>
-                <a href="{{ route('customers.show.purchases', $customer->id) }}"
-                    class="border-b-2 border-transparent px-1 pb-4 text-sm font-medium whitespace-nowrap text-gray-400 hover:border-white/20 hover:text-white">Aankopen</a>
-                <a href="{{ route('customers.show.gift-cards', $customer->id) }}"
-                    class="border-b-2 border-transparent px-1 pb-4 text-sm font-medium whitespace-nowrap text-gray-400 hover:border-white/20 hover:text-white">Kortingsbonnen</a>
+                @php
+                    $tabs = [
+                        'customers.show.overview' => 'Overzicht',
+                        'customers.show.appointments' => 'Afspraken',
+                        'customers.show.messages' => 'Berichten',
+                        'customers.show.purchases' => 'Aankopen',
+                        'customers.show.gift-cards' => 'Kortingsbonnen',
+                    ];
+                @endphp
+
+                @foreach ($tabs as $routeName => $label)
+                    <a href="{{ route($routeName, $customer->id) }}" @class([
+                        'border-b-2 px-1 pb-4 text-sm font-medium whitespace-nowrap',
+                        'border-indigo-400 text-indigo-400' => request()->routeIs($routeName),
+                        'border-transparent text-gray-400 hover:border-white/20 hover:text-white' => !request()->routeIs($routeName),
+                    ])>
+                        {{ $label }}
+                    </a>
+                @endforeach
             </nav>
         </div>
     </div>

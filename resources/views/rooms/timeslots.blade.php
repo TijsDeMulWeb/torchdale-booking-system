@@ -9,6 +9,7 @@
             <div>
                 <h1 class="text-base font-semibold text-gray-900 dark:text-white">Tijdsloten — {{ $room->name }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Beheer beschikbare tijdslots per dag.</p>
+                <x-last-updated :model="$last_updated" />
             </div>
         </div>
         <div class="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">

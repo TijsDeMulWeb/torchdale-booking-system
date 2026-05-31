@@ -24,6 +24,7 @@ class ShowRoomPriceController extends Controller
                     'payment_location' => $rows->first()->payment_location,
                     'players' => $rows->keyBy('player_amount'),
                 ]),
+            'last_updated' => auth()->user()->escaperoom->rooms()->findOrFail($id)->prices()->latest('updated_at')->first(),
         ]);
     }
 }

@@ -17,6 +17,7 @@ class ShowRoomTimeSlotController extends Controller
         return view('rooms.timeslots', [
             'room' => $room,
             'slots' => $room->timeSlots()->get()->groupBy('day_of_week'),
+            'last_updated' => $room->timeSlots()->latest('updated_at')->first(),
         ]);
     }
 }

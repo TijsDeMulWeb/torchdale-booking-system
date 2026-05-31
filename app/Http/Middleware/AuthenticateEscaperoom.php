@@ -5,27 +5,49 @@ namespace App\Http\Middleware;
 use App\Models\EscaperoomSetting;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthenticateEscaperoom
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  Closure(Request): (Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        $apiKey = $request->header('applicationKey');
-
-        if (!$apiKey) {
-            return response()->json(['message' => 'API key is missing'], 401);
+        if (!$request->secure() && app()->environment('production')) {
+            return response()->json(['message' => 'HTTPS required'], 403);
         }
 
-        $escaperoomSetting = EscaperoomSetting::where('escaperoom_api_key_hash', hash('sha256', $apiKey))->first();
+        $publicKey = $request->header('X-API-Public-Key');
+
+        if (!$publicKey) {
+            return response()->json(['message' => 'API key missing'], 401);
+        }
+
+        $rateLimitKey = 'api:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($rateLimitKey, 60)) {
+            $seconds = RateLimiter::availableIn($rateLimitKey);
+            return response()->json([
+                'message'     => 'Too many requests',
+                'retry_after' => $seconds,
+            ], 429);
+        }
+        RateLimiter::hit($rateLimitKey, 60);
+
+        $escaperoomSetting = EscaperoomSetting::where('escaperoom_api_public_key', $publicKey)->first();
 
         if (!$escaperoomSetting) {
+            Log::warning('Invalid API key attempt', [
+                'ip'         => $request->ip(),
+                'public_key' => $publicKey,
+                'origin'     => $request->header('Origin'),
+            ]);
             return response()->json(['message' => 'Invalid API key'], 401);
+        }
+
+        // Origin check
+        $origin = $request->header('Origin');
+        if ($escaperoomSetting->allowed_origin && $origin !== $escaperoomSetting->allowed_origin) {
+            return response()->json(['message' => 'Origin not allowed'], 403);
         }
 
         $request->merge(['escaperoom' => $escaperoomSetting->escaperoom]);

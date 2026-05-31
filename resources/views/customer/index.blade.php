@@ -13,8 +13,7 @@
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
                     <form method="GET" action="{{ route('customers.index') }}" class="relative">
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Zoek klant..."
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Zoek klant..."
                             class="w-64 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 py-2 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500" />
 
                         {{-- Search icon --}}
@@ -88,6 +87,11 @@
                                                 <td
                                                     class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
                                                     <div class="flex items-center justify-end gap-4">
+                                                        <a href="{{ route('customers.show', $customer->id) }}"
+                                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                                            Bekijken
+                                                            <span class="sr-only">, {{ $customer->name }}</span>
+                                                        </a>
                                                         <a href="{{ route('rooms.edit', $customer->id) }}"
                                                             class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                             Wijzigen

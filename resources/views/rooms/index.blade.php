@@ -84,7 +84,7 @@
 
                                                 <div class="flex items-center justify-end gap-4">
 
-                                                    <a href="{{ route('products.edit', $room->id) }}"
+                                                    <a href="{{ route('rooms.edit', $room->id) }}"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                         Wijzigen
                                                         <span class="sr-only">, {{ $room->name }}</span>

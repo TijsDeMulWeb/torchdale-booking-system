@@ -46,6 +46,7 @@ use App\Http\Controllers\Profile\UpdatePasswordController;
 use App\Http\Controllers\Profile\UpdateProfileController;
 use App\Http\Controllers\Room\CreateRoomController;
 use App\Http\Controllers\Room\DeleteRoomController;
+use App\Http\Controllers\Room\EditRoomController;
 use App\Http\Controllers\Room\IndexRoomController;
 use App\Http\Controllers\Room\StoreRoomController;
 use App\Http\Controllers\User\CreateUserController;
@@ -135,5 +136,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms', IndexRoomController::class)->name('rooms.index');
     Route::get('/rooms/create', CreateRoomController::class)->name('rooms.create');
     Route::post('/rooms/create', StoreRoomController::class)->name('rooms.store');
+    Route::get('/rooms/{id}/edit', EditRoomController::class)->name('rooms.edit');
     Route::delete('/rooms/{id}/delete', DeleteRoomController::class)->name('rooms.destroy');
 });

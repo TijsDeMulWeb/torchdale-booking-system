@@ -75,9 +75,7 @@
                                             </td>
                                             <td
                                                 class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
-
                                                 <div class="flex items-center justify-end gap-4">
-
                                                     <a href="{{ route('rooms.edit', $room->id) }}"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                         Wijzigen
@@ -88,7 +86,11 @@
                                                         Prijzen
                                                         <span class="sr-only">, {{ $room->name }}</span>
                                                     </a>
-
+                                                    <a href="{{ route('rooms.timeslots.show', $room->id) }}"
+                                                        class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">
+                                                        Tijdsloten
+                                                        <span class="sr-only">, {{ $room->name }}</span>
+                                                    </a>
                                                     <form method="POST" action="{{ route('rooms.destroy', $room->id) }}">
                                                         @csrf
                                                         @method('DELETE')

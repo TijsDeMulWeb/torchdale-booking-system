@@ -3,6 +3,9 @@
     <x-error name="message" />
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Kamer', 'url' => route('rooms.index')],
+        ['name' => $room->name, 'url' => route('rooms.edit', $room->id)],
+        ['name' => 'Bewerken', 'url' => route('rooms.edit', $room->id)],
+        ['name' => 'Prijzen', 'url' => route('rooms.timeslots.show', $room->id)],
     ]" />
 
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
@@ -54,7 +57,8 @@
                                     <span
                                         class="px-3 py-2 text-sm text-gray-400 bg-gray-50 dark:bg-white/5 border-l border-gray-300 dark:border-white/20">%</span>
                                 </div>
-                                <label class="text-sm text-gray-500 dark:text-gray-400 shrink-0">Extra Prijs Boven Basisprijs - Betaling</label>
+                                <label class="text-sm text-gray-500 dark:text-gray-400 shrink-0">Extra Prijs Boven
+                                    Basisprijs - Betaling</label>
                                 <div
                                     class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
                                     <select name="pricings[{{ $dayIndex }}][payment_location]"

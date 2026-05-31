@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoomPricesRequest;
 use App\Models\RoomPrice;
 
-class StoreRoomPricesController extends Controller
+class StoreRoomPriceController extends Controller
 {
     /**
      * Handle the incoming request.

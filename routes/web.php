@@ -46,13 +46,16 @@ use App\Http\Controllers\Profile\UpdatePasswordController;
 use App\Http\Controllers\Profile\UpdateProfileController;
 use App\Http\Controllers\Room\CreateRoomController;
 use App\Http\Controllers\Room\DeleteRoomController;
+use App\Http\Controllers\Room\DeleteRoomTimeSlotController;
 use App\Http\Controllers\Room\EditRoomController;
 use App\Http\Controllers\Room\IndexRoomController;
-use App\Http\Controllers\Room\ShowRoomPricesController;
-use App\Http\Controllers\Room\ShowRoomTimeSlotsController;
+use App\Http\Controllers\Room\ShowRoomPriceController;
+use App\Http\Controllers\Room\ShowRoomTimeSlotController;
 use App\Http\Controllers\Room\StoreRoomController;
-use App\Http\Controllers\Room\StoreRoomPricesController;
+use App\Http\Controllers\Room\StoreRoomPriceController;
+use App\Http\Controllers\Room\StoreRoomTimeslotController;
 use App\Http\Controllers\Room\UpdateRoomController;
+use App\Http\Controllers\Room\UpdateRoomTimeslotController;
 use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
 use App\Http\Controllers\User\EditUserController;
@@ -145,9 +148,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/rooms/{id}/delete', DeleteRoomController::class)->name('rooms.destroy');
 
     // Rooms prices routes
-    Route::get('/rooms/{id}/prices', ShowRoomPricesController::class)->name('rooms.prices.show');
-    Route::post('/rooms/{id}/prices', StoreRoomPricesController::class)->name('rooms.prices.store');
+    Route::get('/rooms/{id}/prices', ShowRoomPriceController::class)->name('rooms.prices.show');
+    Route::post('/rooms/{id}/prices', StoreRoomPriceController::class)->name('rooms.prices.store');
 
     // Rooms time slots routes
-    Route::get('/rooms/{id}/timeslots', ShowRoomTimeSlotsController::class)->name('rooms.timeslots.show');
+    Route::get('/rooms/{id}/timeslots', ShowRoomTimeSlotController::class)->name('rooms.timeslots.show');
+    Route::delete('/rooms/{id}/timeslots/delete', DeleteRoomTimeSlotController::class)->name('rooms.timeslots.destroy');
+    Route::post('/rooms/{id}/timeslots/create', StoreRoomTimeslotController::class)->name('rooms.timeslots.store');
+    Route::put('/rooms/{id}/timeslots/{timeslot}/edit', UpdateRoomTimeslotController::class)->name('rooms.timeslots.update');
 });

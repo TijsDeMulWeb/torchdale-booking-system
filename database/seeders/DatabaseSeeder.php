@@ -142,6 +142,7 @@ class DatabaseSeeder extends Seeder
             'min_age' => 16,
             'url' => 'https://torchdale.be/rooms/the-toy-factory',
             'active_from' => now(),
+            'color' => '#FF5733',
         ]);
 
 

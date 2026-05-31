@@ -13,6 +13,7 @@ use App\Http\Controllers\Coupon\EditCouponController;
 use App\Http\Controllers\Coupon\IndexCouponController;
 use App\Http\Controllers\Coupon\StoreCouponController;
 use App\Http\Controllers\Coupon\UpdateCouponController;
+use App\Http\Controllers\Customer\EditCustomerController;
 use App\Http\Controllers\Customer\IndexCustomerController;
 use App\Http\Controllers\Customer\ShowAppointmentCustomerController;
 use App\Http\Controllers\Customer\ShowCustomerController;
@@ -166,6 +167,7 @@ Route::middleware('auth')->group(function () {
     // Customer routes
     Route::get('/customers', IndexCustomerController::class)->name('customers.index');
     Route::get('/customers/{id}/overview', ShowCustomerController::class)->name('customers.show.overview');
+    Route::get('/customers/{id}/overview/edit', EditCustomerController::class)->name('customers.edit.overview');
     Route::get('/customers/{id}/appointments', ShowAppointmentCustomerController::class)->name('customers.show.appointments');
     Route::get('/customers/{id}/messages', ShowMessageCustomerController::class)->name('customers.show.messages');
     Route::get('/customers/{id}/purchases', ShowPurchasesCustomerController::class)->name('customers.show.purchases');

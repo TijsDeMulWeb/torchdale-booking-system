@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 
+#[Fillable(['escaperoom_address_id', 'name', 'duration', 'min_players', 'max_players', 'min_age', 'url', 'active_from', 'active_until', 'max_booking_advance', 'color'])]
 class Room extends Model
 {
     public function escaperoom()

@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="mt-5 flex justify-center sm:mt-0">
-                    <form method="POST" action="{{ route('customers.show', $customer->id) }}">
+                    <form method="POST" action="{{ route('customers.show.overview', $customer->id) }}">
                         @csrf
                         @method('PATCH')
                         <button type="submit"
@@ -53,14 +53,18 @@
             </div>
             <div class="mt-4">
                 <div class="grid grid-cols-1 sm:hidden">
-                    <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
-                    <select aria-label="Select a tab"
+                    <select aria-label="Select a tab" onchange="window.location = this.value"
                         class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-2 pr-8 pl-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline-2 focus:-outline-offset-2 focus:outline-white">
-                        <option selected>Overzicht</option>
-                        <option>Afspraken</option>
-                        <option>Berichten</option>
-                        <option>Aankopen</option>
-                        <option>Kortingsbonnen</option>
+                        <option value="{{ route('customers.show.overview', $customer->id) }}"
+                            @selected(request()->routeIs('customers.show.overview'))>Overzicht</option>
+                        <option value="{{ route('customers.show.appointments', $customer->id) }}"
+                            @selected(request()->routeIs('customers.show.appointments'))>Afspraken</option>
+                        <option value="{{ route('customers.show.messages', $customer->id) }}"
+                            @selected(request()->routeIs('customers.show.messages'))>Berichten</option>
+                        <option value="{{ route('customers.show.purchases', $customer->id) }}"
+                            @selected(request()->routeIs('customers.show.purchases'))>Aankopen</option>
+                        <option value="{{ route('customers.show.gift-cards', $customer->id) }}"
+                            @selected(request()->routeIs('customers.show.gift-cards'))>Kortingsbonnen</option>
                     </select>
                     <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true"
                         class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end fill-gray-400">
@@ -72,15 +76,15 @@
                 <!-- Tabs at small breakpoint and up -->
                 <div class="hidden sm:block">
                     <nav class="-mb-px flex space-x-8">
-                        <a href="#" aria-current="page"
+                        <a href="{{ route('customers.show.overview', $customer->id) }}" aria-current="page"
                             class="border-b-2 border-indigo-400 px-1 pb-4 text-sm font-medium whitespace-nowrap text-indigo-400">Overzicht</a>
-                        <a href="#"
+                        <a href="{{ route('customers.show.appointments', $customer->id) }}"
                             class="border-b-2 border-transparent px-1 pb-4 text-sm font-medium whitespace-nowrap text-gray-400 hover:border-white/20 hover:text-white">Afspraken</a>
-                        <a href="#"
+                        <a href="{{ route('customers.show.messages', $customer->id) }}"
                             class="border-b-2 border-transparent px-1 pb-4 text-sm font-medium whitespace-nowrap text-gray-400 hover:border-white/20 hover:text-white">Berichten</a>
-                        <a href="#"
+                        <a href="{{ route('customers.show.purchases', $customer->id) }}"
                             class="border-b-2 border-transparent px-1 pb-4 text-sm font-medium whitespace-nowrap text-gray-400 hover:border-white/20 hover:text-white">Aankopen</a>
-                        <a href="#"
+                        <a href="{{ route('customers.show.gift-cards', $customer->id) }}"
                             class="border-b-2 border-transparent px-1 pb-4 text-sm font-medium whitespace-nowrap text-gray-400 hover:border-white/20 hover:text-white">Kortingsbonnen</a>
                     </nav>
                 </div>
@@ -106,7 +110,9 @@
                 </div>
                 <div class="border-t border-white/10 px-4 py-6 sm:col-span-1 sm:px-0">
                     <dt class="text-sm/6 font-medium text-white">Adres</dt>
-                    <dd class="mt-1 text-sm/6 text-gray-400 sm:mt-2">{{ ucfirst($customer->street) }} {{ $customer->house_number }}, {{ ucfirst($customer->city) }} {{ $customer->postal_code }}, {{ ucfirst($customer->country) }}</dd>
+                    <dd class="mt-1 text-sm/6 text-gray-400 sm:mt-2">{{ ucfirst($customer->street) }}
+                        {{ $customer->house_number }}, {{ ucfirst($customer->city) }} {{ $customer->postal_code }},
+                        {{ ucfirst($customer->country) }}</dd>
                 </div>
 
                 <div class="border-t border-white/10 px-4 py-6 sm:col-span-2 sm:px-0">
@@ -114,10 +120,6 @@
                     <dd class="mt-1 text-sm/6 text-gray-400 sm:mt-2">{{ $customer->created_at->format('d-m-Y') }}</dd>
                 </div>
             </dl>
-
         </div>
-
-
-
     </div>
 </x-layouts.app>

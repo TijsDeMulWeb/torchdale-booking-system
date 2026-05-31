@@ -27,7 +27,7 @@ class UpdateProfileController extends Controller
             }
 
             $path = $request->file('profile_picture')
-                ->store('users/profile', 'public');
+                ->store("escaperooms/{$user->escaperoom_id}/users/{$user->id}/profile", 'public');
 
             $data['profile_picture'] = $path;
         }

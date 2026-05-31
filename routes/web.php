@@ -14,6 +14,7 @@ use App\Http\Controllers\Coupon\IndexCouponController;
 use App\Http\Controllers\Coupon\StoreCouponController;
 use App\Http\Controllers\Coupon\UpdateCouponController;
 use App\Http\Controllers\Customer\IndexCustomerController;
+use App\Http\Controllers\Customer\ShowCustomerController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
 use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
@@ -160,4 +161,5 @@ Route::middleware('auth')->group(function () {
 
     // Customer routes
     Route::get('/customers', IndexCustomerController::class)->name('customers.index');
+    Route::get('/customers/{id}', ShowCustomerController::class)->name('customers.show');
 });

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('postal_code', 20);
             $table->string('city', 100);
             $table->string('country', 100);
+            $table->string('ip_address', 45)->nullable();
             $table->dateTime('banned_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

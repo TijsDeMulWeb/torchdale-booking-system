@@ -57,9 +57,4 @@ class Escaperoom extends Model
     {
         return $this->hasMany(Room::class);
     }
-
-    public function blacklisted_customers()
-    {
-        return $this->hasMany(BlacklistedCustomer::class);
-    }
 }

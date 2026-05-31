@@ -19,7 +19,7 @@ class StoreRoomController extends Controller
 
         $room = new Room($validated);
         $room->escaperoom_id = auth()->user()->escaperoom->id;
-        $room->escaperoom_address_id = auth()->user()->escaperoom->escaperoomAddresses()->first()->id;
+        $room->escaperoom_address_id = $validated['escaperoom_address_id'];
         $room->url = '';
         $room->save();
 

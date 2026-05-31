@@ -48,7 +48,9 @@ use App\Http\Controllers\Room\CreateRoomController;
 use App\Http\Controllers\Room\DeleteRoomController;
 use App\Http\Controllers\Room\EditRoomController;
 use App\Http\Controllers\Room\IndexRoomController;
+use App\Http\Controllers\Room\ShowRoomPricesController;
 use App\Http\Controllers\Room\StoreRoomController;
+use App\Http\Controllers\Room\StoreRoomPricesController;
 use App\Http\Controllers\Room\UpdateRoomController;
 use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
@@ -140,4 +142,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/rooms/{id}/edit', EditRoomController::class)->name('rooms.edit');
     Route::put('/rooms/{id}/edit', UpdateRoomController::class)->name('rooms.update');
     Route::delete('/rooms/{id}/delete', DeleteRoomController::class)->name('rooms.destroy');
+
+    // Rooms prices routes
+    Route::get('/rooms/{id}/prices', ShowRoomPricesController::class)->name('rooms.prices.show');
+    Route::post('/rooms/{id}/prices', StoreRoomPricesController::class)->name('rooms.prices.store');
 });

@@ -92,11 +92,6 @@
                                                             Bekijken
                                                             <span class="sr-only">, {{ $customer->name }}</span>
                                                         </a>
-                                                        <a href="{{ route('rooms.edit', $customer->id) }}"
-                                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                                            Wijzigen
-                                                            <span class="sr-only">, {{ $customer->name }}</span>
-                                                        </a>
                                                         <form method="POST" action="{{ route('rooms.destroy', $customer->id) }}">
                                                             @csrf
                                                             @method('DELETE')

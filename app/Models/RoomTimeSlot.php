@@ -15,4 +15,12 @@ class RoomTimeSlot extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'start_time' => 'datetime:H:i',
+            'end_time' => 'datetime:H:i',
+        ];
+    }
 }

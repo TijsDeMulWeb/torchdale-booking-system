@@ -13,7 +13,7 @@
                         <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Een lijst van alle kamers.</p>
                     </div>
                     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
-                        <a href="{{ route('products.create') }}"
+                        <a href="{{ route('rooms.create') }}"
                             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
                             Kamer Toevoegen
                         </a>
@@ -77,7 +77,7 @@
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 <span class="inline-block w-3 h-3 rounded-full"
-                                                    style="background-color: #00aeef"></span>
+                                                    style="background-color: {{ $room->color }}"></span>
                                             </td>
                                             <td
                                                 class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
@@ -109,7 +109,7 @@
                 </div>
             </div>
         @else
-            <x-empty-state name='room' :route="route('products.create')" />
+            <x-empty-state name='room' :route="route('rooms.create')" />
         @endif
         {{ $rooms->links() }}
     </div>

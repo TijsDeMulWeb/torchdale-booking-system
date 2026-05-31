@@ -4,19 +4,36 @@ namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoomRequest;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UpdateRoomController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
     public function __invoke(StoreRoomRequest $request, int $id)
     {
         $room = auth()->user()->escaperoom->rooms()->findOrFail($id);
-        abort_if($room->escaperoom_id !== auth()->user()->escaperoom_id, 403);
 
-        $room->update($request->validated());
+        $validated = $request->validated();
+
+        if ($request->hasFile('url')) {
+            if ($room->url) {
+                Storage::disk('public')->delete($room->url);
+            }
+
+            $imageFile = $validated['url'];
+            unset($validated['url']);
+
+            $room->update($validated);
+
+            $room->url = $imageFile->store(
+                'escaperooms/' . auth()->user()->escaperoom->id . '/rooms/' . $room->id,
+                'public'
+            );
+            $room->save();
+        } else {
+            unset($validated['url']);
+            $room->update($validated);
+        }
+
         return redirect()->route('rooms.index')->with('message', 'Kamer updated successfully.');
     }
 }

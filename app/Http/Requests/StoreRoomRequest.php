@@ -39,6 +39,7 @@ class StoreRoomRequest extends FormRequest
             'url' => ['nullable', 'image', 'max:5120'],
             'active_from' => ['required', 'date'],
             'active_until' => ['nullable', 'date', 'after:active_from'],
+            'min_booking_advance' => ['nullable', 'integer', 'min:0'],
             'max_booking_advance' => ['nullable', 'integer', 'min:0'],
             'color' => ['required', 'string', 'max:7']
         ];

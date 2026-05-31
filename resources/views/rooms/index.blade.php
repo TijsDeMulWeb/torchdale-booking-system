@@ -90,7 +90,7 @@
                                                         <span class="sr-only">, {{ $room->name }}</span>
                                                     </a>
 
-                                                    <form method="POST" action="{{ route('products.destroy', $room->id) }}">
+                                                    <form method="POST" action="{{ route('rooms.destroy', $room->id) }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"

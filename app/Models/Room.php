@@ -25,6 +25,11 @@ class Room extends Model
         return $this->hasMany(RoomPrice::class);
     }
 
+    public function timeSlots()
+    {
+        return $this->hasMany(RoomTimeSlot::class);
+    }
+
     protected function casts(): array
     {
         return [

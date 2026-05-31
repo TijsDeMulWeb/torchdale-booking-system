@@ -12,7 +12,16 @@ class IndexCustomerController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $customers = auth()->user()->escaperoom->customers()->paginate(10);
+        $customers = auth()->user()->escaperoom
+            ->customers()
+            ->when($request->search, function ($query) use ($request) {
+                $query->where('first_name', 'like', '%' . $request->search . '%')
+                    ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                    ->orWhere('email', 'like', '%' . $request->search . '%')
+                    ->orWhere('id', 'like', '%' . $request->search . '%');
+            })
+            ->paginate(10)
+            ->withQueryString();
 
         return view('customer.index', [
             'customers' => $customers,

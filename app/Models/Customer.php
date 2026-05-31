@@ -3,10 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+#[Fillable(['first_name', 'last_name', 'email', 'phone', 'street', 'postal_code', 'city', 'country', 'banned_at'])]
 class Customer extends Model
 {
-    public function escaperoom(){
+    use SoftDeletes;
+    public function escaperoom()
+    {
         return $this->belongsTo(Escaperoom::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'banned_at' => 'datetime',
+        ];
     }
 }

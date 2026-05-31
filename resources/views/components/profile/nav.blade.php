@@ -3,8 +3,8 @@
         <h3 class="text-base font-semibold text-white">{{ $customer->first_name }} {{ $customer->last_name }}
         </h3>
         <div class="mt-3 flex md:absolute md:top-3 md:right-0 md:mt-0">
-            <button type="button"
-                class="ml-3 inline-flex items-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Aanpassen</button>
+            <a href="{{ route('customers.edit.overview', $customer->id) }}"
+                class="ml-3 inline-flex items-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Aanpassen</a>
         </div>
     </div>
     <div class="mt-4">

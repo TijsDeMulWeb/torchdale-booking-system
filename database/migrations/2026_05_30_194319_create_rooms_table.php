@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->string('url', 255);
             $table->datetime('active_from');
             $table->datetime('active_until')->nullable();
+            $table->integer('min_booking_advance')->nullable();
             $table->integer('max_booking_advance')->nullable();
             $table->string('color', 7)->nullable(); 
             $table->timestamps();

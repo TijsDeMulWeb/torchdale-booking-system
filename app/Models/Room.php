@@ -20,6 +20,11 @@ class Room extends Model
         return $this->belongsTo(EscaperoomAddress::class);
     }
 
+    public function prices()
+    {
+        return $this->hasMany(RoomPrice::class);
+    }
+
     protected function casts(): array
     {
         return [

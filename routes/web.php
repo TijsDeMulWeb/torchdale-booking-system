@@ -20,6 +20,7 @@ use App\Http\Controllers\Customer\ShowCustomerController;
 use App\Http\Controllers\Customer\ShowGiftCardCustomerController;
 use App\Http\Controllers\Customer\ShowMessageCustomerController;
 use App\Http\Controllers\Customer\ShowPurchasesCustomerController;
+use App\Http\Controllers\Customer\UpdateCustomerController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
 use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
@@ -168,6 +169,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers', IndexCustomerController::class)->name('customers.index');
     Route::get('/customers/{id}/overview', ShowCustomerController::class)->name('customers.show.overview');
     Route::get('/customers/{id}/overview/edit', EditCustomerController::class)->name('customers.edit.overview');
+    Route::put('/customers/{id}/overview/edit', UpdateCustomerController::class)->name('customers.update.overview');
     Route::get('/customers/{id}/appointments', ShowAppointmentCustomerController::class)->name('customers.show.appointments');
     Route::get('/customers/{id}/messages', ShowMessageCustomerController::class)->name('customers.show.messages');
     Route::get('/customers/{id}/purchases', ShowPurchasesCustomerController::class)->name('customers.show.purchases');

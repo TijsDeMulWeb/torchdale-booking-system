@@ -16,6 +16,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use App\Services\ApiKeyService;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -73,13 +75,21 @@ class DatabaseSeeder extends Seeder
             'country_id' => 1,
         ]);
 
+        $apiKeyService = new ApiKeyService();
+        $keys = $apiKeyService->generateApiKeys();
+
         EscaperoomSetting::create([
             'escaperoom_id' => 1,
-            'escaperoom_api_key' => 'torchdale',
-            'escaperoom_api_key_hash' => hash('sha256', 'torchdale'),
+            'escaperoom_api_public_key' => $keys['public_key'],
+            'escaperoom_api_secret_hash' => $keys['secret_hash_store'],
             'mollie_api_key' => null,
             'openai_api_key' => env('OPENAI_API_KEY'),
         ]);
+
+        $this->command->info('=== API KEYS (sla deze op!) ===');
+        $this->command->info('Public key: ' . $keys['public_key']);
+        $this->command->info('Secret key: ' . $keys['secret_key']);
+        $this->command->info('================================');
 
         User::create([
             'first_name' => 'Tijs',

@@ -1,4 +1,6 @@
 <x-layouts.app>
+    <x-success :message="session('message')" />
+    <x-error name="message" />
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Kamer', 'url' => route('rooms.index')],
     ]" />
@@ -28,7 +30,8 @@
                     <dt class="text-sm/6 font-medium text-white">Adres</dt>
                     <dd class="mt-1 text-sm/6 text-gray-400 sm:mt-2">{{ ucfirst($customer->street) }}
                         {{ $customer->house_number }}, {{ ucfirst($customer->city) }} {{ $customer->postal_code }},
-                        {{ ucfirst($customer->country) }}</dd>
+                        {{ ucfirst($customer->country) }}
+                    </dd>
                 </div>
 
                 <div class="border-t border-white/10 px-4 py-6 sm:col-span-2 sm:px-0">

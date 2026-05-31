@@ -71,8 +71,7 @@
                                             class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
                                             <span
                                                 class="px-3 py-2 text-sm text-gray-400 bg-gray-50 dark:bg-white/5 border-r border-gray-300 dark:border-white/20">€</span>
-                                            <input type="text"
-                                                name="pricings[{{ $dayIndex }}][players][{{ $players }}]"
+                                            <input type="text" name="pricings[{{ $dayIndex }}][players][{{ $players }}]"
                                                 value="{{ number_format($playerPricing?->price ?? 0, 2, '.', '') }}"
                                                 class="w-full px-2 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0" />
                                         </div>
@@ -84,11 +83,11 @@
                 </div>
             @endforeach
 
-            <div class="mt-6 flex justify-end">
+            <div class="my-6 flex items-center justify-end gap-x-6">
+                <a href="{{ route('rooms.index') }}"
+                    class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
                 <button type="submit"
-                    class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    Opslaan
-                </button>
+                    class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Save</button>
             </div>
         </form>
     </div>

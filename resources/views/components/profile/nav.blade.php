@@ -1,6 +1,7 @@
 <div class="relative border-b border-white/10 pb-5 sm:pb-0">
     <div class="md:flex md:items-center md:justify-between">
         <h3 class="text-base font-semibold text-white">{{ $customer->first_name }} {{ $customer->last_name }}
+            <x-last-updated :model="$customer" />
         </h3>
         <div class="mt-3 flex md:absolute md:top-3 md:right-0 md:mt-0">
             <a href="{{ route('customers.edit.overview', $customer->id) }}"

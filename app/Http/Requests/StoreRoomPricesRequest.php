@@ -26,6 +26,7 @@ class StoreRoomPricesRequest extends FormRequest
             'pricings' => ['required', 'array', 'size:7'],
             'pricings.*.base_price' => ['required', 'numeric', 'min:0'],
             'pricings.*.vat_percentage' => ['required', 'numeric', 'min:0', 'max:100'],
+            'pricings.*.payment_location' => ['required', 'in:online,location'],
             'pricings.*.players' => ['required', 'array'],
             'pricings.*.players.*' => ['required', 'numeric', 'min:0'],
         ];

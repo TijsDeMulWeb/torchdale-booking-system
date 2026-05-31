@@ -54,6 +54,19 @@
                                     <span
                                         class="px-3 py-2 text-sm text-gray-400 bg-gray-50 dark:bg-white/5 border-l border-gray-300 dark:border-white/20">%</span>
                                 </div>
+                                <label class="text-sm text-gray-500 dark:text-gray-400 shrink-0">Extra Prijs Boven Basisprijs - Betaling</label>
+                                <div
+                                    class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
+                                    <select name="pricings[{{ $dayIndex }}][payment_location]"
+                                        class="px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0">
+                                        <option value="online" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'online' ? 'selected' : '' }}>
+                                            Online
+                                        </option>
+                                        <option value="location" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'location' ? 'selected' : '' }}>
+                                            Ter plaatse
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
 
                             {{-- Per speler --}}

@@ -21,6 +21,7 @@ class ShowRoomPricesController extends Controller
                 ->map(fn($rows) => [
                     'base_price' => $rows->first()->base_price,
                     'vat_percentage' => $rows->first()->vat_percentage,
+                    'payment_location' => $rows->first()->payment_location,
                     'players' => $rows->keyBy('player_amount'),
                 ]),
         ]);

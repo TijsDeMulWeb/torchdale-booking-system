@@ -26,6 +26,7 @@ class StoreRoomPricesController extends Controller
                     [
                         'base_price' => $data['base_price'],
                         'vat_percentage' => $data['vat_percentage'] ?? 21,
+                        'payment_location' => $data['payment_location'] ?? 'online',
                         'price' => $price,
                     ]
                 );

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreRoomPricesRequest;
 use App\Models\RoomPrice;
 
 class StoreRoomPricesController extends Controller
@@ -11,7 +11,7 @@ class StoreRoomPricesController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, int $id)
+    public function __invoke(StoreRoomPricesRequest $request, int $id)
     {
         $room = auth()->user()->escaperoom->rooms()->findOrFail($id);
 
@@ -32,6 +32,6 @@ class StoreRoomPricesController extends Controller
             }
         }
 
-        return redirect()->route('rooms.prices.show', $room->id)->with('success', 'Prijzen succesvol bijgewerkt.');
+        return redirect()->route('rooms.prices.show', $room->id)->with('message', 'Prijzen succesvol bijgewerkt.');
     }
 }

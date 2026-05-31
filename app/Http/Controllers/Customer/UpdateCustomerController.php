@@ -14,6 +14,9 @@ class UpdateCustomerController extends Controller
     public function __invoke(StoreCustomerOverviewRequest $request, int $id)
     {
         $customer = auth()->user()->escaperoom->customers()->findOrFail($id);
+        if ($customer->banned_at) {
+            abort(403, 'This customer is banned and cannot be edited.');
+        }
 
         $customer->update($request->validated());
 

@@ -4,7 +4,7 @@
         ['name' => 'Create', 'url' => route('rooms.create')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('products.store') }}">
+        <form method="POST" action="{{ route('rooms.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="space-y-12 sm:space-y-16">
                 <div>
@@ -105,7 +105,7 @@
                                     class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">
                                     Aanpassen
                                 </button>
-                                <x-form.error name="logo" />
+                                <x-form.error name="url" />
                             </div>
                         </div>
                         <script>
@@ -141,14 +141,15 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="maxBookingAdvance"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Maximmale bookings tijd in toekomst ofzo (in dagen)</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Maximmale
+                                bookings tijd in toekomst ofzo (in dagen)</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="maxBookingAdvance" type="text" name="max_booking_advance" placeholder="30"
                                     value="{{ old('maxBookingAdvance') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="maxBookingAdvance" />
                             </div>
-                        </div>  
+                        </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="color"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">

@@ -33,9 +33,6 @@
                                             Duur</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Basisprijs</th>
-                                        <th scope="col"
-                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
                                             Adres</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
@@ -62,9 +59,6 @@
                                                 {{ $room->duration }} minuten
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                &euro;{{ $room->duration }}
-                                            </td>
-                                            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 {{ $room->escaperoomAddress->street }}
                                                 {{ $room->escaperoomAddress->house_number }},
                                                 {{ $room->escaperoomAddress->postal_code }} {{ $room->escaperoomAddress->city }}
@@ -87,6 +81,11 @@
                                                     <a href="{{ route('rooms.edit', $room->id) }}"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                         Wijzigen
+                                                        <span class="sr-only">, {{ $room->name }}</span>
+                                                    </a>
+                                                    <a href="{{ route('rooms.prices.show', $room->id) }}"
+                                                        class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">
+                                                        Prijzen
                                                         <span class="sr-only">, {{ $room->name }}</span>
                                                     </a>
 

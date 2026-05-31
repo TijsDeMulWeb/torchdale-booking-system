@@ -87,7 +87,7 @@
                                                 <td
                                                     class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
                                                     <div class="flex items-center justify-end gap-4">
-                                                        <a href="{{ route('customers.show', $customer->id) }}"
+                                                        <a href="{{ route('customers.show.overview', $customer->id) }}"
                                                             class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
                                                             Bekijken
                                                             <span class="sr-only">, {{ $customer->name }}</span>

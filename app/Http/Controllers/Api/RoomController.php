@@ -12,8 +12,8 @@ class RoomController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $rooms = $request->escaperoom->rooms()->with('escaperoomAddress')->get();
+        $rooms = $request->escaperoom->escaperoomAddresses()->with('rooms')->get();
 
-        return response()->json(['success' => true, 'rooms' => $rooms]);
+        return response()->json(['success' => true, 'addresses' => $rooms]);
     }
 }

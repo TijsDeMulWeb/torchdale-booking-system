@@ -82,6 +82,7 @@ class DatabaseSeeder extends Seeder
             'escaperoom_id' => 1,
             'escaperoom_api_public_key' => $keys['public_key'],
             'escaperoom_api_secret_hash' => $keys['secret_hash_store'],
+            'allowed_origin' => 'https://torchdale.be',
             'mollie_api_key' => null,
             'openai_api_key' => env('OPENAI_API_KEY'),
         ]);

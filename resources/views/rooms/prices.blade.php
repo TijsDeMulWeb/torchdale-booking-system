@@ -14,7 +14,9 @@
                 <h1 class="text-base font-semibold text-gray-900 dark:text-white">Prijzen — {{ $room->name }}</h1>
                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Stel per dag een basisprijs en prijs per speler
                     in.</p>
-                <x-last-updated :model="$last_updated" />
+                @if ($last_updated)
+                    <x-last-updated :model="$last_updated" />
+                @endif
             </div>
         </div>
 

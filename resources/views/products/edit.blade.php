@@ -70,11 +70,11 @@
                             <label for="about"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Details</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <textarea id="details" name="details" rows="10"
-                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-2xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500">{{ old('details', $product->details) }}</textarea>
+                                <textarea id="description" name="description" rows="10"
+                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-2xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500">{{ old('description', $product->description) }}</textarea>
                                 <p class="mt-3 text-sm/6 text-gray-600 dark:text-gray-400">Beschrijf het product
                                     gedetailleerd.</p>
-                                <x-form.error name="details" />
+                                <x-form.error name="description" />
                             </div>
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">

@@ -13,8 +13,7 @@ class ProductCategoryController extends Controller
     public function __invoke(Request $request)
     {
         $productFilter = fn($query) => $query
-            ->where('available_from', '<=', now())
-            ->where('stock_quantity', '>', 0);
+            ->where('available_from', '<=', now());
             
         if ($request->category_id) {
             $categories = $request->escaperoom->categories()

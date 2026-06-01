@@ -12,21 +12,23 @@ class ProductCategoryController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $availableProducts = fn($query) => $query->where('available_from', '<=', now());
-
+        $productFilter = fn($query) => $query
+            ->where('available_from', '<=', now())
+            ->where('stock_quantity', '>', 0);
+            
         if ($request->category_id) {
             $categories = $request->escaperoom->categories()
                 ->where('id', $request->category_id)
-                ->whereHas('products', $availableProducts)
-                ->with(['products' => $availableProducts, 'products.product_images'])
+                ->whereHas('products', $productFilter)
+                ->with(['products' => $productFilter, 'products.product_images'])
                 ->get();
 
             return response()->json(['success' => true, 'categories' => $categories]);
         }
 
         $categories = $request->escaperoom->categories()
-            ->whereHas('products', $availableProducts)
-            ->with(['products' => $availableProducts, 'products.product_images'])
+            ->whereHas('products', $productFilter)
+            ->with(['products' => $productFilter, 'products.product_images'])
             ->get();
 
         return response()->json(['success' => true, 'categories' => $categories]);

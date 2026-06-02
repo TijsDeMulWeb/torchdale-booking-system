@@ -31,20 +31,21 @@ class CheckoutController extends Controller
                 return response()->json(['success' => false, 'message' => 'Each item must have a type.'], 422);
             }
 
-            if (!in_array($item['type'], ['product', 'escaperoom', 'gift_card'])) {
+            if (!in_array($item['type'], ['product', 'escaperoom', 'giftcard'])) {
                 return response()->json(['success' => false, 'message' => 'Invalid item type: ' . $item['type']], 422);
             }
 
-            if (empty($item['product_id']) || empty($item['qty'])) {
-                return response()->json(['success' => false, 'message' => 'Each item must have a product_id and quantity.'], 422);
-            }
-
             if ($item['type'] === 'product') {
+                if (empty($item['product_id']) || empty($item['qty'])) {
+                    return response()->json(['success' => false, 'message' => 'Each item must have a product_id and quantity.'], 422);
+                }
+
                 $productTotal = 0;
                 $productSubtotal = 0;
                 $productDiscountTotal = 0;
                 $productVatTotal = 0;
                 $product = $request->escaperoom->products()->find($item['product_id']);
+
                 if (!$product) {
                     return response()->json(['success' => false, 'message' => 'Product not found: ' . $item['product_id']], 422);
                 }
@@ -69,9 +70,31 @@ class CheckoutController extends Controller
                 $discount += $productDiscountTotal;
                 $vatTotal += $productVatTotal;
             }
+
+            if ($item['type'] === 'giftcard') {
+                if (empty($item['gift_card_id'])) {
+                    return response()->json(['success' => false, 'message' => 'Each item must have a gift_card_id.'], 422);
+                }
+
+                $giftCardTotal = 0;
+                $giftCard = $request->escaperoom->giftCards()->find($item['gift_card_id']);
+
+                if (!$giftCard) {
+                    return response()->json(['success' => false, 'message' => 'Gift card not found: ' . $item['gift_card_id']], 422);
+                }
+
+                if ($giftCard->valid_from > now() || ($giftCard->valid_until && $giftCard->valid_until < now())) {
+                    return response()->json(['success' => false, 'message' => 'Gift card not valid: ' . $item['gift_card_id']], 422);
+                }
+
+                $giftCardTotal = $giftCard->amount;
+
+                $total += $giftCardTotal;
+                $subtotal += $giftCardTotal;
+            }
         }
 
-        return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip(), 'product' => $product, 'total' => $total, 'subtotal' => $subtotal, 'discount' => $discount, 'vat_total' => $vatTotal]);
+        return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip(), 'giftcard' => $giftCard, 'total' => $total, 'subtotal' => $subtotal, 'discount' => $discount, 'vat_total' => $vatTotal]);
     }
 
     private function matchOrCreateCustomer($escaperoom, array $input, ?string $ip): Customer

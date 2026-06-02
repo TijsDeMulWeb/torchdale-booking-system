@@ -20,6 +20,11 @@ class Customer extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function identifiers()
+    {
+        return $this->hasMany(CustomerIdentifier::class);
+    }
+
     protected function casts(): array
     {
         return [

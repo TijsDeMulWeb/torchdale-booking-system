@@ -163,7 +163,7 @@ Route::middleware('auth')->group(function () {
 
     // Rooms time slots routes
     Route::get('/rooms/{id}/timeslots', ShowRoomTimeSlotController::class)->name('rooms.timeslots.show');
-    Route::delete('/rooms/{id}/timeslots/delete', DeleteRoomTimeSlotController::class)->name('rooms.timeslots.destroy');
+    Route::delete('/rooms/{id}/timeslots/{timeslot}/delete', DeleteRoomTimeSlotController::class)->name('rooms.timeslots.destroy');
     Route::post('/rooms/{id}/timeslots/create', StoreRoomTimeslotController::class)->name('rooms.timeslots.store');
     Route::put('/rooms/{id}/timeslots/{timeslot}/edit', UpdateRoomTimeslotController::class)->name('rooms.timeslots.update');
 

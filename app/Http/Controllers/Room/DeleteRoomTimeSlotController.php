@@ -10,11 +10,11 @@ class DeleteRoomTimeSlotController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request, int $id)
+    public function __invoke(Request $request, int $id, int $timeslot)
     {
-        $room = auth()->user()->company->rooms()->findOrFail($id);
+        $room = auth()->user()->escaperoom->rooms()->findOrFail($id);
 
-        $room->timeSlots()->delete();
+        $room->timeSlots()->find($timeslot)->delete();
 
         return redirect()->route('rooms.timeslots.show', $room->id)->with('message', 'Tijdsloten succesvol verwijderd.');
     }

@@ -16,11 +16,11 @@ return new class extends Migration {
             $table->foreignId('customer_id')->constrained()->onDelete('cascade');
             $table->foreignId('coupon_id')->nullable()->constrained()->onDelete('set null');
             $table->string('mollie_id')->nullable();
-            $table->decimal('total', 10, 2);
+            $table->decimal('total', 10, 2)->nullable();
             $table->decimal('discount', 10, 2)->nullable();
             $table->decimal('vat_rate', 10, 2)->nullable();
             $table->decimal('vat_amount', 10, 2)->nullable();
-            $table->decimal('subtotal', 10, 2);
+            $table->decimal('subtotal', 10, 2)->nullable();
             $table->string('status', 50)->default('pending');
             $table->string('payment_method', 50)->nullable();
             $table->string('invoice_number', 100)->nullable()->unique();

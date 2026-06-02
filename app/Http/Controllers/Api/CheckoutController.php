@@ -28,6 +28,17 @@ class CheckoutController extends Controller
             return response()->json(['success' => false, 'message' => 'No items provided.'], 422);
         }
 
+        $discountCodeInput = $request->input('discount_code');
+        $discountCode = null;
+
+        if ($discountCodeInput) {
+            $discountCode = $request->escaperoom->coupons()->where('code', $discountCodeInput)->first();
+
+            if (!$discountCode || $discountCode->valid_from > now() || ($discountCode->valid_until && $discountCode->valid_until < now()) ||  ($discountCode->usage_limit !== null && $discountCode->usage_limit === 0)) {
+                return response()->json(['success' => false, 'message' => 'Invalid discount code.'], 422);
+            }
+        }
+
         $total = 0;
         $subtotal = 0;
         $discount = 0;
@@ -96,7 +107,7 @@ class CheckoutController extends Controller
             }
         }
 
-        DB::transaction(function () use ($request, $items, $customer, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice) {
+        DB::transaction(function () use ($request, $items, $customer, $discountCode, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice) {
             $order = new Order();
             $order->escaperoom_id = $request->escaperoom->id;
             $order->customer_id = $customer->id;
@@ -119,11 +130,13 @@ class CheckoutController extends Controller
                         $product->save();
                     }
 
-                    $productTotal = round($product->selling_price * $item['qty'], 2);
+                    // selling_price is incl. VAT — convert to excl. VAT first
+                    $unitPriceExcl = round($product->selling_price / (1 + $product->vat_percentage / 100), 4);
+                    $productTotalExcl = round($unitPriceExcl * $item['qty'], 2);
 
                     if ($product->discount_type) {
                         if ($product->discount_type === 'percentage') {
-                            $productDiscountTotal = round($productTotal * ($product->discount_value / 100), 2);
+                            $productDiscountTotal = round($productTotalExcl * ($product->discount_value / 100), 2);
                         }
 
                         if ($product->discount_type === 'fixed') {
@@ -131,8 +144,9 @@ class CheckoutController extends Controller
                         }
                     }
 
-                    $productSubtotal = round($productTotal - $productDiscountTotal, 2);
-                    $productVatTotal = round($productSubtotal * $product->vat_percentage / (100 + $product->vat_percentage), 2);
+                    $productSubtotal = round($productTotalExcl - $productDiscountTotal, 2); // excl. VAT, after discount
+                    $productVatTotal = round($productSubtotal * $product->vat_percentage / 100, 2);
+                    $productTotal = round($productSubtotal + $productVatTotal, 2); // incl. VAT, after discount
 
                     $total += $productTotal;
                     $subtotal += $productSubtotal;
@@ -143,7 +157,7 @@ class CheckoutController extends Controller
                         'product_id' => $product->id,
                         'quantity' => $item['qty'],
                         'unit_price' => round($productSubtotal / $item['qty'], 2),
-                        'total_price' => $productSubtotal,
+                        'total_price' => $productTotal,
                         'vat_percentage' => $product->vat_percentage,
                         'vat_amount' => $productVatTotal,
                     ]);
@@ -196,6 +210,27 @@ class CheckoutController extends Controller
                 }
             }
 
+            if ($discountCode) {
+                if ($discountCode->discount_type === 'percentage') {
+                    $couponDiscount = round($subtotal * ($discountCode->discount_value / 100), 2);
+                }
+
+                if ($discountCode->discount_type === 'fixed') {
+                    $couponDiscount = round(min($discountCode->discount_value, $subtotal), 2);
+                }
+
+                $discount += $couponDiscount;
+                $subtotal = round($subtotal - $couponDiscount, 2);
+                $vatTotal = round($subtotal * ($vatTotal / ($subtotal + $couponDiscount)), 2);
+                $total = round($subtotal + $vatTotal, 2);
+
+                if ($discountCode->usage_limit !== null) {
+                    $discountCode->usage_limit -= 1;
+                    $discountCode->times_used += 1;
+                    $discountCode->save();
+                }
+            }
+
             $order->total = $total;
             $order->subtotal = $subtotal;
             $order->discount = $discount;
@@ -203,7 +238,7 @@ class CheckoutController extends Controller
             $order->save();
         });
 
-        return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip(), 'roomPrices' => $roomPrice, 'total' => $total, 'subtotal' => $subtotal, 'discount' => $discount, 'vat_total' => $vatTotal, 'left_to_pay' => $leftToPay]);
+        return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip(), 'discountCode' => $discountCode, 'total' => $total, 'subtotal' => $subtotal, 'discount' => $discount, 'vat_total' => $vatTotal, 'left_to_pay' => $leftToPay]);
     }
 
     private function matchOrCreateCustomer($escaperoom, array $input, ?string $ip): Customer

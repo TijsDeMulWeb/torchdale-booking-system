@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRoomTimeSlotRequest;
+use App\Http\Requests\StoreRoomTimeslotRequest;
 
 class StoreRoomTimeslotController extends Controller
 {
-    public function __invoke(StoreRoomTimeSlotRequest $request, int $id)
+    public function __invoke(StoreRoomTimeslotRequest $request, int $id)
     {
         $room = auth()->user()->escaperoom->rooms()->findOrFail($id);
 

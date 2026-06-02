@@ -147,6 +147,15 @@ class CheckoutController extends Controller
             }
         }
 
+        $order = new Order();
+        $order->escaperoom_id = $request->escaperoom->id;
+        $order->customer_id = $customer->id;
+        $order->total = $total;
+        $order->subtotal = $subtotal;
+        $order->discount = $discount;
+        $order->vat_amount = $vatTotal;
+        $order->save();
+
         return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip(), 'roomPrices' => $roomPrice, 'total' => $total, 'subtotal' => $subtotal, 'discount' => $discount, 'vat_total' => $vatTotal, 'left_to_pay' => $leftToPay]);
     }
 

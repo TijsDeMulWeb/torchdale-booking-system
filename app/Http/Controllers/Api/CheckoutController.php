@@ -130,23 +130,21 @@ class CheckoutController extends Controller
                         $product->save();
                     }
 
-                    // selling_price is incl. VAT — convert to excl. VAT first
-                    $unitPriceExcl = round($product->selling_price / (1 + $product->vat_percentage / 100), 4);
-                    $productTotalExcl = round($unitPriceExcl * $item['qty'], 2);
+                    $productTotalInclVat = round($product->selling_price * $item['qty'], 2);
 
                     if ($product->discount_type) {
                         if ($product->discount_type === 'percentage') {
-                            $productDiscountTotal = round($productTotalExcl * ($product->discount_value / 100), 2);
+                            $productDiscountTotal = round($productTotalInclVat * ($product->discount_value / 100), 2);
                         }
 
                         if ($product->discount_type === 'fixed') {
-                            $productDiscountTotal = round($product->discount_value * $item['qty'], 2);
+                            $productDiscountTotal = round(min($product->discount_value * $item['qty'], $productTotalInclVat), 2);
                         }
                     }
 
-                    $productSubtotal = round($productTotalExcl - $productDiscountTotal, 2); // excl. VAT, after discount
-                    $productVatTotal = round($productSubtotal * $product->vat_percentage / 100, 2);
-                    $productTotal = round($productSubtotal + $productVatTotal, 2); // incl. VAT, after discount
+                    $productTotal = round($productTotalInclVat - $productDiscountTotal, 2);
+                    $productSubtotal = round($productTotal / (1 + $product->vat_percentage / 100), 2);
+                    $productVatTotal = round($productTotal - $productSubtotal, 2);
 
                     $total += $productTotal;
                     $subtotal += $productSubtotal;
@@ -156,7 +154,7 @@ class CheckoutController extends Controller
                     $order->orderedItems()->create([
                         'product_id' => $product->id,
                         'quantity' => $item['qty'],
-                        'unit_price' => round($productSubtotal / $item['qty'], 2),
+                        'unit_price' => $product->selling_price,
                         'total_price' => $productTotal,
                         'vat_percentage' => $product->vat_percentage,
                         'vat_amount' => $productVatTotal,
@@ -211,18 +209,22 @@ class CheckoutController extends Controller
             }
 
             if ($discountCode) {
+                $totalBeforeDiscount = $total;
+
                 if ($discountCode->discount_type === 'percentage') {
-                    $couponDiscount = round($subtotal * ($discountCode->discount_value / 100), 2);
+                    $couponDiscount = round($totalBeforeDiscount * ($discountCode->discount_value / 100), 2);
                 }
 
                 if ($discountCode->discount_type === 'fixed') {
-                    $couponDiscount = round(min($discountCode->discount_value, $subtotal), 2);
+                    $couponDiscount = round(min($discountCode->discount_value, $totalBeforeDiscount), 2);
                 }
 
                 $discount += $couponDiscount;
-                $subtotal = round($subtotal - $couponDiscount, 2);
-                $vatTotal = round($subtotal * ($vatTotal / ($subtotal + $couponDiscount)), 2);
-                $total = round($subtotal + $vatTotal, 2);
+                $total = round($totalBeforeDiscount - $couponDiscount, 2);
+
+                $subtotal = $totalBeforeDiscount > 0 ? round($subtotal * ($total / $totalBeforeDiscount), 2) : 0;
+
+                $vatTotal = round($total - $subtotal, 2);
 
                 if ($discountCode->usage_limit !== null) {
                     $discountCode->usage_limit -= 1;

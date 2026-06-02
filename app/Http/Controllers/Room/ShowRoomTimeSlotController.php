@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Room;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ShowRoomTimeSlotController extends Controller
+class ShowRoomTimeslotController extends Controller
 {
     /**
      * Handle the incoming request.

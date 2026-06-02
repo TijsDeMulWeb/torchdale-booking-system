@@ -13,6 +13,10 @@ class CheckoutController extends Controller
     {
         $orderInfo = $request->input();
         $customerInput = $request->input('customer');
+        $total = 0;
+        $subtotal = 0;
+        $discount = 0;
+        $vatTotal = 0;
 
         $customer = $this->matchOrCreateCustomer($request->escaperoom, $customerInput, $request->ip());
 
@@ -31,12 +35,43 @@ class CheckoutController extends Controller
                 return response()->json(['success' => false, 'message' => 'Invalid item type: ' . $item['type']], 422);
             }
 
-            if (empty($item['product_id']) || empty($item['quantity'])) {
+            if (empty($item['product_id']) || empty($item['qty'])) {
                 return response()->json(['success' => false, 'message' => 'Each item must have a product_id and quantity.'], 422);
+            }
+
+            if ($item['type'] === 'product') {
+                $productTotal = 0;
+                $productSubtotal = 0;
+                $productDiscountTotal = 0;
+                $productVatTotal = 0;
+                $product = $request->escaperoom->products()->find($item['product_id']);
+                if (!$product) {
+                    return response()->json(['success' => false, 'message' => 'Product not found: ' . $item['product_id']], 422);
+                }
+
+                $productTotal = round($product->selling_price * $item['qty'], 2);
+
+                if ($product->discount_type) {
+                    if ($product->discount_type === 'percentage') {
+                        $productDiscountTotal = round($productTotal * ($product->discount_value / 100), 2);
+                    }
+
+                    if ($product->discount_type === 'fixed') {
+                        $productDiscountTotal = round($product->discount_value * $item['qty'], 2);
+                    }
+                }
+
+                $productSubtotal = round($productTotal - $productDiscountTotal, 2);
+                $productVatTotal = round($productSubtotal * $product->vat_percentage / (100 + $product->vat_percentage), 2);
+
+                $total += $productTotal;
+                $subtotal += $productSubtotal;
+                $discount += $productDiscountTotal;
+                $vatTotal += $productVatTotal;
             }
         }
 
-        return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip()]);
+        return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip(), 'product' => $product, 'total' => $total, 'subtotal' => $subtotal, 'discount' => $discount, 'vat_total' => $vatTotal]);
     }
 
     private function matchOrCreateCustomer($escaperoom, array $input, ?string $ip): Customer

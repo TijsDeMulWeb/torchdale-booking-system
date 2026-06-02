@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRoomTimeslotRequest;
+use App\Http\Requests\StoreRoomTimeSlotRequest;
 use App\Models\RoomTimeSlot;
 use Illuminate\Http\Request;
 
-class UpdateRoomTimeslotController extends Controller
+class UpdateRoomTimeSlotController extends Controller
 {
-    public function __invoke(StoreRoomTimeslotRequest $request, int $id, RoomTimeSlot $timeslot)
+    public function __invoke(StoreRoomTimeSlotRequest $request, int $id, RoomTimeSlot $timeslot)
     {
         abort_if($timeslot->room->escaperoom_id !== auth()->user()->escaperoom->id, 403);
 

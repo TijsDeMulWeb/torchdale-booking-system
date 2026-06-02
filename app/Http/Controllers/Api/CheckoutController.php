@@ -107,14 +107,18 @@ class CheckoutController extends Controller
             }
         }
 
-        DB::transaction(function () use ($request, $items, $customer, $discountCode, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice) {
+        DB::transaction(function () use ($request, $items, $customer, $customerInput, $discountCode, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice) {
             $order = new Order();
             $order->escaperoom_id = $request->escaperoom->id;
             $order->customer_id = $customer->id;
-            $order->customer_first_name = $customer->first_name;
-            $order->customer_last_name = $customer->last_name;
+            $order->customer_first_name = $customerInput['first_name'] ?? $customer->first_name;
+            $order->customer_last_name = $customerInput['last_name'] ?? $customer->last_name;
             $order->customer_email = $customerInput['email'] ?? $customer->email;
             $order->customer_phone = $customerInput['phone'] ?? $customer->phone;
+            $order->is_business = !empty($customerInput['is_business']);
+            $order->company_name = $customerInput['company_name'] ?? null;
+            $order->vat_number = $customerInput['vat_number'] ?? null;
+            $order->registration_number = $customerInput['registration_number'] ?? null;
             $order->save();
 
             foreach ($items as $item) {

@@ -57,4 +57,9 @@ class Escaperoom extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

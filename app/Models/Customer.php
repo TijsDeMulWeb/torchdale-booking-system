@@ -15,6 +15,11 @@ class Customer extends Model
         return $this->belongsTo(Escaperoom::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     protected function casts(): array
     {
         return [

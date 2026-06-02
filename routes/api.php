@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\GiftCardController;
 use App\Http\Controllers\Api\RoomController;
@@ -17,4 +18,5 @@ Route::middleware([AuthenticateEscaperoom::class])->group(function () {
     Route::post('/coupon/validate', ValidateCouponController::class)->name('coupon.validate');
     Route::get('/widget-config', WidgetConfigController::class)->name('widget-config.index');
     Route::get('/gift-cards', GiftCardController::class)->name('gift-cards.index');
+    Route::post('/checkout', CheckoutController::class)->name('checkout.index');
 });

@@ -15,9 +15,25 @@ class CheckoutController extends Controller
         $customerInput = $request->input('customer');
 
         $customer = $this->matchOrCreateCustomer($request->escaperoom, $customerInput, $request->ip());
-        
+
         if ($customer->banned_at) {
             return response()->json(['success' => false, 'message' => 'Customer isn\'t allowed to place an order.'], 403);
+        }
+
+        $items = $request->input('items', []);
+
+        foreach ($items as $item) {
+            if (empty($item['type'])) {
+                return response()->json(['success' => false, 'message' => 'Each item must have a type.'], 422);
+            }
+
+            if (!in_array($item['type'], ['product', 'escaperoom', 'gift_card'])) {
+                return response()->json(['success' => false, 'message' => 'Invalid item type: ' . $item['type']], 422);
+            }
+
+            if (empty($item['product_id']) || empty($item['quantity'])) {
+                return response()->json(['success' => false, 'message' => 'Each item must have a product_id and quantity.'], 422);
+            }
         }
 
         return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip()]);
@@ -28,22 +44,22 @@ class CheckoutController extends Controller
         $candidates = $escaperoom->customers()
             ->where(function ($q) use ($input, $ip) {
                 $q->where('email', $input['email'] ?? '')
-                  ->orWhere(function ($q) use ($input) {
-                      if (!empty($input['phone'])) {
-                          $q->where('phone', $input['phone']);
-                      }
-                  })
-                  ->orWhere(function ($q) use ($input) {
-                      if (!empty($input['first_name']) && !empty($input['last_name'])) {
-                          $q->where('first_name', $input['first_name'])
-                            ->where('last_name', $input['last_name']);
-                      }
-                  })
-                  ->orWhere(function ($q) use ($ip) {
-                      if ($ip) {
-                          $q->where('ip_address', $ip);
-                      }
-                  });
+                    ->orWhere(function ($q) use ($input) {
+                        if (!empty($input['phone'])) {
+                            $q->where('phone', $input['phone']);
+                        }
+                    })
+                    ->orWhere(function ($q) use ($input) {
+                        if (!empty($input['first_name']) && !empty($input['last_name'])) {
+                            $q->where('first_name', $input['first_name'])
+                                ->where('last_name', $input['last_name']);
+                        }
+                    })
+                    ->orWhere(function ($q) use ($ip) {
+                        if ($ip) {
+                            $q->where('ip_address', $ip);
+                        }
+                    });
             })
             ->get();
 
@@ -59,9 +75,11 @@ class CheckoutController extends Controller
             if (!empty($input['phone']) && $candidate->phone === $input['phone']) {
                 $score += 50;
             }
-            if (!empty($input['first_name']) && !empty($input['last_name'])
+            if (
+                !empty($input['first_name']) && !empty($input['last_name'])
                 && $candidate->first_name === $input['first_name']
-                && $candidate->last_name === $input['last_name']) {
+                && $candidate->last_name === $input['last_name']
+            ) {
                 $score += 30;
             }
             if (!empty($input['city']) && $candidate->city === $input['city']) {
@@ -86,8 +104,15 @@ class CheckoutController extends Controller
 
         return $escaperoom->customers()->create(array_merge(
             array_intersect_key($input, array_flip([
-                'first_name', 'last_name', 'email', 'phone',
-                'street', 'house_number', 'postal_code', 'city', 'country',
+                'first_name',
+                'last_name',
+                'email',
+                'phone',
+                'street',
+                'house_number',
+                'postal_code',
+                'city',
+                'country',
             ])),
             ['ip_address' => $ip]
         ));

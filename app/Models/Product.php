@@ -25,6 +25,11 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
+    public function orderedItems()
+    {
+        return $this->hasMany(OrderedItem::class);
+    }
+
     protected function casts(): array
     {
         return [

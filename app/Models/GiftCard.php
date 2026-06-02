@@ -21,6 +21,11 @@ class GiftCard extends Model
         return $this->belongsTo(Customer::class);
     }
 
+    public function orderedItems()
+    {
+        return $this->hasMany(OrderedItem::class);
+    }
+
     protected function casts(): array
     {
         return [

@@ -24,4 +24,9 @@ class Order extends Model
     {
         return $this->belongsTo(Coupon::class);
     }
+
+    public function orderedItems()
+    {
+        return $this->hasMany(OrderedItem::class);
+    }
 }

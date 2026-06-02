@@ -111,6 +111,10 @@ class CheckoutController extends Controller
             $order = new Order();
             $order->escaperoom_id = $request->escaperoom->id;
             $order->customer_id = $customer->id;
+            $order->customer_first_name = $customer->first_name;
+            $order->customer_last_name = $customer->last_name;
+            $order->customer_email = $customerInput['email'] ?? $customer->email;
+            $order->customer_phone = $customerInput['phone'] ?? $customer->phone;
             $order->save();
 
             foreach ($items as $item) {
@@ -255,44 +259,66 @@ class CheckoutController extends Controller
                     })
                     ->orWhere(function ($q) use ($input) {
                         if (!empty($input['first_name']) && !empty($input['last_name'])) {
-                            $q->where('first_name', $input['first_name'])
-                                ->where('last_name', $input['last_name']);
+                            $q->whereRaw('LOWER(first_name) = ?', [strtolower($input['first_name'])])
+                                ->whereRaw('LOWER(last_name) = ?', [strtolower($input['last_name'])]);
                         }
                     })
                     ->orWhere(function ($q) use ($ip) {
                         if ($ip) {
                             $q->where('ip_address', $ip);
                         }
+                    })
+                    ->orWhereHas('identifiers', function ($q) use ($input, $ip) {
+                        $q->where(function ($q) use ($input) {
+                            if (!empty($input['email'])) {
+                                $q->where('type', 'email')->where('value', $input['email']);
+                            }
+                        })->orWhere(function ($q) use ($input) {
+                            if (!empty($input['phone'])) {
+                                $q->where('type', 'phone')->where('value', $input['phone']);
+                            }
+                        })->orWhere(function ($q) use ($ip) {
+                            if ($ip) {
+                                $q->where('type', 'ip_address')->where('value', $ip);
+                            }
+                        });
                     });
             })
+            ->with('identifiers')
             ->get();
 
         $best = null;
         $bestScore = 0;
+        $bestBanned = null;
+        $bestBannedScore = 0;
 
         foreach ($candidates as $candidate) {
             $score = 0;
 
-            if (!empty($input['email']) && $candidate->email === $input['email']) {
+            $knownEmails = $candidate->identifiers->where('type', 'email')->pluck('value')->push($candidate->email);
+            $knownPhones = $candidate->identifiers->where('type', 'phone')->pluck('value')->push($candidate->phone);
+            $knownIps    = $candidate->identifiers->where('type', 'ip_address')->pluck('value')->push($candidate->ip_address);
+
+            if (!empty($input['email']) && $knownEmails->contains($input['email'])) {
                 $score += 60;
             }
-            if (!empty($input['phone']) && $candidate->phone === $input['phone']) {
+            if (!empty($input['phone']) && $knownPhones->contains($input['phone'])) {
                 $score += 50;
             }
             if (
                 !empty($input['first_name']) && !empty($input['last_name'])
-                && $candidate->first_name === $input['first_name']
-                && $candidate->last_name === $input['last_name']
+                && strtolower($candidate->first_name) === strtolower($input['first_name'])
+                && strtolower($candidate->last_name) === strtolower($input['last_name'])
             ) {
                 $score += 30;
             }
-            if (!empty($input['city']) && $candidate->city === $input['city']) {
+            if (!empty($input['city']) && strtolower($candidate->city) === strtolower($input['city'])) {
                 $score += 10;
             }
-            if (!empty($input['street']) && $candidate->street === $input['street']) {
+            if (!empty($input['street']) && strtolower($candidate->street) === strtolower($input['street'])) {
                 $score += 10;
             }
-            if ($ip && $candidate->ip_address === $ip) {
+            if ($ip && $knownIps->contains($ip)) {
                 $score += 15;
             }
 
@@ -300,13 +326,32 @@ class CheckoutController extends Controller
                 $bestScore = $score;
                 $best = $candidate;
             }
+
+            if ($candidate->banned_at && $score > $bestBannedScore) {
+                $bestBannedScore = $score;
+                $bestBanned = $candidate;
+            }
+        }
+
+        if ($bestBanned && $bestBannedScore >= 30) {
+            return $bestBanned;
         }
 
         if ($best && $bestScore >= 50) {
+            if (!empty($input['email']) && !$best->identifiers->where('type', 'email')->where('value', $input['email'])->count() && $best->email !== $input['email']) {
+                $best->identifiers()->firstOrCreate(['type' => 'email', 'value' => $input['email']]);
+            }
+            if (!empty($input['phone']) && !$best->identifiers->where('type', 'phone')->where('value', $input['phone'])->count() && $best->phone !== $input['phone']) {
+                $best->identifiers()->firstOrCreate(['type' => 'phone', 'value' => $input['phone']]);
+            }
+            if ($ip && !$best->identifiers->where('type', 'ip_address')->where('value', $ip)->count() && $best->ip_address !== $ip) {
+                $best->identifiers()->firstOrCreate(['type' => 'ip_address', 'value' => $ip]);
+            }
+
             return $best;
         }
 
-        return $escaperoom->customers()->create(array_merge(
+        $customer = $escaperoom->customers()->create(array_merge(
             array_intersect_key($input, array_flip([
                 'first_name',
                 'last_name',
@@ -320,5 +365,7 @@ class CheckoutController extends Controller
             ])),
             ['ip_address' => $ip]
         ));
+
+        return $customer;
     }
 }

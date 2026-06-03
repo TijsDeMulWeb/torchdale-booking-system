@@ -64,4 +64,14 @@ class Customer extends Model
     {
         return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
     }
+
+    public function setFirstNameAttribute($value)
+    {
+        $this->attributes['first_name'] = ucFirst(strtolower($value));
+    }
+
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = ucwords(strtolower($value));
+    }
 }

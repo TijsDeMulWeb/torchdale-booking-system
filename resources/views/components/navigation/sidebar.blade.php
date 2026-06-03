@@ -44,7 +44,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('customers.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'customers.index'
+                                        <a href="{{ route('customers.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('customers.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
 }}">
@@ -196,7 +196,7 @@
                         </li>
                         <li>
                             <a href="{{ route('customers.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
-                                {{ Route::currentRouteName() === 'customers.index'
+                                {{ request()->routeIs('customers.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
                                 }}">

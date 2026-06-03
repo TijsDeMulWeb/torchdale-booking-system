@@ -1,11 +1,11 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Categories', 'url' => route('categories.index')],
+        ['name' => 'Categorieën', 'url' => route('categories.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
-                <h1 class="text-base font-semibold text-gray-900 dark:text-white">Categories</h1>
+                <h1 class="text-base font-semibold text-gray-900 dark:text-white">Categorieën</h1>
                 <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Een lijst van alle categorieën.</p>
             </div>
             <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
@@ -30,7 +30,7 @@
                         <div class="flex shrink-0 items-center gap-x-6">
                             <div class="hidden sm:flex sm:flex-col sm:items-end">
                                 <p class="text-sm/6 text-gray-900 dark:text-white">
-                                    Aantal keer assigned: {{ $category->products_count }}
+                                    Aantal keer toegewezen: {{ $category->products_count }}
                                 </p>
                                 <p class="mt-1 text-xs/5 text-gray-500 dark:text-gray-400">
                                     Laatst aangepast: {{ $category->updated_at->diffForHumans() }}
@@ -50,8 +50,8 @@
                                 <el-menu anchor="bottom end" popover
                                     class="w-32 origin-top-right rounded-md bg-white py-2 shadow-lg outline outline-gray-900/5 transition transition-discrete [--anchor-gap:--spacing(2)] data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in dark:bg-gray-800 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
                                     <a href="{{ route('categories.edit', $category->id) }}"
-                                        class="block px-3 py-1 text-sm/6 text-gray-900 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:focus:bg-white/5">Edit
-                                        Category<span class="sr-only">, {{ $category->name }}</span></a>
+                                        class="block px-3 py-1 text-sm/6 text-gray-900 focus:bg-gray-50 focus:outline-hidden dark:text-white dark:focus:bg-white/5">Wijzig
+                                        categorie<span class="sr-only">, {{ $category->name }}</span></a>
                                     <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')

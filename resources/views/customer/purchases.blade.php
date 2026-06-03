@@ -45,7 +45,7 @@
                                             {{ $order->orderedItems->pluck('item_name')->join(', ') }}
                                         </td>
                                         <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-400">
-                                            €{{ number_format($order->total, 2) }}
+                                            {{ Number::currency($order->total) }}
                                         </td>
                                         <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-400">
                                             {{ $order->status === 'paid' ? $order->payment_method : $order->status }}

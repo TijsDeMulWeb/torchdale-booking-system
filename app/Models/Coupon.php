@@ -28,4 +28,9 @@ class Coupon extends Model
             'valid_until' => 'datetime',
         ];
     }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucfirst(trim($value));
+    }
 }

@@ -12,8 +12,7 @@
             <dl class="grid grid-cols-1 sm:grid-cols-2">
                 <div class="border-t border-white/10 px-4 py-6 sm:col-span-1 sm:px-0">
                     <dt class="text-sm/6 font-medium text-white">Volledige Naam</dt>
-                    <dd class="mt-1 text-sm/6 text-gray-400 sm:mt-2">{{ ucfirst($customer->first_name) }}
-                        {{ ucfirst($customer->last_name) }}
+                    <dd class="mt-1 text-sm/6 text-gray-400 sm:mt-2">{{ $customer->full_name }}
                     </dd>
                 </div>
                 <div class="border-t border-white/10 px-4 py-6 sm:col-span-1 sm:px-0">
@@ -28,9 +27,7 @@
                 </div>
                 <div class="border-t border-white/10 px-4 py-6 sm:col-span-1 sm:px-0">
                     <dt class="text-sm/6 font-medium text-white">Adres</dt>
-                    <dd class="mt-1 text-sm/6 text-gray-400 sm:mt-2">{{ ucfirst($customer->street) }}
-                        {{ $customer->house_number }}, {{ ucfirst($customer->city) }} {{ $customer->postal_code }},
-                        {{ ucfirst($customer->country) }}
+                    <dd class="mt-1 text-sm/6 text-gray-400 sm:mt-2">{{ $customer->full_address}}
                     </dd>
                 </div>
 

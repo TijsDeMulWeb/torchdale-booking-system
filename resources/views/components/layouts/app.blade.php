@@ -14,6 +14,8 @@
 <body class="h-full bg-white dark:bg-gray-900">
     <x-navigation.sidebar />
     <x-navigation.top-nav>
+        <x-success :message="session('message')" />
+        <x-error name="message" />
         {{ $slot }}
     </x-navigation.top-nav>
 </body>

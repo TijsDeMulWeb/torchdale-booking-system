@@ -51,9 +51,15 @@
                             <label for="allowedOrigin"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Website</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="allowedOrigin" type="text" name="allowed_origin" placeholder="https://torchdale.be"
+                                <input id="allowedOrigin" type="text" name="allowed_origin"
+                                    placeholder="https://torchdale.be"
                                     value="{{ old('allowed_origin', $escaperoom->escaperoomSetting->allowed_origin) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                <p class="mt-3 text-sm/6 text-gray-600 dark:text-gray-400">
+                                    Vul hier het exacte domein in van de website waarop de widget geladen wordt (bv.
+                                    <span class="font-mono">https://jouwsite.be</span>). Bij een verkeerd domein kan de
+                                    widget niet ingeladen worden.
+                                </p>
                                 <x-form.error name="allowed_origin" />
                             </div>
                         </div>

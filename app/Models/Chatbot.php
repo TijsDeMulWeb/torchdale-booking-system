@@ -12,4 +12,9 @@ class Chatbot extends Model
     {
         return $this->belongsTo(Escaperoom::class);
     }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucfirst(trim($value));
+    }
 }

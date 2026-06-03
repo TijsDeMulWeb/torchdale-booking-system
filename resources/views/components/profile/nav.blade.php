@@ -37,21 +37,21 @@
             <nav class="-mb-px flex space-x-8">
                 @php
                     $tabs = [
-                        'customers.show.overview' => 'Overzicht',
-                        'customers.show.appointments' => 'Afspraken',
-                        'customers.show.messages' => 'Berichten',
-                        'customers.show.purchases' => 'Aankopen',
-                        'customers.show.gift-cards' => 'Kortingsbonnen',
+                        ['route' => 'customers.show.overview', 'pattern' => ['customers.show.overview', 'customers.edit.overview'], 'label' => 'Overzicht'],
+                        ['route' => 'customers.show.appointments', 'pattern' => 'customers.show.appointments', 'label' => 'Afspraken'],
+                        ['route' => 'customers.show.messages', 'pattern' => 'customers.show.messages', 'label' => 'Berichten'],
+                        ['route' => 'customers.show.purchases', 'pattern' => 'customers.show.purchases', 'label' => 'Aankopen'],
+                        ['route' => 'customers.show.gift-cards', 'pattern' => 'customers.show.gift-cards', 'label' => 'Kortingsbonnen'],
                     ];
                 @endphp
 
-                @foreach ($tabs as $routeName => $label)
-                    <a href="{{ route($routeName, $customer->id) }}" @class([
+                @foreach ($tabs as $tab)
+                    <a href="{{ route($tab['route'], $customer->id) }}" @class([
                         'border-b-2 px-1 pb-4 text-sm font-medium whitespace-nowrap',
-                        'border-indigo-500 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400' => request()->routeIs($routeName),
-                        'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-white' => !request()->routeIs($routeName),
+                        'border-indigo-500 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400' => request()->routeIs($tab['pattern']),
+                        'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-white' => !request()->routeIs($tab['pattern']),
                     ])>
-                        {{ $label }}
+                        {{ $tab['label'] }}
                     </a>
                 @endforeach
             </nav>

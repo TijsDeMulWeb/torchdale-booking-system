@@ -50,6 +50,6 @@ class StoreProductImageController extends Controller
             ]
         );
 
-        return redirect()->route('products.index')->with('message', 'Product Image succesvol toegevoegd.');
+        return redirect()->route('products.edit', $product->id)->with('message', 'Product Image succesvol toegevoegd.');
     }
 }

@@ -1,6 +1,6 @@
 <div class="relative border-b border-white/10 pb-5 sm:pb-0">
     <div class="md:flex md:items-center md:justify-between">
-        <h3 class="text-base font-semibold text-white">{{ $customer->first_name }} {{ $customer->last_name }}
+        <h3 class="text-base font-semibold text-white">{{ $customer->full_name }}
             <x-last-updated :model="$customer" />
         </h3>
         @if (empty($customer->banned_at))

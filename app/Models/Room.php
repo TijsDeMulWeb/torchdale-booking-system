@@ -37,4 +37,9 @@ class Room extends Model
             'active_until' => 'datetime',
         ];
     }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucwords(trim($value));
+    }
 }

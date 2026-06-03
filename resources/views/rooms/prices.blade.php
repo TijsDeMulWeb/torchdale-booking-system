@@ -34,7 +34,7 @@
                         <div class="flex items-center gap-3">
                             <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $day }}</span>
                             <span class="text-xs text-gray-400 dark:text-gray-500">
-                                €{{ number_format($pricings[$dayIndex]['base_price'] ?? 0, 2) }} basis
+                                {{ Number::currency($pricings[$dayIndex]['base_price'] ?? 0) }}
                             </span>
                         </div>
                     </button>

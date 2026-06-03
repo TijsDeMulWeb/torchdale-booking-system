@@ -4,8 +4,7 @@
         <div class="sm:flex sm:items-center sm:justify-between">
             <div class="sm:flex sm:space-x-5">
                 <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                    <p class="text-xl font-bold text-white sm:text-2xl">{{ $customer->first_name }}
-                        {{ $customer->last_name }}
+                    <p class="text-xl font-bold text-white sm:text-2xl">{{ $customer->full_name }}
                     </p>
                 </div>
             </div>

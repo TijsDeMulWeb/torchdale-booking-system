@@ -24,6 +24,6 @@ class UpdateCategoryController extends Controller
 
         $category->update($request->validated());
 
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+        return redirect()->route('categories.index')->with('message', 'Category updated successfully.');
     }
 }

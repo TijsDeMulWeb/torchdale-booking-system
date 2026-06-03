@@ -13,9 +13,16 @@ class ShowPurchasesCustomerController extends Controller
     public function __invoke(Request $request, int $id)
     {
         $customer = auth()->user()->escaperoom->customers()->findOrFail($id);
+        $orders = $customer->orders()->with([
+            'escaperoom',
+            'orderedItems.timeSlot.room',
+            'orderedItems.giftCard',
+            'orderedItems.product',
+        ])->get();
 
         return view('customer.purchases', [
             'customer' => $customer,
+            'orders' => $orders,
         ]);
     }
 }

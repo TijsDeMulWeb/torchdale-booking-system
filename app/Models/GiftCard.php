@@ -33,4 +33,9 @@ class GiftCard extends Model
             'valid_until' => 'datetime',
         ];
     }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucFirst(strtolower(trim($value)));
+    }
 }

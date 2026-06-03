@@ -28,16 +28,6 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Key</dt>
-                        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $setting->escaperoom_api_key }}
-                        </dd>
-                    </div>
-                </dl>
-            </div>
-            <div class="border-t border-gray-100 dark:border-white/10">
-                <dl class="divide-y divide-gray-100 dark:divide-white/10">
-                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Prompt</dt>
                         <dd
                             class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400 whitespace-pre-line max-h-64 overflow-y-auto">

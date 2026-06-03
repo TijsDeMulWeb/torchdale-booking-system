@@ -1,6 +1,6 @@
-<div class="relative border-b border-white/10 pb-5 sm:pb-0">
+<div class="relative border-b border-gray-200 dark:border-white/10 pb-5 sm:pb-0">
     <div class="md:flex md:items-center md:justify-between">
-        <h3 class="text-base font-semibold text-white">{{ $customer->full_name }}
+        <h3 class="text-base font-semibold text-gray-900 dark:text-white">{{ $customer->full_name }}
             <x-last-updated :model="$customer" />
         </h3>
         @if (empty($customer->banned_at))
@@ -13,7 +13,7 @@
     <div class="mt-4">
         <div class="grid grid-cols-1 sm:hidden">
             <select aria-label="Select a tab" onchange="window.location = this.value"
-                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-2 pr-8 pl-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline-2 focus:-outline-offset-2 focus:outline-white">
+                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-gray-100 dark:bg-white/5 py-2 pr-8 pl-3 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 *:bg-white dark:*:bg-gray-800 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 dark:focus:outline-white">
                 <option value="{{ route('customers.show.overview', $customer->id) }}"
                     @selected(request()->routeIs('customers.show.overview'))>Overzicht</option>
                 <option value="{{ route('customers.show.appointments', $customer->id) }}"
@@ -48,8 +48,8 @@
                 @foreach ($tabs as $routeName => $label)
                     <a href="{{ route($routeName, $customer->id) }}" @class([
                         'border-b-2 px-1 pb-4 text-sm font-medium whitespace-nowrap',
-                        'border-indigo-400 text-indigo-400' => request()->routeIs($routeName),
-                        'border-transparent text-gray-400 hover:border-white/20 hover:text-white' => !request()->routeIs($routeName),
+                        'border-indigo-500 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400' => request()->routeIs($routeName),
+                        'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:border-white/20 dark:hover:text-white' => !request()->routeIs($routeName),
                     ])>
                         {{ $label }}
                     </a>

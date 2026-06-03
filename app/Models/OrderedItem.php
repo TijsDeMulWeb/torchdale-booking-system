@@ -30,4 +30,18 @@ class OrderedItem extends Model
     {
         return $this->belongsTo(GiftCard::class);
     }
+
+    public function getItemNameAttribute(): ?string
+    {
+        if ($this->time_slot_id) {
+            return $this->timeSlot?->room?->name;
+        }
+        if ($this->gift_card_id) {
+            return $this->giftCard?->name;
+        }
+        if ($this->product_id) {
+            return $this->product?->name;
+        }
+        return null;
+    }
 }

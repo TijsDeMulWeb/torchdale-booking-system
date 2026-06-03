@@ -41,4 +41,29 @@ class User extends Authenticatable
     {
         return $this->hasMany(GiftCard::class, 'customer_id');
     }
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function setFirstNameAttribute($value): void
+    {
+        $this->attributes['first_name'] = ucfirst(strtolower(trim($value)));
+    }
+
+    public function setLastNameAttribute($value): void
+    {
+        $this->attributes['last_name'] = ucWords(strtolower(trim($value)));
+    }
+
+    public function setEmailAttribute($value): void
+    {
+        $this->attributes['email'] = strtolower(trim($value));
+    }
+
+    public function setPhoneAttribute($value): void
+    {
+        $this->attributes['phone'] = preg_replace('/\D/', '', $value);
+    }
 }

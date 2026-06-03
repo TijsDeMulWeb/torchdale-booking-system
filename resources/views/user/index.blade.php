@@ -14,7 +14,7 @@
                         <div class="flex-1 truncate">
                             <div class="flex items-center space-x-3">
                                 <h3 class="truncate text-sm font-medium text-gray-900 dark:text-white">
-                                    {{ $user->first_name }} {{ $user->last_name }}
+                                    {{ $user->full_name }}
                                 </h3>
                                 <span
                                     class="inline-flex shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20 dark:bg-green-500/10 dark:text-green-500 dark:inset-ring-green-500/10">{{ $user->getRoleNames()->first() }}</span>

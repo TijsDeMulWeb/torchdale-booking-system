@@ -79,10 +79,10 @@
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 @if (!empty($coupon->discount_type))
                                                     @if ($coupon->discount_type == 'fixed')
-                                                        &euro;{{ number_format($coupon->discount_value, 2) }}
+                                                        {{ Number::currency($coupon->discount_value) }}
                                                     @endif
                                                     @if ($coupon->discount_type == 'percentage')
-                                                        {{ number_format($coupon->discount_value, 0) }}%
+                                                        {{ Number::percentage($coupon->discount_value) }}
                                                     @endif
                                                 @endif
                                             </td>

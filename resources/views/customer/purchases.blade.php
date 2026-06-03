@@ -17,9 +17,14 @@
                                         ID</th>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Datum
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Omschrijving Aankoop
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">
+                                        Omschrijving Aankoop
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Bedrag
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">
+                                        Bedrag
+                                    </th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">
+                                        Status
                                     </th>
                                     <th scope="col" class="py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8">
                                         <span class="sr-only">Edit</span>
@@ -27,21 +32,31 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-white/10 bg-gray-900">
-                                <tr>
-                                    <td
-                                        class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-white sm:pl-6 lg:pl-8">
-                                        Lindsay Walton</td>
-                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-400">Front-end Developer
-                                    </td>
-                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-400">
-                                        lindsay.walton@example.com</td>
-                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-400">Member</td>
-                                    <td
-                                        class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
-                                        <a href="#" class="text-indigo-400 hover:text-indigo-300">Edit<span
-                                                class="sr-only">, Lindsay Walton</span></a>
-                                    </td>
-                                </tr>
+                                @foreach ($orders as $order)
+                                    <tr>
+                                        <td
+                                            class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-white sm:pl-6 lg:pl-8">
+                                            {{ $order->id }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-400">
+                                            {{ $order->created_at->format('d-m-Y H:i') }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm text-gray-400">
+                                            {{ $order->orderedItems->pluck('item_name')->join(', ') }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-400">
+                                            €{{ number_format($order->total, 2) }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-400">
+                                            {{ $order->status === 'paid' ? $order->payment_method : $order->status }}
+                                        </td>
+                                        <td
+                                            class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
+                                            <a href="#" class="text-indigo-400 hover:text-indigo-300">Edit<span
+                                                    class="sr-only">, {{ $order->id }}</span></a>
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

@@ -57,7 +57,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('rooms.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'rooms.index'
+                                        <a href="{{ route('rooms.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('rooms.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
 }}">
@@ -70,7 +70,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('products.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'products.index'
+                                        <a href="{{ route('products.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('products.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
 }}">
@@ -83,7 +83,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('coupons.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'coupons.index'
+                                        <a href="{{ route('coupons.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('coupons.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
 }}">
@@ -98,7 +98,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('giftCards.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'giftCards.index'
+                                        <a href="{{ route('giftCards.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('giftCards.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
 }}">
@@ -111,7 +111,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('chatbot.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'chatbot.show'
+                                        <a href="{{ route('chatbot.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('chatbot.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
 }}">
@@ -126,7 +126,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('users.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'users.index'
+                                        <a href="{{ route('users.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('users.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
 }}">
@@ -210,7 +210,7 @@
                         </li>
                         <li>
                             <a href="{{ route('rooms.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
-                                {{ Route::currentRouteName() === 'rooms.index'
+                                {{ request()->routeIs('rooms.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
                                 }}">
@@ -224,7 +224,7 @@
                         </li>
                         <li>
                             <a href="{{ route('products.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
-                                {{ Route::currentRouteName() === 'products.index'
+                                {{ request()->routeIs('products.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
                                 }}">
@@ -238,7 +238,7 @@
                         </li>
                         <li>
                             <a href="{{ route('coupons.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
-                                {{ Route::currentRouteName() === 'coupons.index'
+                                {{ request()->routeIs('coupons.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
                                 }}">
@@ -253,7 +253,7 @@
                         </li>
                         <li>
                             <a href="{{ route('giftCards.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
-                                {{ Route::currentRouteName() === 'giftCards.index'
+                                {{ request()->routeIs('giftCards.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
                                 }}">
@@ -267,7 +267,7 @@
                         </li>
                         <li>
                             <a href="{{ route('chatbot.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
-                                {{ Route::currentRouteName() === 'chatbot.show'
+                                {{ request()->routeIs('chatbot.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
                                 }}">
@@ -282,7 +282,7 @@
                         </li>
                         <li>
                             <a href="{{ route('users.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
-                                {{ Route::currentRouteName() === 'users.index'
+                                {{ request()->routeIs('users.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
                                 }}">

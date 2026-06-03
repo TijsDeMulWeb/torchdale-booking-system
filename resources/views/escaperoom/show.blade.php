@@ -1,6 +1,4 @@
 <x-layouts.app>
-    <x-success :message="session('message')" />
-    <x-error name="message" />
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Instellingen: ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
     ]" />

@@ -1,6 +1,4 @@
 <x-layouts.app>
-    <x-success :message="session('message')" />
-    <x-error name="message" />
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Kortingsbonnen', 'url' => route('coupons.index')],
     ]" />

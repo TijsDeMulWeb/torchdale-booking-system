@@ -1,5 +1,4 @@
 <x-layouts.app>
-    <x-success :message="session('message')" />
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Chatbot', 'url' => route('chatbot.show')],
     ]" />

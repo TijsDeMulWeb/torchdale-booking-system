@@ -1,6 +1,4 @@
 <x-layouts.app>
-    <x-success :message="session('message')" />
-    <x-error name="message" />
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Klant', 'url' => route('customers.index')],
         ['name' => $customer->full_name, 'url' => route('customers.show.overview', $customer)],

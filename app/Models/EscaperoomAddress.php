@@ -29,4 +29,14 @@ class EscaperoomAddress extends Model
     {
         return $this->street . ' ' . $this->house_number . ', ' . $this->city . ' ' . $this->postal_code . ', ' . $this->country->name;
     }
+
+    public function setStreetAttribute($value)
+    {
+        $this->attributes['street'] = ucwords(strtolower(trim($value)));
+    }
+
+    public function setCityAttribute($value)
+    {
+        $this->attributes['city'] = ucwords(strtolower(trim($value)));
+    }
 }

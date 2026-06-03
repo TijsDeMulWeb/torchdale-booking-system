@@ -69,12 +69,12 @@
                                                 {{ $product->name }}
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                {{ $product->cost_price ? '€' . $product->cost_price : 'Niet ingesteld' }}
+                                                {{ $product->cost_price ? Number::currency($product->cost_price) : 'Niet ingesteld' }}
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                &euro;{{ $product->selling_price }}</td>
+                                                {{ Number::currency($product->selling_price) }}</td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                {{ Number::format($product->vat_percentage) }}%
+                                                {{ Number::percentage($product->vat_percentage) }}
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 {{ $product->stock_quantity }}

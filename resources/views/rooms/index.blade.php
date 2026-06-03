@@ -59,9 +59,7 @@
                                                 {{ $room->duration }} minuten
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                {{ $room->escaperoomAddress->street }}
-                                                {{ $room->escaperoomAddress->house_number }},
-                                                {{ $room->escaperoomAddress->postal_code }} {{ $room->escaperoomAddress->city }}
+                                                {{ $room->escaperoomAddress->full_address }}
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 {{ $room->min_age }} jaar

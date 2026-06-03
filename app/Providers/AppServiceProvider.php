@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Number;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -11,7 +12,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        Number::useLocale(config('app.locale'));
+        Number::useCurrency('EUR');
     }
 
     /**

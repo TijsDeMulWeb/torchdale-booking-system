@@ -1,6 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Kamer', 'url' => route('rooms.index')],
+        ['name' => 'Klant', 'url' => route('customers.index')],
+        ['name' => $customer->full_name, 'url' => route('customers.show.overview', $customer)],
     ]" />
     <x-profile.header :customer="$customer" />
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">

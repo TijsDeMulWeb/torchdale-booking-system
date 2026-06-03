@@ -2,7 +2,7 @@
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Categories', 'url' => route('categories.index')],
         ['name' => $category->name, 'url' => route('categories.edit', $category->id)],
-        ['name' => 'Edit', 'url' => route('categories.edit', $category->id)],
+        ['name' => 'Wijzigen', 'url' => route('categories.edit', $category->id)],
     ]" />
     <div class="px-4 py-1 sm:px-6 lg:px-8 my-10">
         <form method="POST" action="{{ route('categories.update', $category->id) }}">
@@ -10,7 +10,7 @@
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
                 <div>
-                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Category</h2>
+                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Categorie</h2>
                     <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Deze informatie bevat alle info
                         over de categorie {{ $category->name }}.</p>
                     <x-last-updated :model="$category" />
@@ -27,12 +27,7 @@
                                 <x-form.error name="name" />
                             </div>
                         </div>
-                        <div class="my-6 flex items-center justify-end gap-x-6">
-                            <a href="{{ route('categories.index') }}"
-                                class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
-                            <button type="submit"
-                                class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Save</button>
-                        </div>
+                        <x-form.actions route="categories.index" />
                     </div>
                 </div>
             </div>

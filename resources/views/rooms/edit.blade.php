@@ -2,7 +2,7 @@
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Kamers', 'url' => route('rooms.index')],
         ['name' => $room->name, 'url' => route('rooms.edit', $room->id)],
-        ['name' => 'Bewerken', 'url' => route('rooms.edit', $room->id)],
+        ['name' => 'Wijzigen', 'url' => route('rooms.edit', $room->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <form method="POST" action="{{ route('rooms.update', $room->id) }}" enctype="multipart/form-data">
@@ -37,8 +37,7 @@
                                         class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500">
                                         @foreach ($escaperoomAddresses as $escaperoomAddress)
                                             <option value="{{ $escaperoomAddress->id }}" {{ old('escaperoom_address_id', $room->escaperoom_address_id) == $escaperoomAddress->id ? 'selected' : '' }}>
-                                                {{ $escaperoomAddress->street }} {{ $escaperoomAddress->house_number }},
-                                                {{ $escaperoomAddress->postal_code }} {{ $escaperoomAddress->city }}
+                                                {{ $escaperoomAddress->full_address }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -190,13 +189,7 @@
                                 colorHex.textContent = colorInput.value;
                             });
                         </script>
-
-                        <div class="my-6 flex items-center justify-end gap-x-6">
-                            <a href="{{ route('rooms.index') }}"
-                                class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
-                            <button type="submit"
-                                class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Save</button>
-                        </div>
+                        <x-form.actions route="rooms.index" />
                     </div>
                 </div>
             </div>

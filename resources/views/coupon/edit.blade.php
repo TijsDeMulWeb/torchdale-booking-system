@@ -2,7 +2,7 @@
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Kortingsbonnen', 'url' => route('coupons.index')],
         ['name' => $coupon->name, 'url' => route('coupons.edit', $coupon->id)],
-        ['name' => 'Edit', 'url' => route('coupons.edit', $coupon->id)],
+        ['name' => 'Wijzigen', 'url' => route('coupons.edit', $coupon->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <form method="POST" action="{{ route('coupons.update', $coupon->id) }}">
@@ -115,13 +115,7 @@
                                 <x-form.error name="valid_until" />
                             </div>
                         </div>
-
-                        <div class="my-6 flex items-center justify-end gap-x-6">
-                            <a href="{{ route('coupons.index') }}"
-                                class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
-                            <button type="submit"
-                                class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Save</button>
-                        </div>
+                        <x-form.actions route="coupons.index" />
                     </div>
                 </div>
             </div>

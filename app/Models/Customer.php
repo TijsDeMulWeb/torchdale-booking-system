@@ -31,4 +31,18 @@ class Customer extends Model
             'banned_at' => 'datetime',
         ];
     }
+
+    public function getNextAppointmentAttribute(): ?\Illuminate\Support\Carbon
+    {
+        return $this->orders()
+            ->where('status', 'paid')
+            ->with(['orderedItems.timeSlot'])
+            ->get()
+            ->flatMap(fn($order) => $order->orderedItems)
+            ->filter(fn($item) => $item->time_slot_id && $item->timeSlot)
+            ->map(fn($item) => $item->timeSlot->start_time)
+            ->filter(fn($date) => $date->isFuture())
+            ->sort()
+            ->first();
+    }
 }

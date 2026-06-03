@@ -42,7 +42,9 @@
         </div>
         <div class="px-6 py-5 text-center text-sm font-medium flex flex-col gap-1">
             <span class="text-xs text-gray-400 uppercase tracking-wide">Vorige afspraak</span>
-            <span class="text-white text-lg font-semibold">DATUM</span>
+            <span class="text-white text-lg font-semibold">
+                {{ $customer->previous_appointment?->format('d/m/Y H:i') ?? 'Geen afspraak' }}
+            </span>
         </div>
     </div>
 </div>

@@ -4,7 +4,6 @@
     <x-navigation.breadcrumb :breadcrumbs="[
         ['name' => 'Kamer', 'url' => route('rooms.index')],
         ['name' => $room->name, 'url' => route('rooms.edit', $room->id)],
-        ['name' => 'Bewerken', 'url' => route('rooms.edit', $room->id)],
         ['name' => 'Prijzen', 'url' => route('rooms.timeslots.show', $room->id)],
     ]" />
 
@@ -41,38 +40,34 @@
                     </button>
                     <div>
                         <div class="p-5 bg-white dark:bg-gray-900">
-                            <div class="flex items-center gap-4 pb-5 mb-5 border-b border-gray-100 dark:border-white/10">
-                                <label class="text-sm text-gray-500 dark:text-gray-400 shrink-0">Basisprijs</label>
-                                <div
-                                    class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
-                                    <span
-                                        class="px-3 py-2 text-sm text-gray-400 bg-gray-50 dark:bg-white/5 border-r border-gray-300 dark:border-white/20">€</span>
-                                    <input type="text" name="pricings[{{ $dayIndex }}][base_price]"
-                                        value="{{ number_format($pricings[$dayIndex]['base_price'] ?? 0, 2, '.', '') }}"
-                                        class="w-24 px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0" />
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-5 mb-5 border-b border-gray-100 dark:border-white/10">
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-sm text-gray-500 dark:text-gray-400">Basisprijs</label>
+                                    <div class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
+                                        <span class="px-3 py-2 text-sm text-gray-400 bg-gray-50 dark:bg-white/5 border-r border-gray-300 dark:border-white/20">€</span>
+                                        <input type="text" name="pricings[{{ $dayIndex }}][base_price]"
+                                            value="{{ number_format($pricings[$dayIndex]['base_price'] ?? 0, 2, '.', '') }}"
+                                            class="w-full px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0" />
+                                    </div>
                                 </div>
-                                <label class="text-sm text-gray-500 dark:text-gray-400 shrink-0">BTW</label>
-                                <div
-                                    class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
-                                    <input type="text" name="pricings[{{ $dayIndex }}][vat_percentage]"
-                                        value="{{ number_format($pricings[$dayIndex]['vat_percentage'] ?? 21, 2, '.', '') }}"
-                                        class="w-16 px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0" />
-                                    <span
-                                        class="px-3 py-2 text-sm text-gray-400 bg-gray-50 dark:bg-white/5 border-l border-gray-300 dark:border-white/20">%</span>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-sm text-gray-500 dark:text-gray-400">BTW</label>
+                                    <div class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
+                                        <input type="text" name="pricings[{{ $dayIndex }}][vat_percentage]"
+                                            value="{{ number_format($pricings[$dayIndex]['vat_percentage'] ?? 21, 2, '.', '') }}"
+                                            class="w-full px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0" />
+                                        <span class="px-3 py-2 text-sm text-gray-400 bg-gray-50 dark:bg-white/5 border-l border-gray-300 dark:border-white/20">%</span>
+                                    </div>
                                 </div>
-                                <label class="text-sm text-gray-500 dark:text-gray-400 shrink-0">Extra Prijs Boven
-                                    Basisprijs - Betaling</label>
-                                <div
-                                    class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
-                                    <select name="pricings[{{ $dayIndex }}][payment_location]"
-                                        class="px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0">
-                                        <option value="online" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'online' ? 'selected' : '' }}>
-                                            Online
-                                        </option>
-                                        <option value="location" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'location' ? 'selected' : '' }}>
-                                            Ter plaatse
-                                        </option>
-                                    </select>
+                                <div class="flex flex-col gap-1">
+                                    <label class="text-sm text-gray-500 dark:text-gray-400">Extra betaling</label>
+                                    <div class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
+                                        <select name="pricings[{{ $dayIndex }}][payment_location]"
+                                            class="w-full px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0">
+                                            <option value="online" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'online' ? 'selected' : '' }}>Online</option>
+                                            <option value="location" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'location' ? 'selected' : '' }}>Ter plaatse</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
 

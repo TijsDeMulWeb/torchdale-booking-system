@@ -24,4 +24,9 @@ class EscaperoomAddress extends Model
     {
         return $this->hasMany(Room::class);
     }
+
+    public function getFullAddressAttribute(): string
+    {
+        return $this->street . ' ' . $this->house_number . ', ' . $this->city . ' ' . $this->postal_code . ', ' . $this->country->name;
+    }
 }

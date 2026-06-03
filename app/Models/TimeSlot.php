@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 #[Fillable(['room_id', 'start_time', 'end_time'])]
 class TimeSlot extends Model
 {
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+
     public function room()
     {
         return $this->belongsTo(Room::class);

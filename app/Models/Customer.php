@@ -67,11 +67,31 @@ class Customer extends Model
 
     public function setFirstNameAttribute($value)
     {
-        $this->attributes['first_name'] = ucFirst(strtolower($value));
+        $this->attributes['first_name'] = ucFirst(strtolower(trim($value)));
     }
 
     public function setLastNameAttribute($value)
     {
-        $this->attributes['last_name'] = ucwords(strtolower($value));
+        $this->attributes['last_name'] = ucwords(strtolower(trim($value)));
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower(trim($value));
+    }
+
+    public function setStreetAttribute($value)
+    {
+        $this->attributes['street'] = ucwords(strtolower(trim($value)));
+    }
+
+    public function setCityAttribute($value)
+    {
+        $this->attributes['city'] = ucwords(strtolower(trim($value)));
+    }
+
+    public function setCountryAttribute($value)
+    {
+        $this->attributes['country'] = ucwords(strtolower(trim($value)));
     }
 }

@@ -1,10 +1,10 @@
-<div class="overflow-hidden bg-gray-900">
+<div class="overflow-hidden bg-gray-100 dark:bg-gray-900">
     <h2 id="profile-overview-title" class="sr-only">Profile Overview</h2>
-    <div class="bg-gray-800/75 p-6">
+    <div class="bg-white/75 dark:bg-gray-800/75 p-6">
         <div class="sm:flex sm:items-center sm:justify-between">
             <div class="sm:flex sm:space-x-5">
                 <div class="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                    <p class="text-xl font-bold text-white sm:text-2xl">{{ $customer->full_name }}
+                    <p class="text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">{{ $customer->full_name }}
                     </p>
                 </div>
             </div>
@@ -28,20 +28,20 @@
         </div>
     </div>
     <div
-        class="grid grid-cols-1 divide-y divide-white/10 border-t border-white/10 bg-gray-800/50 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        class="grid grid-cols-1 divide-y divide-gray-200 dark:divide-white/10 border-t border-gray-200 dark:border-white/10 bg-white/50 dark:bg-gray-800/50 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
         <div class="px-6 py-5 text-center text-sm font-medium flex flex-col gap-1">
-            <span class="text-xs text-gray-400 uppercase tracking-wide">Klantnummer</span>
-            <span class="text-white text-lg font-semibold">#{{ $customer->id }}</span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Klantnummer</span>
+            <span class="text-gray-900 dark:text-white text-lg font-semibold">#{{ $customer->id }}</span>
         </div>
         <div class="px-6 py-5 text-center text-sm font-medium flex flex-col gap-1">
-            <span class="text-xs text-gray-400 uppercase tracking-wide">Volgende afspraak</span>
-            <span class="text-white text-lg font-semibold">
+            <span class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Volgende afspraak</span>
+            <span class="text-gray-900 dark:text-white text-lg font-semibold">
                 {{ $customer->next_appointment?->format('d/m/Y H:i') ?? 'Geen afspraak' }}
             </span>
         </div>
         <div class="px-6 py-5 text-center text-sm font-medium flex flex-col gap-1">
-            <span class="text-xs text-gray-400 uppercase tracking-wide">Vorige afspraak</span>
-            <span class="text-white text-lg font-semibold">
+            <span class="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Vorige afspraak</span>
+            <span class="text-gray-900 dark:text-white text-lg font-semibold">
                 {{ $customer->previous_appointment?->format('d/m/Y H:i') ?? 'Geen afspraak' }}
             </span>
         </div>

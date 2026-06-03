@@ -60,7 +60,7 @@
                                                 {{ $giftCard->name }}
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                &euro;{{ $giftCard->amount }}
+                                                {{ Number::currency($giftCard->amount) }}
                                             </td>
                                             <td
                                                 class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">

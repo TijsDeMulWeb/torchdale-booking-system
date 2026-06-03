@@ -36,4 +36,9 @@ class Product extends Model
             'available_from' => 'datetime',
         ];
     }
+
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucFirst(trim($value));
+    }
 }

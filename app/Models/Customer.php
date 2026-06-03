@@ -62,7 +62,12 @@ class Customer extends Model
 
     public function getFullNameAttribute(): string
     {
-        return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getFullAddressAttribute(): string
+    {
+        return $this->street . ' ' . $this->house_number . ', ' . $this->city . ' ' . $this->postal_code . ', ' . $this->country;
     }
 
     public function setFirstNameAttribute($value)

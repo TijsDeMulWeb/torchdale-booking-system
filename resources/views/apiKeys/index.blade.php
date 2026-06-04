@@ -184,6 +184,10 @@
                 </label>
                 <input type="text" name="allowed_origin" placeholder="bijv. https://mijnwebsite.be"
                     class="h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-indigo-400">
+                <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    De <strong class="text-gray-700 dark:text-gray-300">secret key</strong> wordt eenmalig getoond na
+                    aanmaak. Bewaar het op een veilige plek.
+                </p>
                 <div class="mt-6 flex gap-3">
                     <button type="button" id="cancel-modal-btn"
                         class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">

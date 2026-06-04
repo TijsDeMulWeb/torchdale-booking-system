@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ApiKey;
 use App\Models\Chatbot;
 use App\Models\Country;
 use App\Models\Escaperoom;
@@ -80,11 +81,16 @@ class DatabaseSeeder extends Seeder
 
         EscaperoomSetting::create([
             'escaperoom_id' => 1,
-            'escaperoom_api_public_key' => $keys['public_key'],
-            'escaperoom_api_secret_hash' => $keys['secret_hash_store'],
-            'allowed_origin' => 'https://torchdale.be',
             'mollie_api_key' => null,
             'openai_api_key' => env('OPENAI_API_KEY'),
+        ]);
+
+        ApiKey::create([
+            'escaperoom_id' => 1,
+            'name' => 'Default API Key',
+            'public_key' => $keys['public_key'],
+            'secret_hash' => $keys['secret_hash_store'],
+            'allowed_origin' => 'https://torchdale.be',
         ]);
 
         $this->command->info('=== API KEYS (sla deze op!) ===');

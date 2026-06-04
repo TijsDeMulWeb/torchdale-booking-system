@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ApiKey;
 use App\Models\EscaperoomSetting;
 use Closure;
 use Illuminate\Http\Request;
@@ -33,9 +34,9 @@ class AuthenticateEscaperoom
         }
         RateLimiter::hit($rateLimitKey, 60);
 
-        $escaperoomSetting = EscaperoomSetting::where('escaperoom_api_public_key', $publicKey)->first();
+        $apiKey = ApiKey::where('public_key', $publicKey)->first();
 
-        if (!$escaperoomSetting) {
+        if (!$apiKey || !$apiKey->is_active || ($apiKey->expires_at && $apiKey->expires_at < now())) {
             Log::warning('Invalid API key attempt', [
                 'ip'         => $request->ip(),
                 'public_key' => $publicKey,
@@ -46,11 +47,11 @@ class AuthenticateEscaperoom
 
         // Origin check
         $origin = $request->header('Origin');
-        if ($escaperoomSetting->allowed_origin && $origin !== $escaperoomSetting->allowed_origin) {
+        if ($apiKey->allowed_origin && $origin !== $apiKey->allowed_origin) {
             return response()->json(['message' => 'Origin not allowed'], 403);
         }
 
-        $request->merge(['escaperoom' => $escaperoomSetting->escaperoom]);
+        $request->merge(['escaperoom' => $apiKey->escaperoom]);
 
         return $next($request);
     }

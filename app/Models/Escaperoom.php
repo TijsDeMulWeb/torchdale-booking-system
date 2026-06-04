@@ -62,4 +62,9 @@ class Escaperoom extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function apiKeys()
+    {
+        return $this->hasMany(ApiKey::class);
+    }
 }

@@ -1,5 +1,6 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
+        ['name' => 'Instellingen: ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
         ['name' => 'API Keys', 'url' => route('apiKeys.index')],
     ]" />
 

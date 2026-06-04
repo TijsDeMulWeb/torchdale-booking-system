@@ -41,12 +41,6 @@ class StoreEscaperoomRequest extends FormRequest
                 'max:150',
                 'email',
             ],
-            'allowed_origin' => [
-                'nullable',
-                'string',
-                'max:200',
-                'starts_with:https://'
-            ],
             'invoice_email' => [
                 'nullable',
                 'string',
@@ -95,7 +89,6 @@ class StoreEscaperoomRequest extends FormRequest
     public function escaperoomSettingsData(): array
     {
         return $this->only([
-            'allowed_origin',
             'mollie_api_key',
             'openai_api_key',
         ]);

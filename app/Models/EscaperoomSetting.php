@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['escaperoom_id', 'mollie_api_key', 'openai_api_key', 'allowed_origin'])]
+#[Fillable(['escaperoom_id', 'mollie_api_key', 'openai_api_key'])]
 class EscaperoomSetting extends Model
 {
     protected $casts = [
@@ -17,10 +17,5 @@ class EscaperoomSetting extends Model
     public function escaperoom()
     {
         return $this->belongsTo(Escaperoom::class);
-    }
-
-    public function setAllowedOriginAttribute($value)
-    {
-        $this->attributes['allowed_origin'] = rtrim($value, '/');
     }
 }

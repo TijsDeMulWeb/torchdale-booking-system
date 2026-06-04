@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiKey\IndexApiKeyController;
 use App\Http\Controllers\Category\DeleteCategoryController;
 use App\Http\Controllers\Category\EditCategoryController;
 use App\Http\Controllers\Category\StoreCategoryController;
@@ -178,4 +179,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/{id}/gift-cards', ShowGiftCardCustomerController::class)->name('customers.show.gift-cards');
     Route::post('/customers/{id}/ban', BanCustomerController::class)->name('customers.ban');
     Route::post('/customers/{id}/unban', UnbanCustomerController::class)->name('customers.unban');
+
+    // API Keys routes
+    Route::get('/api-keys', IndexApiKeyController::class)->name('apiKeys.index');
 });

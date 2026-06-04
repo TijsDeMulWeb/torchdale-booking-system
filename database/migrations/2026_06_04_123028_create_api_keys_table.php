@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->string('secret_hash', 64);
             $table->string('allowed_origin')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->timestamp('expires_at')->nullable();
             $table->timestamp('last_used_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

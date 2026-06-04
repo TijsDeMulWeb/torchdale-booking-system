@@ -36,7 +36,7 @@ class AuthenticateEscaperoom
 
         $apiKey = ApiKey::where('public_key', $publicKey)->first();
 
-        if (!$apiKey || !$apiKey->is_active || ($apiKey->expires_at && $apiKey->expires_at < now())) {
+        if (!$apiKey || !$apiKey->is_active) {
             Log::warning('Invalid API key attempt', [
                 'ip'         => $request->ip(),
                 'public_key' => $publicKey,

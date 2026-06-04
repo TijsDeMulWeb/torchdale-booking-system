@@ -11,10 +11,16 @@
                     </p>
                     <x-last-updated :model="$escaperoom" />
                 </div>
-                <a href="{{ route('escaperoom.edit') }}"
-                    class="mt-4 sm:mt-0 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500">
-                    Bewerken
-                </a>
+                <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
+                    <a href="{{ route('apiKeys.index') }}"
+                        class="block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:inset-ring-white/20 dark:hover:bg-white/20">
+                        Api Keys
+                    </a>
+                    <a href="{{ route('escaperoom.edit') }}"
+                        class="mt-4 sm:mt-0 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500">
+                        Bewerken
+                    </a>
+                </div>
             </div>
             <div class="mt-6 border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">

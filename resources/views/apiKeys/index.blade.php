@@ -157,11 +157,14 @@
                                         </td>
                                         <td class="px-5 py-4 whitespace-nowrap">
                                             <div class="flex items-center gap-4">
-                                                <form method="POST" action="#" class="toggle-form">
+                                                <form method="POST" action="{{ route('apiKeys.update', $key->id) }}"
+                                                    class="toggle-form">
                                                     @csrf
                                                     @method('PATCH')
                                                     <label class="relative inline-flex cursor-pointer items-center">
-                                                        <input type="checkbox" class="toggle-checkbox sr-only" {{ $key->is_active ? 'checked' : '' }}>
+                                                        <input type="hidden" name="is_active" value="0">
+                                                        <input type="checkbox" name="is_active" value="1"
+                                                            class="toggle-checkbox sr-only" {{ $key->is_active ? 'checked' : '' }}>
                                                         <div
                                                             class="toggle-track h-6 w-11 rounded-full transition-colors duration-200 {{ $key->is_active ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-white/10' }}">
                                                         </div>
@@ -170,7 +173,8 @@
                                                         </div>
                                                     </label>
                                                 </form>
-                                                <form method="POST" action="{{ route('apiKeys.destroy', $key->id) }}" class="delete-form">
+                                                <form method="POST" action="{{ route('apiKeys.destroy', $key->id) }}"
+                                                    class="delete-form">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

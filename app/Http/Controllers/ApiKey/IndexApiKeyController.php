@@ -12,7 +12,7 @@ class IndexApiKeyController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $apiKeys = auth()->user()->escaperoom->apiKeys()->get();
+        $apiKeys = auth()->user()->escaperoom->apiKeys()->where('name', '!=', 'Default API Key')->get();
 
         return view('apiKeys.index', [
             'apiKeys' => $apiKeys,

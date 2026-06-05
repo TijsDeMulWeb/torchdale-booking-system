@@ -70,6 +70,8 @@ use App\Http\Controllers\Room\StoreRoomPriceController;
 use App\Http\Controllers\Room\StoreRoomTimeSlotController;
 use App\Http\Controllers\Room\UpdateRoomController;
 use App\Http\Controllers\Room\UpdateRoomTimeSlotController;
+use App\Http\Controllers\WidgetSettings\ShowWidgetSettingsController;
+use App\Http\Controllers\WidgetSettings\UpdateWidgetSettingsController;
 use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
 use App\Http\Controllers\User\EditUserController;
@@ -182,6 +184,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/{id}/gift-cards', ShowGiftCardCustomerController::class)->name('customers.show.gift-cards');
     Route::post('/customers/{id}/ban', BanCustomerController::class)->name('customers.ban');
     Route::post('/customers/{id}/unban', UnbanCustomerController::class)->name('customers.unban');
+
+    // Widget Settings routes
+    Route::get('/widget-settings', ShowWidgetSettingsController::class)->name('widgetSettings.show');
+    Route::put('/widget-settings', UpdateWidgetSettingsController::class)->name('widgetSettings.update');
 
     // API Keys routes
     Route::get('/api-keys', IndexApiKeyController::class)->name('apiKeys.index');

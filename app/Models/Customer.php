@@ -67,7 +67,15 @@ class Customer extends Model
 
     public function getFullAddressAttribute(): string
     {
-        return $this->street . ' ' . $this->house_number . ', ' . $this->city . ' ' . $this->postal_code . ', ' . $this->country;
+        $address = $this->street . ' ' . $this->house_number;
+
+        if ($this->address_line_2) {
+            $address .= ' ' . $this->address_line_2;
+        }
+
+        $address .= ', ' . $this->city . ' ' . $this->postal_code . ', ' . $this->country;
+
+        return $address;
     }
 
     public function setFirstNameAttribute($value)

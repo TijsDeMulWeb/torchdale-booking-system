@@ -58,23 +58,23 @@ class DatabaseSeeder extends Seeder
             'registration_number' => '0123456789',
         ]);
 
-        EscaperoomAddress::create([
-            'escaperoom_id' => 1,
-            'street' => 'Herentalsebaan',
-            'house_number' => '47',
-            'postal_code' => '2980',
-            'city' => 'Zoersel',
-            'country_id' => 1,
-            'is_primary' => true,
-        ]);
+        // EscaperoomAddress::create([
+        //     'escaperoom_id' => 1,
+        //     'street' => 'Herentalsebaan',
+        //     'house_number' => '47',
+        //     'postal_code' => '2980',
+        //     'city' => 'Zoersel',
+        //     'country_id' => 1,
+        //     'is_primary' => true,
+        // ]);
 
-        EscaperoomAddress::create([
-            'escaperoom_id' => 1,
-            'street' => 'Parking Kapelstraat',
-            'postal_code' => '2980',
-            'city' => 'Zoersel',
-            'country_id' => 1,
-        ]);
+        // EscaperoomAddress::create([
+        //     'escaperoom_id' => 1,
+        //     'street' => 'Parking Kapelstraat',
+        //     'postal_code' => '2980',
+        //     'city' => 'Zoersel',
+        //     'country_id' => 1,
+        // ]);
 
         $apiKeyService = new ApiKeyService();
         $keys = $apiKeyService->generateApiKeys();
@@ -112,55 +112,55 @@ class DatabaseSeeder extends Seeder
             'prompt' => 'lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate.',
         ]);
 
-        ProductCategory::create([
-            'escaperoom_id' => 1,
-            'name' => 'Bordspellen',
-        ]);
+        // ProductCategory::create([
+        //     'escaperoom_id' => 1,
+        //     'name' => 'Bordspellen',
+        // ]);
 
-        ProductCategory::create([
-            'escaperoom_id' => 1,
-            'name' => 'Shirts',
-        ]);
+        // ProductCategory::create([
+        //     'escaperoom_id' => 1,
+        //     'name' => 'Shirts',
+        // ]);
 
-        Product::create([
-            'escaperoom_id' => 1,
-            'category_id' => 1,
-            'name' => 'Escape Room in a Box',
-            'cost_price' => 15.00,
-            'selling_price' => 30.00,
-            'vat_percentage' => 21.00,
-            'stock_quantity' => 50,
-        ]);
+        // Product::create([
+        //     'escaperoom_id' => 1,
+        //     'category_id' => 1,
+        //     'name' => 'Escape Room in a Box',
+        //     'cost_price' => 15.00,
+        //     'selling_price' => 30.00,
+        //     'vat_percentage' => 21.00,
+        //     'stock_quantity' => 50,
+        // ]);
 
-        Product::create([
-            'escaperoom_id' => 1,
-            'category_id' => 2,
-            'name' => 'Torchdale T-Shirt',
-            'cost_price' => 10.00,
-            'selling_price' => 20.00,
-            'vat_percentage' => 6.00,
-            'stock_quantity' => 100,
-        ]);
+        // Product::create([
+        //     'escaperoom_id' => 1,
+        //     'category_id' => 2,
+        //     'name' => 'Torchdale T-Shirt',
+        //     'cost_price' => 10.00,
+        //     'selling_price' => 20.00,
+        //     'vat_percentage' => 6.00,
+        //     'stock_quantity' => 100,
+        // ]);
 
-        ProductImage::create([
-            'product_id' => 2,
-            'url' => 'https://placehold.co/400x400',
-            'alt_text' => 'Torchdale T-Shirt',
-            'is_primary' => true,
-        ]);
+        // ProductImage::create([
+        //     'product_id' => 2,
+        //     'url' => 'https://placehold.co/400x400',
+        //     'alt_text' => 'Torchdale T-Shirt',
+        //     'is_primary' => true,
+        // ]);
 
-        Room::create([
-            'escaperoom_id' => 1,
-            'escaperoom_address_id' => 1,
-            'name' => 'The Toy Factory',
-            'duration' => 75,
-            'min_players' => 2,
-            'max_players' => 6,
-            'min_age' => 16,
-            'url' => 'https://torchdale.be/rooms/the-toy-factory',
-            'active_from' => now(),
-            'color' => '#FF5733',
-        ]);
+        // Room::create([
+        //     'escaperoom_id' => 1,
+        //     'escaperoom_address_id' => 1,
+        //     'name' => 'The Toy Factory',
+        //     'duration' => 75,
+        //     'min_players' => 2,
+        //     'max_players' => 6,
+        //     'min_age' => 16,
+        //     'url' => 'https://torchdale.be/rooms/the-toy-factory',
+        //     'active_from' => now(),
+        //     'color' => '#FF5733',
+        // ]);
 
 
         Permission::create(['name' => 'view chatbot']);

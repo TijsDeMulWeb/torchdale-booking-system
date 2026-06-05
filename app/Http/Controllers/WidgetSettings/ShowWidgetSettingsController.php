@@ -12,11 +12,33 @@ class ShowWidgetSettingsController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $widgetSettings = auth()->user()->escaperoom->escaperoomSetting()->first()->only(['widget_color_primary', 'widget_color_primary_dark', 'widget_color_background_dark', 'widget_color_text', 'widget_color_sale', 'widget_color_success']);
-        $apiKey = auth()->user()->escaperoom->apiKeys()->where('name', 'LIKE', '%Default%')->first();
+        $escaperoom = auth()->user()->escaperoom;
+
+        $widgetSettings = $escaperoom->escaperoomSetting()
+            ->first()
+            ->only([
+                'widget_color_primary',
+                'widget_color_primary_dark',
+                'widget_color_background_dark',
+                'widget_color_text',
+                'widget_color_sale',
+                'widget_color_success',
+            ]);
+
+        $defaultApiKey = $escaperoom->apiKeys()
+            ->where('name', 'Default API Key')
+            ->first();
+
+        $apiKeys = $escaperoom->apiKeys()
+            ->where('is_active', true)
+            ->where('name', '!=', 'Default API Key')
+            ->orderBy('name')
+            ->get();
+
         return view('widgetSettings.show', [
             'widgetSettings' => $widgetSettings,
-            'apiKey' => $apiKey,
+            'apiKeys' => $apiKeys,
+            'defaultApiKey' => $defaultApiKey,
         ]);
     }
 }

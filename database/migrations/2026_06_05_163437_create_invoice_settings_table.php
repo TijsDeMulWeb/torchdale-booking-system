@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('invoice_settings', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('escaperoom_id')->constrained()->onDelete('cascade');
             $table->string('invoice_prefix');
             $table->text('memo')->nullable();
             $table->unsignedSmallInteger('payment_term_days')->default(30);

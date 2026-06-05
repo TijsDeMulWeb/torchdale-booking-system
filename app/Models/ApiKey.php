@@ -14,4 +14,9 @@ class ApiKey extends Model
     {
         return $this->belongsTo(Escaperoom::class);
     }
+
+    public function setAllowedOriginAttribute($value)
+    {
+        $this->attributes['allowed_origin'] = rtrim($value, '/');
+    }
 }

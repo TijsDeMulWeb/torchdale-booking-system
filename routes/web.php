@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiKey\IndexApiKeyController;
+use App\Http\Controllers\ApiKey\StoreApiKeyController;
 use App\Http\Controllers\Category\DeleteCategoryController;
 use App\Http\Controllers\Category\EditCategoryController;
 use App\Http\Controllers\Category\StoreCategoryController;
@@ -182,4 +183,5 @@ Route::middleware('auth')->group(function () {
 
     // API Keys routes
     Route::get('/api-keys', IndexApiKeyController::class)->name('apiKeys.index');
+    Route::post('/api-keys/create', StoreApiKeyController::class)->name('apiKeys.create');
 });

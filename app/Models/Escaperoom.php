@@ -67,4 +67,9 @@ class Escaperoom extends Model
     {
         return $this->hasMany(ApiKey::class);
     }
+
+    public function invoiceSetting()
+    {
+        return $this->hasOne(InvoiceSetting::class);
+    }
 }

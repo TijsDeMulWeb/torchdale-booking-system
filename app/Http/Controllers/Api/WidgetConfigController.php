@@ -12,15 +12,17 @@ class WidgetConfigController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $escaperoomSettings = $request->escaperoom->escaperoomSetting()->first()->only(['widget_color_primary', 'widget_color_primary_dark', 'widget_color_background_dark', 'widget_color_text', 'widget_color_sale', 'widget_color_success']);
+        
         return response()->json([
             'success' => true,
             'colors' => [
-                'primary' => '#ed6e0c',
-                'primary_dark' => '#b8560a',
-                'background_dark' => '#1f2445',
-                'text' => '#1f2445',
-                'sale' => '#e74c3c',
-                'success' => '#27ae60',
+                'primary' => $escaperoomSettings['widget_color_primary'],
+                'primary_dark' => $escaperoomSettings['widget_color_primary_dark'],
+                'background_dark' => $escaperoomSettings['widget_color_background_dark'],
+                'text' => $escaperoomSettings['widget_color_text'],
+                'sale' => $escaperoomSettings['widget_color_sale'],
+                'success' => $escaperoomSettings['widget_color_success'],
             ],
         ]);
     }

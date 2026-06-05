@@ -57,6 +57,7 @@ class CheckoutController extends Controller
         $discount = 0;
         $vatTotal = 0;
         $leftToPay = 0;
+        $invoiceDiscount = null;
         $roomPrice = null;
         $order = null;
         $invoiceLineData = [];
@@ -124,7 +125,7 @@ class CheckoutController extends Controller
 
 
 
-        DB::transaction(function () use ($request, $items, $customer, $customerInput, $discountCode, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice, &$order, &$invoiceLineData) {
+        DB::transaction(function () use ($request, $items, $customer, $customerInput, $discountCode, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice, &$order, &$invoiceLineData, &$invoiceDiscount) {
             $order = new Order();
             $order->escaperoom_id = $request->escaperoom->id;
             $order->customer_id = $customer->id;
@@ -284,14 +285,10 @@ class CheckoutController extends Controller
                     $discountCode->save();
                 }
 
-                $invoiceLineData[] = [
-                    'description' => 'Kortingscode: ' . $discountCode->code,
-                    'quantity' => 1,
-                    'vatRate' => '0.00',
-                    'unitPrice' => -$couponDiscount,
-                    'discountType' => null,
-                    'discountValue' => null,
-                ];
+                $invoiceDiscount = new Discount(
+                    type: $discountCode->discount_type === 'fixed' ? 'amount' : 'percentage',
+                    value: number_format((float) $discountCode->discount_value, 2, '.', ''),
+                );
             }
 
             $order->total = $total;
@@ -347,6 +344,7 @@ class CheckoutController extends Controller
             recipientIdentifier: 'customer-' . $customer->id . '-' . ($order->is_business ? 'business' : 'consumer'),
             recipient: $recipient,
             lines: new DataCollection($mollieLines),
+            discount: $invoiceDiscount,
             isEInvoice: false
         );
 

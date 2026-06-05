@@ -35,7 +35,6 @@ class AuthenticateEscaperoom
         RateLimiter::hit($rateLimitKey, 60);
 
         $apiKey = ApiKey::where('public_key', $publicKey)->first();
-        return response()->json(['message' => $apiKey], 401);
 
         if (!$apiKey || !$apiKey->is_active) {
             Log::warning('Invalid API key attempt', [

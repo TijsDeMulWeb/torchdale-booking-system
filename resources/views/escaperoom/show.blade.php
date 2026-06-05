@@ -108,7 +108,7 @@
                         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Bevestigingspagina Kamer
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->confirmation_room_url ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->escaperoomSetting->confirmation_room_url ?? 'Niet ingesteld' }}
                         </dd>
                     </div>
                 </dl>
@@ -119,7 +119,7 @@
                         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Bevestigingspagina Product
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->confirmation_product_url ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->escaperoomSetting->confirmation_product_url ?? 'Niet ingesteld' }}
                         </dd>
                     </div>
                 </dl>
@@ -130,7 +130,7 @@
                         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Bevestigingspagina Cadeaubon
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->confirmation_gift_card_url ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->escaperoomSetting->confirmation_gift_card_url ?? 'Niet ingesteld' }}
                         </dd>
                     </div>
                 </dl>

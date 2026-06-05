@@ -42,6 +42,7 @@ use App\Http\Controllers\GiftCard\EditGiftCardController;
 use App\Http\Controllers\GiftCard\DeleteGiftCardController;
 use App\Http\Controllers\GiftCard\UpdateGiftCardController;
 use App\Http\Controllers\GiftCard\StoreGiftCardController;
+use App\Http\Controllers\InvoiceSetting\ShowInvoiceSettingController;
 use App\Http\Controllers\Login\ShowLoginController;
 use App\Http\Controllers\Login\StoreLoginController;
 use App\Http\Controllers\LogoutController;

@@ -23,7 +23,7 @@ class StoreApiKeyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:100', 'doesnt_start_with:Default'],
             'allowed_origin' => ['required', 'url', 'max:255']
         ];
     }

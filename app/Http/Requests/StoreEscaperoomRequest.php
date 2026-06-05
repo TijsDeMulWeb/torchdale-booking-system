@@ -62,6 +62,24 @@ class StoreEscaperoomRequest extends FormRequest
                 'image',
                 'max:2048',
             ],
+            'confirmation_room_url' => [
+                'nullable',
+                'string',
+                'max:255',
+                'url',
+            ],
+            'confirmation_product_url' => [
+                'nullable',
+                'string',
+                'max:255',
+                'url',
+            ],
+            'confirmation_gift_card_url' => [
+                'nullable',
+                'string',
+                'max:255',
+                'url',
+            ],
             'mollie_api_key' => [
                 'nullable',
                 'string',
@@ -89,6 +107,9 @@ class StoreEscaperoomRequest extends FormRequest
     public function escaperoomSettingsData(): array
     {
         return $this->only([
+            'confirmation_room_url',
+            'confirmation_product_url',
+            'confirmation_gift_card_url',
             'mollie_api_key',
             'openai_api_key',
         ]);

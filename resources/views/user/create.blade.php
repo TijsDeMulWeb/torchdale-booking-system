@@ -9,7 +9,8 @@
             <div class="space-y-12 sm:space-y-16">
                 <div>
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Gebruiker</h2>
-                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Vul hier alle info in voor een nieuwe gebruiker.</p>
+                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Vul hier alle info in voor een
+                        nieuwe gebruiker.</p>
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
@@ -53,6 +54,35 @@
                                     value="{{ old('email') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="email" />
+                            </div>
+                        </div>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label for="language"
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Taal</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <div class="grid grid-cols-1 sm:max-w-md">
+                                    <select id="language" name="language"
+                                        class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500">
+                                        <option value="en" {{ old('language') == 'en' ? 'selected' : '' }}>
+                                            Engels
+                                        </option>
+                                        <option value="nl" {{ old('language') == 'nl' ? 'selected' : '' }}>
+                                            Nederlands
+                                        </option>
+                                        <option value="de" {{ old('language') == 'de' ? 'selected' : '' }}>
+                                            Duits
+                                        </option>
+                                        <option value="fr" {{ old('language') == 'fr' ? 'selected' : '' }}>
+                                            Frans
+                                        </option>
+                                    </select>
+                                    <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true"
+                                        class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400">
+                                        <path
+                                            d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+                                            clip-rule="evenodd" fill-rule="evenodd" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>

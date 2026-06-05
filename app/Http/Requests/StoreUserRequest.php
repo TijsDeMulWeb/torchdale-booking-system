@@ -29,6 +29,7 @@ class StoreUserRequest extends FormRequest
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore(auth()->id()),],
             'phone' => ['nullable', 'string', 'max:20'],
             'profile_picture' => ['nullable', 'image', 'max:2048'],
+            'language' => ['required', 'string', 'max:10', Rule::in(['en', 'nl', 'de', 'fr'])],
         ];
     }
 }

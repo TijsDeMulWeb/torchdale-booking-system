@@ -14,7 +14,7 @@ class StoreRoomController extends Controller
     public function __invoke(StoreRoomRequest $request)
     {
         $validated = $request->validated();
-        $imageFile = $validated['url'];
+        $imageFile = $validated['url'] ?? null;
         unset($validated['url']);
 
         $room = new Room($validated);
@@ -23,11 +23,13 @@ class StoreRoomController extends Controller
         $room->url = '';
         $room->save();
 
-        $room->url = $imageFile->store(
-            'escaperooms/' . auth()->user()->escaperoom->id . '/rooms/' . $room->id,
-            'public'
-        );
-        $room->save();
+        if ($imageFile) {
+            $room->url = $imageFile->store(
+                'escaperooms/' . auth()->user()->escaperoom->id . '/rooms/' . $room->id,
+                'public'
+            );
+            $room->save();
+        }
 
         return redirect()->route('rooms.index')->with('message', 'Room created successfully.');
     }

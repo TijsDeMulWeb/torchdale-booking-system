@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApiKey\DeleteApiKeyController;
 use App\Http\Controllers\ApiKey\IndexApiKeyController;
 use App\Http\Controllers\ApiKey\StoreApiKeyController;
+use App\Http\Controllers\ApiKey\UpdateApiKeyController;
 use App\Http\Controllers\Category\DeleteCategoryController;
 use App\Http\Controllers\Category\EditCategoryController;
 use App\Http\Controllers\Category\StoreCategoryController;
@@ -185,5 +186,6 @@ Route::middleware('auth')->group(function () {
     // API Keys routes
     Route::get('/api-keys', IndexApiKeyController::class)->name('apiKeys.index');
     Route::post('/api-keys/create', StoreApiKeyController::class)->name('apiKeys.create');
+    Route::patch('/api-keys/{id}/update', UpdateApiKeyController::class)->name('apiKeys.update');
     Route::delete('/api-keys/{id}/delete', DeleteApiKeyController::class)->name('apiKeys.destroy');
 });

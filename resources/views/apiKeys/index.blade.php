@@ -170,7 +170,7 @@
                                                         </div>
                                                     </label>
                                                 </form>
-                                                <form method="POST" action="#" class="delete-form">
+                                                <form method="POST" action="{{ route('apiKeys.destroy', $key->id) }}" class="delete-form">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"

@@ -9,7 +9,8 @@
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Persoonlijke Informatie</h2>
                 </div>
 
-                <form class="md:col-span-2" method="POST" action="{{ route('profile.update', $user->id) }}" enctype="multipart/form-data">
+                <form class="md:col-span-2" method="POST" action="{{ route('profile.update', $user->id) }}"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
@@ -18,7 +19,8 @@
                                 src="{{ $user->profile_picture ? Storage::url($user->profile_picture) : 'https://placehold.co/400x400' }}"
                                 alt="Profile picture"
                                 class="size-24 flex-none rounded-lg bg-gray-100 object-cover outline -outline-offset-1 outline-black/5 dark:bg-gray-800 dark:outline-white/10" />
-                            <input id="profilePicture" name="profile_picture" type="file" class="hidden" onchange="previewLogo(event)">
+                            <input id="profilePicture" name="profile_picture" type="file" class="hidden"
+                                onchange="previewLogo(event)">
 
                             <button type="button" onclick="document.getElementById('profilePicture').click()"
                                 class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring-1 inset-ring-gray-300 hover:bg-gray-100 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">Aanpassen</button>
@@ -75,6 +77,25 @@
                                     value="{{ old('phone', $user->phone) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="phone" />
+                            </div>
+                        </div>
+                        <div class="col-span-full">
+                            <label for="language"
+                                class="block text-sm/6 font-medium text-gray-900 dark:text-white">Taal</label>
+                            <div class="mt-2">
+                                <div class="grid grid-cols-1">
+                                    <select id="language" name="language"
+                                        class="col-start-1 row-start-1 block w-full appearance-none rounded-md bg-white px-3 py-1.5 pr-8 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500">
+                                        <option value="en" {{ old('language', $user->language) == 'en' ? 'selected' : '' }}>Engels</option>
+                                        <option value="nl" {{ old('language', $user->language) == 'nl' ? 'selected' : '' }}>Nederlands</option>
+                                        <option value="de" {{ old('language', $user->language) == 'de' ? 'selected' : '' }}>Duits</option>
+                                        <option value="fr" {{ old('language', $user->language) == 'fr' ? 'selected' : '' }}>Frans</option>
+                                    </select>
+                                    <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
+                                        class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400">
+                                        <path d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -8,6 +8,19 @@ use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Mollie\Api\MollieApiClient;
+use Mollie\Api\Http\Requests\CreateSalesInvoiceRequest;
+use Mollie\Api\Http\Data\Money;
+use Mollie\Api\Http\Data\Discount;
+use Mollie\Api\Http\Data\Recipient;
+use Mollie\Api\Http\Data\InvoiceLine;
+use Mollie\Api\Http\Data\DataCollection;
+use Mollie\Api\Types\RecipientType;
+use Mollie\Api\Types\VatScheme;
+use Mollie\Api\Types\VatMode;
+use Mollie\Api\Types\PaymentTerm;
+use Mollie\Api\Types\SalesInvoiceStatus;
+
 
 class CheckoutController extends Controller
 {
@@ -34,7 +47,7 @@ class CheckoutController extends Controller
         if ($discountCodeInput) {
             $discountCode = $request->escaperoom->coupons()->where('code', $discountCodeInput)->first();
 
-            if (!$discountCode || $discountCode->valid_from > now() || ($discountCode->valid_until && $discountCode->valid_until < now()) ||  ($discountCode->usage_limit !== null && $discountCode->usage_limit === 0)) {
+            if (!$discountCode || $discountCode->valid_from > now() || ($discountCode->valid_until && $discountCode->valid_until < now()) || ($discountCode->usage_limit !== null && $discountCode->usage_limit === 0)) {
                 return response()->json(['success' => false, 'message' => 'Invalid discount code.'], 422);
             }
         }
@@ -45,6 +58,8 @@ class CheckoutController extends Controller
         $vatTotal = 0;
         $leftToPay = 0;
         $roomPrice = null;
+        $order = null;
+        $invoiceLineData = [];
 
         foreach ($items as $item) {
             if (empty($item['type'])) {
@@ -107,7 +122,9 @@ class CheckoutController extends Controller
             }
         }
 
-        DB::transaction(function () use ($request, $items, $customer, $customerInput, $discountCode, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice) {
+
+
+        DB::transaction(function () use ($request, $items, $customer, $customerInput, $discountCode, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice, &$order, &$invoiceLineData) {
             $order = new Order();
             $order->escaperoom_id = $request->escaperoom->id;
             $order->customer_id = $customer->id;
@@ -167,6 +184,15 @@ class CheckoutController extends Controller
                         'vat_percentage' => $product->vat_percentage,
                         'vat_amount' => $productVatTotal,
                     ]);
+
+                    $invoiceLineData[] = [
+                        'description' => $product->name,
+                        'quantity' => $item['qty'],
+                        'vatRate' => number_format((float) $product->vat_percentage, 2, '.', ''),
+                        'unitPrice' => $product->selling_price,
+                        'discountType' => $product->discount_type,
+                        'discountValue' => $product->discount_value ? number_format((float) $product->discount_value, 2, '.', '') : null,
+                    ];
                 }
 
                 if ($item['type'] === 'giftcard') {
@@ -175,6 +201,15 @@ class CheckoutController extends Controller
 
                     $total += $giftCardTotal;
                     $subtotal += $giftCardTotal;
+
+                    $invoiceLineData[] = [
+                        'description' => $giftCard->name,
+                        'quantity' => 1,
+                        'vatRate' => '0.00',
+                        'unitPrice' => $giftCardTotal,
+                        'discountType' => null,
+                        'discountValue' => null,
+                    ];
                 }
 
                 if ($item['type'] === 'escaperoom') {
@@ -213,6 +248,15 @@ class CheckoutController extends Controller
                     $discount += $roomDiscountTotal;
                     $vatTotal += $roomVatTotal;
                     $leftToPay += $roomLeftToPay;
+
+                    $invoiceLineData[] = [
+                        'description' => $room->name . ' — ' . $item['date'] . ' (' . $item['players'] . ' spelers)',
+                        'quantity' => 1,
+                        'vatRate' => number_format((float) $roomPrice->vat_percentage, 2, '.', ''),
+                        'unitPrice' => $roomTotal,
+                        'discountType' => null,
+                        'discountValue' => null,
+                    ];
                 }
             }
 
@@ -239,6 +283,15 @@ class CheckoutController extends Controller
                     $discountCode->times_used += 1;
                     $discountCode->save();
                 }
+
+                $invoiceLineData[] = [
+                    'description' => 'Kortingscode: ' . $discountCode->code,
+                    'quantity' => 1,
+                    'vatRate' => '0.00',
+                    'unitPrice' => -$couponDiscount,
+                    'discountType' => null,
+                    'discountValue' => null,
+                ];
             }
 
             $order->total = $total;
@@ -248,7 +301,58 @@ class CheckoutController extends Controller
             $order->save();
         });
 
-        return response()->json(['success' => true, 'info' => $orderInfo, 'customer' => $customer, 'ip' => $request->ip(), 'discountCode' => $discountCode, 'total' => $total, 'subtotal' => $subtotal, 'discount' => $discount, 'vat_total' => $vatTotal, 'left_to_pay' => $leftToPay]);
+        $mollie = new MollieApiClient();
+        $mollie->setApiKey('test_McAeHWQHyjAAnkjEkzDdTm7nuAbgkd');
+
+        $streetAndNumber = trim(($customerInput['street'] ?? '') . ' ' . ($customerInput['house_number'] ?? ''));
+
+        $recipient = new Recipient(
+            type: $order->is_business ? RecipientType::BUSINESS : RecipientType::CONSUMER,
+            givenName: $order->customer_first_name,
+            familyName: $order->customer_last_name,
+            email: $order->customer_email,
+            phone: $order->customer_phone ?? null,
+            streetAndNumber: $streetAndNumber,
+            streetAdditional: $customerInput['address_line_2'] ?? null,
+            postalCode: $customerInput['postal_code'],
+            city: $customerInput['city'],
+            country: 'BE',
+            locale: 'nl_BE',
+            organizationName: $order->is_business ? $order->company_name : null,
+            organizationNumber: $order->is_business ? $order->registration_number : null,
+            vatNumber: $order->is_business ? $order->vat_number : null,
+        );
+
+        $mollieLines = array_map(function (array $line): InvoiceLine {
+            $discount = null;
+            if ($line['discountType'] && $line['discountValue'] !== null) {
+                $discount = new Discount(type: $line['discountType'], value: $line['discountValue']);
+            }
+
+            return new InvoiceLine(
+                description: $line['description'],
+                quantity: $line['quantity'],
+                vatRate: $line['vatRate'],
+                unitPrice: new Money(currency: 'EUR', value: number_format((float) $line['unitPrice'], 2, '.', '')),
+                discount: $discount,
+            );
+        }, $invoiceLineData);
+
+        $invoiceRequest = new CreateSalesInvoiceRequest(
+            currency: 'EUR',
+            status: SalesInvoiceStatus::ISSUED,
+            vatScheme: VatScheme::STANDARD,
+            vatMode: VatMode::INCLUSIVE,
+            paymentTerm: PaymentTerm::DAYS_30,
+            recipientIdentifier: 'customer-' . $customer->id . '-' . ($order->is_business ? 'business' : 'consumer'),
+            recipient: $recipient,
+            lines: new DataCollection($mollieLines),
+            isEInvoice: false
+        );
+
+        $salesInvoice = $mollie->send($invoiceRequest);
+
+        return response()->json(['success' => true, 'order' => $order, 'invoice' => $salesInvoice]);
     }
 
     private function matchOrCreateCustomer($escaperoom, array $input, ?string $ip): Customer
@@ -301,7 +405,7 @@ class CheckoutController extends Controller
 
             $knownEmails = $candidate->identifiers->where('type', 'email')->pluck('value')->push($candidate->email);
             $knownPhones = $candidate->identifiers->where('type', 'phone')->pluck('value')->push($candidate->phone);
-            $knownIps    = $candidate->identifiers->where('type', 'ip_address')->pluck('value')->push($candidate->ip_address);
+            $knownIps = $candidate->identifiers->where('type', 'ip_address')->pluck('value')->push($candidate->ip_address);
 
             if (!empty($input['email']) && $knownEmails->contains($input['email'])) {
                 $score += 60;

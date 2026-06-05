@@ -24,6 +24,63 @@
                         API Key Toevoegen
                     </button>
                 </div>
+                @if (session('new_public_key') && session('new_secret_key'))
+                    <div
+                        class="my-4 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/20 dark:bg-amber-500/10">
+                        <div class="mb-3 flex items-start gap-2.5">
+                            <div>
+                                <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">Sla je secret key nu op!
+                                </p>
+                                <p class="text-xs text-amber-700 dark:text-amber-400">De secret key wordt maar <strong>één
+                                        keer</strong> getoond en kan daarna niet meer worden opgezocht.</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2.5">
+                            <div>
+                                <p class="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">Public Key</p>
+                                <div class="relative">
+                                    <input type="text" value="{{ session('new_public_key') }}" readonly
+                                        class="h-10 w-full rounded-lg border border-gray-300 bg-white pr-24 pl-3.5 font-mono text-xs text-gray-700 select-all dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                                    <button type="button" data-key="{{ session('new_public_key') }}"
+                                        class="copy-btn absolute top-1/2 right-0 inline-flex h-10 -translate-y-1/2 items-center gap-1.5 rounded-r-lg border-y border-r border-gray-300 bg-white px-3 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                        <svg class="copy-icon size-3.5 fill-current" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M6.588 4.584a.5.5 0 0 1 .5-.5h8.327a.5.5 0 0 1 .5.5v8.329a.5.5 0 0 1-.5.5H7.088a.5.5 0 0 1-.5-.5V4.584ZM7.088 2.584A2.5 2.5 0 0 0 4.588 5.09v.51h-.504A2.5 2.5 0 0 0 1.585 8.094v8.322a2.5 2.5 0 0 0 2.5 2.5h8.32a2.5 2.5 0 0 0 2.5-2.5v-.513h.51a2.5 2.5 0 0 0 2.5-2.5V4.584a2.5 2.5 0 0 0-2.5-2.5H7.088Z" />
+                                        </svg>
+                                        <svg class="check-icon size-3.5 fill-current text-green-500 hidden"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z" />
+                                        </svg>
+                                        <span class="copy-text">Copy</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">Secret Key <span
+                                        class="font-normal">(bewaar deze nu!)</span></p>
+                                <div class="relative">
+                                    <input type="text" value="{{ session('new_secret_key') }}" readonly
+                                        class="h-10 w-full rounded-lg border border-gray-300 bg-white pr-24 pl-3.5 font-mono text-xs text-gray-700 select-all dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+                                    <button type="button" data-key="{{ session('new_secret_key') }}"
+                                        class="copy-btn absolute top-1/2 right-0 inline-flex h-10 -translate-y-1/2 items-center gap-1.5 rounded-r-lg border-y border-r border-gray-300 bg-white px-3 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                        <svg class="copy-icon size-3.5 fill-current" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M6.588 4.584a.5.5 0 0 1 .5-.5h8.327a.5.5 0 0 1 .5.5v8.329a.5.5 0 0 1-.5.5H7.088a.5.5 0 0 1-.5-.5V4.584ZM7.088 2.584A2.5 2.5 0 0 0 4.588 5.09v.51h-.504A2.5 2.5 0 0 0 1.585 8.094v8.322a2.5 2.5 0 0 0 2.5 2.5h8.32a2.5 2.5 0 0 0 2.5-2.5v-.513h.51a2.5 2.5 0 0 0 2.5-2.5V4.584a2.5 2.5 0 0 0-2.5-2.5H7.088Z" />
+                                        </svg>
+                                        <svg class="check-icon size-3.5 fill-current text-green-500 hidden"
+                                            viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z" />
+                                        </svg>
+                                        <span class="copy-text">Copy</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="overflow-x-auto pb-4">
                     @if ($apiKeys->count() > 0)
                         <table class="min-w-full">
@@ -172,20 +229,24 @@
                 Geef je API key een naam zodat je hem later makkelijk herkent.
             </p>
 
-            <form method="POST" action="#">
+            <form method="POST" action="{{ route('apiKeys.create') }}">
                 @csrf
                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Naam van de applicatie
                 </label>
-                <input type="text" name="name" placeholder="bijv. Mijn Booking Widget"
-                    class="h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-indigo-400">
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="bijv. Mijn Booking Widget"
+                    class="h-11 w-full rounded-lg border bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-gray-700 dark:focus:border-indigo-400">
+                <x-form.error name="name" />
 
                 <label class="mb-1.5 mt-5 block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Website
                 </label>
-                <input type="text" name="allowed_origin" placeholder="bijv. https://mijnwebsite.be"
-                    class="h-11 w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-indigo-400">
-                <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                <input type="text" name="allowed_origin" value="{{ old('allowed_origin') }}"
+                    placeholder="bijv. https://mijnwebsite.be"
+                    class="h-11 w-full rounded-lg border bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-gray-700 dark:focus:border-indigo-400">
+                <x-form.error name="allowed_origin" />
+
+                <p class="mt-4 text-xs text-gray-500 dark:text-gray-400">
                     De <strong class="text-gray-700 dark:text-gray-300">secret key</strong> wordt eenmalig getoond na
                     aanmaak. Bewaar het op een veilige plek.
                 </p>
@@ -228,6 +289,11 @@
         backdrop.addEventListener('click', closeModal);
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+        // Open modal automatisch als er validatiefouten zijn
+        @if ($errors->hasAny(['name', 'allowed_origin']))
+            openModal();
+        @endif
+
         // ── Copy ───────────────────────────────────────────────
         function copyToClipboard(text) {
             if (navigator.clipboard && window.isSecureContext) {
@@ -247,7 +313,8 @@
 
         document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', function () {
-                const feedback = this.closest('td').querySelector('.copy-feedback');
+                const td = this.closest('td');
+                const feedback = td ? td.querySelector('.copy-feedback') : null;
                 const self = this;
                 copyToClipboard(this.dataset.key).then(() => {
                     self.querySelector('.copy-icon').classList.add('hidden');

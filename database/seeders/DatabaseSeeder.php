@@ -13,6 +13,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductImage;
 use App\Models\User;
 use App\Models\Room;
+use App\Models\Admin;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -110,6 +111,13 @@ class DatabaseSeeder extends Seeder
             'escaperoom_id' => 1,
             'name' => 'Torchdale Support',
             'prompt' => 'lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque. Molestias, voluptate.',
+        ]);
+
+        Admin::create([
+            'first_name' => 'Tijs',
+            'last_name' => 'De Mul',
+            'email' => 'tijs.de.mul@gmail.com',
+            'password' => 'testtest',
         ]);
 
         // ProductCategory::create([

@@ -22,7 +22,7 @@ class ShowAccountSetupController extends Controller
         $escaperoom = $apiKey->escaperoom;
 
         if ($escaperoom->users()->exists()) {
-            return redirect()->route('login')->with('message', 'Er bestaat al een account voor deze escaperoom. Log in met je gegevens.');
+            return redirect()->route('register')->withErrors(['message' => 'Er is al een account gekoppeld aan deze escaperoom. Log in met je e-mailadres en wachtwoord.']);
         }
 
         return view('accountSetup.show', [

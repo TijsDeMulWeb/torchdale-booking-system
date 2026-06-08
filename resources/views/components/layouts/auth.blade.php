@@ -12,6 +12,7 @@
 </head>
 
 <body class="h-full">
+    <x-error name="message" />
     {{ $slot }}
 </body>
 

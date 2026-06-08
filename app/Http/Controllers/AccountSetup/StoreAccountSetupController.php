@@ -19,13 +19,13 @@ class StoreAccountSetupController extends Controller
         $apiKey = ApiKey::where('public_key', $data['key'])->first();
 
         if (!$apiKey) {
-            return redirect()->route('register')->withErrors(['key' => 'Deze link is ongeldig of verlopen.']);
+            return redirect()->route('register')->withErrors(['message' => 'Deze link is ongeldig of verlopen.']);
         }
 
         $escaperoom = $apiKey->escaperoom;
 
         if ($escaperoom->users()->exists()) {
-            return redirect()->route('login')->with('message', 'Er bestaat al een account voor deze escaperoom. Log in met je gegevens.');
+            return redirect()->route('login')->withErrors(['message' => 'Er is al een account gekoppeld aan deze escaperoom. Log in met je e-mailadres en wachtwoord.']);
         }
 
         $user = new User();
@@ -39,6 +39,9 @@ class StoreAccountSetupController extends Controller
         $user->escaperoom_id = $escaperoom->id;
         $user->password = $data['password'];
         $user->save();
+
+        User::find($user->id)->assignRole('admin');
+
 
         return redirect()->route('login')->with('message', 'Je account is aangemaakt! Je kan nu inloggen met je e-mailadres en wachtwoord.');
     }

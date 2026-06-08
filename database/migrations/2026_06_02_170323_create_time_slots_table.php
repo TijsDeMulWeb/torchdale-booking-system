@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->foreignId('room_id')->constrained()->onDelete('cascade');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
+            $table->timestamp('blocked_at')->nullable();
+            $table->string('blocked_reason', 150)->nullable();
             $table->timestamps();
         });
     }

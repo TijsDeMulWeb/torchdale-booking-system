@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Register;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRegisterRequest;
 use App\Mail\EscaperoomRegisteredMail;
+use App\Mail\EscaperoomRegistrationConfirmationMail;
 use App\Models\Chatbot;
 use App\Models\Escaperoom;
 use App\Models\EscaperoomRequest;
@@ -64,6 +65,7 @@ class StoreRegisterController extends Controller
 
         try {
             Mail::to('info@torchdaleplanner.be')->send(new EscaperoomRegisteredMail($escaperoom, $keys['public_key']));
+            Mail::to($escaperoom->email)->send(new EscaperoomRegistrationConfirmationMail($escaperoom));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

@@ -38,6 +38,7 @@ class StoreAccountSetupController extends Controller
         ]);
         $user->escaperoom_id = $escaperoom->id;
         $user->password = $data['password'];
+        $user->password_set_at = now();
         $user->save();
 
         User::find($user->id)->assignRole('admin');

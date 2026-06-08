@@ -106,7 +106,7 @@
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
-                                <div style="font-family:Inter, Arial, sans-serif;font-size:14px;line-height:1.6;text-align:left;color:#9ca3af;">Bedankt voor je interesse in Torchdale Planner namens <strong style="color:#d1d5db;">{{ $escaperoom->name }}</strong>.</div>
+                                <div style="font-family:Inter, Arial, sans-serif;font-size:14px;line-height:1.6;text-align:left;color:#9ca3af;">Bedankt voor je interesse in Torchdaleplanner namens <strong style="color:#d1d5db;">{{ $escaperoom->name }}</strong>.</div>
                               </td>
                             </tr>
                           </tbody>
@@ -182,7 +182,7 @@
                           <tbody>
                             <tr>
                               <td align="left" style="font-size:0px;padding:0;word-break:break-word;">
-                                <div style="font-family:Inter, Arial, sans-serif;font-size:12px;line-height:1;text-align:left;color:#9ca3af;">Torchdale Planner — info@torchdaleplanner.be</div>
+                                <div style="font-family:Inter, Arial, sans-serif;font-size:12px;line-height:1;text-align:left;color:#9ca3af;">Torchdaleplanner — info@torchdaleplanner.be</div>
                               </td>
                             </tr>
                           </tbody>

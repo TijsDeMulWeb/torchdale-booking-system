@@ -29,8 +29,8 @@ class EscaperoomRequestDeniedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('info@torchdaleplanner.be', 'Torchdale Planner'),
-            subject: 'Je aanvraag voor Torchdale Planner werd niet goedgekeurd',
+            from: new Address('info@torchdaleplanner.be', 'Torchdaleplanner'),
+            subject: 'Je aanvraag voor Torchdaleplanner werd niet goedgekeurd',
         );
     }
 

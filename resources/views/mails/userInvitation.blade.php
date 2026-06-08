@@ -102,7 +102,7 @@
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:0;padding-bottom:16px;word-break:break-word;">
-                                <div style="font-family:Inter, Arial, sans-serif;font-size:26px;font-weight:600;line-height:1.25;text-align:left;color:#ffffff;">Welkom bij Torchdale Planner!</div>
+                                <div style="font-family:Inter, Arial, sans-serif;font-size:26px;font-weight:600;line-height:1.25;text-align:left;color:#ffffff;">Welkom bij Torchdaleplanner!</div>
                               </td>
                             </tr>
                             <tr>
@@ -147,7 +147,7 @@
                             </tr>
                             <tr>
                               <td align="left" style="font-size:0px;padding:0;padding-top:12px;word-break:break-word;">
-                                <div style="font-family:Inter, Arial, sans-serif;font-size:14px;line-height:1.6;text-align:left;color:#374151;">Een beheerder van <strong>{{ $escaperoom->name }}</strong> heeft jou toegang gegeven tot Torchdale Planner. Via dit platform beheer je boekingen, klanten, escape rooms en meer — allemaal op één plek.</div>
+                                <div style="font-family:Inter, Arial, sans-serif;font-size:14px;line-height:1.6;text-align:left;color:#374151;">Een beheerder van <strong>{{ $escaperoom->name }}</strong> heeft jou toegang gegeven tot Torchdaleplanner. Via dit platform beheer je boekingen, klanten, escape rooms en meer — allemaal op één plek.</div>
                               </td>
                             </tr>
                             <!-- Divider -->

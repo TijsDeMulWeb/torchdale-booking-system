@@ -20,7 +20,7 @@ class StoreAdminLoginController extends Controller
                 $admin = Admin::where('email', $request->email)->first();
 
                 if ($admin && Hash::check($request->password, $admin->password)) {
-                    Auth::login($admin);
+                    Auth::guard('admin')->login($admin);
                     $request->session()->regenerate();
                     return redirect()->route('admin.dashboard.show');
                 }

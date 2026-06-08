@@ -7,6 +7,7 @@ use App\Http\Requests\StoreRegisterRequest;
 use App\Mail\EscaperoomRegisteredMail;
 use App\Models\Chatbot;
 use App\Models\Escaperoom;
+use App\Models\EscaperoomRequest;
 use App\Models\EscaperoomSetting;
 use App\Models\ApiKey;
 use App\Services\ApiKeyService;
@@ -20,6 +21,11 @@ class StoreRegisterController extends Controller
     public function __invoke(StoreRegisterRequest $request)
     {
         $escaperoom = Escaperoom::create($request->validated());
+
+        EscaperoomRequest::create([
+            'escaperoom_id' => $escaperoom->id,
+            'status' => EscaperoomRequest::STATUS_PENDING,
+        ]);
 
         $apiKeyService = new ApiKeyService();
         $keys = $apiKeyService->generateApiKeys();

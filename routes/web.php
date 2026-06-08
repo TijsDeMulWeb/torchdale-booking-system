@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AccountSetup\ShowAccountSetupController;
 use App\Http\Controllers\AccountSetup\StoreAccountSetupController;
+use App\Http\Controllers\PasswordSetup\ShowPasswordSetupController;
+use App\Http\Controllers\PasswordSetup\StorePasswordSetupController;
 use App\Http\Controllers\Admin\AcceptEscaperoomRequestController;
 use App\Http\Controllers\Admin\DenyEscaperoomRequestController;
 use App\Http\Controllers\Admin\LogoutAdminController;
@@ -102,6 +104,11 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/account-setup', ShowAccountSetupController::class)->name('accountSetup.show');
     Route::post('/account-setup', StoreAccountSetupController::class)->name('accountSetup.store');
+
+    Route::middleware('signed')->group(function () {
+        Route::get('/password-setup/{user}', ShowPasswordSetupController::class)->name('passwordSetup.show');
+        Route::post('/password-setup/{user}', StorePasswordSetupController::class)->name('passwordSetup.store');
+    });
 });
 
 Route::prefix('admin')->middleware('guest:admin')->group(function () {
@@ -112,7 +119,6 @@ Route::prefix('admin')->middleware('guest:admin')->group(function () {
 Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/', ShowAdminDashboardController::class)->name('admin.dashboard.show');
     Route::post('/logout', LogoutAdminController::class)->name('admin.logout');
-
     Route::post('/escaperoom-requests/{escaperoomRequest}/accept', AcceptEscaperoomRequestController::class)->name('admin.escaperoomRequests.accept');
     Route::post('/escaperoom-requests/{escaperoomRequest}/deny', DenyEscaperoomRequestController::class)->name('admin.escaperoomRequests.deny');
 });

@@ -7,7 +7,7 @@
         </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form action="{{ route('login.store') }}" method="POST" class="space-y-6">
+            <form action="{{ route('register.store') }}" method="POST" class="space-y-6">
                 @csrf
                 <div>
                     <label for="name"
@@ -47,11 +47,13 @@
                     <x-form.error name="vat_number" />
                 </div>
                 <div>
-                    <label for="registrationNumber" class="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">Registratie
-                        nummer</label>
+                    <label for="registrationNumber"
+                        class="block text-sm/6 font-medium text-gray-900 dark:text-gray-100">Registratie
+                        nummer <span class="text-gray-400 dark:text-gray-500 font-normal">(optioneel)</span>
+                    </label>
                     <div class="mt-2">
-                        <input id="registrationNumber" type="text" name="registration_number" autocomplete="registrationNumber"
-                            value="{{ old('registration_number') }}"
+                        <input id="registrationNumber" type="text" name="registration_number"
+                            autocomplete="registrationNumber" value="{{ old('registration_number') }}"
                             class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                     </div>
                     <x-form.error name="registration_number" />

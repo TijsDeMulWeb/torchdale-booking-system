@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['name', 'prompt'])]
+#[Fillable(['escaperoom_id', 'name', 'prompt'])]
 class Chatbot extends Model
 {
     public function escaperoom()

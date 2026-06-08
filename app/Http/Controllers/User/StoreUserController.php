@@ -26,6 +26,8 @@ class StoreUserController extends Controller
         $user->password = Str::random(40);
         $user->save();
 
+        User::find($user->id)->assignRole('admin');
+
         $passwordSetupUrl = URL::temporarySignedRoute(
             'passwordSetup.show',
             now()->addHours(48),

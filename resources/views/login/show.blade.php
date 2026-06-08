@@ -36,6 +36,11 @@
                         class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Inloggen</button>
                 </div>
             </form>
+            <p class="mt-10 text-center text-sm/6 text-gray-500 dark:text-gray-400">
+                Nog geen account?
+                <a href="{{ route('register') }}"
+                    class="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">Maak hier je gratis account aan</a>
+            </p>
         </div>
     </div>
 </x-layouts.auth>

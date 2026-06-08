@@ -90,6 +90,7 @@ use App\Http\Controllers\WidgetSettings\ShowWidgetSettingsController;
 use App\Http\Controllers\WidgetSettings\UpdateWidgetSettingsController;
 use App\Http\Controllers\User\CreateUserController;
 use App\Http\Controllers\User\DeleteUserController;
+use App\Http\Controllers\User\ResendUserInvitationController;
 use App\Http\Controllers\User\EditUserController;
 use App\Http\Controllers\User\IndexUserController;
 use App\Http\Controllers\User\StoreUserController;
@@ -157,6 +158,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', EditUserController::class)->name('users.edit');
     Route::put('/users/{id}/edit', UpdateUserController::class)->name('users.update');
     Route::delete('/users/{id}/delete', DeleteUserController::class)->name('users.destroy');
+    Route::post('/users/{id}/resend-invitation', ResendUserInvitationController::class)->name('users.resendInvitation');
 
     // Profile routes
     Route::get('/profile', ShowProfileController::class)->name('profile.show');

@@ -1,5 +1,13 @@
 <?php
 
+use App\Http\Controllers\AccountSetup\ShowAccountSetupController;
+use App\Http\Controllers\AccountSetup\StoreAccountSetupController;
+use App\Http\Controllers\Admin\AcceptEscaperoomRequestController;
+use App\Http\Controllers\Admin\DenyEscaperoomRequestController;
+use App\Http\Controllers\Admin\LogoutAdminController;
+use App\Http\Controllers\Admin\ShowAdminDashboardController;
+use App\Http\Controllers\Admin\ShowAdminLoginController;
+use App\Http\Controllers\Admin\StoreAdminLoginController;
 use App\Http\Controllers\ApiKey\DeleteApiKeyController;
 use App\Http\Controllers\ApiKey\IndexApiKeyController;
 use App\Http\Controllers\ApiKey\StoreApiKeyController;
@@ -91,6 +99,22 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', StoreLoginController::class)->name('login.store');
     Route::get('/register', ShowRegisterController::class)->name('register');
     Route::post('/register', StoreRegisterController::class)->name('register.store');
+
+    Route::get('/account-setup', ShowAccountSetupController::class)->name('accountSetup.show');
+    Route::post('/account-setup', StoreAccountSetupController::class)->name('accountSetup.store');
+});
+
+Route::prefix('admin')->middleware('guest:admin')->group(function () {
+    Route::get('/login', ShowAdminLoginController::class)->name('admin.login');
+    Route::post('/login', StoreAdminLoginController::class)->name('admin.login.store');
+});
+
+Route::prefix('admin')->middleware('auth:admin')->group(function () {
+    Route::get('/', ShowAdminDashboardController::class)->name('admin.dashboard.show');
+    Route::post('/logout', LogoutAdminController::class)->name('admin.logout');
+
+    Route::post('/escaperoom-requests/{escaperoomRequest}/accept', AcceptEscaperoomRequestController::class)->name('admin.escaperoomRequests.accept');
+    Route::post('/escaperoom-requests/{escaperoomRequest}/deny', DenyEscaperoomRequestController::class)->name('admin.escaperoomRequests.deny');
 });
 
 Route::middleware('auth')->group(function () {

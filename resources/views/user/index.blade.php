@@ -18,6 +18,10 @@
                                 </h3>
                                 <span
                                     class="inline-flex shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20 dark:bg-green-500/10 dark:text-green-500 dark:inset-ring-green-500/10">{{ $user->getRoleNames()->first() }}</span>
+                                @if (is_null($user->password_set_at))
+                                    <span
+                                        class="inline-flex shrink-0 items-center rounded-full bg-amber-50 px-1.5 py-0.5 text-xs font-medium text-amber-700 inset-ring inset-ring-amber-600/20 dark:bg-amber-500/10 dark:text-amber-400 dark:inset-ring-amber-400/20">In afwachting</span>
+                                @endif
                             </div>
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                                 {{ $user->email }}
@@ -53,6 +57,24 @@
                                     Bewerken
                                 </a>
                             </div>
+                            @if (is_null($user->password_set_at))
+                                <div class="-ml-px flex w-0 flex-1">
+                                    <form action="{{ route('users.resendInvitation', $user->id) }}" method="POST"
+                                        class="w-full">
+                                        @csrf
+                                        <button type="submit"
+                                            class="relative inline-flex w-full items-center justify-center gap-x-2 border border-transparent py-4 text-sm font-semibold text-amber-600 hover:bg-amber-50 dark:text-amber-400 dark:hover:bg-amber-500/10">
+                                            <svg viewBox="0 0 20 20" fill="currentColor" class="size-5 text-amber-500">
+                                                <path
+                                                    d="M3 4a2 2 0 0 0-2 2v1.161l8.441 4.221a1.25 1.25 0 0 0 1.118 0L19 7.162V6a2 2 0 0 0-2-2H3Z" />
+                                                <path
+                                                    d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z" />
+                                            </svg>
+                                            Uitnodigen
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
                             <div class="-ml-px flex w-0 flex-1">
                                 <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="w-full">
                                     @csrf

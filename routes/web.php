@@ -27,7 +27,11 @@ use App\Http\Controllers\Customer\ShowMessageCustomerController;
 use App\Http\Controllers\Customer\ShowPurchasesCustomerController;
 use App\Http\Controllers\Customer\UnbanCustomerController;
 use App\Http\Controllers\Customer\UpdateCustomerController;
+use App\Http\Controllers\Dashboard\BlockTimeSlotController;
+use App\Http\Controllers\Dashboard\BlockTimeSlotRangeController;
 use App\Http\Controllers\Dashboard\ShowDashboardController;
+use App\Http\Controllers\Dashboard\UnblockTimeSlotController;
+use App\Http\Controllers\Dashboard\UnblockTimeSlotRangeController;
 use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
 use App\Http\Controllers\Escaperoom\UpdateEscaperoomController;
@@ -88,6 +92,12 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/', ShowDashboardController::class)->name('dashboard.show');
     Route::post('/', LogoutController::class)->name('logout');
+
+    // Dashboard routes
+    Route::post('/dashboard/time-slots/block', BlockTimeSlotController::class)->name('dashboard.timeslots.block');
+    Route::post('/dashboard/time-slots/block-range', BlockTimeSlotRangeController::class)->name('dashboard.timeslots.blockRange');
+    Route::delete('/dashboard/time-slots/{timeSlot}/unblock', UnblockTimeSlotController::class)->name('dashboard.timeslots.unblock');
+    Route::post('/dashboard/time-slots/unblock-range', UnblockTimeSlotRangeController::class)->name('dashboard.timeslots.unblockRange');
 
     // Chatbot routes
     Route::get('/chatbot', ShowChatbotController::class)->name('chatbot.show');

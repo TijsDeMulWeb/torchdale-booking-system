@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 
 class EscaperoomRegisteredMail extends Mailable
@@ -29,6 +30,7 @@ class EscaperoomRegisteredMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new Address('info@torchdaleplanner.be', 'Torchdale Planner'),
             subject: 'Escaperoom Registered Mail',
         );
     }

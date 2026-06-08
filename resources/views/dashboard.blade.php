@@ -245,7 +245,7 @@
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
-                <p class="-mt-3 mb-5 text-xs text-gray-400 dark:text-gray-500">Dit tijdsbereik wordt op elke dag in de gekozen periode toegepast. Sloten die al bezet of geblokkeerd zijn, worden automatisch overgeslagen.</p>
+                <p class="-mt-3 mb-5 text-xs text-gray-400 dark:text-gray-500">Dit tijdsbereik wordt op elke dag in de gekozen periode toegepast. Overlapt het met een bestaande boeking of blokkade? Dan wordt er gewoon rond geblokkeerd — de bestaande boeking of blokkade blijft altijd staan.</p>
 
                 <div class="mb-6">
                     <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Reden (optioneel)</label>

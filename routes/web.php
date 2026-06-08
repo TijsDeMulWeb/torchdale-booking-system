@@ -62,6 +62,8 @@ use App\Http\Controllers\Profile\DeleteProfileController;
 use App\Http\Controllers\Profile\ShowProfileController;
 use App\Http\Controllers\Profile\UpdatePasswordController;
 use App\Http\Controllers\Profile\UpdateProfileController;
+use App\Http\Controllers\Register\ShowRegisterController;
+use App\Http\Controllers\Register\StoreRegisterController;
 use App\Http\Controllers\Room\CreateRoomController;
 use App\Http\Controllers\Room\DeleteRoomController;
 use App\Http\Controllers\Room\DeleteRoomTimeSlotController;
@@ -87,6 +89,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('/login', ShowLoginController::class)->name('login');
     Route::post('/login', StoreLoginController::class)->name('login.store');
+    Route::get('/register', ShowRegisterController::class)->name('register');
+    Route::post('/register', StoreRegisterController::class)->name('register.store');
 });
 
 Route::middleware('auth')->group(function () {

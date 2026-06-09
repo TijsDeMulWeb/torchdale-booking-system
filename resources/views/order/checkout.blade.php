@@ -305,6 +305,8 @@
                                         data-discount-value="{{ $hasDiscount ? $discountValue : 0 }}"
                                         data-vat="{{ $product->vat_percentage ?? 0 }}"
                                         data-stock="{{ $product->stock_quantity ?? -1 }}"
+                                        data-shipping-domestic="{{ $product->shipping_cost_domestic ?? 0 }}"
+                                        data-shipping-international="{{ $product->shipping_cost_international ?? 0 }}"
                                         @if($outOfStock) disabled @endif
                                         class="item-card group flex flex-col items-start rounded-lg border p-3 text-left transition-colors
                                             {{ $outOfStock
@@ -677,17 +679,21 @@
 
         function selectCustomer(c) {
             selectedCustomerId = c.id;
+            selectedCustomerCountryIso = c.country_iso || null;
             selectedName.textContent  = c.name;
             selectedEmail.textContent = c.email;
             selectedChip.classList.remove('hidden');
             searchWrap.classList.add('hidden');
             document.getElementById('business-section').classList.remove('hidden');
             closeDropdown();
+            recalculateProductShipping();
+            renderCart();
             updatePlaceOrderBtn();
         }
 
         function clearCustomer() {
             selectedCustomerId = null;
+            selectedCustomerCountryIso = null;
             searchInput.value = '';
             selectedChip.classList.add('hidden');
             searchWrap.classList.remove('hidden');
@@ -702,6 +708,8 @@
             document.getElementById('business-company-name').value = '';
             document.getElementById('business-vat-number').value   = '';
             document.getElementById('business-reg-number').value   = '';
+            recalculateProductShipping();
+            renderCart();
             updatePlaceOrderBtn();
         }
 
@@ -953,6 +961,33 @@
 
         // ── Cart ─────────────────────────────────────────────────────
         var cart = [];
+        var escaperoomCountryIso = '{{ $escaperoomCountryIso ?? '' }}';
+        var selectedCustomerCountryIso = null;
+
+        function resolveProductShipping(btn) {
+            var domestic      = parseFloat(btn.dataset.shippingDomestic) || 0;
+            var international = parseFloat(btn.dataset.shippingInternational) || 0;
+            if (domestic === 0 && international === 0) return 0;
+            if (!selectedCustomerCountryIso || !escaperoomCountryIso) return domestic;
+            return selectedCustomerCountryIso.toUpperCase() === escaperoomCountryIso.toUpperCase()
+                ? domestic
+                : international;
+        }
+
+        function recalculateProductShipping() {
+            cart.forEach(function (item) {
+                if (!item.shippingDomestic && !item.shippingInternational) return;
+                var domestic      = item.shippingDomestic || 0;
+                var international = item.shippingInternational || 0;
+                if (!selectedCustomerCountryIso || !escaperoomCountryIso) {
+                    item.shippingCost = domestic;
+                } else {
+                    item.shippingCost = selectedCustomerCountryIso.toUpperCase() === escaperoomCountryIso.toUpperCase()
+                        ? domestic
+                        : international;
+                }
+            });
+        }
 
         function addToCart(btn) {
             var id            = btn.dataset.type + '_' + btn.dataset.id;
@@ -970,7 +1005,12 @@
             if (existing) {
                 existing.qty++;
             } else {
-                cart.push({ id: id, name: btn.dataset.name, price: price, originalPrice: originalPrice, discountType: discountType, discountValue: discountValue, vat: vat, qty: 1, stock: stock });
+                var shippingDomestic      = parseFloat(btn.dataset.shippingDomestic) || 0;
+                var shippingInternational = parseFloat(btn.dataset.shippingInternational) || 0;
+                var shippingCost          = (shippingDomestic > 0 || shippingInternational > 0)
+                    ? resolveProductShipping(btn)
+                    : 0;
+                cart.push({ id: id, name: btn.dataset.name, price: price, originalPrice: originalPrice, discountType: discountType, discountValue: discountValue, vat: vat, qty: 1, stock: stock, shippingDomestic: shippingDomestic, shippingInternational: shippingInternational, shippingCost: shippingCost });
             }
 
             renderCart();
@@ -996,7 +1036,7 @@
             var totaalInclBtw = 0, itemCount = 0;
             var btwPerRate = {};
             cart.forEach(function (item) {
-                var shipping  = (item.deliveryMethod === 'post' && item.shippingCost > 0) ? item.shippingCost * item.qty : 0;
+                var shipping  = item.shippingCost > 0 && (!item.deliveryMethod || item.deliveryMethod === 'post') ? item.shippingCost * item.qty : 0;
                 var lineTotal = item.price * item.qty + shipping;
                 var btwAmount = lineTotal * (item.vat / (100 + item.vat));
                 totaalInclBtw += lineTotal;
@@ -1067,7 +1107,7 @@
 
                 listEl.innerHTML = '';
                 cart.forEach(function (item) {
-                    var shipping  = (item.deliveryMethod === 'post' && item.shippingCost > 0) ? item.shippingCost * item.qty : 0;
+                    var shipping  = item.shippingCost > 0 && (!item.deliveryMethod || item.deliveryMethod === 'post') ? item.shippingCost * item.qty : 0;
                     var lineTotal = item.price * item.qty + shipping;
                     var isRoom = item.id.indexOf('room_') === 0;
 
@@ -1089,10 +1129,15 @@
                         subLabel = '<span class="text-xs line-through text-gray-400 dark:text-gray-500">' + fmt(item.originalPrice) + '</span>' +
                                    '<span class="text-xs text-green-600 dark:text-green-400 font-medium ml-1">' + fmt(item.price) + '</span>' +
                                    '<span class="text-xs text-gray-400 dark:text-gray-500">' + stockSuffix + '</span>';
+                        if (item.shippingCost > 0) {
+                            subLabel += '<span class="text-xs text-indigo-500 dark:text-indigo-400"> + ' + fmt(item.shippingCost) + ' verzending</span>';
+                        }
                     } else {
-                        subLabel = item.stock !== -1
-                            ? '<span class="text-xs text-gray-400 dark:text-gray-500">' + fmt(item.price) + ' · max ' + item.stock + '</span>'
-                            : '<span class="text-xs text-gray-400 dark:text-gray-500">' + fmt(item.price) + ' / stuk</span>';
+                        var perUnitLabel = item.stock !== -1 ? fmt(item.price) + ' · max ' + item.stock : fmt(item.price) + ' / stuk';
+                        subLabel = '<span class="text-xs text-gray-400 dark:text-gray-500">' + perUnitLabel + '</span>';
+                        if (item.shippingCost > 0) {
+                            subLabel += '<span class="text-xs text-indigo-500 dark:text-indigo-400"> + ' + fmt(item.shippingCost) + ' verzending</span>';
+                        }
                     }
 
                     var qtyControls;
@@ -1210,7 +1255,7 @@
             var totaalInclBtw = 0, itemCount = 0;
             var btwPerRate = {};
             cart.forEach(function (item) {
-                var shipping  = (item.deliveryMethod === 'post' && item.shippingCost > 0) ? item.shippingCost * item.qty : 0;
+                var shipping  = item.shippingCost > 0 && (!item.deliveryMethod || item.deliveryMethod === 'post') ? item.shippingCost * item.qty : 0;
                 var lineTotal = item.price * item.qty + shipping;
                 var btwAmount = lineTotal * (item.vat / (100 + item.vat));
                 totaalInclBtw += lineTotal;

@@ -231,6 +231,7 @@ Route::middleware('auth')->group(function () {
 
     // Customer routes
     Route::get('/customers/search', SearchCustomerController::class)->name('customers.search');
+    Route::post('/customers/quick-store', \App\Http\Controllers\Customer\QuickStoreCustomerController::class)->name('customers.quickStore');
     Route::get('/customers', IndexCustomerController::class)->name('customers.index');
     Route::get('/customers/{id}/overview', ShowCustomerController::class)->name('customers.show.overview');
     Route::get('/customers/{id}/overview/edit', EditCustomerController::class)->name('customers.edit.overview');

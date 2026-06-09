@@ -103,7 +103,14 @@
                 <div class="mt-4 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
                     <div class="flex-1 min-w-0 flex flex-col gap-4">
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Klant</label>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-xs font-medium text-gray-500 dark:text-gray-400">Klant</label>
+                                <button onclick="openNewCustomerForm()" type="button" id="btn-new-customer"
+                                    class="flex items-center gap-1 rounded-md bg-indigo-50 dark:bg-indigo-900/20 px-2 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                    Klant toevoegen
+                                </button>
+                            </div>
 
                             <div id="selected-customer" class="hidden mb-3 flex items-center justify-between rounded-lg bg-indigo-50 dark:bg-indigo-900/20 px-3 py-2.5 border border-indigo-200 dark:border-indigo-500/30">
                                 <div>
@@ -129,6 +136,75 @@
                                 </svg>
 
                                 <ul id="customer-dropdown" class="hidden absolute z-20 mt-1 w-full rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-800 shadow-lg overflow-hidden"></ul>
+                            </div>
+
+                            {{-- Nieuwe klant aanmaken (inline) --}}
+                            <div id="new-customer-form" class="hidden mt-3 rounded-lg border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-900/10 p-3 space-y-2.5">
+                                <p class="text-xs font-semibold text-indigo-700 dark:text-indigo-300">Nieuwe klant aanmaken</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Voornaam <span class="text-red-500">*</span></label>
+                                        <input id="nc-first-name" type="text" placeholder="Jan"
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Achternaam <span class="text-red-500">*</span></label>
+                                        <input id="nc-last-name" type="text" placeholder="Janssen"
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">E-mailadres <span class="text-red-500">*</span></label>
+                                    <input id="nc-email" type="email" placeholder="jan@voorbeeld.be"
+                                        class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Telefoon <span class="text-gray-400">(optioneel)</span></label>
+                                    <input id="nc-phone" type="tel" placeholder="+32 470 00 00 00"
+                                        class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="col-span-2">
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Straat <span class="text-gray-400">(optioneel)</span></label>
+                                        <input id="nc-street" type="text" placeholder="Kerkstraat"
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Nr.</label>
+                                        <input id="nc-house-number" type="text" placeholder="12"
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Postcode</label>
+                                        <input id="nc-postal-code" type="text" placeholder="2000"
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                    <div class="col-span-2">
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Gemeente</label>
+                                        <input id="nc-city" type="text" placeholder="Antwerpen"
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Land</label>
+                                    <input id="nc-country-search" type="text" placeholder="Zoek land…" autocomplete="off"
+                                        class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    <input id="nc-country" type="hidden" value="" />
+                                    <ul id="nc-country-dropdown" class="hidden absolute z-30 mt-1 w-full max-h-44 overflow-y-auto rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-800 shadow-lg"></ul>
+                                </div>
+                                <p id="nc-error" class="hidden text-xs text-red-500"></p>
+                                <div class="flex gap-2 pt-0.5">
+                                    <button onclick="cancelNewCustomer()" type="button"
+                                        class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                                        Annuleren
+                                    </button>
+                                    <button onclick="saveNewCustomer()" type="button" id="nc-save-btn"
+                                        class="flex-1 rounded-lg bg-indigo-600 py-2 text-xs font-semibold text-white hover:bg-indigo-500 transition-colors disabled:opacity-50">
+                                        Aanmaken
+                                    </button>
+                                </div>
                             </div>
 
                             {{-- Business toggle + fields (shown after customer is selected) --}}
@@ -514,19 +590,27 @@
             customerFocusIdx = -1;
 
             if (!customers.length) {
-                dropdown.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">Geen klanten gevonden.</li>';
-                dropdown.classList.remove('hidden');
-                return;
+                var emptyLi = document.createElement('li');
+                emptyLi.className = 'px-4 py-3 text-sm text-gray-400 dark:text-gray-500';
+                emptyLi.textContent = 'Geen klanten gevonden.';
+                dropdown.appendChild(emptyLi);
+            } else {
+                customers.forEach(function (c) {
+                    var li = document.createElement('li');
+                    li.className = 'dd-item flex flex-col px-4 py-2.5 cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border-b border-gray-100 dark:border-white/5 last:border-0';
+                    li.innerHTML = '<span class="text-sm font-medium text-gray-900 dark:text-white">' + escHtml(c.name) + '</span>'
+                                 + '<span class="text-xs text-gray-400 dark:text-gray-500">' + escHtml(c.email) + '</span>';
+                    li.addEventListener('click', function () { selectCustomer(c); });
+                    dropdown.appendChild(li);
+                });
             }
 
-            customers.forEach(function (c) {
-                var li = document.createElement('li');
-                li.className = 'dd-item flex flex-col px-4 py-2.5 cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border-b border-gray-100 dark:border-white/5 last:border-0';
-                li.innerHTML = '<span class="text-sm font-medium text-gray-900 dark:text-white">' + escHtml(c.name) + '</span>'
-                             + '<span class="text-xs text-gray-400 dark:text-gray-500">' + escHtml(c.email) + '</span>';
-                li.addEventListener('click', function () { selectCustomer(c); });
-                dropdown.appendChild(li);
-            });
+            // Always show "Nieuwe klant aanmaken" at the bottom
+            var newLi = document.createElement('li');
+            newLi.className = 'flex items-center gap-2 px-4 py-2.5 cursor-pointer text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border-t border-gray-100 dark:border-white/5 text-sm font-medium';
+            newLi.innerHTML = '<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Nieuwe klant aanmaken';
+            newLi.addEventListener('click', function () { openNewCustomerForm(); });
+            dropdown.appendChild(newLi);
 
             dropdown.classList.remove('hidden');
         }
@@ -1116,6 +1200,209 @@
 
             document.getElementById('order-form').submit();
         }
+
+        // ── Quick new customer ────────────────────────────────────────────────
+        var countriesList = @json($countries);
+        var quickStoreUrl = '{{ route('customers.quickStore') }}';
+        var csrfToken     = document.querySelector('meta[name="csrf-token"]')?.content ?? '{{ csrf_token() }}';
+
+        function openNewCustomerForm() {
+            closeDropdown();
+            document.getElementById('new-customer-form').classList.remove('hidden');
+            // Pre-select België
+            var defaultCountry = countriesList.find(function (c) { return c.name === 'België'; });
+            if (defaultCountry) {
+                document.getElementById('nc-country-search').value = defaultCountry.name;
+                document.getElementById('nc-country').value = defaultCountry.name;
+            }
+            document.getElementById('nc-first-name').focus();
+        }
+
+        function cancelNewCustomer() {
+            document.getElementById('new-customer-form').classList.add('hidden');
+            clearNewCustomerFields();
+        }
+
+        function clearNewCustomerFields() {
+            ['nc-first-name', 'nc-last-name', 'nc-email', 'nc-phone', 'nc-street', 'nc-house-number', 'nc-postal-code', 'nc-city'].forEach(function (id) {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('nc-country-search').value = '';
+            document.getElementById('nc-country').value = '';
+            document.getElementById('nc-country-dropdown').classList.add('hidden');
+            var err = document.getElementById('nc-error');
+            err.textContent = '';
+            err.classList.add('hidden');
+        }
+
+        // Country search-select
+        (function () {
+            var searchEl   = document.getElementById('nc-country-search');
+            var hiddenEl   = document.getElementById('nc-country');
+            var ddEl       = document.getElementById('nc-country-dropdown');
+            var focusIdx   = -1;
+
+            function renderCountries(list) {
+                ddEl.innerHTML = '';
+                focusIdx = -1;
+                if (!list.length) {
+                    ddEl.innerHTML = '<li class="px-3 py-2 text-xs text-gray-400">Geen resultaten</li>';
+                    ddEl.classList.remove('hidden');
+                    return;
+                }
+                list.forEach(function (c) {
+                    var li = document.createElement('li');
+                    li.className = 'px-3 py-2 text-sm text-gray-900 dark:text-white cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20';
+                    li.textContent = c.name;
+                    li.addEventListener('mousedown', function (e) {
+                        e.preventDefault(); // don't blur the input first
+                        selectCountry(c);
+                    });
+                    ddEl.appendChild(li);
+                });
+                ddEl.classList.remove('hidden');
+            }
+
+            function selectCountry(c) {
+                searchEl.value  = c.name;
+                hiddenEl.value  = c.name;
+                ddEl.classList.add('hidden');
+            }
+
+            searchEl.addEventListener('input', function () {
+                var q = this.value.trim().toLowerCase();
+                if (!q) { ddEl.classList.add('hidden'); hiddenEl.value = ''; return; }
+                var filtered = countriesList.filter(function (c) {
+                    return c.name.toLowerCase().includes(q);
+                });
+                renderCountries(filtered);
+            });
+
+            searchEl.addEventListener('focus', function () {
+                var q = this.value.trim().toLowerCase();
+                var list = q
+                    ? countriesList.filter(function (c) { return c.name.toLowerCase().includes(q); })
+                    : countriesList;
+                renderCountries(list);
+            });
+
+            searchEl.addEventListener('keydown', function (e) {
+                var items = ddEl.querySelectorAll('li');
+                if (!items.length) return;
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    focusIdx = Math.min(focusIdx + 1, items.length - 1);
+                    items.forEach(function (li, i) { li.classList.toggle('bg-indigo-50', i === focusIdx); li.classList.toggle('dark:bg-indigo-900/20', i === focusIdx); });
+                    items[focusIdx].scrollIntoView({ block: 'nearest' });
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    focusIdx = Math.max(focusIdx - 1, 0);
+                    items.forEach(function (li, i) { li.classList.toggle('bg-indigo-50', i === focusIdx); li.classList.toggle('dark:bg-indigo-900/20', i === focusIdx); });
+                    items[focusIdx].scrollIntoView({ block: 'nearest' });
+                } else if (e.key === 'Enter' && focusIdx >= 0) {
+                    e.preventDefault();
+                    var name = items[focusIdx].textContent;
+                    var found = countriesList.find(function (c) { return c.name === name; });
+                    if (found) selectCountry(found);
+                } else if (e.key === 'Escape') {
+                    ddEl.classList.add('hidden');
+                }
+            });
+
+            searchEl.addEventListener('blur', function () {
+                // If typed text doesn't match any country exactly, reset hidden value
+                setTimeout(function () {
+                    ddEl.classList.add('hidden');
+                    var match = countriesList.find(function (c) { return c.name.toLowerCase() === searchEl.value.trim().toLowerCase(); });
+                    if (match) {
+                        searchEl.value = match.name;
+                        hiddenEl.value = match.name;
+                    } else if (!hiddenEl.value) {
+                        searchEl.value = '';
+                    }
+                }, 150);
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!searchEl.parentElement.contains(e.target)) ddEl.classList.add('hidden');
+            });
+        })();
+
+        function saveNewCustomer() {
+            var firstName = document.getElementById('nc-first-name').value.trim();
+            var lastName  = document.getElementById('nc-last-name').value.trim();
+            var email     = document.getElementById('nc-email').value.trim();
+            var phone     = document.getElementById('nc-phone').value.trim();
+            var errEl     = document.getElementById('nc-error');
+            var saveBtn   = document.getElementById('nc-save-btn');
+
+            errEl.classList.add('hidden');
+            errEl.textContent = '';
+
+            if (!firstName || !lastName || !email) {
+                errEl.textContent = 'Voornaam, achternaam en e-mail zijn verplicht.';
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Bezig…';
+
+            var street      = document.getElementById('nc-street').value.trim();
+            var houseNumber = document.getElementById('nc-house-number').value.trim();
+            var postalCode  = document.getElementById('nc-postal-code').value.trim();
+            var city        = document.getElementById('nc-city').value.trim();
+            var country     = document.getElementById('nc-country').value.trim();
+
+            fetch(quickStoreUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({
+                    first_name:   firstName,
+                    last_name:    lastName,
+                    email:        email,
+                    phone:        phone || null,
+                    street:       street || null,
+                    house_number: houseNumber || null,
+                    postal_code:  postalCode || null,
+                    city:         city || null,
+                    country:      country || null,
+                }),
+            })
+            .then(function (r) {
+                if (!r.ok) {
+                    return r.json().then(function (data) {
+                        var msg = 'Er ging iets mis.';
+                        if (data && data.errors) {
+                            msg = Object.values(data.errors).flat().join(' ');
+                        } else if (data && data.message) {
+                            msg = data.message;
+                        }
+                        throw new Error(msg);
+                    });
+                }
+                return r.json();
+            })
+            .then(function (customer) {
+                document.getElementById('new-customer-form').classList.add('hidden');
+                clearNewCustomerFields();
+                selectCustomer(customer);
+            })
+            .catch(function (err) {
+                errEl.textContent = err.message;
+                errEl.classList.remove('hidden');
+            })
+            .finally(function () {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Aanmaken';
+            });
+        }
+        // ── End quick new customer ────────────────────────────────────────────
 
         function toggleMobileCart() {
             var panel = document.getElementById('mobile-cart-panel');

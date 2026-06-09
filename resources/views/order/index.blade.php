@@ -113,6 +113,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="mt-4">
+                            {{ $todayOrders->links() }}
+                        </div>
                     @else
                         <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Geen bestellingen vandaag.</p>
                     @endif

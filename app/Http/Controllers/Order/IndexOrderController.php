@@ -16,7 +16,7 @@ class IndexOrderController extends Controller
             ->where('escaperoom_id', $escaperoomId)
             ->whereDate('created_at', today())
             ->latest()
-            ->get();
+            ->paginate(20);
 
         $orders = Order::with(['customer', 'orderedItems', 'invoice'])
             ->where('escaperoom_id', $escaperoomId)
@@ -34,7 +34,7 @@ class IndexOrderController extends Controller
             ->where('status', 'paid')
             ->sum('total');
 
-        $todayOrderCount = $todayOrders->count();
+        $todayOrderCount = $todayOrders->total();
         $totalOrderCount = Order::where('escaperoom_id', $escaperoomId)->count();
 
         return view('order.index', compact(

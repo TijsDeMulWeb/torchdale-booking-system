@@ -8,7 +8,9 @@ use App\Models\Order;
 use App\Models\OrderedItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Http\Data\DataCollection;
 use Mollie\Api\Http\Data\Discount;
@@ -187,13 +189,22 @@ class StoreOrderController extends Controller
             $mollieInvoice = $mollie->send($salesInvoiceRequest);
 
             $invoiceNumber = $mollieInvoice->invoiceNumber ?? ('INV-' . $order->id . '-' . time());
-            $pdfUrl = $mollieInvoice->_links->document->href ?? null;
+
+            $pdfPath = null;
+            $mollieHref = $mollieInvoice->_links->pdfLink->href ?? null;
+            if ($mollieHref) {
+                $pdfResponse = Http::withToken(env('MOLLIE_KEY'))->get($mollieHref);
+                if ($pdfResponse->successful()) {
+                    $pdfPath = 'escaperooms/' . auth()->user()->escaperoom->id . '/invoices/' . $invoiceNumber . '.pdf';
+                    Storage::disk('local')->put($pdfPath, $pdfResponse->body());
+                }
+            }
 
             DB::table('invoices')->insert([
                 'customer_id' => $customer->id,
                 'order_id' => $order->id,
                 'mollie_invoice_id' => $mollieInvoice->id,
-                'pdf_url' => $pdfUrl,
+                'pdf_url' => $pdfPath,
                 'source' => 'mollie',
                 'invoice_number' => $invoiceNumber,
                 'status' => $mollieInvoice->status,
@@ -202,7 +213,7 @@ class StoreOrderController extends Controller
                 'updated_at' => now(),
             ]);
 
-            $order->mollie_id      = $mollieInvoice->id;
+            $order->mollie_id = $mollieInvoice->id;
             $order->invoice_number = $invoiceNumber;
             $order->save();
         } catch (\Exception $e) {

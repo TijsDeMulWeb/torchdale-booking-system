@@ -77,6 +77,13 @@
                 </div>
 
                 @if ($rooms->isNotEmpty())
+                    <button type="button" id="open-new-booking-modal"
+                        class="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-500 shadow-sm">
+                        <svg viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                            <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+                        </svg>
+                        Nieuwe afspraak
+                    </button>
                     <button type="button" id="open-range-block-modal"
                         class="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/10 dark:text-gray-200 dark:hover:bg-white/5">
                         <svg viewBox="0 0 20 20" fill="currentColor" class="size-4">
@@ -307,7 +314,7 @@
 
     {{-- New appointment modal --}}
     <div id="booking-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-        <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 dark:border-white/10 dark:bg-gray-900">
+        <div class="w-full max-w-lg rounded-xl border border-gray-200 bg-white p-8 dark:border-white/10 dark:bg-gray-900 max-h-[90vh] overflow-y-auto">
             <div class="mb-6 flex items-center justify-between">
                 <h2 class="text-base font-semibold text-gray-900 dark:text-white">Nieuwe afspraak aanmaken</h2>
                 <button type="button" data-close-modal="booking" class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
@@ -318,11 +325,34 @@
             </div>
             <form id="booking-form" method="POST" action="{{ route('dashboard.timeslots.book') }}">
                 @csrf
-                <input type="hidden" name="room_id" id="booking-room-id">
-                <input type="hidden" name="date" id="booking-date">
-                <input type="hidden" name="start" id="booking-start">
-                <input type="hidden" name="end" id="booking-end">
-                <p id="booking-summary" class="mb-5 text-sm text-gray-500 dark:text-gray-400"></p>
+                {{-- Timing & room --}}
+                <div class="mb-5">
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Kamer</label>
+                    <select name="room_id" id="booking-room-id" required
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                        @foreach ($rooms as $room)
+                            <option value="{{ $room->id }}">{{ $room->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-5 grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Datum</label>
+                        <input type="date" name="date" id="booking-date" required
+                            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Van</label>
+                        <input type="time" name="start" id="booking-start" required
+                            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Tot</label>
+                        <input type="time" name="end" id="booking-end" required
+                            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                </div>
+                {{-- Customer --}}
                 <div class="mb-5 grid grid-cols-2 gap-4">
                     <div>
                         <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Voornaam</label>
@@ -337,14 +367,62 @@
                     <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">E-mailadres</label>
                     <input type="email" name="email" required class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                 </div>
-                <div class="mb-6 grid grid-cols-2 gap-4">
+                <div class="mb-5 grid grid-cols-3 gap-4">
+                    <div class="col-span-2">
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Straat <span class="text-gray-400">(optioneel)</span></label>
+                        <input type="text" name="street" placeholder="Kerkstraat" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Nr.</label>
+                        <input type="text" name="house_number" placeholder="12" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                </div>
+                <div class="mb-5 grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Postcode</label>
+                        <input type="text" name="postal_code" placeholder="2000" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Gemeente</label>
+                        <input type="text" name="city" placeholder="Antwerpen" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                </div>
+                <div class="mb-5 grid grid-cols-2 gap-4">
                     <div>
                         <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Telefoon (optioneel)</label>
-                        <input type="text" name="phone" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                        <input type="tel" name="phone" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Aantal spelers</label>
                         <input type="number" name="players" id="booking-players" min="1" required class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                </div>
+                {{-- Language --}}
+                <div class="mb-5">
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Taal</label>
+                    <select name="language_id" id="booking-language-id" required
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </select>
+                </div>
+                {{-- Pricing --}}
+                <div class="mb-2">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-sm text-gray-500 dark:text-gray-400">Prijs (incl. BTW)</label>
+                        <span id="booking-price-hint" class="text-xs text-gray-400 dark:text-gray-500"></span>
+                    </div>
+                    <input type="number" name="custom_price" id="booking-custom-price" step="0.01" min="0" placeholder="0.00"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                </div>
+                <div class="mb-6 grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Online te betalen</label>
+                        <input type="number" name="amount_online" id="booking-amount-online" step="0.01" min="0" value="0"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Ter plekke te betalen</label>
+                        <input type="number" name="amount_onsite" id="booking-amount-onsite" step="0.01" min="0" value="0"
+                            class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
                 <div class="flex items-center justify-end gap-4">
@@ -677,6 +755,10 @@
                     `;
 
                     const { column, body } = buildColumn(headerNode);
+                    body.dataset.roomId = room.id;
+                    body.dataset.date   = CALENDAR.date;
+                    body.style.cursor   = 'crosshair';
+                    body.addEventListener('click', handleCalendarBodyClick);
 
                     const events = CALENDAR.events.filter((event) => event.roomId === room.id && event.date === CALENDAR.date);
                     placeEvents(body, events, () => room.color, (event) => `${event.start} - ${event.end}`);
@@ -710,6 +792,10 @@
 
                     const { column, body } = buildColumn(headerNode);
                     column.style.flex = `0 0 ${WEEK_COLUMN_WIDTH}px`;
+                    body.dataset.date   = day.date;
+                    body.dataset.roomId = ''; // room chosen in modal for week view
+                    body.style.cursor   = 'crosshair';
+                    body.addEventListener('click', handleCalendarBodyClick);
 
                     const events = CALENDAR.events.filter((event) => visibleRoomIds.includes(event.roomId) && event.date === day.date);
                     placeEvents(
@@ -952,27 +1038,193 @@
             function openBookingModal(slot) {
                 const form = document.getElementById('booking-form');
                 form.reset();
-                fillSlotFields('booking', slot);
-                document.getElementById('booking-summary').textContent = formatSlotLabel(slot);
 
-                const room = ROOMS_BY_ID.get(slot.roomId);
-                const playersInput = document.getElementById('booking-players');
+                // Fill visible fields
+                document.getElementById('booking-date').value  = slot.date  || CALENDAR.date;
+                document.getElementById('booking-start').value = slot.start || '';
+                document.getElementById('booking-end').value   = slot.end   || '';
 
-                if (room && room.minPlayers) {
-                    playersInput.min = room.minPlayers;
-                    playersInput.value = room.minPlayers;
-                } else {
-                    playersInput.min = 1;
-                    playersInput.value = '';
+                // Pre-select room
+                const roomSelect = document.getElementById('booking-room-id');
+                if (slot.roomId) {
+                    roomSelect.value = slot.roomId;
+                } else if (roomSelect.options.length > 0) {
+                    const visibleIds = getVisibleRoomIds();
+                    const first = visibleIds.length ? visibleIds[0] : Number(roomSelect.options[0].value);
+                    roomSelect.value = first;
                 }
 
+                const roomId = Number(roomSelect.value);
+                updateBookingPlayersConstraints(roomId);
+                updateBookingLanguages(roomId);
+
+                // Reset pricing fields
+                document.getElementById('booking-custom-price').value   = '';
+                document.getElementById('booking-amount-online').value  = '0.00';
+                document.getElementById('booking-amount-onsite').value  = '0.00';
+                document.getElementById('booking-price-hint').textContent = '';
+
+                // Trigger price lookup if we have enough context
+                schedulePriceLookup();
+
+                openActionModal('booking');
+            }
+
+            function updateBookingPlayersConstraints(roomId) {
+                const room = ROOMS_BY_ID.get(roomId);
+                const playersInput = document.getElementById('booking-players');
+                if (room && room.minPlayers) {
+                    playersInput.min = room.minPlayers;
+                    if (!playersInput.value || Number(playersInput.value) < room.minPlayers) {
+                        playersInput.value = room.minPlayers;
+                    }
+                } else {
+                    playersInput.min = 1;
+                }
                 if (room && room.maxPlayers) {
                     playersInput.max = room.maxPlayers;
                 } else {
                     playersInput.removeAttribute('max');
                 }
+            }
 
-                openActionModal('booking');
+            // ── Booking modal: price lookup + language + payment split ────────
+            const ROOM_PRICE_URL = '{{ route('dashboard.roomPrice') }}';
+            const ALL_LANGUAGES  = @json(\App\Models\Language::orderBy('name')->get(['id','name']));
+            // Map room_id → language ids (loaded via CALENDAR.rooms which has no languages yet)
+            // We'll fetch languages per room lazily and cache
+            const roomLanguagesCache = new Map();
+
+            async function fetchRoomLanguages(roomId) {
+                if (roomLanguagesCache.has(roomId)) return roomLanguagesCache.get(roomId);
+                // Languages for a room are embedded via a data attr on the select options
+                // (server-rendered). We build a map from the CALENDAR data which includes
+                // language ids if we add them. For now derive from the hidden map below.
+                return roomLanguagesCache.get(roomId) ?? [];
+            }
+
+            // Embed room→language map from Blade
+            const ROOM_LANGUAGE_MAP = @json(
+                auth()->user()->escaperoom->rooms()->with('languages:id')->get()
+                    ->mapWithKeys(fn($r) => [$r->id => $r->languages->pluck('id')->all()])
+            );
+
+            function updateBookingLanguages(roomId) {
+                const select = document.getElementById('booking-language-id');
+                const allowed = ROOM_LANGUAGE_MAP[roomId] ?? [];
+                select.innerHTML = '';
+                const list = allowed.length
+                    ? ALL_LANGUAGES.filter(lang => allowed.includes(lang.id))
+                    : ALL_LANGUAGES;
+                list.forEach(lang => {
+                    const opt = document.createElement('option');
+                    opt.value = lang.id;
+                    opt.textContent = lang.name;
+                    select.appendChild(opt);
+                });
+            }
+
+            let priceTimer = null;
+            function schedulePriceLookup() {
+                clearTimeout(priceTimer);
+                priceTimer = setTimeout(doLookupPrice, 300);
+            }
+
+            async function doLookupPrice() {
+                const roomId  = document.getElementById('booking-room-id').value;
+                const date    = document.getElementById('booking-date').value;
+                const players = document.getElementById('booking-players').value;
+                const hint    = document.getElementById('booking-price-hint');
+                const priceEl = document.getElementById('booking-custom-price');
+
+                if (!roomId || !date || !players) return;
+
+                hint.textContent = 'Prijs opzoeken…';
+                try {
+                    const res = await fetch(`${ROOM_PRICE_URL}?room_id=${roomId}&date=${date}&players=${players}`, {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    });
+                    const data = await res.json();
+                    if (data.found) {
+                        priceEl.value = parseFloat(data.price).toFixed(2);
+                        hint.textContent = `Gevonden (${data.vat_percentage}% BTW)`;
+                        applyPaymentLocation(data.payment_location, parseFloat(data.price));
+                    } else {
+                        hint.textContent = 'Geen prijs gevonden — vul manueel in';
+                    }
+                } catch {
+                    hint.textContent = '';
+                }
+            }
+
+            function applyPaymentLocation(location, total) {
+                const onlineEl = document.getElementById('booking-amount-online');
+                const onsiteEl = document.getElementById('booking-amount-onsite');
+                if (location === 'online') {
+                    onlineEl.value = total.toFixed(2);
+                    onsiteEl.value = '0.00';
+                } else if (location === 'onsite') {
+                    onlineEl.value = '0.00';
+                    onsiteEl.value = total.toFixed(2);
+                } else {
+                    onlineEl.value = total.toFixed(2);
+                    onsiteEl.value = '0.00';
+                }
+            }
+
+            function initBookingPriceListeners() {
+                ['booking-room-id', 'booking-date', 'booking-players'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.addEventListener('change', () => {
+                        if (id === 'booking-room-id') updateBookingLanguages(Number(el.value));
+                        schedulePriceLookup();
+                    });
+                });
+                // Sync: when price changes, put remainder in onsite
+                document.getElementById('booking-custom-price')?.addEventListener('input', () => {
+                    const total  = parseFloat(document.getElementById('booking-custom-price').value) || 0;
+                    const online = parseFloat(document.getElementById('booking-amount-online').value) || 0;
+                    document.getElementById('booking-amount-onsite').value = Math.max(0, total - online).toFixed(2);
+                });
+                document.getElementById('booking-amount-online')?.addEventListener('input', () => {
+                    const total  = parseFloat(document.getElementById('booking-custom-price').value) || 0;
+                    const online = parseFloat(document.getElementById('booking-amount-online').value) || 0;
+                    document.getElementById('booking-amount-onsite').value = Math.max(0, total - online).toFixed(2);
+                });
+                document.getElementById('booking-amount-onsite')?.addEventListener('input', () => {
+                    const total  = parseFloat(document.getElementById('booking-custom-price').value) || 0;
+                    const onsite = parseFloat(document.getElementById('booking-amount-onsite').value) || 0;
+                    document.getElementById('booking-amount-online').value = Math.max(0, total - onsite).toFixed(2);
+                });
+            }
+            // ── End booking pricing ──────────────────────────────────────────
+
+            function handleCalendarBodyClick(event) {
+                // Ignore clicks that land on an existing event card
+                if (event.target.closest('.calendar-event')) return;
+
+                const body = event.currentTarget;
+                const rect = body.getBoundingClientRect();
+                const yFromTop = event.clientY - rect.top;
+
+                // Snap to 15-minute grid
+                const totalMinutes = Math.floor((yFromTop / HOUR_HEIGHT) * 60 / 15) * 15;
+                const clamped = Math.max(0, Math.min(totalMinutes, 23 * 60 + 45));
+
+                const startH = Math.floor(clamped / 60);
+                const startM = clamped % 60;
+                const endMin  = Math.min(clamped + 60, 24 * 60 - 1);
+                const endH   = Math.floor(endMin / 60);
+                const endM   = endMin % 60;
+
+                const pad = (n) => String(n).padStart(2, '0');
+
+                openBookingModal({
+                    roomId: Number(body.dataset.roomId) || null,
+                    date:   body.dataset.date || CALENDAR.date,
+                    start:  `${pad(startH)}:${pad(startM)}`,
+                    end:    `${pad(endH)}:${pad(endM)}`,
+                });
             }
 
             function submitUnblock(timeSlotId) {
@@ -1021,6 +1273,13 @@
                         }
                     });
                 });
+
+                const openNewBookingButton = document.getElementById('open-new-booking-modal');
+                if (openNewBookingButton) {
+                    openNewBookingButton.addEventListener('click', () => {
+                        openBookingModal({ roomId: null, date: CALENDAR.date, start: '10:00', end: '11:00' });
+                    });
+                }
 
                 const openRangeBlockButton = document.getElementById('open-range-block-modal');
                 if (openRangeBlockButton) {
@@ -1101,6 +1360,7 @@
                 render();
                 scrollToRelevantTime();
                 initSlotActions();
+                initBookingPriceListeners();
 
                 document.querySelectorAll('.room-toggle').forEach((checkbox) => {
                     checkbox.addEventListener('change', render);

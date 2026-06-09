@@ -28,13 +28,78 @@
                             Winkelwagen
                         </span>
                         <span class="flex items-center gap-2">
-                            <span class="font-semibold text-gray-900 dark:text-white">{{ Number::currency(0) }}</span>
+                            <span id="mobile-cart-toggle-total" class="font-semibold text-gray-900 dark:text-white">€ 0,00</span>
                             <svg id="mobile-cart-chevron" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-gray-400 transition-transform duration-200">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                             </svg>
                         </span>
                     </button>
                 </div>
+
+                <div id="mobile-cart-panel" class="hidden lg:hidden flex-col gap-3 mt-3">
+
+                <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Winkelwagen</h3>
+
+                    <div id="cart-empty-state-mobile" class="flex flex-col items-center justify-center py-6 text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-10 text-gray-300 dark:text-gray-600 mb-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                        </svg>
+                        <p class="text-sm text-gray-400 dark:text-gray-500">Nog geen items toegevoegd</p>
+                    </div>
+
+                    <ul id="cart-items-list-mobile" class="hidden divide-y divide-gray-100 dark:divide-white/5 -mx-1"></ul>
+                </div>
+
+                <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 space-y-2">
+                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span id="cart-subtotaal-label-mobile">Subtotaal excl. BTW</span><span id="cart-subtotaal-mobile">€ 0,00</span></div>
+                    <div id="cart-btw-rows-mobile"></div>
+                    <div id="cart-korting-row-mobile" class="hidden flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Korting</span><span id="cart-korting-mobile" class="text-green-600 dark:text-green-400"></span></div>
+                    <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>Totaal incl. BTW</span><span id="cart-totaal-mobile">€ 0,00</span></div>
+                </div>
+
+                <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">Betaalmethode</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button data-method="kaart" onclick="selectPayment('kaart')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 p-3 text-xs font-medium text-indigo-700 dark:text-indigo-300 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" /></svg>
+                            Kaart
+                        </button>
+                        <button data-method="cash" onclick="selectPayment('cash')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-gray-200 dark:border-white/10 p-3 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75" /></svg>
+                            Cash
+                        </button>
+                        <button data-method="online" onclick="selectPayment('online')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-gray-200 dark:border-white/10 p-3 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+                            Online
+                        </button>
+                    </div>
+
+                    <div id="payment-term-block-mobile" class="hidden mt-4 border-t border-gray-100 dark:border-white/5 pt-4">
+                        <label for="payment_term_mobile" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Betaaltermijn</label>
+                        <select
+                            id="payment_term_mobile"
+                            name="payment_term"
+                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 px-3 text-sm text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <option value="7">7 dagen</option>
+                            <option value="14">14 dagen</option>
+                            <option value="30" selected>30 dagen (standaard)</option>
+                            <option value="45">45 dagen</option>
+                            <option value="60">60 dagen</option>
+                            <option value="90">90 dagen</option>
+                            <option value="120">120 dagen</option>
+                        </select>
+                        <p class="mt-1.5 text-xs text-gray-400 dark:text-gray-500">Factuur wordt verstuurd naar het e-mailadres van de klant.</p>
+                    </div>
+                </div>
+
+                <button class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors">
+                    Bestelling plaatsen
+                </button>
+
+                
+                </div>
+
                 <div class="mt-4 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
                     <div class="flex-1 min-w-0 flex flex-col gap-4">
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
@@ -257,69 +322,6 @@
                         <button class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors">
                             Bestelling plaatsen
                         </button>
-                    </div>
-
-                    <div id="mobile-cart-panel" class="hidden lg:hidden flex-col gap-3">
-
-                        <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Winkelwagen</h3>
-
-                            <div id="cart-empty-state-mobile" class="flex flex-col items-center justify-center py-6 text-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-10 text-gray-300 dark:text-gray-600 mb-2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                </svg>
-                                <p class="text-sm text-gray-400 dark:text-gray-500">Nog geen items toegevoegd</p>
-                            </div>
-
-                            <ul id="cart-items-list-mobile" class="hidden divide-y divide-gray-100 dark:divide-white/5 -mx-1"></ul>
-                        </div>
-
-                        <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 space-y-2">
-                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span id="cart-subtotaal-label-mobile">Subtotaal excl. BTW</span><span id="cart-subtotaal-mobile">€ 0,00</span></div>
-                            <div id="cart-btw-rows-mobile"></div>
-                            <div id="cart-korting-row-mobile" class="hidden flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Korting</span><span id="cart-korting-mobile" class="text-green-600 dark:text-green-400"></span></div>
-                            <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>Totaal incl. BTW</span><span id="cart-totaal-mobile">€ 0,00</span></div>
-                        </div>
-
-                        <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">Betaalmethode</p>
-                            <div class="grid grid-cols-3 gap-2">
-                                <button data-method="kaart" onclick="selectPayment('kaart')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 p-3 text-xs font-medium text-indigo-700 dark:text-indigo-300 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" /></svg>
-                                    Kaart
-                                </button>
-                                <button data-method="cash" onclick="selectPayment('cash')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-gray-200 dark:border-white/10 p-3 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75" /></svg>
-                                    Cash
-                                </button>
-                                <button data-method="online" onclick="selectPayment('online')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-gray-200 dark:border-white/10 p-3 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
-                                    Online
-                                </button>
-                            </div>
-
-                            <div id="payment-term-block-mobile" class="hidden mt-4 border-t border-gray-100 dark:border-white/5 pt-4">
-                                <label for="payment_term_mobile" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Betaaltermijn</label>
-                                <select
-                                    id="payment_term_mobile"
-                                    name="payment_term"
-                                    class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 px-3 text-sm text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                                    <option value="7">7 dagen</option>
-                                    <option value="14">14 dagen</option>
-                                    <option value="30" selected>30 dagen (standaard)</option>
-                                    <option value="45">45 dagen</option>
-                                    <option value="60">60 dagen</option>
-                                    <option value="90">90 dagen</option>
-                                    <option value="120">120 dagen</option>
-                                </select>
-                                <p class="mt-1.5 text-xs text-gray-400 dark:text-gray-500">Factuur wordt verstuurd naar het e-mailadres van de klant.</p>
-                            </div>
-                        </div>
-
-                        <button class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors">
-                            Bestelling plaatsen
-                        </button>
-
                     </div>
                 </div>
             </div>
@@ -708,6 +710,10 @@
                     listEl.appendChild(li);
                 });
             });
+
+            // Update mobile toggle button total
+            var toggleTotal = document.getElementById('mobile-cart-toggle-total');
+            if (toggleTotal) toggleTotal.textContent = fmt(totaal);
         }
         // ─────────────────────────────────────────────────────────────
 
@@ -759,9 +765,16 @@
             var panel = document.getElementById('mobile-cart-panel');
             var chevron = document.getElementById('mobile-cart-chevron');
             var isHidden = panel.classList.contains('hidden');
-            panel.classList.toggle('hidden', !isHidden);
-            panel.classList.toggle('flex', isHidden);
-            chevron.style.transform = isHidden ? 'rotate(180deg)' : '';
+            if (isHidden) {
+                panel.classList.remove('hidden');
+                panel.style.display = 'flex';
+                panel.style.flexDirection = 'column';
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                panel.classList.add('hidden');
+                panel.style.display = '';
+                chevron.style.transform = '';
+            }
         }
     </script>
 

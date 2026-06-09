@@ -29,6 +29,7 @@ use App\Http\Controllers\Coupon\EditCouponController;
 use App\Http\Controllers\Coupon\IndexCouponController;
 use App\Http\Controllers\Coupon\StoreCouponController;
 use App\Http\Controllers\Coupon\UpdateCouponController;
+use App\Http\Controllers\Customer\SearchCustomerController;
 use App\Http\Controllers\Customer\BanCustomerController;
 use App\Http\Controllers\Customer\EditCustomerController;
 use App\Http\Controllers\Customer\IndexCustomerController;
@@ -222,6 +223,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/rooms/{id}/timeslots/{timeslot}/edit', UpdateRoomTimeSlotController::class)->name('rooms.timeslots.update');
 
     // Customer routes
+    Route::get('/customers/search', SearchCustomerController::class)->name('customers.search');
     Route::get('/customers', IndexCustomerController::class)->name('customers.index');
     Route::get('/customers/{id}/overview', ShowCustomerController::class)->name('customers.show.overview');
     Route::get('/customers/{id}/overview/edit', EditCustomerController::class)->name('customers.edit.overview');

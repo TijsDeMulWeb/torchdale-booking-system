@@ -101,6 +101,7 @@ use App\Http\Controllers\User\EditUserController;
 use App\Http\Controllers\User\IndexUserController;
 use App\Http\Controllers\User\StoreUserController;
 use App\Http\Controllers\User\UpdateUserController;
+use App\Http\Controllers\MailTemplate\MailTemplateController;
 use App\Http\Controllers\Webhook\MollieWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -208,6 +209,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/coupons/{id}/edit', EditCouponController::class)->name('coupons.edit');
     Route::put('/coupons/{id}/edit', UpdateCouponController::class)->name('coupons.update');
     Route::delete('/coupons/{id}/delete', DeleteCouponController::class)->name('coupons.destroy');
+
+    // Mail templates
+    Route::get('/mail-templates/{type}', [MailTemplateController::class, 'index'])->name('mail-templates.index');
+    Route::post('/mail-templates/{type}/upload-image', [MailTemplateController::class, 'uploadImage'])->name('mail-templates.upload-image');
+    Route::get('/mail-templates/{type}/create', [MailTemplateController::class, 'create'])->name('mail-templates.create');
+    Route::post('/mail-templates/{type}', [MailTemplateController::class, 'store'])->name('mail-templates.store');
+    Route::get('/mail-templates/{type}/{template}/edit', [MailTemplateController::class, 'edit'])->name('mail-templates.edit');
+    Route::put('/mail-templates/{type}/{template}', [MailTemplateController::class, 'update'])->name('mail-templates.update');
+    Route::delete('/mail-templates/{type}/{template}', [MailTemplateController::class, 'destroy'])->name('mail-templates.destroy');
 
     // GiftCards routes
     Route::get('/gift-cards', IndexGiftCardController::class)->name('giftCards.index');

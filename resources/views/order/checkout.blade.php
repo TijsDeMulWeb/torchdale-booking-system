@@ -93,7 +93,7 @@
                     </div>
                 </div>
 
-                <button id="place-order-btn" disabled class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                <button id="place-order-btn" onclick="submitOrder()" disabled class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                     Bestelling plaatsen
                 </button>
 
@@ -358,7 +358,7 @@
                             </div>
                         </div>
 
-                        <button id="place-order-btn-mobile" disabled class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+                        <button id="place-order-btn-mobile" onclick="submitOrder()" disabled class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                             Bestelling plaatsen
                         </button>
                     </div>
@@ -415,6 +415,16 @@
             </div>
         </div>
     </div>
+
+    <form id="order-form" method="POST" action="{{ route('orders.store') }}" class="hidden">
+        @csrf
+        <input type="hidden" name="customer_id"      id="form-customer-id">
+        <input type="hidden" name="cart"             id="form-cart">
+        <input type="hidden" name="payment_method"   id="form-payment-method">
+        <input type="hidden" name="payment_term"     id="form-payment-term">
+        <input type="hidden" name="coupon_id"        id="form-coupon-id">
+        <input type="hidden" name="totals"           id="form-totals">
+    </form>
 
     <script>
         var customerSearchUrl = '{{ route('customers.search') }}';
@@ -967,6 +977,56 @@
             var showTerm = method === 'online';
             document.getElementById('payment-term-block').classList.toggle('hidden', !showTerm);
             document.getElementById('payment-term-block-mobile').classList.toggle('hidden', !showTerm);
+        }
+
+        function submitOrder() {
+            // Gather cart totals
+            var totaalInclBtw = 0, itemCount = 0;
+            var btwPerRate = {};
+            cart.forEach(function (item) {
+                var lineTotal = item.price * item.qty;
+                var btwAmount = lineTotal * (item.vat / (100 + item.vat));
+                totaalInclBtw += lineTotal;
+                itemCount += item.qty;
+                if (item.vat > 0) {
+                    var key = String(item.vat);
+                    btwPerRate[key] = (btwPerRate[key] || 0) + btwAmount;
+                }
+            });
+            var totalBtw = Object.values(btwPerRate).reduce(function (s, v) { return s + v; }, 0);
+            var subtotaalExcl = totaalInclBtw - totalBtw;
+            var discount = 0;
+            if (selectedCoupon && subtotaalExcl > 0) {
+                discount = selectedCoupon.discount_type === 'percentage'
+                    ? subtotaalExcl * parseFloat(selectedCoupon.discount_value) / 100
+                    : Math.min(parseFloat(selectedCoupon.discount_value), subtotaalExcl);
+            }
+            var discountedExcl = subtotaalExcl - discount;
+            var scale = subtotaalExcl > 0 ? discountedExcl / subtotaalExcl : 1;
+            var scaledBtw = {};
+            Object.keys(btwPerRate).forEach(function (rate) { scaledBtw[rate] = btwPerRate[rate] * scale; });
+            var totaal = discountedExcl + Object.values(scaledBtw).reduce(function (s, v) { return s + v; }, 0);
+
+            // Active payment method
+            var activeMethod = document.querySelector('.payment-btn[class*="border-indigo"]');
+            var paymentMethod = activeMethod ? activeMethod.dataset.method : 'kaart';
+            var paymentTerm   = paymentMethod === 'online'
+                ? document.getElementById('payment_term').value
+                : null;
+
+            document.getElementById('form-customer-id').value    = selectedCustomerId;
+            document.getElementById('form-cart').value           = JSON.stringify(cart);
+            document.getElementById('form-payment-method').value = paymentMethod;
+            document.getElementById('form-payment-term').value   = paymentTerm || '';
+            document.getElementById('form-coupon-id').value      = selectedCoupon ? selectedCoupon.id : '';
+            document.getElementById('form-totals').value         = JSON.stringify({
+                subtotaal_excl:  Math.round(subtotaalExcl  * 100) / 100,
+                discount:        Math.round(discount        * 100) / 100,
+                btw:             scaledBtw,
+                totaal_incl_btw: Math.round(totaal          * 100) / 100,
+            });
+
+            document.getElementById('order-form').submit();
         }
 
         function toggleMobileCart() {

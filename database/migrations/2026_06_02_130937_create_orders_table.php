@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->decimal('subtotal', 10, 2)->nullable();
             $table->string('status', 50)->default('pending');
             $table->string('payment_method', 50)->nullable();
+            $table->id('invoice_id')->nullable();
             $table->string('invoice_number', 100)->nullable()->unique();
             $table->timestamps();
             $table->softDeletes();

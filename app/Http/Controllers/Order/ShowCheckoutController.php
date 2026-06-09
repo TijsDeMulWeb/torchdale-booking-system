@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Order;
 
 use App\Http\Controllers\Controller;
+use App\Models\EscaperoomAddress;
 use App\Models\GiftCard;
 use App\Models\Product;
 use App\Models\Room;
@@ -26,6 +27,13 @@ class ShowCheckoutController extends Controller
 
         $countries = DB::table('countries')->orderBy('name')->get(['id', 'name']);
 
-        return view('order.checkout', compact('rooms', 'products', 'giftCards', 'countries'));
+        $primaryAddress = EscaperoomAddress::where('escaperoom_id', $escaperoom->id)
+            ->where('is_primary', true)
+            ->with('country')
+            ->first();
+
+        $escaperoomCountryIso = $primaryAddress?->country?->iso_code ?? null;
+
+        return view('order.checkout', compact('rooms', 'products', 'giftCards', 'countries', 'escaperoomCountryIso'));
     }
 }

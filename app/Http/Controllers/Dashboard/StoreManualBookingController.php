@@ -114,18 +114,41 @@ class StoreManualBookingController extends Controller
 
     private function matchOrCreateCustomer($escaperoom, array $data): Customer
     {
+        $email = strtolower(trim($data['email'] ?? ''));
+
+        // Primaire match: op e-mailadres
         $customer = $escaperoom->customers()
-            ->where('email', strtolower(trim($data['email'])))
+            ->where('email', $email)
             ->first();
 
+        // Secundaire match: zelfde voor- + achternaam (voorkomt duplicaten bij ander e-mailadres)
+        if (!$customer) {
+            $customer = $escaperoom->customers()
+                ->whereRaw('LOWER(first_name) = ?', [strtolower(trim($data['first_name']))])
+                ->whereRaw('LOWER(last_name) = ?', [strtolower(trim($data['last_name']))])
+                ->first();
+        }
+
         if ($customer) {
+            // Vul ontbrekende contactgegevens aan op het bestaande record
+            $updates = array_filter([
+                'email'        => ($customer->email ? null : $email) ?: null,
+                'phone'        => ($customer->phone ? null : ($data['phone'] ?? null)),
+                'street'       => ($customer->street ? null : ($data['street'] ?? null)),
+                'house_number' => ($customer->house_number ? null : ($data['house_number'] ?? null)),
+                'postal_code'  => ($customer->postal_code ? null : ($data['postal_code'] ?? null)),
+                'city'         => ($customer->city ? null : ($data['city'] ?? null)),
+            ]);
+            if ($updates) {
+                $customer->fill($updates)->save();
+            }
             return $customer;
         }
 
         return $escaperoom->customers()->create([
             'first_name'   => $data['first_name'],
             'last_name'    => $data['last_name'],
-            'email'        => $data['email'],
+            'email'        => $email,
             'phone'        => $data['phone'] ?? null,
             'street'       => $data['street'] ?? null,
             'house_number' => $data['house_number'] ?? null,

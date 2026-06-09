@@ -130,6 +130,34 @@
 
                                 <ul id="customer-dropdown" class="hidden absolute z-20 mt-1 w-full rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-800 shadow-lg overflow-hidden"></ul>
                             </div>
+
+                            {{-- Business toggle + fields (shown after customer is selected) --}}
+                            <div id="business-section" class="hidden mt-3 border-t border-gray-100 dark:border-white/5 pt-3 space-y-3">
+                                <button type="button" onclick="toggleBusiness()" id="business-toggle"
+                                    class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+                                    <span id="business-toggle-icon" class="flex h-5 w-5 items-center justify-center rounded border-2 border-gray-300 dark:border-white/20 transition-colors">
+                                    </span>
+                                    Zakelijke klant
+                                </button>
+
+                                <div id="business-fields" class="hidden space-y-2.5">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Bedrijfsnaam <span class="text-red-500">*</span></label>
+                                        <input id="business-company-name" type="text" placeholder="Bedrijfsnaam..."
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">BTW-nummer <span class="text-red-500">*</span></label>
+                                        <input id="business-vat-number" type="text" placeholder="BE0123456789..."
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Ondernemingsnummer <span class="text-gray-400">(optioneel)</span></label>
+                                        <input id="business-reg-number" type="text" placeholder="0123.456.789..."
+                                            class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
@@ -424,6 +452,7 @@
         <input type="hidden" name="payment_term"     id="form-payment-term">
         <input type="hidden" name="coupon_id"        id="form-coupon-id">
         <input type="hidden" name="totals"           id="form-totals">
+        <input type="hidden" name="business"          id="form-business">
     </form>
 
     <script>
@@ -508,12 +537,15 @@
             if (items[idx]) items[idx].scrollIntoView({ block: 'nearest' });
         }
 
+        var isBusiness = false;
+
         function selectCustomer(c) {
             selectedCustomerId = c.id;
             selectedName.textContent  = c.name;
             selectedEmail.textContent = c.email;
             selectedChip.classList.remove('hidden');
             searchWrap.classList.add('hidden');
+            document.getElementById('business-section').classList.remove('hidden');
             closeDropdown();
             updatePlaceOrderBtn();
         }
@@ -524,7 +556,34 @@
             selectedChip.classList.add('hidden');
             searchWrap.classList.remove('hidden');
             searchInput.focus();
+            // Reset business
+            isBusiness = false;
+            document.getElementById('business-section').classList.add('hidden');
+            document.getElementById('business-fields').classList.add('hidden');
+            document.getElementById('business-toggle-icon').innerHTML = '';
+            document.getElementById('business-toggle-icon').classList.remove('border-indigo-500', 'bg-indigo-500');
+            document.getElementById('business-toggle-icon').classList.add('border-gray-300', 'dark:border-white/20');
+            document.getElementById('business-company-name').value = '';
+            document.getElementById('business-vat-number').value   = '';
+            document.getElementById('business-reg-number').value   = '';
             updatePlaceOrderBtn();
+        }
+
+        function toggleBusiness() {
+            isBusiness = !isBusiness;
+            var icon   = document.getElementById('business-toggle-icon');
+            var fields = document.getElementById('business-fields');
+            fields.classList.toggle('hidden', !isBusiness);
+            if (isBusiness) {
+                icon.classList.remove('border-gray-300', 'dark:border-white/20');
+                icon.classList.add('border-indigo-500', 'bg-indigo-500');
+                icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-3 text-white"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" /></svg>';
+                document.getElementById('business-company-name').focus();
+            } else {
+                icon.classList.add('border-gray-300', 'dark:border-white/20');
+                icon.classList.remove('border-indigo-500', 'bg-indigo-500');
+                icon.innerHTML = '';
+            }
         }
 
         function closeDropdown() {
@@ -1025,6 +1084,12 @@
                 btw:             scaledBtw,
                 totaal_incl_btw: Math.round(totaal          * 100) / 100,
             });
+            document.getElementById('form-business').value       = JSON.stringify(isBusiness ? {
+                is_business:         true,
+                company_name:        document.getElementById('business-company-name').value,
+                vat_number:          document.getElementById('business-vat-number').value,
+                registration_number: document.getElementById('business-reg-number').value,
+            } : { is_business: false });
 
             document.getElementById('order-form').submit();
         }

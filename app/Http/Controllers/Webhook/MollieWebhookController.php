@@ -42,19 +42,19 @@ class MollieWebhookController extends Controller
                 return response('', 200);
             }
 
-            // Voorkom dubbele verwerking
-            $alreadyProcessed = DB::table('invoices')
+            // Voorkom dubbele verwerking — skip als de invoice al als 'paid' is verwerkt
+            $existingInvoice = DB::table('invoices')
                 ->where('mollie_invoice_id', $mollieInvoiceId)
-                ->exists();
+                ->first();
 
-            if ($alreadyProcessed) {
+            if ($existingInvoice && $existingInvoice->status === 'paid') {
                 return response('', 200);
             }
 
             $invoiceNumber = $mollieInvoice->invoiceNumber ?? ('INV-' . $order->id . '-' . time());
 
-            // PDF downloaden
-            $pdfPath = null;
+            // PDF downloaden (betaalde versie)
+            $pdfPath = $existingInvoice?->pdf_url;
             $mollieHref = $mollieInvoice->_links->pdfLink->href ?? null;
             if ($mollieHref) {
                 $pdfResponse = Http::withToken($mollieKey)->get($mollieHref);
@@ -64,21 +64,34 @@ class MollieWebhookController extends Controller
                 }
             }
 
-            DB::table('invoices')->insert([
-                'customer_id'       => $order->customer_id,
-                'order_id'          => $order->id,
-                'mollie_invoice_id' => $mollieInvoiceId,
-                'pdf_url'           => $pdfPath,
-                'source'            => 'mollie',
-                'invoice_number'    => $invoiceNumber,
-                'status'            => 'paid',
-                'amount'            => $order->total,
-                'created_at'        => now(),
-                'updated_at'        => now(),
-            ]);
+            // Update bestaande invoice record (issued → paid) of maak nieuw aan
+            if ($existingInvoice) {
+                DB::table('invoices')
+                    ->where('id', $existingInvoice->id)
+                    ->update([
+                        'status'         => 'paid',
+                        'pdf_url'        => $pdfPath,
+                        'invoice_number' => $invoiceNumber,
+                        'updated_at'     => now(),
+                    ]);
+            } else {
+                DB::table('invoices')->insert([
+                    'customer_id'       => $order->customer_id,
+                    'order_id'          => $order->id,
+                    'mollie_invoice_id' => $mollieInvoiceId,
+                    'pdf_url'           => $pdfPath,
+                    'source'            => 'mollie',
+                    'invoice_number'    => $invoiceNumber,
+                    'status'            => 'paid',
+                    'amount'            => $order->total,
+                    'created_at'        => now(),
+                    'updated_at'        => now(),
+                ]);
+            }
 
-            $order->status         = 'paid';
-            $order->invoice_number = $invoiceNumber;
+            $order->status              = 'paid';
+            $order->amount_paid_online  = $order->total;
+            $order->invoice_number      = $invoiceNumber;
             $order->save();
 
         } catch (\Exception $e) {

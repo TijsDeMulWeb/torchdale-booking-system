@@ -42,10 +42,61 @@
                 @php
                     $statusBadge = function(string $status): string {
                         return match($status) {
-                            'paid'    => '<span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Betaald</span>',
-                            'pending' => '<span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">Open</span>',
-                            default   => '<span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">' . e($status) . '</span>',
+                            'paid'      => '<span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Betaald</span>',
+                            'pending'   => '<span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">Open</span>',
+                            'cancelled' => '<span class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/20 px-2 py-1 text-xs font-medium text-red-700 dark:text-red-400 ring-1 ring-inset ring-red-600/20">Geannuleerd</span>',
+                            default     => '<span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">' . e($status) . '</span>',
                         };
+                    };
+
+                    /**
+                     * Step tracker — adapts per payment method:
+                     *   cash / kaart  →  2 steps: Betaald | Factuur
+                     *   online / manual / overig met mollie  →  3 steps: Betaallink | Betaald | Factuur
+                     */
+                    $paymentSteps = function(\App\Models\Order $order): string {
+                        $invoice     = $order->invoice;
+                        $paid        = $order->status === 'paid';
+                        $receiptSent = $invoice !== null;
+
+                        $isInPerson = in_array($order->payment_method, ['cash', 'kaart']);
+
+                        if ($isInPerson) {
+                            // Cash / kaart: geen betaallink stap
+                            $methodLabel = $order->payment_method === 'cash' ? 'Cash' : 'Kaart';
+                            $steps = [
+                                ['label' => 'Betaald',  'done' => $paid],
+                                ['label' => 'Factuur',  'done' => $receiptSent],
+                            ];
+                            $badge = '<span class="inline-flex items-center rounded-md bg-gray-100 dark:bg-white/10 px-1.5 py-0.5 text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">' . $methodLabel . '</span>';
+                        } else {
+                            // Online / manual: Mollie betaallink flow
+                            $invoiceSent = !empty($order->mollie_id);
+                            $steps = [
+                                ['label' => 'Betaallink', 'done' => $invoiceSent],
+                                ['label' => 'Betaald',    'done' => $paid],
+                                ['label' => 'Factuur',    'done' => $receiptSent],
+                            ];
+                            $methodLabel = $order->payment_method === 'manual' ? 'Handmatig' : 'Online';
+                            $badge = '<span class="inline-flex items-center rounded-md bg-indigo-50 dark:bg-indigo-900/20 px-1.5 py-0.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 mb-1">' . $methodLabel . '</span>';
+                        }
+
+                        $html = '<div class="flex flex-col gap-1">';
+                        $html .= $badge;
+                        $html .= '<div class="flex items-center gap-1">';
+                        foreach ($steps as $i => $step) {
+                            $dot = $step['done']
+                                ? '<span class="inline-flex size-5 items-center justify-center rounded-full bg-indigo-600 text-white dark:bg-indigo-500 text-xs">✓</span>'
+                                : '<span class="inline-flex size-5 items-center justify-center rounded-full border-2 border-gray-300 dark:border-white/20 text-gray-400 text-xs">' . ($i + 1) . '</span>';
+                            $label = '<span class="text-xs ' . ($step['done'] ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-400 dark:text-gray-500') . '">' . e($step['label']) . '</span>';
+                            $html .= '<div class="flex flex-col items-center gap-0.5">' . $dot . $label . '</div>';
+                            if ($i < count($steps) - 1) {
+                                $html .= '<div class="mb-4 h-px w-4 ' . ($step['done'] ? 'bg-indigo-600 dark:bg-indigo-500' : 'bg-gray-200 dark:bg-white/10') . '"></div>';
+                            }
+                        }
+                        $html .= '</div>';
+                        $html .= '</div>';
+                        return $html;
                     };
                 @endphp
 
@@ -104,7 +155,13 @@
                                                         {{ Number::currency($order->total ?? 0) }}
                                                     </td>
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
-                                                        {!! $statusBadge($order->status) !!}
+                                                        @if ($order->status === 'cancelled')
+                                                            {!! $statusBadge($order->status) !!}
+                                                        @elseif ($order->payment_method !== null)
+                                                            {!! $paymentSteps($order) !!}
+                                                        @else
+                                                            {!! $statusBadge($order->status) !!}
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -177,7 +234,13 @@
                                                         {{ Number::currency($order->total ?? 0) }}
                                                     </td>
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
-                                                        {!! $statusBadge($order->status) !!}
+                                                        @if ($order->status === 'cancelled')
+                                                            {!! $statusBadge($order->status) !!}
+                                                        @elseif ($order->payment_method !== null)
+                                                            {!! $paymentSteps($order) !!}
+                                                        @else
+                                                            {!! $statusBadge($order->status) !!}
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach

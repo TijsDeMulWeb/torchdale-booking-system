@@ -30,6 +30,11 @@ class Room extends Model
         return $this->hasMany(RoomTimeSlot::class);
     }
 
+    public function languages()
+    {
+        return $this->belongsToMany(Language::class, 'room_language');
+    }
+
     protected function casts(): array
     {
         return [

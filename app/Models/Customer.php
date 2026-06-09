@@ -105,14 +105,6 @@ class Customer extends Model
 
     public function setCountryAttribute($value)
     {
-        $map = [
-            'belgium' => 'BE', 'belgie' => 'BE', 'belgië' => 'BE',
-            'netherlands' => 'NL', 'nederland' => 'NL',
-            'germany' => 'DE', 'duitsland' => 'DE',
-            'france' => 'FR', 'frankrijk' => 'FR',
-            'luxembourg' => 'LU', 'luxemburg' => 'LU',
-        ];
-        $normalized = strtolower(trim($value ?? ''));
-        $this->attributes['country'] = $map[$normalized] ?? strtoupper($normalized) ?: 'BE';
+        $this->attributes['country'] = Country::resolveIso($value ?? '');
     }
 }

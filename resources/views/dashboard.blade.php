@@ -435,6 +435,67 @@
     </div>
 
     {{-- Booking detail modal (for clicking a booked slot) --}}
+    {{-- Cancel options sub-modal --}}
+    <div id="cancel-options-overlay" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-4">
+        <div class="w-full max-w-sm rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden shadow-2xl">
+            <div class="px-6 py-5">
+                <p class="text-base font-semibold text-gray-900 dark:text-white">Afspraak annuleren</p>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Kies wat er moet gebeuren met de betaling.</p>
+            </div>
+            <div class="px-6 pb-2 space-y-2">
+                {{-- Only cancel --}}
+                <button type="button" id="cancel-action-cancel"
+                    class="w-full flex items-start gap-3 rounded-lg border border-gray-200 dark:border-white/10 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    <svg class="mt-0.5 shrink-0 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">Alleen annuleren</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Tijdslot verwijderen, geen verdere actie.</p>
+                    </div>
+                </button>
+                {{-- Voucher --}}
+                <button type="button" id="cancel-action-voucher"
+                    class="w-full flex items-start gap-3 rounded-lg border border-indigo-200 dark:border-indigo-900/50 px-4 py-3 text-left hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+                    <svg class="mt-0.5 shrink-0 h-5 w-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a4 4 0 00-4-4H5.45a4 4 0 00-3.955 4.55l.18 1.2A4 4 0 005.626 11H12m0 0h6.374a4 4 0 003.955-3.45l.18-1.2A4 4 0 0018.55 2H16a4 4 0 00-4 4v2z"/>
+                    </svg>
+                    <div>
+                        <p class="text-sm font-medium text-indigo-700 dark:text-indigo-400">Cadeaubon sturen</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">Annuleren en een cadeaubon aanmaken voor het betaalde bedrag (1 jaar geldig).</p>
+                    </div>
+                </button>
+            </div>
+            <div class="flex justify-end px-6 py-4 border-t border-gray-100 dark:border-white/10">
+                <button type="button" id="cancel-options-back"
+                    class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Terug</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Voucher code confirmation --}}
+    <div id="voucher-confirm-overlay" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-4">
+        <div class="w-full max-w-sm rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden shadow-2xl">
+            <div class="px-6 py-5 text-center">
+                <div class="mx-auto mb-3 flex size-12 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/30">
+                    <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <p class="text-base font-semibold text-gray-900 dark:text-white">Cadeaubon aangemaakt</p>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Deel deze code met de klant:</p>
+                <div class="mt-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-4 py-3">
+                    <p id="voucher-code-display" class="font-mono text-xl font-bold tracking-widest text-gray-900 dark:text-white"></p>
+                </div>
+                <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">12 maanden geldig · staat ook opgeslagen in het systeem</p>
+            </div>
+            <div class="flex justify-center px-6 py-4 border-t border-gray-100 dark:border-white/10">
+                <button type="button" id="voucher-confirm-close"
+                    class="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
     <div id="booking-detail-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
         <div class="w-full max-w-xl rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden">
             {{-- Header --}}
@@ -1456,29 +1517,51 @@
                         updateStatusBadge(d.status);
 
 
-                        // Cancel button
+                        // Cancel button → open sub-modal with options
                         const cancelBtn = document.getElementById('bdetail-cancel-btn');
                         cancelBtn.onclick = () => {
-                            if (!window.confirm(`Afspraak van ${d.customer_name || 'deze klant'} annuleren?`)) return;
+                            // Show/hide refund option based on payment status
+                            // Toon cadeaubon-optie alleen als er een order met bedrag aan hangt
+                            const voucherBtn = document.getElementById('cancel-action-voucher');
+                            if (voucherBtn) voucherBtn.style.display = (d.total > 0) ? '' : 'none';
 
-                            cancelBtn.disabled = true;
-                            cancelBtn.textContent = 'Bezig…';
+                            document.getElementById('cancel-options-overlay').classList.remove('hidden');
+                        };
+
+                        // Helper: execute cancel with chosen action
+                        function doCancelBooking(action) {
+                            document.getElementById('cancel-options-overlay').classList.add('hidden');
 
                             const url = CANCEL_BOOKING_URL_TEMPLATE.replace('__id__', d.id);
                             fetch(url, {
-                                method: 'DELETE',
+                                method: 'POST',
                                 headers: {
                                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
                                     'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
                                 },
+                                body: JSON.stringify({ action }),
                             })
                             .then((res) => { if (!res.ok) throw new Error(); return res.json(); })
-                            .then(() => { window.location.reload(); })
+                            .then((data) => {
+                                if (data.voucher_code) {
+                                    // Show voucher code before reloading
+                                    document.getElementById('voucher-code-display').textContent = data.voucher_code;
+                                    document.getElementById('voucher-confirm-overlay').classList.remove('hidden');
+                                    document.getElementById('voucher-confirm-close').onclick = () => window.location.reload();
+                                } else {
+                                    window.location.reload();
+                                }
+                            })
                             .catch(() => {
-                                cancelBtn.disabled = false;
-                                cancelBtn.textContent = 'Annuleren';
-                                alert('Er ging iets mis. Probeer opnieuw.');
+                                alert('Er ging iets mis bij het annuleren. Probeer opnieuw.');
                             });
+                        }
+
+                        document.getElementById('cancel-action-cancel').onclick  = () => doCancelBooking('cancel');
+                        document.getElementById('cancel-action-voucher').onclick  = () => doCancelBooking('voucher');
+                        document.getElementById('cancel-options-back').onclick    = () => {
+                            document.getElementById('cancel-options-overlay').classList.add('hidden');
                         };
                     })
                     .catch(() => {

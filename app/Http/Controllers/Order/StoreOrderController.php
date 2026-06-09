@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderedItem;
+use App\Services\GiftVoucherService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -240,6 +241,9 @@ class StoreOrderController extends Controller
 
                 $order->invoice_number = $invoiceNumber;
                 $order->save();
+
+                // Cadeaubonnen aanmaken voor eventuele gift_card-items (cash = direct betaald)
+                app(GiftVoucherService::class)->createForPaidOrder($order);
             }
         } catch (\Exception $e) {
             Log::error('Mollie sales invoice creation failed for order ' . $order->id . ': ' . $e->getMessage());

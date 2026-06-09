@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Webhook;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Services\GiftVoucherService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,9 @@ class MollieWebhookController extends Controller
             $order->amount_paid_online  = $order->total;
             $order->invoice_number      = $invoiceNumber;
             $order->save();
+
+            // Cadeaubonnen aanmaken voor eventuele gift_card-items in deze order
+            app(GiftVoucherService::class)->createForPaidOrder($order);
 
         } catch (\Exception $e) {
             Log::error('Mollie webhook verwerking mislukt voor invoice ' . $mollieInvoiceId . ': ' . $e->getMessage());

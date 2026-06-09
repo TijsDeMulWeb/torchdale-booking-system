@@ -38,15 +38,32 @@
                 <div class="mt-4 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
                     <div class="flex-1 min-w-0 flex flex-col gap-4">
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Klant zoeken</label>
-                            <div class="relative">
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Klant</label>
+
+                            <div id="selected-customer" class="hidden mb-3 flex items-center justify-between rounded-lg bg-indigo-50 dark:bg-indigo-900/20 px-3 py-2.5 border border-indigo-200 dark:border-indigo-500/30">
+                                <div>
+                                    <p id="selected-customer-name" class="text-sm font-medium text-indigo-900 dark:text-indigo-100"></p>
+                                    <p id="selected-customer-email" class="text-xs text-indigo-600 dark:text-indigo-400"></p>
+                                </div>
+                                <button onclick="clearCustomer()" type="button" class="ml-3 text-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div id="customer-search-wrap" class="relative">
                                 <input
+                                    id="customer-search-input"
                                     type="text"
+                                    autocomplete="off"
                                     placeholder="Naam of e-mailadres..."
                                     class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 pl-9 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="pointer-events-none absolute left-3 top-2.5 size-4 text-gray-400">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 5.4 5.4a7.5 7.5 0 0 0 11.25 11.25Z" />
                                 </svg>
+
+                                <ul id="customer-dropdown" class="hidden absolute z-20 mt-1 w-full rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-800 shadow-lg overflow-hidden"></ul>
                             </div>
                         </div>
 
@@ -278,6 +295,88 @@
     </div>
 
     <script>
+        var customerSearchUrl = '{{ route('customers.search') }}';
+        var selectedCustomerId = null;
+        var searchTimer = null;
+
+        var searchInput    = document.getElementById('customer-search-input');
+        var dropdown       = document.getElementById('customer-dropdown');
+        var selectedChip   = document.getElementById('selected-customer');
+        var selectedName   = document.getElementById('selected-customer-name');
+        var selectedEmail  = document.getElementById('selected-customer-email');
+        var searchWrap     = document.getElementById('customer-search-wrap');
+
+        searchInput.addEventListener('input', function () {
+            clearTimeout(searchTimer);
+            var q = this.value.trim();
+            if (q.length < 2) { closeDropdown(); return; }
+            searchTimer = setTimeout(function () { fetchCustomers(q); }, 250);
+        });
+
+        searchInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeDropdown();
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!searchWrap.contains(e.target)) closeDropdown();
+        });
+
+        function fetchCustomers(q) {
+            fetch(customerSearchUrl + '?q=' + encodeURIComponent(q), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (customers) { renderDropdown(customers); });
+        }
+
+        function renderDropdown(customers) {
+            dropdown.innerHTML = '';
+
+            if (!customers.length) {
+                dropdown.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">Geen klanten gevonden.</li>';
+                dropdown.classList.remove('hidden');
+                return;
+            }
+
+            customers.forEach(function (c) {
+                var li = document.createElement('li');
+                li.className = 'flex flex-col px-4 py-2.5 cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border-b border-gray-100 dark:border-white/5 last:border-0';
+                li.innerHTML = '<span class="text-sm font-medium text-gray-900 dark:text-white">' + escHtml(c.name) + '</span>'
+                             + '<span class="text-xs text-gray-400 dark:text-gray-500">' + escHtml(c.email) + '</span>';
+                li.addEventListener('click', function () { selectCustomer(c); });
+                dropdown.appendChild(li);
+            });
+
+            dropdown.classList.remove('hidden');
+        }
+
+        function selectCustomer(c) {
+            selectedCustomerId = c.id;
+            selectedName.textContent  = c.name;
+            selectedEmail.textContent = c.email;
+            selectedChip.classList.remove('hidden');
+            searchWrap.classList.add('hidden');
+            closeDropdown();
+        }
+
+        function clearCustomer() {
+            selectedCustomerId = null;
+            searchInput.value = '';
+            selectedChip.classList.add('hidden');
+            searchWrap.classList.remove('hidden');
+            searchInput.focus();
+        }
+
+        function closeDropdown() {
+            dropdown.classList.add('hidden');
+            dropdown.innerHTML = '';
+        }
+
+        function escHtml(str) {
+            return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+        // ────────────────────────────────────────────────────────────
+
         document.addEventListener('DOMContentLoaded', function () { filterItems('room'); });
 
         function filterItems(type) {

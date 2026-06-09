@@ -93,7 +93,7 @@
                     </div>
                 </div>
 
-                <button class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors">
+                <button id="place-order-btn" disabled class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                     Bestelling plaatsen
                 </button>
 
@@ -319,7 +319,7 @@
                             </div>
                         </div>
 
-                        <button class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors">
+                        <button id="place-order-btn-mobile" disabled class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
                             Bestelling plaatsen
                         </button>
                     </div>
@@ -440,6 +440,7 @@
             selectedChip.classList.remove('hidden');
             searchWrap.classList.add('hidden');
             closeDropdown();
+            updatePlaceOrderBtn();
         }
 
         function clearCustomer() {
@@ -448,6 +449,7 @@
             selectedChip.classList.add('hidden');
             searchWrap.classList.remove('hidden');
             searchInput.focus();
+            updatePlaceOrderBtn();
         }
 
         function closeDropdown() {
@@ -714,8 +716,18 @@
             // Update mobile toggle button total
             var toggleTotal = document.getElementById('mobile-cart-toggle-total');
             if (toggleTotal) toggleTotal.textContent = fmt(totaal);
+
+            updatePlaceOrderBtn();
         }
         // ─────────────────────────────────────────────────────────────
+
+        function updatePlaceOrderBtn() {
+            var enabled = selectedCustomerId !== null && cart.length > 0;
+            ['place-order-btn', 'place-order-btn-mobile'].forEach(function (id) {
+                var btn = document.getElementById(id);
+                if (btn) btn.disabled = !enabled;
+            });
+        }
 
         document.addEventListener('DOMContentLoaded', function () { filterItems('room'); });
 

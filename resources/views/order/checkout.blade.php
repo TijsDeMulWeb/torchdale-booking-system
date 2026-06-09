@@ -729,7 +729,7 @@
             });
         }
 
-        document.addEventListener('DOMContentLoaded', function () { filterItems('room'); });
+        document.addEventListener('DOMContentLoaded', function () { filterItems('all'); });
 
         function filterItems(type) {
             var cards = document.querySelectorAll('.item-card');

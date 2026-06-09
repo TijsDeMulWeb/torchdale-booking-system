@@ -196,6 +196,7 @@
                                         data-id="{{ $product->id }}"
                                         data-name="{{ $product->name }}"
                                         data-price="{{ $effectivePrice }}"
+                                        data-original-price="{{ $sellingPrice }}"
                                         data-vat="{{ $product->vat_percentage ?? 0 }}"
                                         data-stock="{{ $product->stock_quantity ?? -1 }}"
                                         @if($outOfStock) disabled @endif
@@ -749,19 +750,20 @@
         var cart = [];
 
         function addToCart(btn) {
-            var id    = btn.dataset.type + '_' + btn.dataset.id;
-            var price = parseFloat(btn.dataset.price) || 0;
-            var vat   = parseFloat(btn.dataset.vat)   || 0;
-            var stock = parseInt(btn.dataset.stock, 10); // -1 = unlimited
-            var existing = cart.find(function (i) { return i.id === id; });
-            var currentQty = existing ? existing.qty : 0;
+            var id            = btn.dataset.type + '_' + btn.dataset.id;
+            var price         = parseFloat(btn.dataset.price) || 0;
+            var originalPrice = parseFloat(btn.dataset.originalPrice || btn.dataset.price) || 0;
+            var vat           = parseFloat(btn.dataset.vat)   || 0;
+            var stock         = parseInt(btn.dataset.stock, 10); // -1 = unlimited
+            var existing      = cart.find(function (i) { return i.id === id; });
+            var currentQty    = existing ? existing.qty : 0;
 
             if (stock !== -1 && currentQty >= stock) return;
 
             if (existing) {
                 existing.qty++;
             } else {
-                cart.push({ id: id, name: btn.dataset.name, price: price, vat: vat, qty: 1, stock: stock });
+                cart.push({ id: id, name: btn.dataset.name, price: price, originalPrice: originalPrice, vat: vat, qty: 1, stock: stock });
             }
 
             renderCart();
@@ -860,11 +862,20 @@
                     var lineTotal = item.price * item.qty;
                     var isRoom = item.id.indexOf('room_') === 0;
 
-                    var subLabel = isRoom
-                        ? ''
-                        : (item.stock !== -1)
+                    var hasDiscount = item.originalPrice && item.originalPrice > item.price;
+                    var subLabel;
+                    if (isRoom) {
+                        subLabel = '';
+                    } else if (hasDiscount) {
+                        var stockSuffix = item.stock !== -1 ? ' · max ' + item.stock : ' / stuk';
+                        subLabel = '<span class="text-xs line-through text-gray-400 dark:text-gray-500">' + fmt(item.originalPrice) + '</span>' +
+                                   '<span class="text-xs text-green-600 dark:text-green-400 font-medium ml-1">' + fmt(item.price) + '</span>' +
+                                   '<span class="text-xs text-gray-400 dark:text-gray-500">' + stockSuffix + '</span>';
+                    } else {
+                        subLabel = item.stock !== -1
                             ? '<span class="text-xs text-gray-400 dark:text-gray-500">' + fmt(item.price) + ' · max ' + item.stock + '</span>'
                             : '<span class="text-xs text-gray-400 dark:text-gray-500">' + fmt(item.price) + ' / stuk</span>';
+                    }
 
                     var qtyControls;
                     if (isRoom) {

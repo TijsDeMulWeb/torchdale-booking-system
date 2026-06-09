@@ -95,6 +95,20 @@
                                 <x-form.error name="selling_price" />
                             </div>
                         </div>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6" id="variants-section">
+                            <div class="sm:pt-1.5">
+                                <label class="block text-sm/6 font-medium text-gray-900 dark:text-white">Variaties</label>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Bijv. maat S, M, L of kleur Rood, Blauw. Laat leeg als er geen variaties zijn.</p>
+                            </div>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <div id="variants-list" class="space-y-2 mb-3"></div>
+                                <button type="button" onclick="addVariantRow()"
+                                    class="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-indigo-600 dark:text-indigo-400 border border-indigo-300 dark:border-indigo-500/40 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+                                    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                    Variatie toevoegen
+                                </button>
+                            </div>
+                        </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Verzendkosten</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
@@ -161,7 +175,7 @@
                                 <x-form.error name="discount_value" />
                             </div>
                         </div>
-                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                        <div id="product-stock-row" class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="stockQuantity"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Stock</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
@@ -258,4 +272,50 @@
             </dialog>
         </el-dialog>
     </div>
+
+<script>
+var variantCount = 0;
+
+function syncStockRow() {
+    var hasVariants = document.querySelectorAll('.variant-row').length > 0;
+    var row   = document.getElementById('product-stock-row');
+    var input = document.getElementById('stockQuantity');
+    row.style.display   = hasVariants ? 'none' : '';
+    input.disabled      = hasVariants;
+    if (hasVariants) input.value = '';
+}
+
+function addVariantRow(data) {
+    data = data || {};
+    var idx = variantCount++;
+    var row = document.createElement('div');
+    row.className = 'variant-row grid grid-cols-12 gap-2 items-center';
+    row.innerHTML =
+        (data.id ? '<input type="hidden" name="variants[' + idx + '][id]" value="' + data.id + '">' : '') +
+        '<div class="col-span-4">' +
+            '<input type="text" name="variants[' + idx + '][name]" placeholder="Naam (bijv. S, M, L)" value="' + (data.name || '') + '" required' +
+            ' class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/5 dark:text-white dark:outline-white/10">' +
+        '</div>' +
+        '<div class="col-span-3">' +
+            '<div class="relative"><span class="absolute inset-y-0 left-2.5 flex items-center text-xs text-gray-400">€</span>' +
+            '<input type="number" name="variants[' + idx + '][selling_price]" min="0" step="0.01" placeholder="Prijs (leeg = product)" value="' + (data.selling_price !== null && data.selling_price !== undefined ? data.selling_price : '') + '"' +
+            ' class="block w-full pl-6 pr-2 py-1.5 rounded-md bg-white text-sm text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/5 dark:text-white dark:outline-white/10"></div>' +
+        '</div>' +
+        '<div class="col-span-2">' +
+            '<input type="number" name="variants[' + idx + '][stock_quantity]" min="0" step="1" placeholder="Stock" value="' + (data.stock_quantity !== null && data.stock_quantity !== undefined ? data.stock_quantity : '') + '"' +
+            ' class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/5 dark:text-white dark:outline-white/10">' +
+        '</div>' +
+        '<div class="col-span-2">' +
+            '<input type="text" name="variants[' + idx + '][sku]" placeholder="SKU" value="' + (data.sku || '') + '"' +
+            ' class="block w-full rounded-md bg-white px-3 py-1.5 text-sm text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 dark:bg-white/5 dark:text-white dark:outline-white/10">' +
+        '</div>' +
+        '<div class="col-span-1 flex justify-end">' +
+            '<button type="button" onclick="this.closest(\'.variant-row\').remove(); syncStockRow();" class="rounded-md p-1 text-gray-400 hover:text-red-500 transition-colors">' +
+                '<svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>' +
+            '</button>' +
+        '</div>';
+    document.getElementById('variants-list').appendChild(row);
+    syncStockRow();
+}
+</script>
 </x-layouts.app>

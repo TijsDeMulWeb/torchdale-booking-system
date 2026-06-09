@@ -42,7 +42,7 @@ class ProductRequest extends FormRequest
             'discount_type' => ['nullable', 'in:fixed,percentage'],
             'discount_value' => ['nullable', 'numeric', 'min:0'],
             'sku' => ['nullable', 'string', 'max:50', 'unique:products,sku,' . $this->route('id')],
-            'stock_quantity' => ['required', 'integer', 'min:0'],
+            'stock_quantity' => ['nullable', 'integer', 'min:0'],
             'available_from' => ['required', 'date'],
         ];
     }

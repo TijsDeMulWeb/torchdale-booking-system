@@ -448,13 +448,14 @@
 
     <form id="order-form" method="POST" action="{{ route('orders.store') }}" class="hidden">
         @csrf
-        <input type="hidden" name="customer_id"      id="form-customer-id">
-        <input type="hidden" name="cart"             id="form-cart">
-        <input type="hidden" name="payment_method"   id="form-payment-method">
-        <input type="hidden" name="payment_term"     id="form-payment-term">
-        <input type="hidden" name="coupon_id"        id="form-coupon-id">
-        <input type="hidden" name="totals"           id="form-totals">
-        <input type="hidden" name="business"          id="form-business">
+        <input type="hidden" name="customer_id"        id="form-customer-id">
+        <input type="hidden" name="cart"               id="form-cart">
+        <input type="hidden" name="payment_method"     id="form-payment-method">
+        <input type="hidden" name="payment_term"       id="form-payment-term">
+        <input type="hidden" name="coupon_id"          id="form-coupon-id">
+        <input type="hidden" name="totals"             id="form-totals">
+        <input type="hidden" name="business"           id="form-business">
+        <input type="hidden" name="idempotency_key"    id="form-idempotency-key">
     </form>
 
     <script>
@@ -1042,7 +1043,25 @@
             document.getElementById('payment-term-block-mobile').classList.toggle('hidden', !showTerm);
         }
 
+        var orderSubmitting = false;
+
         function submitOrder() {
+            if (orderSubmitting) return;
+            orderSubmitting = true;
+
+            var btns = [
+                document.getElementById('place-order-btn'),
+                document.getElementById('place-order-btn-mobile'),
+            ];
+            btns.forEach(function(btn) {
+                if (!btn) return;
+                btn.disabled = true;
+                btn.textContent = 'Bezig...';
+            });
+
+            // Unique key per submit attempt — prevents duplicate orders on multi-click or back+resubmit
+            var key = 'ik-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10);
+            document.getElementById('form-idempotency-key').value = key;
             // Gather cart totals
             var totaalInclBtw = 0, itemCount = 0;
             var btwPerRate = {};

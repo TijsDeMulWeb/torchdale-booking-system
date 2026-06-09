@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderedItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -17,6 +18,7 @@ use Mollie\Api\Http\Data\Discount;
 use Mollie\Api\Http\Data\InvoiceLine;
 use Mollie\Api\Http\Data\Money;
 use Mollie\Api\Http\Data\Recipient;
+use Mollie\Api\Http\Data\PaymentDetails;
 use Mollie\Api\Http\Requests\CreateSalesInvoiceRequest;
 use Mollie\Api\Types\RecipientType;
 use Mollie\Api\Types\SalesInvoiceStatus;
@@ -37,6 +39,15 @@ class StoreOrderController extends Controller
         $totals = json_decode($request->input('totals', '{}'), true) ?? [];
         $business = json_decode($request->input('business', '{}'), true) ?? [];
 
+        // Idempotency: prevent duplicate orders from multi-click or back+resubmit
+        $idempotencyKey = $request->input('idempotency_key');
+        if ($idempotencyKey) {
+            $cacheKey = 'order_submit_' . auth()->id() . '_' . $idempotencyKey;
+            if (! Cache::add($cacheKey, true, now()->addMinutes(5))) {
+                return redirect()->route('orders.index')->with('success', 'Bestelling geplaatst.');
+            }
+        }
+
         $customer = Customer::findOrFail($customerId);
 
         $totalBtw = array_sum($totals['btw'] ?? []);
@@ -53,7 +64,9 @@ class StoreOrderController extends Controller
         $order->subtotal = round($totals['subtotaal_excl'] ?? 0, 2);
         $order->discount = round($totals['discount'] ?? 0, 2);
         $order->vat_amount = round($totalBtw, 2);
-        $order->status = 'pending';
+        $paymentMethod = $request->input('payment_method');
+        $order->payment_method = $paymentMethod;
+        $order->status = $paymentMethod === 'cash' ? 'paid' : 'pending';
         $order->is_business = (bool) ($business['is_business'] ?? false);
         $order->company_name = $business['company_name'] ?? null;
         $order->vat_number = $business['vat_number'] ?? null;
@@ -89,9 +102,7 @@ class StoreOrderController extends Controller
             $orderedItem->save();
         }
 
-        if ($request->payment_method === 'online') {
-            $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm);
-        }
+        $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm, $paymentMethod);
 
         return redirect()->route('orders.index')->with('success', 'Bestelling geplaatst.');
     }
@@ -102,7 +113,8 @@ class StoreOrderController extends Controller
         array $cart,
         array $totals,
         array $business,
-        string $paymentTerm
+        ?string $paymentTerm,
+        string $paymentMethod = 'online'
     ): void {
         try {
             $isBusiness = (bool) ($business['is_business'] ?? false);
@@ -155,7 +167,9 @@ class StoreOrderController extends Controller
                 );
             }
 
-            $molliePaymentTerm = $this->mapPaymentTerm($paymentTerm);
+            $isCash = $paymentMethod === 'cash';
+            $mollieStatus = $isCash ? SalesInvoiceStatus::PAID : SalesInvoiceStatus::ISSUED;
+            $molliePaymentTerm = $isCash ? '30 days' : $this->mapPaymentTerm($paymentTerm ?? '30');
 
             $discount = (float) ($totals['discount'] ?? 0);
             $subtotaalExcl = (float) ($totals['subtotaal_excl'] ?? 0);
@@ -170,15 +184,18 @@ class StoreOrderController extends Controller
 
             $salesInvoiceRequest = new CreateSalesInvoiceRequest(
                 currency: 'EUR',
-                status: SalesInvoiceStatus::ISSUED,
+                status: $mollieStatus,
                 vatScheme: VatScheme::STANDARD,
                 vatMode: VatMode::INCLUSIVE,
                 paymentTerm: $molliePaymentTerm,
                 recipientIdentifier: $isBusiness
-                ? ($business['vat_number'] ?? ($customer->email . '-business'))
-                : $customer->email,
+                    ? ($business['vat_number'] ?? ($customer->email . '-business'))
+                    : $customer->email,
                 recipient: $recipient,
                 lines: new DataCollection($lines),
+                paymentDetails: $isCash
+                    ? new PaymentDetails(source: 'manual', sourceReference: 'Contante betaling')
+                    : null,
                 discount: $invoiceDiscount,
                 isEInvoice: false,
             );

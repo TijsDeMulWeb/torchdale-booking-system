@@ -20,6 +20,14 @@ class ProductRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'shipping_cost_domestic'      => $this->shipping_cost_domestic      !== '' ? $this->shipping_cost_domestic      : 0,
+            'shipping_cost_international' => $this->shipping_cost_international !== '' ? $this->shipping_cost_international : 0,
+        ]);
+    }
+
     public function rules(): array
     {
         return [
@@ -28,6 +36,8 @@ class ProductRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'cost_price' => ['nullable', 'numeric', 'min:0'],
             'selling_price' => ['required', 'numeric', 'min:0'],
+            'shipping_cost_domestic' => ['required', 'numeric', 'min:0'],
+            'shipping_cost_international' => ['required', 'numeric', 'min:0'],
             'vat_percentage' => ['required', 'numeric', 'min:0', 'max:100'],
             'discount_type' => ['nullable', 'in:fixed,percentage'],
             'discount_value' => ['nullable', 'numeric', 'min:0'],

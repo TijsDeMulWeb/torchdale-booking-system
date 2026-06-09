@@ -101,7 +101,10 @@ use App\Http\Controllers\User\EditUserController;
 use App\Http\Controllers\User\IndexUserController;
 use App\Http\Controllers\User\StoreUserController;
 use App\Http\Controllers\User\UpdateUserController;
+use App\Http\Controllers\Webhook\MollieWebhookController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/webhook/mollie', MollieWebhookController::class)->name('webhook.mollie');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', ShowLoginController::class)->name('login');

@@ -90,7 +90,8 @@ class StoreOrderController extends Controller
             $orderedItem->vat_amount = round($vatAmount, 4);
 
             if (str_starts_with($itemId, 'room_')) {
-                $orderedItem->time_slot_id = null;
+                $parts = explode('_', $itemId, 3);
+                $orderedItem->room_id = isset($parts[1]) ? (int) $parts[1] : null;
             } elseif (str_starts_with($itemId, 'giftcard_')) {
                 $orderedItem->gift_card_id = (int) substr($itemId, strlen('giftcard_'));
             } elseif (str_starts_with($itemId, 'product_')) {
@@ -182,6 +183,8 @@ class StoreOrderController extends Controller
                 );
             }
 
+            $mollieKey = auth()->user()->escaperoom->escaperoomSetting->mollie_api_key;
+
             $salesInvoiceRequest = new CreateSalesInvoiceRequest(
                 currency: 'EUR',
                 status: $mollieStatus,
@@ -197,45 +200,47 @@ class StoreOrderController extends Controller
                     ? new PaymentDetails(source: 'manual', sourceReference: 'Contante betaling')
                     : null,
                 discount: $invoiceDiscount,
+                webhookUrl: $isCash ? null : route('webhook.mollie'),
                 isEInvoice: false,
             );
-
-            $mollieKey = auth()->user()->escaperoom->escaperoomSetting->mollie_api_key
-                ?? env('MOLLIE_KEY');
 
             $mollie = new MollieApiClient();
             $mollie->setApiKey($mollieKey);
 
             $mollieInvoice = $mollie->send($salesInvoiceRequest);
 
-            $invoiceNumber = $mollieInvoice->invoiceNumber ?? ('INV-' . $order->id . '-' . time());
-
-            $pdfPath = null;
-            $mollieHref = $mollieInvoice->_links->pdfLink->href ?? null;
-            if ($mollieHref) {
-                $pdfResponse = Http::withToken($mollieKey)->get($mollieHref);
-                if ($pdfResponse->successful()) {
-                    $pdfPath = 'escaperooms/' . auth()->user()->escaperoom->id . '/invoices/' . $invoiceNumber . '.pdf';
-                    Storage::disk('local')->put($pdfPath, $pdfResponse->body());
-                }
-            }
-
-            DB::table('invoices')->insert([
-                'customer_id' => $customer->id,
-                'order_id' => $order->id,
-                'mollie_invoice_id' => $mollieInvoice->id,
-                'pdf_url' => $pdfPath,
-                'source' => 'mollie',
-                'invoice_number' => $invoiceNumber,
-                'status' => $mollieInvoice->status,
-                'amount' => round($totals['totaal_incl_btw'] ?? 0, 2),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-
             $order->mollie_id = $mollieInvoice->id;
-            $order->invoice_number = $invoiceNumber;
             $order->save();
+
+            if ($isCash) {
+                $invoiceNumber = $mollieInvoice->invoiceNumber ?? ('INV-' . $order->id . '-' . time());
+
+                $pdfPath = null;
+                $mollieHref = $mollieInvoice->_links->pdfLink->href ?? null;
+                if ($mollieHref) {
+                    $pdfResponse = Http::withToken($mollieKey)->get($mollieHref);
+                    if ($pdfResponse->successful()) {
+                        $pdfPath = 'escaperooms/' . $order->escaperoom_id . '/invoices/' . $invoiceNumber . '.pdf';
+                        Storage::disk('local')->put($pdfPath, $pdfResponse->body());
+                    }
+                }
+
+                DB::table('invoices')->insert([
+                    'customer_id'       => $customer->id,
+                    'order_id'          => $order->id,
+                    'mollie_invoice_id' => $mollieInvoice->id,
+                    'pdf_url'           => $pdfPath,
+                    'source'            => 'mollie',
+                    'invoice_number'    => $invoiceNumber,
+                    'status'            => 'paid',
+                    'amount'            => round($totals['totaal_incl_btw'] ?? 0, 2),
+                    'created_at'        => now(),
+                    'updated_at'        => now(),
+                ]);
+
+                $order->invoice_number = $invoiceNumber;
+                $order->save();
+            }
         } catch (\Exception $e) {
             Log::error('Mollie sales invoice creation failed for order ' . $order->id . ': ' . $e->getMessage());
         }

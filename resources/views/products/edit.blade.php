@@ -98,6 +98,28 @@
                             </div>
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Verzendkosten</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <div class="flex gap-4">
+                                    <div class="flex-1">
+                                        <label for="shippingCostDomestic" class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Binnenland</label>
+                                        <input id="shippingCostDomestic" type="text" name="shipping_cost_domestic" placeholder="0.00"
+                                            value="{{ old('shipping_cost_domestic', $product->shipping_cost_domestic) }}"
+                                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                        <x-form.error name="shipping_cost_domestic" />
+                                    </div>
+                                    <div class="flex-1">
+                                        <label for="shippingCostInternational" class="block text-xs text-gray-500 dark:text-gray-400 mb-1">Internationaal</label>
+                                        <input id="shippingCostInternational" type="text" name="shipping_cost_international" placeholder="0.00"
+                                            value="{{ old('shipping_cost_international', $product->shipping_cost_international) }}"
+                                            class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                        <x-form.error name="shipping_cost_international" />
+                                    </div>
+                                </div>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Binnenland = zelfde land als het escaperoom adres. Laat 0 als er geen verzendkosten zijn.</p>
+                            </div>
+                        </div>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="vatPercentage"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">BTW-percentage</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">

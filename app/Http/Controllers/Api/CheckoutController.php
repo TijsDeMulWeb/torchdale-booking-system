@@ -120,6 +120,7 @@ class CheckoutController extends Controller
                 if (!$roomPrice) {
                     return response()->json(['success' => false, 'message' => 'No price found for room ' . $item['room_id'] . ' on day ' . $dayOfWeek . ' for ' . $item['players'] . ' players.'], 422);
                 }
+
             }
         }
 

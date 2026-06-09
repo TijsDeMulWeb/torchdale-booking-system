@@ -244,8 +244,8 @@ Route::middleware('auth')->group(function () {
 
     // Orders routes
     Route::get('/orders', IndexOrderController::class)->name('orders.index');
-    Route::get('/orders/afrekenen', ShowCheckoutController::class)->name('orders.checkout');
-    Route::post('/orders/afrekenen', StoreOrderController::class)->name('orders.store');
+    Route::get('/orders/checkout', ShowCheckoutController::class)->name('orders.checkout');
+    Route::post('/orders/checkout', StoreOrderController::class)->name('orders.store');
 
     // API Keys routes
     Route::get('/api-keys', IndexApiKeyController::class)->name('apiKeys.index');

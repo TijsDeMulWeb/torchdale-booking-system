@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['order_id', 'time_slot_id', 'product_id', 'gift_card_id', 'quantity', 'unit_price', 'total_price', 'vat_percentage', 'vat_amount'])]
+#[Fillable(['order_id', 'time_slot_id', 'room_id', 'product_id', 'gift_card_id', 'quantity', 'unit_price', 'total_price', 'vat_percentage', 'vat_amount'])]
 class OrderedItem extends Model
 {
     use SoftDeletes;
@@ -31,10 +31,18 @@ class OrderedItem extends Model
         return $this->belongsTo(GiftCard::class);
     }
 
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
     public function getItemNameAttribute(): ?string
     {
         if ($this->time_slot_id) {
             return $this->timeSlot?->room?->name;
+        }
+        if ($this->room_id) {
+            return $this->room?->name;
         }
         if ($this->gift_card_id) {
             return $this->giftCard?->name;

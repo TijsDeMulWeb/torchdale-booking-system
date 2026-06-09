@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Order\IndexOrderController;
 use App\Http\Controllers\Order\ShowCheckoutController;
+use App\Http\Controllers\Order\StoreOrderController;
 use App\Http\Controllers\AccountSetup\ShowAccountSetupController;
 use App\Http\Controllers\AccountSetup\StoreAccountSetupController;
 use App\Http\Controllers\PasswordSetup\ShowPasswordSetupController;
@@ -244,6 +245,7 @@ Route::middleware('auth')->group(function () {
     // Orders routes
     Route::get('/orders', IndexOrderController::class)->name('orders.index');
     Route::get('/orders/afrekenen', ShowCheckoutController::class)->name('orders.checkout');
+    Route::post('/orders/afrekenen', StoreOrderController::class)->name('orders.store');
 
     // API Keys routes
     Route::get('/api-keys', IndexApiKeyController::class)->name('apiKeys.index');

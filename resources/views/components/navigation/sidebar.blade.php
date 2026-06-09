@@ -54,6 +54,19 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="{{ route('orders.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('orders.*')
+    ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
+    : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+}}">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.5" aria-hidden="true" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185ZM9.75 9h.008v.008H9.75V9Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                            </svg>
+                                            Bestellingen
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('rooms.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('rooms.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -215,6 +228,20 @@
                                         d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                 </svg>
                                 Klanten
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('orders.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
+                                {{ request()->routeIs('orders.*')
+    ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
+    : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
+                                }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    aria-hidden="true" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185ZM9.75 9h.008v.008H9.75V9Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                                Bestellingen
                             </a>
                         </li>
                         <li>

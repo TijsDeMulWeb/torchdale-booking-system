@@ -69,6 +69,25 @@
                                 <x-form.error name="valid_until" />
                             </div>
                         </div>
+
+                        {{-- Shipping cost --}}
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label for="gc-shipping-cost" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">
+                                Verzendkosten
+                                <span class="block mt-0.5 font-normal text-xs text-gray-500 dark:text-gray-400">Bij levering per post</span>
+                            </label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <div class="relative sm:max-w-xs">
+                                    <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
+                                    <input id="gc-shipping-cost" type="number" name="shipping_cost" min="0" max="99.99" step="0.01"
+                                        value="{{ old('shipping_cost', number_format((float)($giftCard->shipping_cost ?? 0), 2, '.', '')) }}"
+                                        class="block w-full pl-7 rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xs sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:focus:outline-indigo-500" />
+                                </div>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Wordt automatisch toegepast wanneer "Per post" gekozen wordt bij een bon.</p>
+                                <x-form.error name="shipping_cost" />
+                            </div>
+                        </div>
+
                         <x-form.actions route="giftCards.index" />
                     </div>
                 </div>

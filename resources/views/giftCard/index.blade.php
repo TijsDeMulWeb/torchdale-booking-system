@@ -47,6 +47,9 @@
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
                                             Waarde</th>
+                                        <th scope="col"
+                                            class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
+                                            Verzendkosten</th>
                                         <th scope="col" class="py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8">
                                             <span class="sr-only">Acties</span>
                                         </th>
@@ -61,6 +64,13 @@
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 {{ Number::currency($giftCard->amount) }}
+                                            </td>
+                                            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                                                @if ($giftCard->shipping_cost > 0)
+                                                    {{ Number::currency($giftCard->shipping_cost) }}
+                                                @else
+                                                    <span class="text-gray-300 dark:text-gray-600">—</span>
+                                                @endif
                                             </td>
                                             <td
                                                 class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">

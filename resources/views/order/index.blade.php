@@ -39,6 +39,17 @@
                     </div>
                 </div>
 
+                @php
+                    $statusBadge = function(string $status): string {
+                        return match($status) {
+                            'paid'    => '<span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Betaald</span>',
+                            'pending' => '<span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">Open</span>',
+                            default   => '<span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">' . e($status) . '</span>',
+                        };
+                    };
+                @endphp
+
+                {{-- Vandaag --}}
                 <div class="mt-8">
                     <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Bestellingen vandaag</h2>
                     @if ($todayOrders->count() > 0)
@@ -58,12 +69,30 @@
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
                                             @foreach ($todayOrders as $order)
+                                                @php
+                                                    $customerName = trim(($order->customer_first_name ?? $order->customer?->first_name) . ' ' . ($order->customer_last_name ?? $order->customer?->last_name)) ?: '—';
+                                                    $hasPdf = $order->invoice && $order->invoice->pdf_url;
+                                                @endphp
                                                 <tr>
-                                                    <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-white sm:pl-6 lg:pl-8">
-                                                        {{ $order->invoice_number ?? '#' . $order->id }}
+                                                    <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap sm:pl-6 lg:pl-8">
+                                                        @if ($hasPdf)
+                                                            <button onclick="openPdfModal('{{ route('orders.invoice', $order) }}')"
+                                                                class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">
+                                                                {{ $order->invoice_number ?? '#' . $order->id }}
+                                                            </button>
+                                                        @else
+                                                            <span class="text-gray-900 dark:text-white font-mono">{{ $order->invoice_number ?? '#' . $order->id }}</span>
+                                                        @endif
                                                     </td>
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
-                                                        {{ trim(($order->customer_first_name ?? $order->customer?->first_name) . ' ' . ($order->customer_last_name ?? $order->customer?->last_name)) ?: '—' }}
+                                                        @if ($order->customer_id)
+                                                            <a href="{{ route('customers.show.overview', $order->customer_id) }}"
+                                                               class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline">
+                                                                {{ $customerName }}
+                                                            </a>
+                                                        @else
+                                                            {{ $customerName }}
+                                                        @endif
                                                     </td>
                                                     <td class="hidden sm:table-cell px-3 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-xs truncate">
                                                         {{ $order->orderedItems->pluck('item_name')->filter()->join(', ') ?: '—' }}
@@ -75,13 +104,7 @@
                                                         {{ Number::currency($order->total ?? 0) }}
                                                     </td>
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
-                                                        @if ($order->status === 'paid')
-                                                            <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Betaald</span>
-                                                        @elseif ($order->status === 'pending')
-                                                            <span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">Open</span>
-                                                        @else
-                                                            <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">{{ $order->status }}</span>
-                                                        @endif
+                                                        {!! $statusBadge($order->status) !!}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -95,6 +118,7 @@
                     @endif
                 </div>
 
+                {{-- Eerdere bestellingen --}}
                 <div class="mt-10">
                     <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Eerdere bestellingen</h2>
 
@@ -115,12 +139,30 @@
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
                                             @foreach ($orders as $order)
+                                                @php
+                                                    $customerName = trim(($order->customer_first_name ?? $order->customer?->first_name) . ' ' . ($order->customer_last_name ?? $order->customer?->last_name)) ?: '—';
+                                                    $hasPdf = $order->invoice && $order->invoice->pdf_url;
+                                                @endphp
                                                 <tr>
-                                                    <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 dark:text-white sm:pl-6 lg:pl-8">
-                                                        {{ $order->invoice_number ?? '#' . $order->id }}
+                                                    <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap sm:pl-6 lg:pl-8">
+                                                        @if ($hasPdf)
+                                                            <button onclick="openPdfModal('{{ route('orders.invoice', $order) }}')"
+                                                                class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">
+                                                                {{ $order->invoice_number ?? '#' . $order->id }}
+                                                            </button>
+                                                        @else
+                                                            <span class="text-gray-900 dark:text-white font-mono">{{ $order->invoice_number ?? '#' . $order->id }}</span>
+                                                        @endif
                                                     </td>
-                                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
-                                                        {{ trim(($order->customer_first_name ?? $order->customer?->first_name) . ' ' . ($order->customer_last_name ?? $order->customer?->last_name)) ?: '—' }}
+                                                    <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                                        @if ($order->customer_id)
+                                                            <a href="{{ route('customers.show.overview', $order->customer_id) }}"
+                                                               class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline">
+                                                                {{ $customerName }}
+                                                            </a>
+                                                        @else
+                                                            <span class="text-gray-600 dark:text-gray-400">{{ $customerName }}</span>
+                                                        @endif
                                                     </td>
                                                     <td class="hidden sm:table-cell px-3 py-4 text-sm text-gray-600 dark:text-gray-400 max-w-xs truncate">
                                                         {{ $order->orderedItems->pluck('item_name')->filter()->join(', ') ?: '—' }}
@@ -132,13 +174,7 @@
                                                         {{ Number::currency($order->total ?? 0) }}
                                                     </td>
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
-                                                        @if ($order->status === 'paid')
-                                                            <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Betaald</span>
-                                                        @elseif ($order->status === 'pending')
-                                                            <span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">In behandeling</span>
-                                                        @else
-                                                            <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">{{ $order->status }}</span>
-                                                        @endif
+                                                        {!! $statusBadge($order->status) !!}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -156,7 +192,55 @@
                 </div>
 
             </div>
-
         </div>
     </div>
+
+    {{-- PDF Modal --}}
+    <div id="pdf-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+         onclick="closePdfModal(event)">
+        <div class="relative w-full max-w-4xl h-[85vh] bg-white dark:bg-gray-900 rounded-xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-white/10">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">Factuur</span>
+                <div class="flex items-center gap-2">
+                    <a id="pdf-download-link" href="#" download
+                       class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                        Download
+                    </a>
+                    <button onclick="closePdfModal()" class="rounded-lg p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <iframe id="pdf-frame" src="" class="flex-1 w-full border-0"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function openPdfModal(url) {
+            document.getElementById('pdf-frame').src = url;
+            document.getElementById('pdf-download-link').href = url;
+            var modal = document.getElementById('pdf-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePdfModal(e) {
+            if (e && e.target !== document.getElementById('pdf-modal')) return;
+            var modal = document.getElementById('pdf-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('pdf-frame').src = '';
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closePdfModal();
+        });
+    </script>
 </x-layouts.app>

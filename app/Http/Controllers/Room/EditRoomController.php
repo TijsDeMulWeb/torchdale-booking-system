@@ -13,8 +13,9 @@ class EditRoomController extends Controller
     public function __invoke(Request $request, int $id)
     {
         return view('rooms.edit', [
-            'room' => auth()->user()->escaperoom->rooms()->findOrFail($id),
+            'room'               => auth()->user()->escaperoom->rooms()->with('languages')->findOrFail($id),
             'escaperoomAddresses' => auth()->user()->escaperoom->escaperoomAddresses()->get(),
+            'languages'          => \App\Models\Language::orderBy('name')->get(),
         ]);
     }
 }

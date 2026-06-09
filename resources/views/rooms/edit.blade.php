@@ -189,6 +189,29 @@
                                 colorHex.textContent = colorInput.value;
                             });
                         </script>
+                        {{-- Languages --}}
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">
+                                Talen
+                            </label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <p class="mb-3 text-sm text-gray-500 dark:text-gray-400">Selecteer de talen waarin deze kamer gespeeld kan worden.</p>
+                                <div class="flex flex-wrap gap-3">
+                                    @foreach ($languages as $language)
+                                        <label class="inline-flex cursor-pointer items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm select-none hover:bg-gray-50 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10">
+                                            <input type="checkbox"
+                                                name="language_ids[]"
+                                                value="{{ $language->id }}"
+                                                {{ $room->languages->contains($language->id) ? 'checked' : '' }}
+                                                class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-white/20">
+                                            <span class="text-gray-700 dark:text-gray-200">{{ $language->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <x-form.error name="language_ids" />
+                            </div>
+                        </div>
+
                         <x-form.actions route="rooms.index" />
                     </div>
                 </div>

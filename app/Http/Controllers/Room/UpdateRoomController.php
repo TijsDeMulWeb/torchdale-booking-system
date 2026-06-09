@@ -34,6 +34,10 @@ class UpdateRoomController extends Controller
             $room->update($validated);
         }
 
+        // Sync languages
+        $languageIds = array_filter(array_map('intval', $request->input('language_ids', [])));
+        $room->languages()->sync($languageIds);
+
         return redirect()->route('rooms.index')->with('message', 'Kamer updated successfully.');
     }
 }

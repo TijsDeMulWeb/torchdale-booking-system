@@ -24,6 +24,7 @@ use App\Http\Controllers\Chatbot\EditChatbotController;
 use App\Http\Controllers\Chatbot\ShowChatbotController;
 use App\Http\Controllers\Chatbot\UpdateChatbotController;
 use App\Http\Controllers\Coupon\CreateCouponController;
+use App\Http\Controllers\Coupon\SearchCouponController;
 use App\Http\Controllers\Coupon\DeleteCouponController;
 use App\Http\Controllers\Coupon\EditCouponController;
 use App\Http\Controllers\Coupon\IndexCouponController;
@@ -189,6 +190,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/categories/{id}/delete', DeleteCategoryController::class)->name('categories.destroy');
 
     // Coupons routes
+    Route::get('/coupons/search', SearchCouponController::class)->name('coupons.search');
     Route::get('/coupons', IndexCouponController::class)->name('coupons.index');
     Route::get('/coupons/create', CreateCouponController::class)->name('coupons.create');
     Route::post('/coupons/create', StoreCouponController::class)->name('coupons.store');

@@ -29,4 +29,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderedItem::class);
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 }

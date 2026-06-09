@@ -80,16 +80,20 @@
 
                             <div id="items-grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
                                 @forelse ($rooms as $room)
-                                    @php $basePrice = $room->prices->min('base_price'); @endphp
+                                    @php $basePrice = $room->prices->min('base_price'); $noPrice = !$basePrice; @endphp
                                     <button
-                                        onclick="addToCart(this)"
+                                        @if(!$noPrice) onclick="addToCart(this)" @endif
                                         data-type="room"
                                         data-id="{{ $room->id }}"
                                         data-name="{{ $room->name }}"
                                         data-price="{{ $basePrice ?? 0 }}"
                                         data-vat="0"
                                         data-stock="-1"
-                                        class="item-card group flex flex-col items-start rounded-lg border border-gray-200 dark:border-white/10 p-3 text-left hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+                                        @if($noPrice) disabled @endif
+                                        class="item-card group flex flex-col items-start rounded-lg border p-3 text-left transition-colors
+                                            {{ $noPrice
+                                                ? 'border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] opacity-50 cursor-not-allowed'
+                                                : 'border-gray-200 dark:border-white/10 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20' }}">
                                         <div class="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 dark:bg-white/10 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
@@ -99,6 +103,9 @@
                                         <span class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
                                             {{ $basePrice ? 'v.a. ' . Number::currency($basePrice) : 'Prijs niet ingesteld' }}
                                         </span>
+                                        @if($noPrice)
+                                            <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400">Geen prijs</span>
+                                        @endif
                                     </button>
                                 @empty
                                 @endforelse

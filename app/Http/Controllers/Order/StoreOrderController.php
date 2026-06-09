@@ -32,7 +32,6 @@ class StoreOrderController extends Controller
 
         $customerId = $request->input('customer_id');
         $cart = json_decode($request->input('cart', '[]'), true) ?? [];
-        $paymentMethod = $request->input('payment_method');
         $paymentTerm = $request->input('payment_term', '30');
         $couponId = $request->input('coupon_id') ?: null;
         $totals = json_decode($request->input('totals', '{}'), true) ?? [];
@@ -90,9 +89,7 @@ class StoreOrderController extends Controller
             $orderedItem->save();
         }
 
-        if ($paymentMethod === 'online') {
-            $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm);
-        }
+        $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm);
 
         return redirect()->route('orders.index')->with('success', 'Bestelling geplaatst.');
     }
@@ -127,21 +124,21 @@ class StoreOrderController extends Controller
 
             $lines = [];
             foreach ($cart as $item) {
-                $originalPrice  = (float) ($item['originalPrice'] ?? $item['price'] ?? 0);
+                $originalPrice = (float) ($item['originalPrice'] ?? $item['price'] ?? 0);
                 $effectivePrice = (float) ($item['price'] ?? 0);
-                $discountType   = $item['discountType'] ?? '';
-                $discountValue  = (float) ($item['discountValue'] ?? 0);
+                $discountType = $item['discountType'] ?? '';
+                $discountValue = (float) ($item['discountValue'] ?? 0);
 
                 $lineDiscount = null;
                 if ($originalPrice > 0 && $effectivePrice < $originalPrice && $discountType && $discountValue > 0) {
                     if ($discountType === 'percentage') {
                         $lineDiscount = new Discount(
-                            type:  'percentage',
+                            type: 'percentage',
                             value: number_format($discountValue, 2, '.', ''),
                         );
                     } else {
                         $lineDiscount = new Discount(
-                            type:  'amount',
+                            type: 'amount',
                             value: number_format($discountValue, 2, '.', ''),
                         );
                     }
@@ -159,12 +156,12 @@ class StoreOrderController extends Controller
             $molliePaymentTerm = $this->mapPaymentTerm($paymentTerm);
 
             $discount = (float) ($totals['discount'] ?? 0);
-            $subtotaalExcl  = (float) ($totals['subtotaal_excl'] ?? 0);
+            $subtotaalExcl = (float) ($totals['subtotaal_excl'] ?? 0);
             $invoiceDiscount = null;
             if ($discount > 0 && $subtotaalExcl > 0) {
                 $pct = round($discount / $subtotaalExcl * 100, 2);
                 $invoiceDiscount = new Discount(
-                    type:  'percentage',
+                    type: 'percentage',
                     value: number_format($pct, 2, '.', ''),
                 );
             }
@@ -175,10 +172,11 @@ class StoreOrderController extends Controller
                 vatScheme: VatScheme::STANDARD,
                 vatMode: VatMode::INCLUSIVE,
                 paymentTerm: $molliePaymentTerm,
-                recipientIdentifier: $customer->email,
+                recipientIdentifier: $isBusiness
+                    ? ($business['vat_number'] ?? ($customer->email . '-business'))
+                    : $customer->email,
                 recipient: $recipient,
                 lines: new DataCollection($lines),
-                memo: 'Bedankt voor uw aankoop!',
                 discount: $invoiceDiscount,
                 isEInvoice: false,
             );
@@ -224,11 +222,11 @@ class StoreOrderController extends Controller
     private function mapPaymentTerm(string $days): string
     {
         return match ($days) {
-            '7'   => '7 days',
-            '14'  => '14 days',
-            '45'  => '45 days',
-            '60'  => '60 days',
-            '90'  => '90 days',
+            '7' => '7 days',
+            '14' => '14 days',
+            '45' => '45 days',
+            '60' => '60 days',
+            '90' => '90 days',
             '120' => '120 days',
             default => '30 days',
         };

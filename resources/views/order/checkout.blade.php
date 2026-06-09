@@ -82,10 +82,13 @@
                                 @forelse ($rooms as $room)
                                     @php $basePrice = $room->prices->min('base_price'); @endphp
                                     <button
+                                        onclick="addToCart(this)"
                                         data-type="room"
                                         data-id="{{ $room->id }}"
                                         data-name="{{ $room->name }}"
                                         data-price="{{ $basePrice ?? 0 }}"
+                                        data-vat="0"
+                                        data-stock="-1"
                                         class="item-card group flex flex-col items-start rounded-lg border border-gray-200 dark:border-white/10 p-3 text-left hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
                                         <div class="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 dark:bg-white/10 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
@@ -101,12 +104,20 @@
                                 @endforelse
 
                                 @forelse ($products as $product)
+                                    @php $outOfStock = !is_null($product->stock_quantity) && $product->stock_quantity <= 0; @endphp
                                     <button
+                                        @if(!$outOfStock) onclick="addToCart(this)" @endif
                                         data-type="product"
                                         data-id="{{ $product->id }}"
                                         data-name="{{ $product->name }}"
                                         data-price="{{ $product->selling_price ?? 0 }}"
-                                        class="item-card group flex flex-col items-start rounded-lg border border-gray-200 dark:border-white/10 p-3 text-left hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+                                        data-vat="{{ $product->vat_percentage ?? 0 }}"
+                                        data-stock="{{ $product->stock_quantity ?? -1 }}"
+                                        @if($outOfStock) disabled @endif
+                                        class="item-card group flex flex-col items-start rounded-lg border p-3 text-left transition-colors
+                                            {{ $outOfStock
+                                                ? 'border-gray-100 dark:border-white/5 bg-gray-50 dark:bg-white/[0.02] opacity-50 cursor-not-allowed'
+                                                : 'border-gray-200 dark:border-white/10 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20' }}">
                                         <div class="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 dark:bg-white/10 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
@@ -116,16 +127,24 @@
                                         <span class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
                                             {{ $product->selling_price ? Number::currency($product->selling_price) : '—' }}
                                         </span>
+                                        @if($outOfStock)
+                                            <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">Uitverkocht</span>
+                                        @elseif(!is_null($product->stock_quantity) && $product->stock_quantity <= 5)
+                                            <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">Nog {{ $product->stock_quantity }} op voorraad</span>
+                                        @endif
                                     </button>
                                 @empty
                                 @endforelse
 
                                 @forelse ($giftCards as $giftCard)
                                     <button
+                                        onclick="addToCart(this)"
                                         data-type="giftcard"
                                         data-id="{{ $giftCard->id }}"
                                         data-name="{{ $giftCard->name }}"
                                         data-price="{{ $giftCard->amount ?? 0 }}"
+                                        data-vat="0"
+                                        data-stock="-1"
                                         class="item-card group flex flex-col items-start rounded-lg border border-gray-200 dark:border-white/10 p-3 text-left hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
                                         <div class="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 dark:bg-white/10 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
@@ -168,20 +187,23 @@
 
                     <div class="hidden lg:flex lg:w-80 xl:w-96 flex-col gap-3 lg:sticky lg:top-6">
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Winkelwagen</h3>
-                            <div class="flex flex-col items-center justify-center py-8 text-center">
+                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Winkelwagen</h3>
+
+                            <div id="cart-empty-state" class="flex flex-col items-center justify-center py-8 text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-10 text-gray-300 dark:text-gray-600 mb-2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                 </svg>
-                                <p class="text-sm text-gray-400 dark:text-gray-500">Nog geen producten toegevoegd</p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">Nog geen items toegevoegd</p>
                             </div>
+
+                            <ul id="cart-items-list" class="hidden divide-y divide-gray-100 dark:divide-white/5 -mx-1"></ul>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 space-y-2">
-                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Subtotaal</span><span>€ 0,00</span></div>
-                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Korting</span><span class="text-green-600 dark:text-green-400">— € 0,00</span></div>
-                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>BTW</span><span>€ 0,00</span></div>
-                            <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>Totaal</span><span>€ 0,00</span></div>
+                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Subtotaal</span><span id="cart-subtotaal">€ 0,00</span></div>
+                            <div id="cart-korting-row" class="hidden flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Korting</span><span id="cart-korting" class="text-green-600 dark:text-green-400"></span></div>
+                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>BTW</span><span id="cart-btw">€ 0,00</span></div>
+                            <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>Totaal</span><span id="cart-totaal">€ 0,00</span></div>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
@@ -233,20 +255,23 @@
                     <div id="mobile-cart-panel" class="hidden lg:hidden flex-col gap-3">
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-4">Winkelwagen</h3>
-                            <div class="flex flex-col items-center justify-center py-6 text-center">
+                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Winkelwagen</h3>
+
+                            <div id="cart-empty-state-mobile" class="flex flex-col items-center justify-center py-6 text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-10 text-gray-300 dark:text-gray-600 mb-2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                 </svg>
-                                <p class="text-sm text-gray-400 dark:text-gray-500">Nog geen producten toegevoegd</p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">Nog geen items toegevoegd</p>
                             </div>
+
+                            <ul id="cart-items-list-mobile" class="hidden divide-y divide-gray-100 dark:divide-white/5 -mx-1"></ul>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 space-y-2">
-                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Subtotaal</span><span>€ 0,00</span></div>
-                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Korting</span><span class="text-green-600 dark:text-green-400">— € 0,00</span></div>
-                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>BTW</span><span>€ 0,00</span></div>
-                            <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>Totaal</span><span>€ 0,00</span></div>
+                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Subtotaal</span><span id="cart-subtotaal-mobile">€ 0,00</span></div>
+                            <div id="cart-korting-row-mobile" class="hidden flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Korting</span><span id="cart-korting-mobile" class="text-green-600 dark:text-green-400"></span></div>
+                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>BTW</span><span id="cart-btw-mobile">€ 0,00</span></div>
+                            <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>Totaal</span><span id="cart-totaal-mobile">€ 0,00</span></div>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
@@ -376,6 +401,111 @@
             return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
         // ────────────────────────────────────────────────────────────
+
+        // ── Cart ─────────────────────────────────────────────────────
+        var cart = [];
+
+        function addToCart(btn) {
+            var id    = btn.dataset.type + '_' + btn.dataset.id;
+            var price = parseFloat(btn.dataset.price) || 0;
+            var vat   = parseFloat(btn.dataset.vat)   || 0;
+            var stock = parseInt(btn.dataset.stock, 10); // -1 = unlimited
+            var existing = cart.find(function (i) { return i.id === id; });
+            var currentQty = existing ? existing.qty : 0;
+
+            if (stock !== -1 && currentQty >= stock) return;
+
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ id: id, name: btn.dataset.name, price: price, vat: vat, qty: 1, stock: stock });
+            }
+
+            renderCart();
+        }
+
+        function changeQty(id, delta) {
+            var idx = cart.findIndex(function (i) { return i.id === id; });
+            if (idx === -1) return;
+            var item = cart[idx];
+
+            if (delta > 0 && item.stock !== -1 && item.qty >= item.stock) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) cart.splice(idx, 1);
+            renderCart();
+        }
+
+        var discount = 0; // set this when a coupon is applied
+
+        function renderCart() {
+            var isEmpty = cart.length === 0;
+            var fmt = function (n) { return '€ ' + n.toFixed(2).replace('.', ','); };
+
+            // Calculate totals
+            var subtotaal = 0, btwTotal = 0;
+            cart.forEach(function (item) {
+                var lineTotal = item.price * item.qty;
+                var btwFactor = item.vat / (100 + item.vat);
+                subtotaal += lineTotal;
+                btwTotal  += lineTotal * btwFactor;
+            });
+            var totaal = subtotaal - discount;
+
+            // Render desktop + mobile in one pass
+            ['', '-mobile'].forEach(function (suffix) {
+                var emptyEl    = document.getElementById('cart-empty-state'   + suffix);
+                var listEl     = document.getElementById('cart-items-list'    + suffix);
+                var subEl      = document.getElementById('cart-subtotaal'     + suffix);
+                var kortingRow = document.getElementById('cart-korting-row'   + suffix);
+                var kortingEl  = document.getElementById('cart-korting'       + suffix);
+                var btwEl      = document.getElementById('cart-btw'           + suffix);
+                var totEl      = document.getElementById('cart-totaal'        + suffix);
+
+                if (!emptyEl) return;
+
+                emptyEl.classList.toggle('hidden', !isEmpty);
+                listEl.classList.toggle('hidden', isEmpty);
+
+                subEl.textContent = fmt(subtotaal);
+                btwEl.textContent = fmt(btwTotal);
+                totEl.textContent = fmt(totaal);
+
+                if (kortingRow) {
+                    var hasDiscount = discount > 0;
+                    kortingRow.classList.toggle('hidden', !hasDiscount);
+                    if (kortingEl && hasDiscount) kortingEl.textContent = '— ' + fmt(discount);
+                }
+
+                listEl.innerHTML = '';
+                cart.forEach(function (item) {
+                    var lineTotal = item.price * item.qty;
+                    var atMax = item.stock !== -1 && item.qty >= item.stock;
+                    var plusClass = atMax
+                        ? 'flex h-6 w-6 items-center justify-center rounded-md border border-gray-100 dark:border-white/5 text-gray-300 dark:text-gray-600 cursor-not-allowed text-sm leading-none'
+                        : 'flex h-6 w-6 items-center justify-center rounded-md border border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 text-sm leading-none';
+                    var stockLabel = (item.stock !== -1)
+                        ? '<span class="text-xs text-gray-400 dark:text-gray-500">' + fmt(item.price) + ' · max ' + item.stock + '</span>'
+                        : '<span class="text-xs text-gray-400 dark:text-gray-500">' + fmt(item.price) + ' / stuk</span>';
+
+                    var li = document.createElement('li');
+                    li.className = 'flex items-center gap-2 px-1 py-2.5';
+                    li.innerHTML =
+                        '<div class="flex-1 min-w-0">' +
+                            '<p class="text-xs font-medium text-gray-900 dark:text-white truncate">' + escHtml(item.name) + '</p>' +
+                            stockLabel +
+                        '</div>' +
+                        '<div class="flex items-center gap-1 shrink-0">' +
+                            '<button onclick="changeQty(\'' + item.id + '\', -1)" class="flex h-6 w-6 items-center justify-center rounded-md border border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 text-sm leading-none">−</button>' +
+                            '<span class="w-5 text-center text-xs font-medium text-gray-900 dark:text-white">' + item.qty + '</span>' +
+                            '<button onclick="changeQty(\'' + item.id + '\', 1)" ' + (atMax ? 'disabled' : '') + ' class="' + plusClass + '">+</button>' +
+                        '</div>' +
+                        '<span class="w-14 text-right text-xs font-medium text-gray-900 dark:text-white shrink-0">' + fmt(lineTotal) + '</span>';
+                    listEl.appendChild(li);
+                });
+            });
+        }
+        // ─────────────────────────────────────────────────────────────
 
         document.addEventListener('DOMContentLoaded', function () { filterItems('room'); });
 

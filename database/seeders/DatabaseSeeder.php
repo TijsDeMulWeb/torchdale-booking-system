@@ -31,25 +31,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-        Country::create([
-            'name' => 'België',
-        ]);
-
-        Country::create([
-            'name' => 'Nederland',
-        ]);
-
-        Country::create([
-            'name' => 'Deutsland',
-        ]);
-
-        Country::create([
-            'name' => 'France',
-        ]);
-
-        Country::create([
-            'name' => 'United Kingdom',
-        ]);
+        $this->call(CountrySeeder::class);
 
         Admin::create([
             'first_name' => 'Tijs',

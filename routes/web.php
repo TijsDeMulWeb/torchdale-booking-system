@@ -259,6 +259,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/checkout', ShowCheckoutController::class)->name('orders.checkout');
         Route::post('/orders/checkout', StoreOrderController::class)->name('orders.store');
     });
+    Route::get('/orders/gift-vouchers', \App\Http\Controllers\Order\GiftVoucherController::class)->name('orders.gift-vouchers');
+    Route::post('/orders/gift-vouchers', \App\Http\Controllers\Order\StoreManualGiftVoucherController::class)->name('orders.gift-vouchers.store');
     Route::get('/orders/{order}/invoice', ShowOrderInvoiceController::class)->name('orders.invoice');
 
     // API Keys routes

@@ -56,6 +56,9 @@ class GiftVoucherService
             for ($i = 0; $i < $qty; $i++) {
                 $validUntil = $item->giftCard?->valid_until;
 
+                $deliveryMethod = $item->gift_delivery_method ?? 'mail';
+                $shippingCost   = $deliveryMethod === 'post' ? (float) ($item->gift_shipping_cost ?? 0) : 0;
+
                 GiftVoucher::create([
                     'escaperoom_id'   => $order->escaperoom_id,
                     'code'            => $this->generateCode(),
@@ -64,8 +67,8 @@ class GiftVoucherService
                     'order_id'        => $order->id,
                     'gift_card_id'    => $item->gift_card_id,
                     'source'          => 'purchase',
-                    'delivery_method' => 'mail',
-                    'shipping_cost'   => 0,
+                    'delivery_method' => $deliveryMethod,
+                    'shipping_cost'   => $shippingCost,
                     'status'          => 'active',
                     'valid_until'     => $validUntil,
                 ]);

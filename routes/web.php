@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Order\IndexOrderController;
+use App\Http\Controllers\Order\ShowCheckoutController;
 use App\Http\Controllers\AccountSetup\ShowAccountSetupController;
 use App\Http\Controllers\AccountSetup\StoreAccountSetupController;
 use App\Http\Controllers\PasswordSetup\ShowPasswordSetupController;
@@ -234,6 +236,10 @@ Route::middleware('auth')->group(function () {
     // Widget Settings routes
     Route::get('/widget-settings', ShowWidgetSettingsController::class)->name('widgetSettings.show');
     Route::put('/widget-settings', UpdateWidgetSettingsController::class)->name('widgetSettings.update');
+
+    // Orders routes
+    Route::get('/orders', IndexOrderController::class)->name('orders.index');
+    Route::get('/orders/afrekenen', ShowCheckoutController::class)->name('orders.checkout');
 
     // API Keys routes
     Route::get('/api-keys', IndexApiKeyController::class)->name('apiKeys.index');

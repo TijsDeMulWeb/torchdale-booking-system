@@ -1,0 +1,159 @@
+<x-layouts.app>
+    <x-navigation.breadcrumb :breadcrumbs="[
+        ['name' => 'Bestellingen', 'url' => route('orders.index')],
+        ['name' => 'Openstaande betalingen', 'url' => route('orders.open-orders')],
+    ]" />
+
+    <div class="px-4 sm:px-6 lg:px-8 my-6 pb-4">
+        <div class="px-4 sm:px-6 lg:px-8">
+
+            <div class="sm:flex sm:items-center">
+                <div class="sm:flex-auto">
+                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">Openstaande betalingen</h1>
+                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">Bestellingen waarvoor nog geen betaling ontvangen is.</p>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <x-order.tabs />
+
+                {{-- Stats --}}
+                <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                    <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Openstaand</p>
+                        <p class="mt-1 text-xl font-semibold text-orange-600 dark:text-orange-400">{{ $stats['count'] }}</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Bestellingen</p>
+                    </div>
+                    <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Openstaand bedrag</p>
+                        <p class="mt-1 text-xl font-semibold text-orange-600 dark:text-orange-400">{{ Number::currency($stats['total']) }}</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Totaal te ontvangen</p>
+                    </div>
+                    <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Facturen verstuurd</p>
+                        <p class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{{ $stats['online'] }}</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Online betaling</p>
+                    </div>
+                </div>
+
+                {{-- Table --}}
+                <div class="mt-8">
+                    @if ($orders->count() > 0)
+                        <div class="flow-root">
+                            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                <div class="inline-block min-w-full py-2 align-middle">
+                                    <table class="min-w-full divide-y divide-gray-300 dark:divide-white/15">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">Klant</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Bedrag</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Betaalmethode</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Factuurnr.</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Datum</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Wachttijd</th>
+                                                <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8"><span class="sr-only">Acties</span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
+                                            @foreach ($orders as $order)
+                                                @php
+                                                    $daysAgo = (int) $order->created_at->diffInDays(now());
+                                                    $urgency = $daysAgo >= 30 ? 'red' : ($daysAgo >= 14 ? 'orange' : 'gray');
+                                                    $customerName = trim(($order->customer_first_name ?? '') . ' ' . ($order->customer_last_name ?? ''))
+                                                        ?: ($order->customer ? trim($order->customer->first_name . ' ' . $order->customer->last_name) : '—');
+                                                @endphp
+                                                <tr class="hover:bg-gray-50 dark:hover:bg-white/5">
+                                                    {{-- Customer --}}
+                                                    <td class="py-4 pr-3 pl-4 text-sm sm:pl-6 lg:pl-8">
+                                                        @if ($order->customer_id)
+                                                            <a href="{{ route('customers.show.overview', $order->customer_id) }}"
+                                                               class="font-medium text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline">
+                                                                {{ $customerName }}
+                                                            </a>
+                                                        @else
+                                                            <span class="font-medium text-gray-900 dark:text-white">{{ $customerName }}</span>
+                                                        @endif
+                                                        @if ($order->customer_email)
+                                                            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ $order->customer_email }}</p>
+                                                        @endif
+                                                    </td>
+
+                                                    {{-- Amount --}}
+                                                    <td class="px-3 py-4 text-sm font-semibold whitespace-nowrap text-gray-900 dark:text-white">
+                                                        {{ Number::currency($order->total ?? 0) }}
+                                                    </td>
+
+                                                    {{-- Payment method --}}
+                                                    <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                                        @if ($order->payment_method === 'online')
+                                                            <span class="inline-flex items-center rounded-md bg-indigo-50 dark:bg-indigo-900/20 px-2 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-400 ring-1 ring-inset ring-indigo-700/10">Online</span>
+                                                        @elseif ($order->payment_method === 'manual')
+                                                            <span class="inline-flex items-center rounded-md bg-purple-50 dark:bg-purple-900/20 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-400 ring-1 ring-inset ring-purple-700/10">Manueel</span>
+                                                        @else
+                                                            <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">{{ $order->payment_method ?? '—' }}</span>
+                                                        @endif
+                                                    </td>
+
+                                                    {{-- Invoice number --}}
+                                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
+                                                        @if ($order->invoice_number)
+                                                            <a href="{{ route('orders.invoice', $order->id) }}"
+                                                               class="font-mono text-xs hover:text-indigo-600 dark:hover:text-indigo-400 hover:underline">
+                                                                {{ $order->invoice_number }}
+                                                            </a>
+                                                        @else
+                                                            <span class="text-gray-300 dark:text-gray-600">—</span>
+                                                        @endif
+                                                    </td>
+
+                                                    {{-- Date --}}
+                                                    <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
+                                                        {{ $order->created_at->format('d/m/Y') }}
+                                                    </td>
+
+                                                    {{-- Wachttijd --}}
+                                                    <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                                        @php
+                                                            $urgencyClasses = [
+                                                                'red'    => 'bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 ring-red-600/20',
+                                                                'orange' => 'bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-400 ring-orange-600/20',
+                                                                'gray'   => 'bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 ring-gray-500/20',
+                                                            ];
+                                                        @endphp
+                                                        <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset {{ $urgencyClasses[$urgency] }}">
+                                                            {{ $daysAgo === 0 ? 'Vandaag' : $daysAgo . ' dag' . ($daysAgo !== 1 ? 'en' : '') }}
+                                                        </span>
+                                                    </td>
+
+                                                    {{-- Actions --}}
+                                                    <td class="py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-6 lg:pr-8">
+                                                        <a href="{{ route('orders.index') }}?search={{ urlencode($order->invoice_number ?? $order->id) }}"
+                                                           class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 text-xs font-medium">
+                                                            Bekijken
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            {{ $orders->links() }}
+                        </div>
+                    @else
+                        <div class="mt-6 text-center py-16 rounded-xl border border-dashed border-gray-300 dark:border-white/10">
+                            <svg class="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Geen openstaande betalingen</p>
+                            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Alle bestellingen zijn betaald.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+</x-layouts.app>

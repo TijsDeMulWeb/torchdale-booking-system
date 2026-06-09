@@ -259,6 +259,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/checkout', ShowCheckoutController::class)->name('orders.checkout');
         Route::post('/orders/checkout', StoreOrderController::class)->name('orders.store');
     });
+    Route::get('/orders/open-orders', \App\Http\Controllers\Order\OpenOrdersController::class)->name('orders.open-orders');
     Route::get('/orders/gift-vouchers', \App\Http\Controllers\Order\GiftVoucherController::class)->name('orders.gift-vouchers');
     Route::post('/orders/gift-vouchers', \App\Http\Controllers\Order\StoreManualGiftVoucherController::class)->name('orders.gift-vouchers.store');
     Route::patch('/orders/gift-vouchers/{voucher}/delivery', \App\Http\Controllers\Order\UpdateGiftVoucherDeliveryController::class)->name('orders.gift-vouchers.delivery');

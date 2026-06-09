@@ -200,8 +200,11 @@ class StoreOrderController extends Controller
                 isEInvoice: false,
             );
 
+            $mollieKey = auth()->user()->escaperoom->escaperoomSetting->mollie_api_key
+                ?? env('MOLLIE_KEY');
+
             $mollie = new MollieApiClient();
-            $mollie->setApiKey(env('MOLLIE_KEY'));
+            $mollie->setApiKey($mollieKey);
 
             $mollieInvoice = $mollie->send($salesInvoiceRequest);
 
@@ -210,7 +213,7 @@ class StoreOrderController extends Controller
             $pdfPath = null;
             $mollieHref = $mollieInvoice->_links->pdfLink->href ?? null;
             if ($mollieHref) {
-                $pdfResponse = Http::withToken(env('MOLLIE_KEY'))->get($mollieHref);
+                $pdfResponse = Http::withToken($mollieKey)->get($mollieHref);
                 if ($pdfResponse->successful()) {
                     $pdfPath = 'escaperooms/' . auth()->user()->escaperoom->id . '/invoices/' . $invoiceNumber . '.pdf';
                     Storage::disk('local')->put($pdfPath, $pdfResponse->body());

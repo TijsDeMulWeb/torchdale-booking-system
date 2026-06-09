@@ -9,6 +9,7 @@ use App\Models\OrderedItem;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\GiftVoucherService;
+use App\Services\MailTemplateService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -146,6 +147,11 @@ class StoreOrderController extends Controller
         });
 
         $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm, $paymentMethod);
+
+        $mailTemplateService = app(MailTemplateService::class);
+        foreach ($order->orderedItems as $orderedItem) {
+            $mailTemplateService->sendForProductItem($orderedItem, $order);
+        }
 
         return redirect()->route('orders.index')->with('success', 'Bestelling geplaatst.');
     }

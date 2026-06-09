@@ -176,13 +176,26 @@
                                 @endforelse
 
                                 @forelse ($products as $product)
-                                    @php $outOfStock = !is_null($product->stock_quantity) && $product->stock_quantity <= 0; @endphp
+                                    @php
+                                        $outOfStock = !is_null($product->stock_quantity) && $product->stock_quantity <= 0;
+                                        $sellingPrice = $product->selling_price ?? 0;
+                                        $discountType  = $product->discount_type;
+                                        $discountValue = $product->discount_value ?? 0;
+                                        if ($discountType === 'percentage' && $discountValue > 0) {
+                                            $effectivePrice = $sellingPrice * (1 - $discountValue / 100);
+                                        } elseif ($discountType === 'fixed' && $discountValue > 0) {
+                                            $effectivePrice = max(0, $sellingPrice - $discountValue);
+                                        } else {
+                                            $effectivePrice = $sellingPrice;
+                                        }
+                                        $hasDiscount = $effectivePrice < $sellingPrice;
+                                    @endphp
                                     <button
                                         @if(!$outOfStock) onclick="addToCart(this)" @endif
                                         data-type="product"
                                         data-id="{{ $product->id }}"
                                         data-name="{{ $product->name }}"
-                                        data-price="{{ $product->selling_price ?? 0 }}"
+                                        data-price="{{ $effectivePrice }}"
                                         data-vat="{{ $product->vat_percentage ?? 0 }}"
                                         data-stock="{{ $product->stock_quantity ?? -1 }}"
                                         @if($outOfStock) disabled @endif
@@ -196,13 +209,22 @@
                                             </svg>
                                         </div>
                                         <span class="text-xs font-medium text-gray-900 dark:text-white leading-snug">{{ $product->name }}</span>
-                                        <span class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-                                            {{ $product->selling_price ? Number::currency($product->selling_price) : '—' }}
+                                        <span class="mt-0.5 text-xs leading-snug">
+                                            @if($hasDiscount)
+                                                <span class="line-through text-gray-400 dark:text-gray-500">{{ Number::currency($sellingPrice) }}</span>
+                                                <span class="text-green-600 dark:text-green-400 font-medium"> {{ Number::currency($effectivePrice) }}</span>
+                                            @else
+                                                <span class="text-gray-400 dark:text-gray-500">{{ $sellingPrice ? Number::currency($sellingPrice) : '—' }}</span>
+                                            @endif
                                         </span>
                                         @if($outOfStock)
                                             <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">Uitverkocht</span>
                                         @elseif(!is_null($product->stock_quantity) && $product->stock_quantity <= 5)
                                             <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">Nog {{ $product->stock_quantity }} op voorraad</span>
+                                        @elseif($hasDiscount)
+                                            <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
+                                                {{ $discountType === 'percentage' ? $discountValue . '% korting' : '−' . Number::currency($discountValue) }}
+                                            </span>
                                         @endif
                                     </button>
                                 @empty
@@ -245,14 +267,30 @@
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
                             <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Kortingscode</label>
-                            <div class="flex gap-2">
-                                <input
-                                    type="text"
-                                    placeholder="Voer code in..."
-                                    class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
-                                <button class="rounded-lg border border-gray-300 dark:border-white/10 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                                    Toepassen
+
+                            <div id="selected-coupon" class="hidden mb-3 flex items-center justify-between rounded-lg bg-green-50 dark:bg-green-900/20 px-3 py-2.5 border border-green-200 dark:border-green-500/30">
+                                <div>
+                                    <p id="selected-coupon-name" class="text-sm font-medium text-green-900 dark:text-green-100"></p>
+                                    <p id="selected-coupon-detail" class="text-xs text-green-600 dark:text-green-400"></p>
+                                </div>
+                                <button onclick="clearCoupon()" type="button" class="ml-3 text-green-400 hover:text-green-600 dark:hover:text-green-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                    </svg>
                                 </button>
+                            </div>
+
+                            <div id="coupon-search-wrap" class="relative">
+                                <input
+                                    id="coupon-search-input"
+                                    type="text"
+                                    autocomplete="off"
+                                    placeholder="Zoek op code of naam..."
+                                    class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 pl-9 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="pointer-events-none absolute left-3 top-2.5 size-4 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25l6-6m4.5-3.493V21.75l-4.5-4.5-4.5 4.5-4.5-4.5-4.5 4.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185Z" />
+                                </svg>
+                                <ul id="coupon-dropdown" class="hidden absolute z-20 mt-1 w-full rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-800 shadow-lg overflow-hidden"></ul>
                             </div>
                         </div>
                     </div>
@@ -379,6 +417,7 @@
 
     <script>
         var customerSearchUrl = '{{ route('customers.search') }}';
+        var couponSearchUrl   = '{{ route('coupons.search') }}';
         var selectedCustomerId = null;
         var searchTimer = null;
 
@@ -461,6 +500,99 @@
             return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         }
         // ────────────────────────────────────────────────────────────
+
+        // ── Coupon search ────────────────────────────────────────────
+        var couponSearchTimer = null;
+        var selectedCoupon    = null;
+
+        var couponInput    = document.getElementById('coupon-search-input');
+        var couponDropdown = document.getElementById('coupon-dropdown');
+        var couponChip     = document.getElementById('selected-coupon');
+        var couponWrap     = document.getElementById('coupon-search-wrap');
+
+        couponInput.addEventListener('input', function () {
+            clearTimeout(couponSearchTimer);
+            var q = this.value.trim();
+            if (q.length < 1) { closeCouponDropdown(); return; }
+            couponSearchTimer = setTimeout(function () { fetchCoupons(q); }, 250);
+        });
+
+        couponInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeCouponDropdown();
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!couponWrap.contains(e.target)) closeCouponDropdown();
+        });
+
+        function fetchCoupons(q) {
+            fetch(couponSearchUrl + '?q=' + encodeURIComponent(q), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (coupons) { renderCouponDropdown(coupons); });
+        }
+
+        function renderCouponDropdown(coupons) {
+            couponDropdown.innerHTML = '';
+
+            if (!coupons.length) {
+                couponDropdown.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">Geen kortingscodes gevonden.</li>';
+                couponDropdown.classList.remove('hidden');
+                return;
+            }
+
+            coupons.forEach(function (c) {
+                var discountLabel = c.discount_type === 'percentage'
+                    ? c.discount_value + '%'
+                    : '€\xa0' + parseFloat(c.discount_value).toFixed(2).replace('.', ',');
+
+                var usageLabel = c.usage_limit
+                    ? c.times_used + '/' + c.usage_limit + ' gebruikt'
+                    : 'Onbeperkt';
+
+                var li = document.createElement('li');
+                li.className = 'flex items-center justify-between px-4 py-2.5 cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/20 border-b border-gray-100 dark:border-white/5 last:border-0';
+                li.innerHTML =
+                    '<div>' +
+                        '<span class="text-sm font-medium text-gray-900 dark:text-white">' + escHtml(c.code) + '</span>' +
+                        '<span class="ml-2 text-xs text-gray-400 dark:text-gray-500">' + escHtml(c.name) + '</span>' +
+                    '</div>' +
+                    '<span class="text-xs font-semibold text-green-600 dark:text-green-400 shrink-0">' + discountLabel + '</span>';
+                li.addEventListener('click', function () { applyCoupon(c); });
+                couponDropdown.appendChild(li);
+            });
+
+            couponDropdown.classList.remove('hidden');
+        }
+
+        function applyCoupon(c) {
+            selectedCoupon = c;
+            document.getElementById('selected-coupon-name').textContent = c.code + ' — ' + c.name;
+            var discountLabel = c.discount_type === 'percentage'
+                ? c.discount_value + '% korting'
+                : '€\xa0' + parseFloat(c.discount_value).toFixed(2).replace('.', ',') + ' korting';
+            document.getElementById('selected-coupon-detail').textContent = discountLabel;
+            couponChip.classList.remove('hidden');
+            couponWrap.classList.add('hidden');
+            closeCouponDropdown();
+            renderCart(); // recalculate discount
+        }
+
+        function clearCoupon() {
+            selectedCoupon = null;
+            couponInput.value = '';
+            couponChip.classList.add('hidden');
+            couponWrap.classList.remove('hidden');
+            couponInput.focus();
+            renderCart();
+        }
+
+        function closeCouponDropdown() {
+            couponDropdown.classList.add('hidden');
+            couponDropdown.innerHTML = '';
+        }
+        // ─────────────────────────────────────────────────────────────
 
         // ── Room modal ───────────────────────────────────────────────
         var roomModal = {
@@ -610,8 +742,6 @@
             renderCart();
         }
 
-        var discount = 0; // set this when a coupon is applied
-
         function renderCart() {
             var isEmpty = cart.length === 0;
             var fmt = function (n) { return '€ ' + n.toFixed(2).replace('.', ','); };
@@ -629,9 +759,27 @@
                     btwPerRate[key] = (btwPerRate[key] || 0) + btwAmount;
                 }
             });
-            var totalBtw = Object.values(btwPerRate).reduce(function (s, v) { return s + v; }, 0);
+            var totalBtw      = Object.values(btwPerRate).reduce(function (s, v) { return s + v; }, 0);
             var subtotaalExcl = totaalInclBtw - totalBtw;
-            var totaal = totaalInclBtw - discount;
+
+            // 1. Bereken korting op excl. BTW bedrag
+            var discount = 0;
+            if (selectedCoupon && subtotaalExcl > 0) {
+                discount = selectedCoupon.discount_type === 'percentage'
+                    ? subtotaalExcl * parseFloat(selectedCoupon.discount_value) / 100
+                    : Math.min(parseFloat(selectedCoupon.discount_value), subtotaalExcl);
+            }
+
+            // 2. BTW herberekenen op gecorrigeerd excl. bedrag (proportioneel schalen)
+            var discountedExcl = subtotaalExcl - discount;
+            var scale = subtotaalExcl > 0 ? discountedExcl / subtotaalExcl : 1;
+            var scaledBtw = {};
+            Object.keys(btwPerRate).forEach(function (rate) {
+                scaledBtw[rate] = btwPerRate[rate] * scale;
+            });
+
+            // 3. Totaal = gecorrigeerd excl. + geschaalde BTW
+            var totaal = discountedExcl + Object.values(scaledBtw).reduce(function (s, v) { return s + v; }, 0);
 
             // Render desktop + mobile in one pass
             ['', '-mobile'].forEach(function (suffix) {
@@ -656,10 +804,10 @@
 
                 if (btwRows) {
                     btwRows.innerHTML = '';
-                    Object.keys(btwPerRate).sort(function(a,b){return a-b;}).forEach(function (rate) {
+                    Object.keys(scaledBtw).sort(function(a,b){return a-b;}).forEach(function (rate) {
                         var row = document.createElement('div');
                         row.className = 'flex justify-between text-sm text-gray-600 dark:text-gray-400';
-                        row.innerHTML = '<span>BTW ' + rate + '%</span><span>' + fmt(btwPerRate[rate]) + '</span>';
+                        row.innerHTML = '<span>BTW ' + rate + '%</span><span>' + fmt(scaledBtw[rate]) + '</span>';
                         btwRows.appendChild(row);
                     });
                 }

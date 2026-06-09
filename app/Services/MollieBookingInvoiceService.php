@@ -40,7 +40,9 @@ class MollieBookingInvoiceService
 
         try {
             /** @var \Mollie\Api\MollieApiClient $mollie */
-            $street = trim(($customer->street ?? '') . ' ' . ($customer->house_number ?? ''));
+            $street  = trim(($customer->street ?? '') . ' ' . ($customer->house_number ?? ''));
+            $locale  = $this->resolveLocale($timeSlot->language?->name);
+            $country = $customer->country ?: 'BE';
 
             $recipient = new Recipient(
                 type: RecipientType::CONSUMER,
@@ -48,8 +50,8 @@ class MollieBookingInvoiceService
                 streetAndNumber: $street ?: null,
                 postalCode: $customer->postal_code ?: null,
                 city: $customer->city ?: null,
-                country: 'BE',
-                locale: 'nl_BE',
+                country: $country,
+                locale: $locale,
                 givenName: $customer->first_name,
                 familyName: $customer->last_name,
                 phone: $customer->phone ?: null,
@@ -58,11 +60,7 @@ class MollieBookingInvoiceService
             $orderedItem = $timeSlot->orderedItems()->first();
             $vatRate     = number_format((float) ($orderedItem?->vat_percentage ?? 6), 2, '.', '');
 
-            $description = $timeSlot->room->name
-                . ' – ' . $timeSlot->start_time->format('d/m/Y')
-                . ' ' . $timeSlot->start_time->format('H:i')
-                . '–' . $timeSlot->end_time->format('H:i');
-
+            $description = $this->buildDescription($timeSlot, $locale);
             if ($timeSlot->language) {
                 $description .= ' (' . $timeSlot->language->name . ')';
             }
@@ -110,5 +108,90 @@ class MollieBookingInvoiceService
             Log::error('MollieBookingInvoiceService failed for order ' . $order->id . ': ' . $e->getMessage());
             return false;
         }
+    }
+
+    // Exhaustive list of locales Mollie actually supports for hosted pages + customer emails.
+    // Any locale not in this set falls back to nl_BE.
+    private const MOLLIE_LOCALES = [
+        'nl_NL', 'nl_BE',
+        'en_US', 'en_GB',
+        'de_DE', 'de_AT', 'de_CH', 'de_LU',
+        'fr_FR', 'fr_BE', 'fr_LU',
+        'es_ES', 'ca_ES',
+        'it_IT',
+        'pt_PT',
+        'nb_NO',
+        'sv_SE',
+        'fi_FI',
+        'da_DK',
+        'is_IS',
+        'hu_HU',
+        'pl_PL',
+        'lv_LV',
+        'lt_LT',
+    ];
+
+    /**
+     * Vertaal de taalsnaam (zoals opgeslagen in Language.name) naar een Mollie-ondersteunde locale.
+     * Talen die Mollie niet kent vallen terug op nl_BE.
+     */
+    private function resolveLocale(?string $languageName): string
+    {
+        $locale = match (strtolower(trim($languageName ?? ''))) {
+            'engels', 'english'              => 'en_US',
+            'frans', 'français', 'french'    => 'fr_BE',
+            'duits', 'deutsch', 'german'     => 'de_DE',
+            'spaans', 'español', 'spanish'   => 'es_ES',
+            'italiaans', 'italiano', 'italian' => 'it_IT',
+            'portugees', 'português',
+            'portuguese'                     => 'pt_PT',
+            'noors', 'norsk', 'norwegian'    => 'nb_NO',
+            'zweeds', 'svenska', 'swedish'   => 'sv_SE',
+            'fins', 'suomi', 'finnish'       => 'fi_FI',
+            'deens', 'dansk', 'danish'       => 'da_DK',
+            'ijslands', 'íslenska',
+            'icelandic'                      => 'is_IS',
+            'hongaars', 'magyar', 'hungarian' => 'hu_HU',
+            'pools', 'polski', 'polish'      => 'pl_PL',
+            'lets', 'latviešu', 'latvian'    => 'lv_LV',
+            'litouws', 'lietuvių',
+            'lithuanian'                     => 'lt_LT',
+            default                          => 'nl_BE',
+        };
+
+        // Veiligheidsnet: als de locale om welke reden dan ook niet door Mollie herkend wordt, nl_BE
+        return in_array($locale, self::MOLLIE_LOCALES, true) ? $locale : 'nl_BE';
+    }
+
+    /**
+     * Stel de factuurbeschrijving op in de juiste taal.
+     */
+    private function buildDescription(TimeSlot $timeSlot, string $locale): string
+    {
+        $room  = $timeSlot->room->name;
+        $date  = $timeSlot->start_time->format('d/m/Y');
+        $start = $timeSlot->start_time->format('H:i');
+        $end   = $timeSlot->end_time->format('H:i');
+
+        $prefix = match (substr($locale, 0, 2)) {
+            'en'    => 'Escape room',
+            'fr'    => 'Salle d\'évasion',
+            'de'    => 'Escape Room',
+            'es', 'ca' => 'Sala de escape',
+            'it'    => 'Stanza di fuga',
+            'pt'    => 'Sala de escape',
+            'nb'    => 'Escape room',
+            'sv'    => 'Escape room',
+            'fi'    => 'Pakohuone',
+            'da'    => 'Escape room',
+            'is'    => 'Escape room',
+            'hu'    => 'Szabadulószoba',
+            'pl'    => 'Escape room',
+            'lv'    => 'Escape room',
+            'lt'    => 'Escape room',
+            default => 'Escape room',
+        };
+
+        return "{$prefix} {$room} – {$date} {$start}–{$end}";
     }
 }

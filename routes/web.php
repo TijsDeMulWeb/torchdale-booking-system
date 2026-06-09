@@ -144,6 +144,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/time-slots/unblock-range', UnblockTimeSlotRangeController::class)->name('dashboard.timeslots.unblockRange');
     Route::post('/dashboard/time-slots/book', \App\Http\Controllers\Dashboard\StoreManualBookingController::class)->name('dashboard.timeslots.book');
     Route::get('/dashboard/time-slots/{timeSlot}/booking', \App\Http\Controllers\Dashboard\GetBookingDetailsController::class)->name('dashboard.timeslots.bookingDetails');
+    Route::delete('/dashboard/time-slots/{timeSlot}/cancel', \App\Http\Controllers\Dashboard\CancelBookingController::class)->name('dashboard.timeslots.cancel');
     Route::get('/dashboard/room-price', \App\Http\Controllers\Dashboard\GetRoomPriceController::class)->name('dashboard.roomPrice');
 
     // Chatbot routes

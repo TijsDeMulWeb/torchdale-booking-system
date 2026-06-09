@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[Fillable(['room_id', 'language_id', 'start_time', 'end_time', 'blocked_at', 'blocked_reason'])]
 class TimeSlot extends Model
 {
+    use SoftDeletes;
     protected $casts = [
         'start_time' => 'datetime',
         'end_time' => 'datetime',

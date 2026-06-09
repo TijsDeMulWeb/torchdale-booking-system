@@ -511,7 +511,13 @@
                     Factuur openen
                 </a>
                 <p id="bdetail-no-invoice" class="text-xs text-gray-400 dark:text-gray-500 hidden">Geen factuur beschikbaar</p>
-                <button type="button" data-close-modal="booking-detail" class="ml-auto text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Sluiten</button>
+                <div class="ml-auto flex items-center gap-3">
+                    <button type="button" id="bdetail-cancel-btn"
+                        class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-900/20">
+                        Annuleren
+                    </button>
+                    <button type="button" data-close-modal="booking-detail" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Sluiten</button>
+                </div>
             </div>
         </div>
     </div>
@@ -529,6 +535,7 @@
             const CALENDAR = {!! $calendarDataJson !!};
             const UNBLOCK_URL_TEMPLATE = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.unblock', ['timeSlot' => '__id__'])) !!};
             const BOOKING_DETAILS_URL_TEMPLATE = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.bookingDetails', ['timeSlot' => '__id__'])) !!};
+            const CANCEL_BOOKING_URL_TEMPLATE  = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.cancel', ['timeSlot' => '__id__'])) !!};
             const HOUR_HEIGHT = 60;
             const DAY_HEIGHT = 24 * HOUR_HEIGHT;
             const FIXED_ROOM_COLUMN_WIDTH = 280;
@@ -1361,6 +1368,31 @@
                             invoiceLink.classList.add('hidden');
                             noInvoice.classList.remove('hidden');
                         }
+
+                        // Cancel button
+                        const cancelBtn = document.getElementById('bdetail-cancel-btn');
+                        cancelBtn.onclick = () => {
+                            if (!window.confirm(`Afspraak van ${d.customer_name || 'deze klant'} annuleren?`)) return;
+
+                            cancelBtn.disabled = true;
+                            cancelBtn.textContent = 'Bezig…';
+
+                            const url = CANCEL_BOOKING_URL_TEMPLATE.replace('__id__', d.id);
+                            fetch(url, {
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                                    'Accept': 'application/json',
+                                },
+                            })
+                            .then((res) => { if (!res.ok) throw new Error(); return res.json(); })
+                            .then(() => { window.location.reload(); })
+                            .catch(() => {
+                                cancelBtn.disabled = false;
+                                cancelBtn.textContent = 'Annuleren';
+                                alert('Er ging iets mis. Probeer opnieuw.');
+                            });
+                        };
                     })
                     .catch(() => {
                         setText('bdetail-customer-name', 'Fout bij laden');

@@ -433,6 +433,89 @@
         </div>
     </div>
 
+    {{-- Booking detail modal (for clicking a booked slot) --}}
+    <div id="booking-detail-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+        <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden">
+            {{-- Header --}}
+            <div id="bdetail-header" class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-white/10">
+                <div class="flex items-center gap-3 min-w-0">
+                    <span id="bdetail-color-dot" class="shrink-0 size-2.5 rounded-full"></span>
+                    <div class="min-w-0">
+                        <p id="bdetail-customer-name" class="text-sm font-semibold text-gray-900 dark:text-white truncate"></p>
+                        <p id="bdetail-room-name" class="text-xs text-gray-500 dark:text-gray-400 truncate"></p>
+                    </div>
+                </div>
+                <button type="button" data-close-modal="booking-detail" class="shrink-0 ml-3 p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            {{-- Body --}}
+            <div class="px-6 py-5 space-y-5">
+                {{-- When & who --}}
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">Datum & tijd</p>
+                        <p id="bdetail-date" class="text-gray-900 dark:text-white font-medium"></p>
+                        <p id="bdetail-time" class="text-gray-500 dark:text-gray-400 text-xs"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">Spelers & taal</p>
+                        <p id="bdetail-players" class="text-gray-900 dark:text-white font-medium"></p>
+                        <p id="bdetail-language" class="text-gray-500 dark:text-gray-400 text-xs"></p>
+                    </div>
+                </div>
+
+                {{-- Contact --}}
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Contactgegevens</p>
+                    <div class="space-y-1 text-sm">
+                        <p id="bdetail-email" class="text-gray-700 dark:text-gray-300"></p>
+                        <p id="bdetail-phone" class="text-gray-500 dark:text-gray-400 text-xs"></p>
+                    </div>
+                </div>
+
+                {{-- Payment --}}
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Betaling</p>
+                    <div class="rounded-lg border border-gray-100 dark:border-white/10 divide-y divide-gray-100 dark:divide-white/10 text-sm">
+                        <div class="flex items-center justify-between px-4 py-2.5">
+                            <span class="text-gray-500 dark:text-gray-400">Totaal</span>
+                            <span id="bdetail-total" class="font-semibold text-gray-900 dark:text-white"></span>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-2.5">
+                            <span class="text-gray-500 dark:text-gray-400">Online betaald</span>
+                            <span id="bdetail-amount-online" class="text-gray-700 dark:text-gray-300"></span>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-2.5">
+                            <span class="text-gray-500 dark:text-gray-400">Ter plekke</span>
+                            <span id="bdetail-amount-onsite" class="text-gray-700 dark:text-gray-300"></span>
+                        </div>
+                        <div class="flex items-center justify-between px-4 py-2.5">
+                            <span class="text-gray-500 dark:text-gray-400">Status</span>
+                            <span id="bdetail-status" class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Footer --}}
+            <div id="bdetail-footer" class="flex items-center justify-between gap-3 px-6 py-4 border-t border-gray-100 dark:border-white/10">
+                <a id="bdetail-invoice-link" href="#" target="_blank"
+                    class="hidden inline-flex items-center gap-2 rounded-lg border border-gray-300 dark:border-white/15 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5">
+                    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Factuur openen
+                </a>
+                <p id="bdetail-no-invoice" class="text-xs text-gray-400 dark:text-gray-500 hidden">Geen factuur beschikbaar</p>
+                <button type="button" data-close-modal="booking-detail" class="ml-auto text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Sluiten</button>
+            </div>
+        </div>
+    </div>
+
     @php
         $calendarDataJson = \Illuminate\Support\Js::from($calendarData);
     @endphp
@@ -445,6 +528,7 @@
 
             const CALENDAR = {!! $calendarDataJson !!};
             const UNBLOCK_URL_TEMPLATE = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.unblock', ['timeSlot' => '__id__'])) !!};
+            const BOOKING_DETAILS_URL_TEMPLATE = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.bookingDetails', ['timeSlot' => '__id__'])) !!};
             const HOUR_HEIGHT = 60;
             const DAY_HEIGHT = 24 * HOUR_HEIGHT;
             const FIXED_ROOM_COLUMN_WIDTH = 280;
@@ -651,8 +735,9 @@
             function buildEventCard(event, color, subtitle) {
                 const isAvailable = event.booked === false;
                 const isBlocked = event.blocked === true;
+                const isBooking = event.booked === true && !isBlocked;
 
-                const isInteractive = isAvailable || isBlocked;
+                const isInteractive = isAvailable || isBlocked || isBooking;
 
                 const node = document.createElement('div');
                 node.className = `calendar-event absolute overflow-hidden rounded-lg border px-2 py-1 text-xs transition-shadow hover:z-30 hover:shadow-md ${isInteractive ? 'cursor-pointer' : ''} ${isAvailable ? 'border-dashed' : 'border-solid shadow-sm'}`;
@@ -681,7 +766,12 @@
                     <p class="truncate leading-tight opacity-75">${subtitle}</p>
                 `;
 
-                if (isInteractive) {
+                if (isBooking) {
+                    node.addEventListener('click', (clickEvent) => {
+                        clickEvent.stopPropagation();
+                        openBookingDetailModal(event.timeSlotId);
+                    });
+                } else if (isInteractive) {
                     node.addEventListener('click', (clickEvent) => {
                         clickEvent.stopPropagation();
                         openSlotMenu(clickEvent, event);
@@ -1199,6 +1289,85 @@
             }
             // ── End booking pricing ──────────────────────────────────────────
 
+            // ── Booking detail modal ─────────────────────────────────────────
+            function openBookingDetailModal(timeSlotId) {
+                if (!timeSlotId) return;
+
+                // Show modal with loading state
+                const overlay = document.getElementById('booking-detail-modal-overlay');
+                const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val ?? '—'; };
+
+                setText('bdetail-customer-name', 'Laden…');
+                setText('bdetail-room-name', '');
+                setText('bdetail-date', '');
+                setText('bdetail-time', '');
+                setText('bdetail-players', '');
+                setText('bdetail-language', '');
+                setText('bdetail-email', '');
+                setText('bdetail-phone', '');
+                setText('bdetail-total', '');
+                setText('bdetail-amount-online', '');
+                setText('bdetail-amount-onsite', '');
+                document.getElementById('bdetail-status').textContent = '';
+                document.getElementById('bdetail-invoice-link').classList.add('hidden');
+                document.getElementById('bdetail-no-invoice').classList.add('hidden');
+                overlay.classList.remove('hidden');
+
+                const url = BOOKING_DETAILS_URL_TEMPLATE.replace('__id__', timeSlotId);
+                fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then((res) => {
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                        return res.json();
+                    })
+                    .then((d) => {
+                        // Color dot
+                        const dot = document.getElementById('bdetail-color-dot');
+                        dot.style.backgroundColor = d.room_color || '#6366f1';
+
+                        setText('bdetail-customer-name', d.customer_name || 'Onbekende klant');
+                        setText('bdetail-room-name', d.room || '');
+                        setText('bdetail-date', d.date || '');
+                        setText('bdetail-time', d.start && d.end ? `${d.start} – ${d.end}` : '');
+                        setText('bdetail-players', d.players ? `${d.players} speler${d.players !== 1 ? 's' : ''}` : '—');
+                        setText('bdetail-language', d.language || '—');
+                        setText('bdetail-email', d.customer_email || '—');
+                        setText('bdetail-phone', d.customer_phone || '');
+
+                        setText('bdetail-total', d.total ? `€ ${d.total}` : '—');
+                        setText('bdetail-amount-online', `€ ${d.amount_online || '0,00'}`);
+                        setText('bdetail-amount-onsite', `€ ${d.amount_onsite || '0,00'}`);
+
+                        // Status badge
+                        const statusEl = document.getElementById('bdetail-status');
+                        const statusMap = {
+                            paid:    ['Betaald',      'bg-green-100  text-green-700  dark:bg-green-900/30  dark:text-green-400'],
+                            pending: ['In afwachting','bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
+                            open:    ['Open',         'bg-blue-100   text-blue-700   dark:bg-blue-900/30   dark:text-blue-400'],
+                            failed:  ['Mislukt',      'bg-red-100    text-red-700    dark:bg-red-900/30    dark:text-red-400'],
+                            manual:  ['Manueel',      'bg-gray-100   text-gray-700   dark:bg-white/10      dark:text-gray-300'],
+                        };
+                        const [label, cls] = statusMap[d.status] || ['Onbekend', 'bg-gray-100 text-gray-600'];
+                        statusEl.textContent = label;
+                        statusEl.className = `inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${cls}`;
+
+                        // Invoice link
+                        const invoiceLink = document.getElementById('bdetail-invoice-link');
+                        const noInvoice   = document.getElementById('bdetail-no-invoice');
+                        if (d.invoice_pdf_url) {
+                            invoiceLink.href = d.invoice_pdf_url;
+                            invoiceLink.classList.remove('hidden');
+                            noInvoice.classList.add('hidden');
+                        } else {
+                            invoiceLink.classList.add('hidden');
+                            noInvoice.classList.remove('hidden');
+                        }
+                    })
+                    .catch(() => {
+                        setText('bdetail-customer-name', 'Fout bij laden');
+                    });
+            }
+            // ── End booking detail modal ─────────────────────────────────────
+
             function handleCalendarBodyClick(event) {
                 // Ignore clicks that land on an existing event card
                 if (event.target.closest('.calendar-event')) return;
@@ -1265,7 +1434,7 @@
                     button.addEventListener('click', () => closeActionModal(button.dataset.closeModal));
                 });
 
-                ['block', 'booking', 'range-block', 'range-unblock'].forEach((name) => {
+                ['block', 'booking', 'range-block', 'range-unblock', 'booking-detail'].forEach((name) => {
                     const overlay = document.getElementById(`${name}-modal-overlay`);
                     overlay.addEventListener('click', (event) => {
                         if (event.target === overlay) {
@@ -1343,6 +1512,7 @@
                         closeActionModal('booking');
                         closeActionModal('range-block');
                         closeActionModal('range-unblock');
+                        closeActionModal('booking-detail');
                     }
                 });
 

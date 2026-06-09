@@ -143,6 +143,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/dashboard/time-slots/{timeSlot}/unblock', UnblockTimeSlotController::class)->name('dashboard.timeslots.unblock');
     Route::post('/dashboard/time-slots/unblock-range', UnblockTimeSlotRangeController::class)->name('dashboard.timeslots.unblockRange');
     Route::post('/dashboard/time-slots/book', \App\Http\Controllers\Dashboard\StoreManualBookingController::class)->name('dashboard.timeslots.book');
+    Route::get('/dashboard/time-slots/{timeSlot}/booking', \App\Http\Controllers\Dashboard\GetBookingDetailsController::class)->name('dashboard.timeslots.bookingDetails');
     Route::get('/dashboard/room-price', \App\Http\Controllers\Dashboard\GetRoomPriceController::class)->name('dashboard.roomPrice');
 
     // Chatbot routes

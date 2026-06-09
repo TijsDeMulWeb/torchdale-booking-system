@@ -427,6 +427,7 @@
         var selectedName   = document.getElementById('selected-customer-name');
         var selectedEmail  = document.getElementById('selected-customer-email');
         var searchWrap     = document.getElementById('customer-search-wrap');
+        var customerFocusIdx = -1;
 
         searchInput.addEventListener('input', function () {
             clearTimeout(searchTimer);
@@ -436,7 +437,21 @@
         });
 
         searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeDropdown();
+            if (e.key === 'Escape') { closeDropdown(); return; }
+            var items = dropdown.querySelectorAll('li.dd-item');
+            if (!items.length) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                customerFocusIdx = Math.min(customerFocusIdx + 1, items.length - 1);
+                setDropdownFocus(items, customerFocusIdx, 'indigo');
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                customerFocusIdx = Math.max(customerFocusIdx - 1, 0);
+                setDropdownFocus(items, customerFocusIdx, 'indigo');
+            } else if (e.key === 'Enter' && customerFocusIdx >= 0) {
+                e.preventDefault();
+                items[customerFocusIdx].click();
+            }
         });
 
         document.addEventListener('click', function (e) {
@@ -453,6 +468,7 @@
 
         function renderDropdown(customers) {
             dropdown.innerHTML = '';
+            customerFocusIdx = -1;
 
             if (!customers.length) {
                 dropdown.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">Geen klanten gevonden.</li>';
@@ -462,7 +478,7 @@
 
             customers.forEach(function (c) {
                 var li = document.createElement('li');
-                li.className = 'flex flex-col px-4 py-2.5 cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border-b border-gray-100 dark:border-white/5 last:border-0';
+                li.className = 'dd-item flex flex-col px-4 py-2.5 cursor-pointer hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border-b border-gray-100 dark:border-white/5 last:border-0';
                 li.innerHTML = '<span class="text-sm font-medium text-gray-900 dark:text-white">' + escHtml(c.name) + '</span>'
                              + '<span class="text-xs text-gray-400 dark:text-gray-500">' + escHtml(c.email) + '</span>';
                 li.addEventListener('click', function () { selectCustomer(c); });
@@ -470,6 +486,15 @@
             });
 
             dropdown.classList.remove('hidden');
+        }
+
+        function setDropdownFocus(items, idx, color) {
+            items.forEach(function (item, i) {
+                var active = i === idx;
+                item.classList.toggle('bg-' + color + '-50', active);
+                item.classList.toggle('dark:bg-' + color + '-900/20', active);
+            });
+            if (items[idx]) items[idx].scrollIntoView({ block: 'nearest' });
         }
 
         function selectCustomer(c) {
@@ -509,6 +534,7 @@
         var couponDropdown = document.getElementById('coupon-dropdown');
         var couponChip     = document.getElementById('selected-coupon');
         var couponWrap     = document.getElementById('coupon-search-wrap');
+        var couponFocusIdx = -1;
 
         couponInput.addEventListener('input', function () {
             clearTimeout(couponSearchTimer);
@@ -518,7 +544,21 @@
         });
 
         couponInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') closeCouponDropdown();
+            if (e.key === 'Escape') { closeCouponDropdown(); return; }
+            var items = couponDropdown.querySelectorAll('li.dd-item');
+            if (!items.length) return;
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                couponFocusIdx = Math.min(couponFocusIdx + 1, items.length - 1);
+                setDropdownFocus(items, couponFocusIdx, 'green');
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                couponFocusIdx = Math.max(couponFocusIdx - 1, 0);
+                setDropdownFocus(items, couponFocusIdx, 'green');
+            } else if (e.key === 'Enter' && couponFocusIdx >= 0) {
+                e.preventDefault();
+                items[couponFocusIdx].click();
+            }
         });
 
         document.addEventListener('click', function (e) {
@@ -535,6 +575,7 @@
 
         function renderCouponDropdown(coupons) {
             couponDropdown.innerHTML = '';
+            couponFocusIdx = -1;
 
             if (!coupons.length) {
                 couponDropdown.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">Geen kortingscodes gevonden.</li>';
@@ -547,12 +588,8 @@
                     ? c.discount_value + '%'
                     : '€\xa0' + parseFloat(c.discount_value).toFixed(2).replace('.', ',');
 
-                var usageLabel = c.usage_limit
-                    ? c.times_used + '/' + c.usage_limit + ' gebruikt'
-                    : 'Onbeperkt';
-
                 var li = document.createElement('li');
-                li.className = 'flex items-center justify-between px-4 py-2.5 cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/20 border-b border-gray-100 dark:border-white/5 last:border-0';
+                li.className = 'dd-item flex items-center justify-between px-4 py-2.5 cursor-pointer hover:bg-green-50 dark:hover:bg-green-900/20 border-b border-gray-100 dark:border-white/5 last:border-0';
                 li.innerHTML =
                     '<div>' +
                         '<span class="text-sm font-medium text-gray-900 dark:text-white">' + escHtml(c.code) + '</span>' +

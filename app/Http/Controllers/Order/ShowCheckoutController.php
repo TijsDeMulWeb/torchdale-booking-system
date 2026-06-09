@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\GiftCard;
 use App\Models\Product;
 use App\Models\Room;
+use Illuminate\Support\Facades\DB;
 
 class ShowCheckoutController extends Controller
 {
@@ -23,6 +24,8 @@ class ShowCheckoutController extends Controller
         $giftCards = GiftCard::where('escaperoom_id', $escaperoom->id)
             ->get();
 
-        return view('order.checkout', compact('rooms', 'products', 'giftCards'));
+        $countries = DB::table('countries')->orderBy('name')->get(['id', 'name']);
+
+        return view('order.checkout', compact('rooms', 'products', 'giftCards', 'countries'));
     }
 }

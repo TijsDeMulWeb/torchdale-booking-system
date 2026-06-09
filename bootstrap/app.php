@@ -18,6 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'webhook/mollie',
         ]);
+        $middleware->alias([
+            'mollie.key' => \App\Http\Middleware\RequiresMollieKey::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

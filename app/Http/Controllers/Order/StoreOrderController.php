@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderedItem;
+use App\Models\Product;
 use App\Services\GiftVoucherService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -52,66 +53,81 @@ class StoreOrderController extends Controller
         $customer = Customer::findOrFail($customerId);
 
         $totalBtw = array_sum($totals['btw'] ?? []);
-
-        $order = new Order();
-        $order->escaperoom_id = $escaperoomId;
-        $order->customer_id = $customerId;
-        $order->customer_first_name = $customer->first_name;
-        $order->customer_last_name = $customer->last_name;
-        $order->customer_email = $customer->email;
-        $order->customer_phone = $customer->phone ?? null;
-        $order->coupon_id = $couponId;
-        $order->total = round($totals['totaal_incl_btw'] ?? 0, 2);
-        $order->subtotal = round($totals['subtotaal_excl'] ?? 0, 2);
-        $order->discount = round($totals['discount'] ?? 0, 2);
-        $order->vat_amount = round($totalBtw, 2);
         $paymentMethod = $request->input('payment_method');
-        $order->payment_method = $paymentMethod;
-        $order->status = $paymentMethod === 'cash' ? 'paid' : 'pending';
-        $order->is_business = (bool) ($business['is_business'] ?? false);
-        $order->company_name = $business['company_name'] ?? null;
-        $order->vat_number = $business['vat_number'] ?? null;
-        $order->registration_number = $business['registration_number'] ?? null;
-        $order->save();
 
-        foreach ($cart as $item) {
-            $itemId = (string) ($item['id'] ?? '');
-            $unitPrice = (float) ($item['price'] ?? 0);
-            $qty = (int) ($item['qty'] ?? 1);
-            $vatPct = (float) ($item['vat'] ?? 0);
-            $lineTotal = $unitPrice * $qty;
-            $vatAmount = $vatPct > 0 ? $lineTotal * ($vatPct / (100 + $vatPct)) : 0;
+        DB::transaction(function () use (
+            $cart, $customer, $customerId, $escaperoomId, $couponId,
+            $totals, $totalBtw, $paymentMethod, $business, $paymentTerm, &$order
+        ) {
+            $order = new Order();
+            $order->escaperoom_id = $escaperoomId;
+            $order->customer_id = $customerId;
+            $order->customer_first_name = $customer->first_name;
+            $order->customer_last_name = $customer->last_name;
+            $order->customer_email = $customer->email;
+            $order->customer_phone = $customer->phone ?? null;
+            $order->coupon_id = $couponId;
+            $order->total = round($totals['totaal_incl_btw'] ?? 0, 2);
+            $order->subtotal = round($totals['subtotaal_excl'] ?? 0, 2);
+            $order->discount = round($totals['discount'] ?? 0, 2);
+            $order->vat_amount = round($totalBtw, 2);
+            $order->payment_method = $paymentMethod;
+            $order->status = $paymentMethod === 'cash' ? 'paid' : 'pending';
+            $order->is_business = (bool) ($business['is_business'] ?? false);
+            $order->company_name = $business['company_name'] ?? null;
+            $order->vat_number = $business['vat_number'] ?? null;
+            $order->registration_number = $business['registration_number'] ?? null;
+            $order->save();
 
-            $orderedItem = new OrderedItem();
-            $orderedItem->order_id = $order->id;
-            $orderedItem->quantity = $qty;
-            $orderedItem->unit_price = $unitPrice;
-            $orderedItem->total_price = $lineTotal;
-            $orderedItem->vat_percentage = $vatPct;
-            $orderedItem->vat_amount = round($vatAmount, 4);
+            foreach ($cart as $item) {
+                $itemId = (string) ($item['id'] ?? '');
+                $unitPrice = (float) ($item['price'] ?? 0);
+                $qty = (int) ($item['qty'] ?? 1);
+                $vatPct = (float) ($item['vat'] ?? 0);
+                $lineTotal = $unitPrice * $qty;
+                $vatAmount = $vatPct > 0 ? $lineTotal * ($vatPct / (100 + $vatPct)) : 0;
 
-            if (str_starts_with($itemId, 'room_')) {
-                $parts = explode('_', $itemId, 3);
-                $orderedItem->room_id = isset($parts[1]) ? (int) $parts[1] : null;
-            } elseif (str_starts_with($itemId, 'giftcard_')) {
-                $orderedItem->gift_card_id       = (int) substr($itemId, strlen('giftcard_'));
-                $deliveryMethod = $item['deliveryMethod'] ?? 'mail';
-                $orderedItem->gift_delivery_method = in_array($deliveryMethod, ['mail', 'post', 'pickup']) ? $deliveryMethod : 'mail';
-                $shippingCost = $deliveryMethod === 'post' ? round((float) ($item['shippingCost'] ?? 0), 2) : 0;
-                $orderedItem->gift_shipping_cost = $shippingCost;
-                $orderedItem->total_price = round(($unitPrice + $shippingCost) * $qty, 2);
-            } elseif (str_starts_with($itemId, 'product_')) {
-                $orderedItem->product_id = (int) substr($itemId, strlen('product_'));
-                $productShipping = round((float) ($item['shippingCost'] ?? 0), 2);
-                if ($productShipping > 0) {
-                    $orderedItem->total_price = round(($unitPrice + $productShipping) * $qty, 2);
+                $orderedItem = new OrderedItem();
+                $orderedItem->order_id = $order->id;
+                $orderedItem->quantity = $qty;
+                $orderedItem->unit_price = $unitPrice;
+                $orderedItem->total_price = $lineTotal;
+                $orderedItem->vat_percentage = $vatPct;
+                $orderedItem->vat_amount = round($vatAmount, 4);
+
+                if (str_starts_with($itemId, 'room_')) {
+                    $parts = explode('_', $itemId, 3);
+                    $orderedItem->room_id = isset($parts[1]) ? (int) $parts[1] : null;
+                } elseif (str_starts_with($itemId, 'giftcard_')) {
+                    $orderedItem->gift_card_id       = (int) substr($itemId, strlen('giftcard_'));
+                    $deliveryMethod = $item['deliveryMethod'] ?? 'mail';
+                    $orderedItem->gift_delivery_method = in_array($deliveryMethod, ['mail', 'post', 'pickup']) ? $deliveryMethod : 'mail';
+                    $shippingCost = $deliveryMethod === 'post' ? round((float) ($item['shippingCost'] ?? 0), 2) : 0;
+                    $orderedItem->gift_shipping_cost = $shippingCost;
+                    $orderedItem->total_price = round(($unitPrice + $shippingCost) * $qty, 2);
+                } elseif (str_starts_with($itemId, 'product_')) {
+                    $productId = (int) substr($itemId, strlen('product_'));
+                    $orderedItem->product_id = $productId;
+
+                    $product = Product::lockForUpdate()->find($productId);
+                    if ($product && ! is_null($product->stock_quantity)) {
+                        if ($product->stock_quantity < $qty) {
+                            abort(422, "Onvoldoende stock voor \"{$product->name}\". Nog {$product->stock_quantity} beschikbaar.");
+                        }
+                        $product->decrement('stock_quantity', $qty);
+                    }
+
+                    $productShipping = round((float) ($item['shippingCost'] ?? 0), 2);
+                    if ($productShipping > 0) {
+                        $orderedItem->total_price = round(($unitPrice + $productShipping) * $qty, 2);
+                    }
+                } else {
+                    $orderedItem->product_id = (int) $itemId ?: null;
                 }
-            } else {
-                $orderedItem->product_id = (int) $itemId ?: null;
-            }
 
-            $orderedItem->save();
-        }
+                $orderedItem->save();
+            }
+        });
 
         $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm, $paymentMethod);
 

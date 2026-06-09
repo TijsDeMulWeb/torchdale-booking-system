@@ -295,7 +295,9 @@
                                         $hasDiscount = $effectivePrice < $sellingPrice;
                                     @endphp
                                     <button
-                                        @if(!$outOfStock) onclick="addToCart(this)" @endif
+                                        @if(!$outOfStock)
+                                            onclick="{{ ($product->shipping_cost_domestic > 0 || $product->shipping_cost_international > 0) ? 'openProductModal(this)' : 'addToCart(this)' }}"
+                                        @endif
                                         data-type="product"
                                         data-id="{{ $product->id }}"
                                         data-name="{{ $product->name }}"
@@ -520,6 +522,38 @@
             <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
                 <button onclick="closeGiftCardModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Annuleren</button>
                 <button onclick="addGiftCardToCart()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Toevoegen</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Product shipping modal --}}
+    <div id="prod-modal-backdrop" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onclick="closeProductModal(event)">
+        <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-gray-900 shadow-xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b border-gray-200 dark:border-white/10 px-5 py-4">
+                <div>
+                    <h3 id="prod-modal-title" class="text-sm font-semibold text-gray-900 dark:text-white"></h3>
+                    <p id="prod-modal-price" class="text-xs text-gray-500 dark:text-gray-400 mt-0.5"></p>
+                </div>
+                <button onclick="closeProductModal()" class="rounded-md p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="px-5 py-4 space-y-3">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Pas de verzendkosten aan indien nodig.</p>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Verzendkosten</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
+                        <input type="number" id="prod-modal-shipping-cost" min="0" step="0.01"
+                            placeholder="0.00"
+                            class="w-full pl-7 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <p class="mt-1 text-xs text-gray-400 dark:text-gray-500" id="prod-modal-shipping-hint"></p>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
+                <button onclick="closeProductModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Annuleren</button>
+                <button onclick="addProductFromModal()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Toevoegen</button>
             </div>
         </div>
     </div>
@@ -1576,6 +1610,75 @@
             document.getElementById('gc-modal-backdrop').classList.add('hidden');
             document.getElementById('gc-modal-backdrop').classList.remove('flex');
             gcModalItem = null;
+        }
+
+        // ── Product shipping modal ────────────────────────────────────────────
+        var prodModalItem = null;
+
+        function openProductModal(btn) {
+            var domestic      = parseFloat(btn.dataset.shippingDomestic) || 0;
+            var international = parseFloat(btn.dataset.shippingInternational) || 0;
+            var computed      = resolveProductShipping(btn);
+
+            prodModalItem = {
+                id:                    btn.dataset.type + '_' + btn.dataset.id,
+                name:                  btn.dataset.name,
+                price:                 parseFloat(btn.dataset.price) || 0,
+                originalPrice:         parseFloat(btn.dataset.originalPrice || btn.dataset.price) || 0,
+                discountType:          btn.dataset.discountType || '',
+                discountValue:         parseFloat(btn.dataset.discountValue) || 0,
+                vat:                   parseFloat(btn.dataset.vat) || 0,
+                qty:                   1,
+                stock:                 parseInt(btn.dataset.stock, 10),
+                shippingDomestic:      domestic,
+                shippingInternational: international,
+                shippingCost:          computed,
+            };
+
+            var fmt = function (n) { return '€ ' + n.toFixed(2).replace('.', ','); };
+            document.getElementById('prod-modal-title').textContent = btn.dataset.name;
+            document.getElementById('prod-modal-price').textContent = fmt(prodModalItem.price) + ' / stuk';
+            document.getElementById('prod-modal-shipping-cost').value = computed > 0 ? computed.toFixed(2) : '';
+
+            var hint = '';
+            if (domestic > 0 || international > 0) {
+                hint = 'Binnenland: ' + fmt(domestic) + ' · Internationaal: ' + fmt(international);
+            }
+            document.getElementById('prod-modal-shipping-hint').textContent = hint;
+
+            document.getElementById('prod-modal-backdrop').classList.remove('hidden');
+            document.getElementById('prod-modal-backdrop').classList.add('flex');
+            document.getElementById('prod-modal-shipping-cost').focus();
+        }
+
+        function closeProductModal(e) {
+            if (e && e.target !== document.getElementById('prod-modal-backdrop')) return;
+            document.getElementById('prod-modal-backdrop').classList.add('hidden');
+            document.getElementById('prod-modal-backdrop').classList.remove('flex');
+            prodModalItem = null;
+        }
+
+        function addProductFromModal() {
+            if (!prodModalItem) return;
+            var shippingCost = parseFloat(document.getElementById('prod-modal-shipping-cost').value) || 0;
+            var item = Object.assign({}, prodModalItem, { shippingCost: shippingCost });
+
+            var existing = cart.find(function (i) { return i.id === item.id; });
+            if (existing) {
+                if (item.stock !== -1 && existing.qty >= item.stock) {
+                    closeProductModal();
+                    return;
+                }
+                existing.qty++;
+                existing.shippingCost = shippingCost;
+            } else {
+                cart.push(item);
+            }
+
+            renderCart();
+            document.getElementById('prod-modal-backdrop').classList.add('hidden');
+            document.getElementById('prod-modal-backdrop').classList.remove('flex');
+            prodModalItem = null;
         }
         // ─────────────────────────────────────────────────────────────
 

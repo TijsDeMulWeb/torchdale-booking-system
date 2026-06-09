@@ -59,7 +59,7 @@ class GiftVoucherService
                 $deliveryMethod = $item->gift_delivery_method ?? 'mail';
                 $shippingCost   = $deliveryMethod === 'post' ? (float) ($item->gift_shipping_cost ?? 0) : 0;
 
-                GiftVoucher::create([
+                $voucher = GiftVoucher::create([
                     'escaperoom_id'   => $order->escaperoom_id,
                     'code'            => $this->generateCode(),
                     'amount'          => $item->unit_price,
@@ -72,6 +72,8 @@ class GiftVoucherService
                     'status'          => 'active',
                     'valid_until'     => $validUntil,
                 ]);
+
+                app(MailTemplateService::class)->sendForGiftVoucher($voucher, $order);
 
                 $created++;
             }

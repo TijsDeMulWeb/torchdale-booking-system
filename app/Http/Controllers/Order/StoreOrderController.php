@@ -89,7 +89,9 @@ class StoreOrderController extends Controller
             $orderedItem->save();
         }
 
-        $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm);
+        if ($request->payment_method === 'online') {
+            $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm);
+        }
 
         return redirect()->route('orders.index')->with('success', 'Bestelling geplaatst.');
     }
@@ -173,8 +175,8 @@ class StoreOrderController extends Controller
                 vatMode: VatMode::INCLUSIVE,
                 paymentTerm: $molliePaymentTerm,
                 recipientIdentifier: $isBusiness
-                    ? ($business['vat_number'] ?? ($customer->email . '-business'))
-                    : $customer->email,
+                ? ($business['vat_number'] ?? ($customer->email . '-business'))
+                : $customer->email,
                 recipient: $recipient,
                 lines: new DataCollection($lines),
                 discount: $invoiceDiscount,

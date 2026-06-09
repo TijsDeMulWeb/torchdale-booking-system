@@ -53,8 +53,28 @@
                                         <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
                                             {{ Number::currency($order->total) }}
                                         </td>
-                                        <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
-                                            {{ $order->status === 'paid' ? $order->payment_method : $order->status }}
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                            @if ($order->status === 'paid' && $order->payment_method === 'cash')
+                                                <span class="inline-flex items-center gap-1 rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
+                                                    Cash
+                                                </span>
+                                            @elseif ($order->status === 'paid' && $order->payment_method === 'online')
+                                                <span class="inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-400 ring-1 ring-inset ring-blue-600/20">
+                                                    Online
+                                                </span>
+                                            @elseif ($order->status === 'paid')
+                                                <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
+                                                    Betaald
+                                                </span>
+                                            @elseif ($order->status === 'pending')
+                                                <span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">
+                                                    Open
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">
+                                                    {{ $order->status }}
+                                                </span>
+                                            @endif
                                         </td>
                                         <td
                                             class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
@@ -66,6 +86,9 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="mt-4">
+                            {{ $orders->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

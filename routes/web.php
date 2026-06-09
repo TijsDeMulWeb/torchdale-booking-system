@@ -261,6 +261,7 @@ Route::middleware('auth')->group(function () {
     });
     Route::get('/orders/gift-vouchers', \App\Http\Controllers\Order\GiftVoucherController::class)->name('orders.gift-vouchers');
     Route::post('/orders/gift-vouchers', \App\Http\Controllers\Order\StoreManualGiftVoucherController::class)->name('orders.gift-vouchers.store');
+    Route::patch('/orders/gift-vouchers/{voucher}/delivery', \App\Http\Controllers\Order\UpdateGiftVoucherDeliveryController::class)->name('orders.gift-vouchers.delivery');
     Route::get('/orders/{order}/invoice', ShowOrderInvoiceController::class)->name('orders.invoice');
 
     // API Keys routes

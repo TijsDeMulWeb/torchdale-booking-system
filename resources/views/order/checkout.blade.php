@@ -339,13 +339,14 @@
 
                                 @forelse ($giftCards as $giftCard)
                                     <button
-                                        onclick="addToCart(this)"
+                                        onclick="openGiftCardModal(this)"
                                         data-type="giftcard"
                                         data-id="{{ $giftCard->id }}"
                                         data-name="{{ $giftCard->name }}"
                                         data-price="{{ $giftCard->amount ?? 0 }}"
                                         data-vat="0"
                                         data-stock="-1"
+                                        data-shipping-cost="{{ $giftCard->shipping_cost ?? 0 }}"
                                         class="item-card group flex flex-col items-start rounded-lg border border-gray-200 dark:border-white/10 p-3 text-left hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
                                         <div class="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 dark:bg-white/10 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/40 transition-colors">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4 text-gray-500 dark:text-gray-400 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">
@@ -469,6 +470,54 @@
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Gift card delivery modal --}}
+    <div id="gc-modal-backdrop" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onclick="closeGiftCardModal(event)">
+        <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-gray-900 shadow-xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b border-gray-200 dark:border-white/10 px-5 py-4">
+                <h3 id="gc-modal-title" class="text-sm font-semibold text-gray-900 dark:text-white"></h3>
+                <button onclick="closeGiftCardModal()" class="rounded-md p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="px-5 py-4 space-y-4">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Kies hoe deze cadeaubon bezorgd wordt.</p>
+                <div class="grid grid-cols-3 gap-2">
+                    @foreach ([
+                        ['value' => 'mail',   'label' => 'E-mail',   'icon' => 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
+                        ['value' => 'post',   'label' => 'Per post', 'icon' => 'M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.235 2.235 0 00-.1.661z'],
+                        ['value' => 'pickup', 'label' => 'Afhalen',  'icon' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
+                    ] as $opt)
+                        <label class="relative flex flex-col items-center gap-1.5 rounded-lg border-2 px-3 py-3 cursor-pointer transition-colors
+                            has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20
+                            border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20">
+                            <input type="radio" name="gc_delivery_method" value="{{ $opt['value'] }}"
+                                onchange="gcToggleShipping(this.value)"
+                                class="sr-only gc-delivery-radio">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $opt['icon'] }}"/>
+                            </svg>
+                            <span class="text-xs font-medium text-gray-600 dark:text-gray-400">{{ $opt['label'] }}</span>
+                        </label>
+                    @endforeach
+                </div>
+
+                <div id="gc-modal-shipping-field" class="hidden">
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Verzendkosten</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
+                        <input type="number" id="gc-modal-shipping-cost" min="0" max="99.99" step="0.01"
+                            placeholder="0.00"
+                            class="w-full pl-7 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
+                <button onclick="closeGiftCardModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Annuleren</button>
+                <button onclick="addGiftCardToCart()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Toevoegen</button>
             </div>
         </div>
     </div>
@@ -947,7 +996,8 @@
             var totaalInclBtw = 0, itemCount = 0;
             var btwPerRate = {};
             cart.forEach(function (item) {
-                var lineTotal = item.price * item.qty;
+                var shipping  = (item.deliveryMethod === 'post' && item.shippingCost > 0) ? item.shippingCost * item.qty : 0;
+                var lineTotal = item.price * item.qty + shipping;
                 var btwAmount = lineTotal * (item.vat / (100 + item.vat));
                 totaalInclBtw += lineTotal;
                 itemCount += item.qty;
@@ -1017,13 +1067,23 @@
 
                 listEl.innerHTML = '';
                 cart.forEach(function (item) {
-                    var lineTotal = item.price * item.qty;
+                    var shipping  = (item.deliveryMethod === 'post' && item.shippingCost > 0) ? item.shippingCost * item.qty : 0;
+                    var lineTotal = item.price * item.qty + shipping;
                     var isRoom = item.id.indexOf('room_') === 0;
 
                     var hasDiscount = item.originalPrice && item.originalPrice > item.price;
+                    var isGiftCard = item.id.indexOf('giftcard_') === 0;
                     var subLabel;
                     if (isRoom) {
                         subLabel = '';
+                    } else if (isGiftCard) {
+                        var dmLabels = { mail: 'E-mail', post: 'Per post', pickup: 'Afhalen' };
+                        var dmColors = { mail: 'text-sky-600 dark:text-sky-400', post: 'text-purple-600 dark:text-purple-400', pickup: 'text-teal-600 dark:text-teal-400' };
+                        var dm = item.deliveryMethod || 'mail';
+                        subLabel = '<span class="text-xs ' + (dmColors[dm] || 'text-gray-400') + '">' + (dmLabels[dm] || dm) + '</span>';
+                        if (dm === 'post' && item.shippingCost > 0) {
+                            subLabel += '<span class="text-xs text-gray-400 dark:text-gray-500"> + ' + fmt(item.shippingCost) + ' verzending</span>';
+                        }
                     } else if (hasDiscount) {
                         var stockSuffix = item.stock !== -1 ? ' · max ' + item.stock : ' / stuk';
                         subLabel = '<span class="text-xs line-through text-gray-400 dark:text-gray-500">' + fmt(item.originalPrice) + '</span>' +
@@ -1150,7 +1210,8 @@
             var totaalInclBtw = 0, itemCount = 0;
             var btwPerRate = {};
             cart.forEach(function (item) {
-                var lineTotal = item.price * item.qty;
+                var shipping  = (item.deliveryMethod === 'post' && item.shippingCost > 0) ? item.shippingCost * item.qty : 0;
+                var lineTotal = item.price * item.qty + shipping;
                 var btwAmount = lineTotal * (item.vat / (100 + item.vat));
                 totaalInclBtw += lineTotal;
                 itemCount += item.qty;
@@ -1403,6 +1464,75 @@
             });
         }
         // ── End quick new customer ────────────────────────────────────────────
+
+        // ── Gift card delivery modal ──────────────────────────────────
+        var gcModalItem = null;
+
+        function openGiftCardModal(btn) {
+            gcModalItem = {
+                id:           btn.dataset.type + '_' + btn.dataset.id,
+                name:         btn.dataset.name,
+                price:        parseFloat(btn.dataset.price) || 0,
+                vat:          0,
+                qty:          1,
+                stock:        -1,
+                shippingCost: parseFloat(btn.dataset.shippingCost) || 0,
+            };
+            document.getElementById('gc-modal-title').textContent = btn.dataset.name;
+
+            // Reset to mail
+            document.querySelectorAll('.gc-delivery-radio').forEach(function (r) {
+                r.checked = r.value === 'mail';
+            });
+            document.getElementById('gc-modal-shipping-field').classList.add('hidden');
+            document.getElementById('gc-modal-shipping-cost').value = '';
+
+            document.getElementById('gc-modal-backdrop').classList.remove('hidden');
+            document.getElementById('gc-modal-backdrop').classList.add('flex');
+        }
+
+        function closeGiftCardModal(e) {
+            if (e && e.target !== document.getElementById('gc-modal-backdrop')) return;
+            document.getElementById('gc-modal-backdrop').classList.add('hidden');
+            document.getElementById('gc-modal-backdrop').classList.remove('flex');
+            gcModalItem = null;
+        }
+
+        function gcToggleShipping(value) {
+            var field = document.getElementById('gc-modal-shipping-field');
+            var input = document.getElementById('gc-modal-shipping-cost');
+            if (value === 'post') {
+                field.classList.remove('hidden');
+                if (gcModalItem && gcModalItem.shippingCost > 0) {
+                    input.value = gcModalItem.shippingCost.toFixed(2);
+                }
+            } else {
+                field.classList.add('hidden');
+                input.value = '';
+            }
+        }
+
+        function addGiftCardToCart() {
+            if (!gcModalItem) return;
+            var deliveryMethod = document.querySelector('.gc-delivery-radio:checked')?.value || 'mail';
+            var shippingCost   = deliveryMethod === 'post'
+                ? parseFloat(document.getElementById('gc-modal-shipping-cost').value) || 0
+                : 0;
+
+            var item = Object.assign({}, gcModalItem, { deliveryMethod: deliveryMethod, shippingCost: shippingCost });
+            var existing = cart.find(function (i) { return i.id === item.id && i.deliveryMethod === deliveryMethod; });
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push(item);
+            }
+
+            renderCart();
+            document.getElementById('gc-modal-backdrop').classList.add('hidden');
+            document.getElementById('gc-modal-backdrop').classList.remove('flex');
+            gcModalItem = null;
+        }
+        // ─────────────────────────────────────────────────────────────
 
         function toggleMobileCart() {
             var panel = document.getElementById('mobile-cart-panel');

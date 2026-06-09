@@ -115,7 +115,7 @@
                                                         @endif
                                                     </td>
 
-                                                    {{-- Delivery method --}}
+                                                    {{-- Delivery method (klikbaar) --}}
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
                                                         @php
                                                             $delivery = match($voucher->delivery_method) {
@@ -280,6 +280,107 @@
             </form>
         </div>
     </div>
+
+{{-- Delivery method edit modal --}}
+<div id="delivery-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+     onclick="if(event.target===this) closeDeliveryModal()">
+    <div class="w-full max-w-sm rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden shadow-2xl">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-white/10">
+            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Leveringswijze aanpassen</h2>
+            <button type="button" onclick="closeDeliveryModal()"
+                class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <form id="delivery-form" method="POST" class="px-5 py-4 space-y-4">
+            @csrf
+            @method('PATCH')
+
+            <div class="grid grid-cols-3 gap-2">
+                @foreach ([
+                    ['value' => 'mail',   'label' => 'E-mail',   'icon' => 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
+                    ['value' => 'post',   'label' => 'Per post', 'icon' => 'M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.235 2.235 0 00-.1.661z'],
+                    ['value' => 'pickup', 'label' => 'Afhalen',  'icon' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
+                ] as $opt)
+                    <label class="relative flex flex-col items-center gap-1.5 rounded-lg border-2 px-3 py-3 cursor-pointer transition-colors
+                        has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20
+                        border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20">
+                        <input type="radio" name="delivery_method" value="{{ $opt['value'] }}"
+                            onchange="toggleDeliveryShipping(this.value)"
+                            class="sr-only dm-radio">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $opt['icon'] }}"/>
+                        </svg>
+                        <span class="text-xs font-medium text-gray-600 dark:text-gray-400">{{ $opt['label'] }}</span>
+                    </label>
+                @endforeach
+            </div>
+
+            <div id="dm-shipping-field" class="hidden">
+                <label for="dm-shipping-cost" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Verzendkosten</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
+                    <input type="number" id="dm-shipping-cost" name="shipping_cost" min="0" max="99.99" step="0.01"
+                        placeholder="0.00"
+                        class="w-full pl-7 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2 border-t border-gray-100 dark:border-white/10">
+                <button type="button" onclick="closeDeliveryModal()"
+                    class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Annuleren</button>
+                <button type="submit"
+                    class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">
+                    Opslaan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openDeliveryModal(voucherId, currentMethod, currentShipping) {
+    const modal = document.getElementById('delivery-modal');
+    const form  = document.getElementById('delivery-form');
+
+    form.action = `/orders/gift-vouchers/${voucherId}/delivery`;
+
+    // Zet de juiste radio aan
+    form.querySelectorAll('.dm-radio').forEach(r => {
+        r.checked = r.value === currentMethod;
+    });
+
+    // Toon/verberg shipping veld
+    const shippingField = document.getElementById('dm-shipping-field');
+    const shippingInput = document.getElementById('dm-shipping-cost');
+    if (currentMethod === 'post') {
+        shippingField.classList.remove('hidden');
+        shippingInput.value = currentShipping > 0 ? currentShipping.toFixed(2) : '';
+    } else {
+        shippingField.classList.add('hidden');
+        shippingInput.value = '';
+    }
+
+    modal.classList.remove('hidden');
+}
+
+function closeDeliveryModal() {
+    document.getElementById('delivery-modal').classList.add('hidden');
+}
+
+function toggleDeliveryShipping(value) {
+    const field = document.getElementById('dm-shipping-field');
+    const input = document.getElementById('dm-shipping-cost');
+    if (value === 'post') {
+        field.classList.remove('hidden');
+    } else {
+        field.classList.add('hidden');
+        input.value = '';
+    }
+}
+</script>
 
 <script>
 function toggleShippingCost(value) {

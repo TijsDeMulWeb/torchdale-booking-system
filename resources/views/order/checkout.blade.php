@@ -225,6 +225,8 @@
                                         data-name="{{ $product->name }}"
                                         data-price="{{ $effectivePrice }}"
                                         data-original-price="{{ $sellingPrice }}"
+                                        data-discount-type="{{ $hasDiscount ? $discountType : '' }}"
+                                        data-discount-value="{{ $hasDiscount ? $discountValue : 0 }}"
                                         data-vat="{{ $product->vat_percentage ?? 0 }}"
                                         data-stock="{{ $product->stock_quantity ?? -1 }}"
                                         @if($outOfStock) disabled @endif
@@ -822,6 +824,8 @@
             var id            = btn.dataset.type + '_' + btn.dataset.id;
             var price         = parseFloat(btn.dataset.price) || 0;
             var originalPrice = parseFloat(btn.dataset.originalPrice || btn.dataset.price) || 0;
+            var discountType  = btn.dataset.discountType || '';
+            var discountValue = parseFloat(btn.dataset.discountValue) || 0;
             var vat           = parseFloat(btn.dataset.vat)   || 0;
             var stock         = parseInt(btn.dataset.stock, 10); // -1 = unlimited
             var existing      = cart.find(function (i) { return i.id === id; });
@@ -832,7 +836,7 @@
             if (existing) {
                 existing.qty++;
             } else {
-                cart.push({ id: id, name: btn.dataset.name, price: price, originalPrice: originalPrice, vat: vat, qty: 1, stock: stock });
+                cart.push({ id: id, name: btn.dataset.name, price: price, originalPrice: originalPrice, discountType: discountType, discountValue: discountValue, vat: vat, qty: 1, stock: stock });
             }
 
             renderCart();

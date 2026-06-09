@@ -57,15 +57,17 @@ class GiftVoucherService
                 $validUntil = $item->giftCard?->valid_until;
 
                 GiftVoucher::create([
-                    'escaperoom_id' => $order->escaperoom_id,
-                    'code'          => $this->generateCode(),
-                    'amount'        => $item->unit_price,
-                    'customer_id'   => $order->customer_id,
-                    'order_id'      => $order->id,
-                    'gift_card_id'  => $item->gift_card_id,
-                    'source'        => 'purchase',
-                    'status'        => 'active',
-                    'valid_until'   => $validUntil,
+                    'escaperoom_id'   => $order->escaperoom_id,
+                    'code'            => $this->generateCode(),
+                    'amount'          => $item->unit_price,
+                    'customer_id'     => $order->customer_id,
+                    'order_id'        => $order->id,
+                    'gift_card_id'    => $item->gift_card_id,
+                    'source'          => 'purchase',
+                    'delivery_method' => 'mail',
+                    'shipping_cost'   => 0,
+                    'status'          => 'active',
+                    'valid_until'     => $validUntil,
                 ]);
 
                 $created++;
@@ -90,14 +92,15 @@ class GiftVoucherService
             : null;
 
         return GiftVoucher::create([
-            'escaperoom_id' => $order->escaperoom_id,
-            'code'          => $this->generateCode(),
-            'amount'        => $order->total,
-            'customer_id'   => $order->customer_id,
-            'order_id'      => $order->id,
-            'source'        => 'cancellation',
-            'status'        => 'active',
-            'valid_until'   => $validUntil,
+            'escaperoom_id'   => $order->escaperoom_id,
+            'code'            => $this->generateCode(),
+            'amount'          => $order->total,
+            'customer_id'     => $order->customer_id,
+            'order_id'        => $order->id,
+            'source'          => 'cancellation',
+            'delivery_method' => 'mail',
+            'status'          => 'active',
+            'valid_until'     => $validUntil,
         ]);
     }
 }

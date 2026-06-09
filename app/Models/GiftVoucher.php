@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['escaperoom_id', 'code', 'amount', 'customer_id', 'order_id', 'gift_card_id', 'source', 'status', 'valid_until', 'used_at', 'used_order_id'])]
+#[Fillable(['escaperoom_id', 'code', 'amount', 'customer_id', 'order_id', 'gift_card_id', 'source', 'delivery_method', 'shipping_cost', 'status', 'valid_until', 'used_at', 'used_order_id'])]
 class GiftVoucher extends Model
 {
     use SoftDeletes;
@@ -14,9 +14,10 @@ class GiftVoucher extends Model
     protected function casts(): array
     {
         return [
-            'valid_until' => 'datetime',
-            'used_at'     => 'datetime',
-            'amount'      => 'decimal:2',
+            'valid_until'   => 'datetime',
+            'used_at'       => 'datetime',
+            'amount'        => 'decimal:2',
+            'shipping_cost' => 'decimal:2',
         ];
     }
 

@@ -94,7 +94,12 @@ class StoreOrderController extends Controller
                 $parts = explode('_', $itemId, 3);
                 $orderedItem->room_id = isset($parts[1]) ? (int) $parts[1] : null;
             } elseif (str_starts_with($itemId, 'giftcard_')) {
-                $orderedItem->gift_card_id = (int) substr($itemId, strlen('giftcard_'));
+                $orderedItem->gift_card_id       = (int) substr($itemId, strlen('giftcard_'));
+                $deliveryMethod = $item['deliveryMethod'] ?? 'mail';
+                $orderedItem->gift_delivery_method = in_array($deliveryMethod, ['mail', 'post', 'pickup']) ? $deliveryMethod : 'mail';
+                $shippingCost = $deliveryMethod === 'post' ? round((float) ($item['shippingCost'] ?? 0), 2) : 0;
+                $orderedItem->gift_shipping_cost = $shippingCost;
+                $orderedItem->total_price = round(($unitPrice + $shippingCost) * $qty, 2);
             } elseif (str_starts_with($itemId, 'product_')) {
                 $orderedItem->product_id = (int) substr($itemId, strlen('product_'));
             } else {

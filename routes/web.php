@@ -248,9 +248,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/widget-settings', UpdateWidgetSettingsController::class)->name('widgetSettings.update');
 
     // Orders routes
-    Route::get('/orders', IndexOrderController::class)->name('orders.index');
-    Route::get('/orders/checkout', ShowCheckoutController::class)->name('orders.checkout');
-    Route::post('/orders/checkout', StoreOrderController::class)->name('orders.store');
+    Route::middleware('mollie.key')->group(function () {
+        Route::get('/orders', IndexOrderController::class)->name('orders.index');
+        Route::get('/orders/checkout', ShowCheckoutController::class)->name('orders.checkout');
+        Route::post('/orders/checkout', StoreOrderController::class)->name('orders.store');
+    });
     Route::get('/orders/{order}/invoice', ShowOrderInvoiceController::class)->name('orders.invoice');
 
     // API Keys routes

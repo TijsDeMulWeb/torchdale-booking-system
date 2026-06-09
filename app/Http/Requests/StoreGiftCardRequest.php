@@ -32,10 +32,11 @@ class StoreGiftCardRequest extends FormRequest
                     ->where(fn($query) => $query->where('escaperoom_id', auth()->user()->escaperoom->id))
                     ->ignore($this->route('id')),
             ],
-            'description' => ['nullable', 'string'],
-            'amount' => ['required', 'numeric', 'min:0'],
-            'valid_from' => ['required', 'date'],
-            'valid_until' => ['nullable', 'date', 'after:valid_from'],
+            'description'     => ['nullable', 'string'],
+            'amount'          => ['required', 'numeric', 'min:0'],
+            'valid_from'      => ['required', 'date'],
+            'valid_until'     => ['nullable', 'date', 'after:valid_from'],
+            'shipping_cost'   => ['nullable', 'numeric', 'min:0', 'max:99.99'],
         ];
     }
 }

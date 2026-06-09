@@ -294,10 +294,20 @@
                                         }
                                         $hasDiscount = $effectivePrice < $sellingPrice;
                                     @endphp
+                                    @php
+                                        $hasVariants = $product->variants->isNotEmpty();
+                                        $variantsJson = $hasVariants ? $product->variants->map(fn($v) => [
+                                            'id'             => $v->id,
+                                            'name'           => $v->name,
+                                            'selling_price'  => $v->selling_price,
+                                            'stock_quantity' => $v->stock_quantity,
+                                        ])->toJson() : '[]';
+                                        $clickHandler = $hasVariants
+                                            ? 'openVariantModal(this)'
+                                            : (($product->shipping_cost_domestic > 0 || $product->shipping_cost_international > 0) ? 'openProductModal(this)' : 'addToCart(this)');
+                                    @endphp
                                     <button
-                                        @if(!$outOfStock)
-                                            onclick="{{ ($product->shipping_cost_domestic > 0 || $product->shipping_cost_international > 0) ? 'openProductModal(this)' : 'addToCart(this)' }}"
-                                        @endif
+                                        @if(!$outOfStock) onclick="{{ $clickHandler }}" @endif
                                         data-type="product"
                                         data-id="{{ $product->id }}"
                                         data-name="{{ $product->name }}"
@@ -309,6 +319,7 @@
                                         data-stock="{{ $product->stock_quantity ?? -1 }}"
                                         data-shipping-domestic="{{ $product->shipping_cost_domestic ?? 0 }}"
                                         data-shipping-international="{{ $product->shipping_cost_international ?? 0 }}"
+                                        data-variants="{{ $variantsJson }}"
                                         @if($outOfStock) disabled @endif
                                         class="item-card group flex flex-col items-start rounded-lg border p-3 text-left transition-colors
                                             {{ $outOfStock
@@ -522,6 +533,36 @@
             <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
                 <button onclick="closeGiftCardModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Annuleren</button>
                 <button onclick="addGiftCardToCart()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Toevoegen</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Product variant modal --}}
+    <div id="variant-modal-backdrop" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onclick="closeVariantModal(event)">
+        <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-gray-900 shadow-xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b border-gray-200 dark:border-white/10 px-5 py-4">
+                <div>
+                    <h3 id="variant-modal-title" class="text-sm font-semibold text-gray-900 dark:text-white"></h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Kies een variatie</p>
+                </div>
+                <button onclick="closeVariantModal()" class="rounded-md p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="px-5 py-4">
+                <div id="variant-modal-list" class="space-y-2"></div>
+                <div id="variant-modal-shipping" class="mt-4 hidden">
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Verzendkosten</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
+                        <input type="number" id="variant-modal-shipping-cost" min="0" step="0.01" placeholder="0.00"
+                            class="w-full pl-7 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
+                <button onclick="closeVariantModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Annuleren</button>
+                <button onclick="addVariantToCart()" id="variant-modal-add-btn" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Toevoegen</button>
             </div>
         </div>
     </div>
@@ -1610,6 +1651,124 @@
             document.getElementById('gc-modal-backdrop').classList.add('hidden');
             document.getElementById('gc-modal-backdrop').classList.remove('flex');
             gcModalItem = null;
+        }
+
+        // ── Product variant modal ────────────────────────────────────────────
+        var variantModalBase = null;
+        var selectedVariant  = null;
+
+        function openVariantModal(btn) {
+            var variants = JSON.parse(btn.dataset.variants || '[]');
+            if (!variants.length) { addToCart(btn); return; }
+
+            variantModalBase = {
+                productId:             btn.dataset.id,
+                name:                  btn.dataset.name,
+                basePrice:             parseFloat(btn.dataset.price) || 0,
+                originalPrice:         parseFloat(btn.dataset.originalPrice || btn.dataset.price) || 0,
+                discountType:          btn.dataset.discountType || '',
+                discountValue:         parseFloat(btn.dataset.discountValue) || 0,
+                vat:                   parseFloat(btn.dataset.vat) || 0,
+                shippingDomestic:      parseFloat(btn.dataset.shippingDomestic) || 0,
+                shippingInternational: parseFloat(btn.dataset.shippingInternational) || 0,
+                variants:              variants,
+            };
+            selectedVariant = null;
+
+            var hasShipping = variantModalBase.shippingDomestic > 0 || variantModalBase.shippingInternational > 0;
+            document.getElementById('variant-modal-title').textContent = btn.dataset.name;
+            document.getElementById('variant-modal-shipping').classList.toggle('hidden', !hasShipping);
+
+            if (hasShipping) {
+                var computed = (selectedCustomerCountryIso && escaperoomCountryIso &&
+                    selectedCustomerCountryIso.toUpperCase() === escaperoomCountryIso.toUpperCase())
+                    ? variantModalBase.shippingDomestic
+                    : variantModalBase.shippingInternational || variantModalBase.shippingDomestic;
+                document.getElementById('variant-modal-shipping-cost').value = computed > 0 ? computed.toFixed(2) : '';
+            }
+
+            var fmt = function (n) { return '€ ' + n.toFixed(2).replace('.', ','); };
+            var listEl = document.getElementById('variant-modal-list');
+            listEl.innerHTML = '';
+            variants.forEach(function (v) {
+                var price   = v.selling_price !== null ? parseFloat(v.selling_price) : variantModalBase.basePrice;
+                var stock   = v.stock_quantity;
+                var outOfStock = stock !== null && stock <= 0;
+                var label = document.createElement('label');
+                label.className = 'flex items-center justify-between rounded-lg border-2 px-4 py-3 cursor-pointer transition-colors ' +
+                    (outOfStock
+                        ? 'border-gray-100 dark:border-white/5 opacity-40 cursor-not-allowed'
+                        : 'border-gray-200 dark:border-white/10 hover:border-indigo-300 dark:hover:border-indigo-500 has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20');
+                label.innerHTML =
+                    '<div class="flex items-center gap-3">' +
+                        '<input type="radio" name="variant_select" value="' + v.id + '" data-price="' + price + '" data-stock="' + (stock !== null ? stock : -1) + '"' +
+                        (outOfStock ? ' disabled' : '') +
+                        ' class="accent-indigo-600">' +
+                        '<span class="text-sm font-medium text-gray-900 dark:text-white">' + v.name + '</span>' +
+                    '</div>' +
+                    '<div class="text-right">' +
+                        '<span class="text-sm text-gray-700 dark:text-gray-300">' + fmt(price) + '</span>' +
+                        (stock !== null ? '<span class="block text-xs text-gray-400 dark:text-gray-500">' + (outOfStock ? 'Uitverkocht' : stock + ' op voorraad') + '</span>' : '') +
+                    '</div>';
+                listEl.appendChild(label);
+            });
+
+            document.getElementById('variant-modal-backdrop').classList.remove('hidden');
+            document.getElementById('variant-modal-backdrop').classList.add('flex');
+        }
+
+        function closeVariantModal(e) {
+            if (e && e.target !== document.getElementById('variant-modal-backdrop')) return;
+            document.getElementById('variant-modal-backdrop').classList.add('hidden');
+            document.getElementById('variant-modal-backdrop').classList.remove('flex');
+            variantModalBase = null;
+            selectedVariant  = null;
+        }
+
+        function addVariantToCart() {
+            if (!variantModalBase) return;
+            var checked = document.querySelector('input[name="variant_select"]:checked');
+            if (!checked) { alert('Kies eerst een variatie.'); return; }
+
+            var variantId    = parseInt(checked.value, 10);
+            var variantPrice = parseFloat(checked.dataset.price) || variantModalBase.basePrice;
+            var variantStock = parseInt(checked.dataset.stock, 10);
+            var variantObj   = variantModalBase.variants.find(function (v) { return v.id === variantId; });
+
+            var hasShipping  = variantModalBase.shippingDomestic > 0 || variantModalBase.shippingInternational > 0;
+            var shippingCost = hasShipping ? (parseFloat(document.getElementById('variant-modal-shipping-cost').value) || 0) : 0;
+
+            var id = 'product_' + variantModalBase.productId + '_v' + variantId;
+            var existing = cart.find(function (i) { return i.id === id; });
+            if (existing) {
+                if (variantStock !== -1 && existing.qty >= variantStock) { closeVariantModal(); return; }
+                existing.qty++;
+                existing.shippingCost = shippingCost;
+            } else {
+                cart.push({
+                    id:                    id,
+                    name:                  variantModalBase.name + ' – ' + (variantObj ? variantObj.name : ''),
+                    price:                 variantPrice,
+                    originalPrice:         variantPrice,
+                    discountType:          '',
+                    discountValue:         0,
+                    vat:                   variantModalBase.vat,
+                    qty:                   1,
+                    stock:                 variantStock,
+                    shippingDomestic:      variantModalBase.shippingDomestic,
+                    shippingInternational: variantModalBase.shippingInternational,
+                    shippingCost:          shippingCost,
+                    productId:             variantModalBase.productId,
+                    variantId:             variantId,
+                    variantName:           variantObj ? variantObj.name : '',
+                });
+            }
+
+            renderCart();
+            document.getElementById('variant-modal-backdrop').classList.add('hidden');
+            document.getElementById('variant-modal-backdrop').classList.remove('flex');
+            variantModalBase = null;
+            selectedVariant  = null;
         }
 
         // ── Product shipping modal ────────────────────────────────────────────

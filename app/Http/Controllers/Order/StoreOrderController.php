@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderedItem;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use App\Services\GiftVoucherService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -106,15 +107,30 @@ class StoreOrderController extends Controller
                     $orderedItem->gift_shipping_cost = $shippingCost;
                     $orderedItem->total_price = round(($unitPrice + $shippingCost) * $qty, 2);
                 } elseif (str_starts_with($itemId, 'product_')) {
-                    $productId = (int) substr($itemId, strlen('product_'));
-                    $orderedItem->product_id = $productId;
+                    // Format: product_{id} or product_{id}_v{variantId}
+                    preg_match('/^product_(\d+)(?:_v(\d+))?$/', $itemId, $m);
+                    $productId  = (int) ($m[1] ?? 0);
+                    $variantId  = isset($m[2]) ? (int) $m[2] : null;
 
-                    $product = Product::lockForUpdate()->find($productId);
-                    if ($product && ! is_null($product->stock_quantity)) {
-                        if ($product->stock_quantity < $qty) {
-                            abort(422, "Onvoldoende stock voor \"{$product->name}\". Nog {$product->stock_quantity} beschikbaar.");
+                    $orderedItem->product_id = $productId;
+                    $orderedItem->product_variant_id = $variantId;
+
+                    if ($variantId) {
+                        $variant = ProductVariant::lockForUpdate()->find($variantId);
+                        if ($variant && ! is_null($variant->stock_quantity)) {
+                            if ($variant->stock_quantity < $qty) {
+                                abort(422, "Onvoldoende stock voor \"{$variant->product->name} – {$variant->name}\". Nog {$variant->stock_quantity} beschikbaar.");
+                            }
+                            $variant->decrement('stock_quantity', $qty);
                         }
-                        $product->decrement('stock_quantity', $qty);
+                    } else {
+                        $product = Product::lockForUpdate()->find($productId);
+                        if ($product && ! is_null($product->stock_quantity)) {
+                            if ($product->stock_quantity < $qty) {
+                                abort(422, "Onvoldoende stock voor \"{$product->name}\". Nog {$product->stock_quantity} beschikbaar.");
+                            }
+                            $product->decrement('stock_quantity', $qty);
+                        }
                     }
 
                     $productShipping = round((float) ($item['shippingCost'] ?? 0), 2);

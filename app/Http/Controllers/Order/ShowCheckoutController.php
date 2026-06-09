@@ -20,6 +20,7 @@ class ShowCheckoutController extends Controller
             ->get();
 
         $products = Product::where('escaperoom_id', $escaperoom->id)
+            ->with('variants')
             ->get();
 
         $giftCards = GiftCard::where('escaperoom_id', $escaperoom->id)

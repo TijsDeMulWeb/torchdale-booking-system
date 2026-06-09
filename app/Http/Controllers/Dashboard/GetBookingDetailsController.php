@@ -43,17 +43,29 @@ class GetBookingDetailsController extends Controller
             'customer_phone' => $customer?->phone  ?? $order?->customer_phone,
 
             // Payment
-            'total'          => $order?->total          ? number_format((float) $order->total,         2, ',', '.') : null,
-            'amount_online'  => $order?->amount_online  ? number_format((float) $order->amount_online, 2, ',', '.') : '0,00',
-            'amount_onsite'  => $order?->amount_onsite  ? number_format((float) $order->amount_onsite, 2, ',', '.') : '0,00',
-            'status'         => $order?->status,
-            'payment_method' => $order?->payment_method,
+            'total'              => $order ? (float) $order->total              : null,
+            'amount_online'      => $order ? (float) $order->amount_online      : 0,
+            'amount_onsite'      => $order ? (float) $order->amount_onsite      : 0,
+            'amount_paid_online' => $order ? (float) $order->amount_paid_online : 0,
+            'amount_paid_onsite' => $order ? (float) $order->amount_paid_onsite : 0,
+            'status'             => $order?->status,
+            'payment_method'     => $order?->payment_method,
 
-            // Invoice
-            'invoice_pdf_url'  => $invoice?->pdf_url,
+            // Invoice (receipt) — only exists after webhook confirms payment
+            'invoice_pdf_url'  => ($invoice?->pdf_url) ? route('orders.invoice', ['order' => $order->id]) : null,
             'invoice_number'   => $invoice?->invoice_number ?? $order?->invoice_number,
 
+            // Step tracking
+            'steps' => [
+                'invoice_sent'  => !empty($order?->mollie_id),   // Betaallink verstuurd (mollie_id on order)
+                'paid'          => $order?->status === 'paid',   // Betaald
+                'receipt_sent'  => $invoice !== null,            // Betaald factuur ontvangen (Invoice record created by webhook)
+            ],
+
             'order_id' => $order?->id,
+        ])->withHeaders([
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+            'Pragma'        => 'no-cache',
         ]);
     }
 }

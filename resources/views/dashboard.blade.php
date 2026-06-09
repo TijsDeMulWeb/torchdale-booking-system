@@ -325,6 +325,7 @@
             </div>
             <form id="booking-form" method="POST" action="{{ route('dashboard.timeslots.book') }}">
                 @csrf
+                <input type="hidden" name="idempotency_key" id="booking-idempotency-key">
                 {{-- Timing & room --}}
                 <div class="mb-5">
                     <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Kamer</label>
@@ -427,7 +428,7 @@
                 </div>
                 <div class="flex items-center justify-end gap-4">
                     <button type="button" data-close-modal="booking" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Annuleren</button>
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500">Afspraak aanmaken</button>
+                    <button type="submit" id="booking-submit-btn" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed">Afspraak aanmaken</button>
                 </div>
             </form>
         </div>
@@ -435,7 +436,7 @@
 
     {{-- Booking detail modal (for clicking a booked slot) --}}
     <div id="booking-detail-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-        <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden">
+        <div class="w-full max-w-xl rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden">
             {{-- Header --}}
             <div id="bdetail-header" class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-white/10">
                 <div class="flex items-center gap-3 min-w-0">
@@ -477,40 +478,56 @@
                     </div>
                 </div>
 
+                {{-- Step tracker --}}
+                <div id="bdetail-steps" class="flex items-center gap-0">
+                    {{-- Steps filled by JS --}}
+                </div>
+
                 {{-- Payment --}}
                 <div>
                     <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Betaling</p>
-                    <div class="rounded-lg border border-gray-100 dark:border-white/10 divide-y divide-gray-100 dark:divide-white/10 text-sm">
-                        <div class="flex items-center justify-between px-4 py-2.5">
-                            <span class="text-gray-500 dark:text-gray-400">Totaal</span>
-                            <span id="bdetail-total" class="font-semibold text-gray-900 dark:text-white"></span>
+                    <div class="rounded-lg border border-gray-100 dark:border-white/10 text-sm overflow-hidden">
+                        {{-- Header --}}
+                        <div class="grid grid-cols-3 gap-2 bg-gray-50 dark:bg-white/5 px-4 py-2 text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
+                            <span></span>
+                            <span class="text-right">Te betalen</span>
+                            <span class="text-right">Betaald</span>
                         </div>
-                        <div class="flex items-center justify-between px-4 py-2.5">
-                            <span class="text-gray-500 dark:text-gray-400">Online betaald</span>
-                            <span id="bdetail-amount-online" class="text-gray-700 dark:text-gray-300"></span>
+                        {{-- Online row --}}
+                        <div class="grid grid-cols-3 gap-2 items-center border-t border-gray-100 dark:border-white/10 px-4 py-2.5">
+                            <span class="text-gray-500 dark:text-gray-400">Online</span>
+                            <span id="bdetail-amount-online" class="text-right text-gray-700 dark:text-gray-300"></span>
+                            <span id="bdetail-paid-online" class="text-right text-gray-700 dark:text-gray-300"></span>
                         </div>
-                        <div class="flex items-center justify-between px-4 py-2.5">
+                        {{-- Onsite row --}}
+                        <div class="grid grid-cols-3 gap-2 items-center border-t border-gray-100 dark:border-white/10 px-4 py-2.5">
                             <span class="text-gray-500 dark:text-gray-400">Ter plekke</span>
-                            <span id="bdetail-amount-onsite" class="text-gray-700 dark:text-gray-300"></span>
+                            <span id="bdetail-amount-onsite" class="text-right text-gray-700 dark:text-gray-300"></span>
+                            <div class="flex items-center justify-end gap-2">
+                                <span id="bdetail-paid-onsite" class="text-gray-700 dark:text-gray-300"></span>
+                                <button type="button" id="bdetail-mark-onsite-btn"
+                                    class="hidden shrink-0 rounded-md bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50">
+                                    Markeer betaald
+                                </button>
+                            </div>
                         </div>
-                        <div class="flex items-center justify-between px-4 py-2.5">
-                            <span class="text-gray-500 dark:text-gray-400">Status</span>
-                            <span id="bdetail-status" class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"></span>
+                        {{-- Total + status --}}
+                        <div class="grid grid-cols-3 gap-2 items-center border-t border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-4 py-2.5">
+                            <span class="font-medium text-gray-700 dark:text-gray-200">Totaal</span>
+                            <span id="bdetail-total" class="text-right font-semibold text-gray-900 dark:text-white"></span>
+                            <div class="flex justify-end">
+                                <span id="bdetail-status" class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             {{-- Footer --}}
-            <div id="bdetail-footer" class="flex items-center justify-between gap-3 px-6 py-4 border-t border-gray-100 dark:border-white/10">
-                <a id="bdetail-invoice-link" href="#" target="_blank"
-                    class="hidden inline-flex items-center gap-2 rounded-lg border border-gray-300 dark:border-white/15 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-white/5">
-                    <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Factuur openen
-                </a>
-                <p id="bdetail-no-invoice" class="text-xs text-gray-400 dark:text-gray-500 hidden">Geen factuur beschikbaar</p>
+            <div class="flex flex-wrap items-center gap-3 px-6 py-4 border-t border-gray-100 dark:border-white/10">
+                {{-- Left: invoice actions --}}
+
+                {{-- Right: cancel + close --}}
                 <div class="ml-auto flex items-center gap-3">
                     <button type="button" id="bdetail-cancel-btn"
                         class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-900/20">
@@ -536,6 +553,7 @@
             const UNBLOCK_URL_TEMPLATE = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.unblock', ['timeSlot' => '__id__'])) !!};
             const BOOKING_DETAILS_URL_TEMPLATE = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.bookingDetails', ['timeSlot' => '__id__'])) !!};
             const CANCEL_BOOKING_URL_TEMPLATE  = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.cancel', ['timeSlot' => '__id__'])) !!};
+            const MARK_ONSITE_PAID_URL_TEMPLATE   = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.markOnsitePaid', ['timeSlot' => '__id__'])) !!};
             const HOUR_HEIGHT = 60;
             const DAY_HEIGHT = 24 * HOUR_HEIGHT;
             const FIXED_ROOM_COLUMN_WIDTH = 280;
@@ -1160,6 +1178,10 @@
                 document.getElementById('booking-amount-online').value  = '0.00';
                 document.getElementById('booking-amount-onsite').value  = '0.00';
                 document.getElementById('booking-price-hint').textContent = '';
+                document.getElementById('booking-idempotency-key').value = crypto.randomUUID();
+                const submitBtn = document.getElementById('booking-submit-btn');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Afspraak aanmaken';
 
                 // Trigger price lookup if we have enough context
                 schedulePriceLookup();
@@ -1315,12 +1337,13 @@
                 setText('bdetail-total', '');
                 setText('bdetail-amount-online', '');
                 setText('bdetail-amount-onsite', '');
+                setText('bdetail-paid-online', '');
+                setText('bdetail-paid-onsite', '');
+                document.getElementById('bdetail-mark-onsite-btn').classList.add('hidden');
                 document.getElementById('bdetail-status').textContent = '';
-                document.getElementById('bdetail-invoice-link').classList.add('hidden');
-                document.getElementById('bdetail-no-invoice').classList.add('hidden');
                 overlay.classList.remove('hidden');
 
-                const url = BOOKING_DETAILS_URL_TEMPLATE.replace('__id__', timeSlotId);
+                const url = BOOKING_DETAILS_URL_TEMPLATE.replace('__id__', timeSlotId) + '?_=' + Date.now();
                 fetch(url, { headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' } })
                     .then((res) => {
                         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1340,34 +1363,98 @@
                         setText('bdetail-email', d.customer_email || '—');
                         setText('bdetail-phone', d.customer_phone || '');
 
-                        setText('bdetail-total', d.total ? `€ ${d.total}` : '—');
-                        setText('bdetail-amount-online', `€ ${d.amount_online || '0,00'}`);
-                        setText('bdetail-amount-onsite', `€ ${d.amount_onsite || '0,00'}`);
+                        // Step tracker
+                        const steps = [
+                            { label: 'Betaallink verstuurd', done: d.steps?.invoice_sent },
+                            { label: 'Betaald',              done: d.steps?.paid },
+                            { label: 'Factuur ontvangen',    done: d.steps?.receipt_sent },
+                        ];
+                        const stepsEl = document.getElementById('bdetail-steps');
+                        // Build: [step] [line] [step] [line] [step]
+                        // Outer wrapper uses items-start so lines can be offset to circle-center
+                        let stepsHtml = '<div class="flex w-full items-start">';
+                        steps.forEach((step, i) => {
+                            const circleCls = step.done
+                                ? 'border-indigo-600 bg-indigo-600 text-white dark:border-indigo-500 dark:bg-indigo-500'
+                                : 'border-gray-300 bg-white text-gray-400 dark:border-white/20 dark:bg-gray-800';
+                            const labelCls = step.done
+                                ? 'text-indigo-600 dark:text-indigo-400 font-medium'
+                                : 'text-gray-400 dark:text-gray-500';
+                            stepsHtml += `
+                                <div class="flex flex-col items-center gap-1.5 ${i === 1 ? 'flex-1' : ''}">
+                                    <div class="flex size-8 items-center justify-center rounded-full border-2 text-xs font-bold ${circleCls}">
+                                        ${step.done ? '<svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>' : (i + 1)}
+                                    </div>
+                                    <span class="text-center text-xs leading-tight ${labelCls}">${step.label}</span>
+                                </div>`;
+                            if (i < steps.length - 1) {
+                                const lineCls = step.done
+                                    ? 'bg-indigo-600 dark:bg-indigo-500'
+                                    : 'bg-gray-200 dark:bg-white/10';
+                                stepsHtml += `<div class="mt-4 h-0.5 flex-1 ${lineCls}"></div>`;
+                            }
+                        });
+                        stepsHtml += '</div>';
+                        stepsEl.innerHTML = stepsHtml;
+
+                        const fmt = (n) => '€ ' + Number(n).toFixed(2).replace('.', ',');
+
+                        setText('bdetail-total',         d.total > 0 ? fmt(d.total) : '—');
+                        setText('bdetail-amount-online', fmt(d.amount_online ?? 0));
+                        setText('bdetail-amount-onsite', fmt(d.amount_onsite ?? 0));
+                        setText('bdetail-paid-online',   fmt(d.amount_paid_online ?? 0));
+                        setText('bdetail-paid-onsite',   fmt(d.amount_paid_onsite ?? 0));
+
+                        // Show "Markeer betaald" button if there's an onsite amount not yet paid
+                        const onsiteOwed = (d.amount_onsite ?? 0);
+                        const onsitePaid = (d.amount_paid_onsite ?? 0);
+                        const markOnsiteBtn = document.getElementById('bdetail-mark-onsite-btn');
+                        if (onsiteOwed > 0 && onsitePaid < onsiteOwed) {
+                            markOnsiteBtn.classList.remove('hidden');
+                            markOnsiteBtn.onclick = () => {
+                                markOnsiteBtn.disabled = true;
+                                markOnsiteBtn.textContent = 'Bezig…';
+                                fetch(MARK_ONSITE_PAID_URL_TEMPLATE.replace('__id__', d.id), {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                                        'Accept': 'application/json',
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ amount: onsiteOwed }),
+                                })
+                                .then((res) => res.json())
+                                .then((body) => {
+                                    setText('bdetail-paid-onsite', fmt(body.amount_paid_onsite ?? onsiteOwed));
+                                    markOnsiteBtn.classList.add('hidden');
+                                    // Update status badge
+                                    updateStatusBadge(body.status);
+                                })
+                                .catch(() => {
+                                    markOnsiteBtn.disabled = false;
+                                    markOnsiteBtn.textContent = 'Markeer betaald';
+                                });
+                            };
+                        } else {
+                            markOnsiteBtn.classList.add('hidden');
+                        }
 
                         // Status badge
-                        const statusEl = document.getElementById('bdetail-status');
-                        const statusMap = {
-                            paid:    ['Betaald',      'bg-green-100  text-green-700  dark:bg-green-900/30  dark:text-green-400'],
-                            pending: ['In afwachting','bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
-                            open:    ['Open',         'bg-blue-100   text-blue-700   dark:bg-blue-900/30   dark:text-blue-400'],
-                            failed:  ['Mislukt',      'bg-red-100    text-red-700    dark:bg-red-900/30    dark:text-red-400'],
-                            manual:  ['Manueel',      'bg-gray-100   text-gray-700   dark:bg-white/10      dark:text-gray-300'],
-                        };
-                        const [label, cls] = statusMap[d.status] || ['Onbekend', 'bg-gray-100 text-gray-600'];
-                        statusEl.textContent = label;
-                        statusEl.className = `inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${cls}`;
-
-                        // Invoice link
-                        const invoiceLink = document.getElementById('bdetail-invoice-link');
-                        const noInvoice   = document.getElementById('bdetail-no-invoice');
-                        if (d.invoice_pdf_url) {
-                            invoiceLink.href = d.invoice_pdf_url;
-                            invoiceLink.classList.remove('hidden');
-                            noInvoice.classList.add('hidden');
-                        } else {
-                            invoiceLink.classList.add('hidden');
-                            noInvoice.classList.remove('hidden');
+                        function updateStatusBadge(status) {
+                            const statusEl = document.getElementById('bdetail-status');
+                            const statusMap = {
+                                paid:      ['Betaald',     'bg-green-100  text-green-700  dark:bg-green-900/30  dark:text-green-400'],
+                                pending:   ['Openstaand',  'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
+                                open:      ['Openstaand',  'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
+                                cancelled: ['Geannuleerd', 'bg-red-100    text-red-700    dark:bg-red-900/30    dark:text-red-400'],
+                                failed:    ['Mislukt',     'bg-red-100    text-red-700    dark:bg-red-900/30    dark:text-red-400'],
+                            };
+                            const [label, cls] = statusMap[status] ?? ['Onbekend', 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300'];
+                            statusEl.textContent = label;
+                            statusEl.className = `inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${cls}`;
                         }
+                        updateStatusBadge(d.status);
+
 
                         // Cancel button
                         const cancelBtn = document.getElementById('bdetail-cancel-btn');
@@ -1563,6 +1650,12 @@
                 scrollToRelevantTime();
                 initSlotActions();
                 initBookingPriceListeners();
+
+                document.getElementById('booking-form')?.addEventListener('submit', () => {
+                    const btn = document.getElementById('booking-submit-btn');
+                    btn.disabled = true;
+                    btn.textContent = 'Bezig…';
+                });
 
                 document.querySelectorAll('.room-toggle').forEach((checkbox) => {
                     checkbox.addEventListener('change', render);

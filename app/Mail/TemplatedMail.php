@@ -29,7 +29,7 @@ class TemplatedMail extends Mailable
 
     public function content(): Content
     {
-        return new Content(htmlString: $this->renderedBody);
+        return new Content(view: 'mails.templated', with: ['body' => $this->renderedBody]);
     }
 
     public function attachments(): array

@@ -31,6 +31,9 @@ class StoreRoomController extends Controller
             $room->save();
         }
 
+        $languageIds = array_filter(array_map('intval', $request->input('language_ids', [])));
+        $room->languages()->sync($languageIds);
+
         return redirect()->route('rooms.index')->with('message', 'Room created successfully.');
     }
 }

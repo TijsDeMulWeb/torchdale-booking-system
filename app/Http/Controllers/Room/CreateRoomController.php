@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller;
+use App\Models\Language;
 use Illuminate\Http\Request;
 
 class CreateRoomController extends Controller
@@ -14,7 +15,8 @@ class CreateRoomController extends Controller
     {
         $escaperoomAddresses = auth()->user()->escaperoom->escaperoomAddresses()->get();
         return view('rooms.create', [
-            'escaperoomAddresses' => $escaperoomAddresses
+            'escaperoomAddresses' => $escaperoomAddresses,
+            'languages'           => Language::orderBy('name')->get(),
         ]);
     }
 }

@@ -146,14 +146,24 @@ class StoreOrderController extends Controller
             }
         });
 
-        $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm, $paymentMethod);
+        $createdVouchers = $this->createMollieInvoice($order, $customer, $cart, $totals, $business, $paymentTerm, $paymentMethod);
 
         $mailTemplateService = app(MailTemplateService::class);
         foreach ($order->orderedItems as $orderedItem) {
             $mailTemplateService->sendForProductItem($orderedItem, $order);
         }
 
-        return redirect()->route('orders.index')->with('success', 'Bestelling geplaatst.');
+        $redirect = redirect()->route('orders.index')->with('success', 'Bestelling geplaatst.');
+
+        if ($createdVouchers->isNotEmpty()) {
+            $redirect->with('gift_vouchers', $createdVouchers->map(fn ($voucher) => [
+                'code'           => $voucher->code,
+                'amount'         => $voucher->amount,
+                'gift_card_name' => $voucher->giftCard?->name,
+            ])->all());
+        }
+
+        return $redirect;
     }
 
     private function createMollieInvoice(
@@ -164,7 +174,7 @@ class StoreOrderController extends Controller
         array $business,
         ?string $paymentTerm,
         string $paymentMethod = 'online'
-    ): void {
+    ): \Illuminate\Support\Collection {
         try {
             $isBusiness = (bool) ($business['is_business'] ?? false);
             $street = trim(($customer->street ?? '') . ' ' . ($customer->house_number ?? ''));
@@ -258,43 +268,46 @@ class StoreOrderController extends Controller
             $mollieInvoice = $mollie->send($salesInvoiceRequest);
 
             $order->mollie_id = $mollieInvoice->id;
+            $order->payment_link = $mollieInvoice->_links->paymentLink->href ?? null;
+            $order->save();
+
+            $invoiceNumber = $mollieInvoice->invoiceNumber ?? ('INV-' . $order->id . '-' . time());
+
+            $pdfPath = null;
+            $mollieHref = $mollieInvoice->_links->pdfLink->href ?? null;
+            if ($mollieHref) {
+                $pdfResponse = Http::withToken($mollieKey)->get($mollieHref);
+                if ($pdfResponse->successful()) {
+                    $pdfPath = 'escaperooms/' . $order->escaperoom_id . '/invoices/' . $invoiceNumber . '.pdf';
+                    Storage::disk('local')->put($pdfPath, $pdfResponse->body());
+                }
+            }
+
+            DB::table('invoices')->insert([
+                'customer_id'       => $customer->id,
+                'order_id'          => $order->id,
+                'mollie_invoice_id' => $mollieInvoice->id,
+                'pdf_url'           => $pdfPath,
+                'source'            => 'mollie',
+                'invoice_number'    => $invoiceNumber,
+                'status'            => $isCash ? 'paid' : 'issued',
+                'amount'            => round($totals['totaal_incl_btw'] ?? 0, 2),
+                'created_at'        => now(),
+                'updated_at'        => now(),
+            ]);
+
+            $order->invoice_number = $invoiceNumber;
             $order->save();
 
             if ($isCash) {
-                $invoiceNumber = $mollieInvoice->invoiceNumber ?? ('INV-' . $order->id . '-' . time());
-
-                $pdfPath = null;
-                $mollieHref = $mollieInvoice->_links->pdfLink->href ?? null;
-                if ($mollieHref) {
-                    $pdfResponse = Http::withToken($mollieKey)->get($mollieHref);
-                    if ($pdfResponse->successful()) {
-                        $pdfPath = 'escaperooms/' . $order->escaperoom_id . '/invoices/' . $invoiceNumber . '.pdf';
-                        Storage::disk('local')->put($pdfPath, $pdfResponse->body());
-                    }
-                }
-
-                DB::table('invoices')->insert([
-                    'customer_id'       => $customer->id,
-                    'order_id'          => $order->id,
-                    'mollie_invoice_id' => $mollieInvoice->id,
-                    'pdf_url'           => $pdfPath,
-                    'source'            => 'mollie',
-                    'invoice_number'    => $invoiceNumber,
-                    'status'            => 'paid',
-                    'amount'            => round($totals['totaal_incl_btw'] ?? 0, 2),
-                    'created_at'        => now(),
-                    'updated_at'        => now(),
-                ]);
-
-                $order->invoice_number = $invoiceNumber;
-                $order->save();
-
                 // Cadeaubonnen aanmaken voor eventuele gift_card-items (cash = direct betaald)
-                app(GiftVoucherService::class)->createForPaidOrder($order);
+                return app(GiftVoucherService::class)->createForPaidOrder($order);
             }
         } catch (\Exception $e) {
             Log::error('Mollie sales invoice creation failed for order ' . $order->id . ': ' . $e->getMessage());
         }
+
+        return collect();
     }
 
     private function mapPaymentTerm(string $days): string

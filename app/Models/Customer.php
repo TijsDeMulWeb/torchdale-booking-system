@@ -25,6 +25,16 @@ class Customer extends Model
         return $this->hasMany(CustomerIdentifier::class);
     }
 
+    public function mailLogs()
+    {
+        return $this->hasMany(MailLog::class);
+    }
+
+    public function giftVouchers()
+    {
+        return $this->hasMany(GiftVoucher::class);
+    }
+
     protected function casts(): array
     {
         return [

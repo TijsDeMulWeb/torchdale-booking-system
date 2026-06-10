@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-#[Fillable(['room_id', 'language_id', 'start_time', 'end_time', 'blocked_at', 'blocked_reason'])]
+#[Fillable(['room_id', 'language_id', 'start_time', 'end_time', 'blocked_at', 'blocked_reason', 'reminder_sent_at'])]
 class TimeSlot extends Model
 {
     use SoftDeletes;
@@ -14,6 +14,7 @@ class TimeSlot extends Model
         'start_time' => 'datetime',
         'end_time' => 'datetime',
         'blocked_at' => 'datetime',
+        'reminder_sent_at' => 'datetime',
     ];
 
     public function room()

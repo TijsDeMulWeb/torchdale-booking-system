@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['escaperoom_id', 'mollie_api_key', 'openai_api_key', 'widget_color_primary', 'widget_color_primary_dark', 'widget_color_background_dark', 'widget_color_text', 'widget_color_sale', 'widget_color_success', 'confirmation_room_url', 'confirmation_product_url', 'confirmation_gift_card_url'])]
+#[Fillable(['escaperoom_id', 'mollie_api_key', 'openai_api_key', 'widget_color_primary', 'widget_color_primary_dark', 'widget_color_background_dark', 'widget_color_text', 'widget_color_sale', 'widget_color_success', 'confirmation_room_url', 'confirmation_product_url', 'confirmation_gift_card_url', 'reminder_days_before'])]
 class EscaperoomSetting extends Model
 {
     // No 'encrypted' cast — that uses serialize:false which conflicts with the decrypt() helper.

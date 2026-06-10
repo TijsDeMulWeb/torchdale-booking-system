@@ -78,9 +78,17 @@
                                         </td>
                                         <td
                                             class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
-                                            <a href="#"
-                                                class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">Edit<span
-                                                    class="sr-only">, {{ $order->id }}</span></a>
+                                            @if ($order->invoice && $order->invoice->pdf_url)
+                                                <a href="{{ route('orders.invoice', $order) }}" target="_blank"
+                                                    class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">Toon factuur<span
+                                                        class="sr-only">, {{ $order->id }}</span></a>
+                                            @elseif ($order->payment_link)
+                                                <a href="{{ route('orders.payment-link', $order) }}" target="_blank"
+                                                    class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">Toon betaallink<span
+                                                        class="sr-only">, {{ $order->id }}</span></a>
+                                            @else
+                                                <span class="text-gray-400 dark:text-gray-600">Geen factuur</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

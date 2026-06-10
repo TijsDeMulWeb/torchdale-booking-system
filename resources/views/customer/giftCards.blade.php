@@ -6,39 +6,100 @@
     <x-profile.header :customer="$customer" />
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         <x-profile.nav :customer="$customer" />
-        <ul role="list" class="divide-y divide-white/5">
-            <li class="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-white/2.5 sm:px-6 lg:px-8">
-                <div class="flex min-w-0 gap-x-4">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                        class="size-12 flex-none rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" />
-                    <div class="min-w-0 flex-auto">
-                        <p class="text-sm/6 font-semibold text-white">
-                            <a href="#">
-                                <span class="absolute inset-x-0 -top-px bottom-0"></span>
-                                Leslie Alexander
-                            </a>
-                        </p>
-                        <p class="mt-1 flex text-xs/5 text-gray-400">
-                            <a href="mailto:leslie.alexander@example.com"
-                                class="relative truncate hover:underline">leslie.alexander@example.com</a>
-                        </p>
+
+        @if ($vouchers->isEmpty())
+            <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Geen cadeaubonnen gevonden.</p>
+        @else
+            <div class="mt-3 flow-root">
+                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle">
+                        <table class="min-w-full divide-y divide-gray-300 dark:divide-white/15">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">Code</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Cadeaubon</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Waarde</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Bron</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Levering</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Geldig tot</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Aangemaakt</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
+                                @foreach ($vouchers as $voucher)
+                                    @php
+                                        $isExpired = $voucher->valid_until && $voucher->valid_until->isPast() && $voucher->status === 'active';
+                                    @endphp
+                                    <tr>
+                                        <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap sm:pl-6 lg:pl-8">
+                                            <span class="font-mono tracking-widest text-gray-900 dark:text-white select-all">{{ $voucher->code }}</span>
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
+                                            {{ $voucher->giftCard->name ?? '—' }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap font-semibold text-gray-900 dark:text-white">
+                                            {{ Number::currency($voucher->amount) }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                            @if ($voucher->source === 'cancellation')
+                                                <span class="inline-flex items-center rounded-md bg-orange-50 dark:bg-orange-900/20 px-2 py-1 text-xs font-medium text-orange-700 dark:text-orange-400 ring-1 ring-inset ring-orange-600/20">Annulering</span>
+                                            @elseif ($voucher->source === 'manual')
+                                                <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">Manueel</span>
+                                            @else
+                                                <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-400 ring-1 ring-inset ring-blue-600/20">Aankoop</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                            @php
+                                                $delivery = match($voucher->delivery_method) {
+                                                    'post'   => ['label' => 'Per post',  'class' => 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 ring-purple-600/20'],
+                                                    'pickup' => ['label' => 'Afhalen',   'class' => 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 ring-teal-600/20'],
+                                                    default  => ['label' => 'E-mail',    'class' => 'bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 ring-sky-600/20'],
+                                                };
+                                            @endphp
+                                            <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset {{ $delivery['class'] }}">
+                                                {{ $delivery['label'] }}
+                                            </span>
+                                            @if ($voucher->delivery_method === 'post' && $voucher->shipping_cost > 0)
+                                                <span class="ml-1 text-xs text-gray-400 dark:text-gray-500">
+                                                    + {{ Number::currency($voucher->shipping_cost) }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
+                                            @if ($voucher->valid_until)
+                                                <span class="{{ $isExpired ? 'text-red-500 dark:text-red-400' : '' }}">
+                                                    {{ $voucher->valid_until->format('d/m/Y') }}
+                                                </span>
+                                            @else
+                                                <span class="text-gray-400">—</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-600 dark:text-gray-400">
+                                            {{ $voucher->created_at->format('d/m/Y H:i') }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm whitespace-nowrap">
+                                            @if ($isExpired)
+                                                <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">Verlopen</span>
+                                            @elseif ($voucher->status === 'used')
+                                                <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">
+                                                    Ingelost
+                                                    @if ($voucher->used_at)
+                                                        <span class="ml-1 text-gray-400">{{ $voucher->used_at->format('d/m/Y') }}</span>
+                                                    @endif
+                                                </span>
+                                            @else
+                                                <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Actief</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="flex shrink-0 items-center gap-x-4">
-                    <div class="hidden sm:flex sm:flex-col sm:items-end">
-                        <p class="text-sm/6 text-white">Co-Founder / CEO</p>
-                        <p class="mt-1 text-xs/5 text-gray-400">Last seen <time datetime="2023-01-23T13:23Z">3h
-                                ago</time></p>
-                    </div>
-                    <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"
-                        class="size-5 flex-none text-gray-500">
-                        <path
-                            d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z"
-                            clip-rule="evenodd" fill-rule="evenodd" />
-                    </svg>
-                </div>
-            </li>
-        </ul>
+            </div>
+        @endif
     </div>
 </x-layouts.app>

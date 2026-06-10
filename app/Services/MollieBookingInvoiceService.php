@@ -4,7 +4,10 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Models\TimeSlot;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Http\Data\DataCollection;
 use Mollie\Api\Http\Data\InvoiceLine;
@@ -20,8 +23,10 @@ class MollieBookingInvoiceService
 {
     /**
      * Send a Mollie ISSUED sales invoice (betaallink) for a manual booking.
-     * Stores mollie_id + invoice_number on the order — no Invoice record yet.
-     * The Invoice record is only created by the webhook once payment is confirmed.
+     * Stores mollie_id, invoice_number en payment_link op de order, downloadt de
+     * (issued) PDF en maakt een bijhorend invoices-record aan zodat de betaallink/PDF
+     * meteen zichtbaar zijn in het orderoverzicht. De webhook werkt dit record bij
+     * naar status 'paid' zodra de klant betaald heeft.
      * Returns true on success, false on failure.
      */
     public function send(Order $order, TimeSlot $timeSlot, string $mollieApiKey): bool
@@ -101,11 +106,34 @@ class MollieBookingInvoiceService
 
             $invoiceNumber = $mollieInvoice->invoiceNumber ?? ('INV-' . $order->id . '-' . time());
 
-            // Only store the Mollie reference on the order — NO Invoice record yet.
-            // The Invoice (receipt) is created by the webhook once the customer has actually paid.
             $order->mollie_id      = $mollieInvoice->id;
             $order->invoice_number = $invoiceNumber;
+            $order->payment_link   = $mollieInvoice->_links->paymentLink->href ?? null;
             $order->save();
+
+            // PDF van de issued betaallink-factuur downloaden en opslaan
+            $pdfPath = null;
+            $mollieHref = $mollieInvoice->_links->pdfLink->href ?? null;
+            if ($mollieHref) {
+                $pdfResponse = Http::withToken($mollieApiKey)->get($mollieHref);
+                if ($pdfResponse->successful()) {
+                    $pdfPath = 'escaperooms/' . $order->escaperoom_id . '/invoices/' . $invoiceNumber . '.pdf';
+                    Storage::disk('local')->put($pdfPath, $pdfResponse->body());
+                }
+            }
+
+            DB::table('invoices')->insert([
+                'customer_id'       => $customer->id,
+                'order_id'          => $order->id,
+                'mollie_invoice_id' => $mollieInvoice->id,
+                'pdf_url'           => $pdfPath,
+                'source'            => 'mollie',
+                'invoice_number'    => $invoiceNumber,
+                'status'            => 'issued',
+                'amount'            => $order->amount_online,
+                'created_at'        => now(),
+                'updated_at'        => now(),
+            ]);
 
             return true;
 

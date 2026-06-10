@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\GiftVoucher;
 use App\Models\Order;
 use App\Models\OrderedItem;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -31,11 +32,11 @@ class GiftVoucherService
      * Maak cadeaubonnen aan voor alle gift_card-items in een order die betaald is.
      * Wordt aangeroepen vanuit webhook (online) en StoreOrderController (cash).
      */
-    public function createForPaidOrder(Order $order): int
+    public function createForPaidOrder(Order $order): Collection
     {
         $order->loadMissing('orderedItems.giftCard');
 
-        $created = 0;
+        $created = collect();
 
         foreach ($order->orderedItems as $item) {
             if (!$item->gift_card_id) {
@@ -75,12 +76,12 @@ class GiftVoucherService
 
                 app(MailTemplateService::class)->sendForGiftVoucher($voucher, $order);
 
-                $created++;
+                $created->push($voucher);
             }
         }
 
-        if ($created > 0) {
-            Log::info("GiftVoucherService: {$created} bon(nen) aangemaakt voor order #{$order->id}");
+        if ($created->isNotEmpty()) {
+            Log::info("GiftVoucherService: {$created->count()} bon(nen) aangemaakt voor order #{$order->id}");
         }
 
         return $created;

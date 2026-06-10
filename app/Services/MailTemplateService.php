@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Mail\TemplatedMail;
 use App\Models\GiftVoucher;
+use App\Models\MailLog;
 use App\Models\MailTemplate;
 use App\Models\Order;
 use App\Models\OrderedItem;
@@ -47,6 +48,7 @@ class MailTemplateService
 
         try {
             Mail::to($order->customer_email)->send(new TemplatedMail($template, $variables, [], $order->escaperoom?->name, $order->escaperoom?->email));
+            $this->logMail($order, 'product', $template->renderSubject($variables), view('mails.templated', ['body' => $template->render($variables)])->render());
         } catch (\Exception $e) {
             Log::error("MailTemplateService: versturen productmail mislukt voor order #{$order->id}: " . $e->getMessage());
         }
@@ -79,6 +81,7 @@ class MailTemplateService
 
         try {
             Mail::to($order->customer_email)->send(new TemplatedMail($template, $variables, [], $order->escaperoom?->name, $order->escaperoom?->email));
+            $this->logMail($order, 'gift-card', $template->renderSubject($variables), view('mails.templated', ['body' => $template->render($variables)])->render());
         } catch (\Exception $e) {
             Log::error("MailTemplateService: versturen cadeaubon-mail mislukt voor order #{$order->id}: " . $e->getMessage());
         }
@@ -126,6 +129,7 @@ class MailTemplateService
 
         try {
             Mail::to($order->customer_email)->send(new TemplatedMail($template, $variables, $attachments, $order->escaperoom?->name, $order->escaperoom?->email));
+            $this->logMail($order, 'room_confirmation', $template->renderSubject($variables), view('mails.templated', ['body' => $template->render($variables)])->render());
         } catch (\Exception $e) {
             Log::error("MailTemplateService: versturen room-bevestigingsmail mislukt voor order #{$order->id}: " . $e->getMessage());
         }
@@ -173,6 +177,7 @@ class MailTemplateService
 
         try {
             Mail::to($order->customer_email)->send(new TemplatedMail($template, $variables, $attachments, $order->escaperoom?->name, $order->escaperoom?->email));
+            $this->logMail($order, 'room_reminder', $template->renderSubject($variables), view('mails.templated', ['body' => $template->render($variables)])->render());
         } catch (\Exception $e) {
             Log::error("MailTemplateService: versturen room-herinneringsmail mislukt voor order #{$order->id}: " . $e->getMessage());
         }
@@ -215,6 +220,7 @@ class MailTemplateService
 
         try {
             Mail::to($order->customer_email)->send(new TemplatedMail($template, $variables, [], $order->escaperoom?->name, $order->escaperoom?->email));
+            $this->logMail($order, 'room_cancellation', $template->renderSubject($variables), view('mails.templated', ['body' => $template->render($variables)])->render());
         } catch (\Exception $e) {
             Log::error("MailTemplateService: versturen room-annuleringsmail mislukt voor order #{$order->id}: " . $e->getMessage());
         }
@@ -252,6 +258,22 @@ class MailTemplateService
     private function icsEscape(string $value): string
     {
         return str_replace(["\\", "\n", ',', ';'], ['\\\\', '\\n', '\\,', '\\;'], $value);
+    }
+
+    /**
+     * Houd een verstuurde mail bij zodat deze terug te vinden is in de berichtgeschiedenis van de klant.
+     */
+    public function logMail(Order $order, string $type, string $subject, string $body): void
+    {
+        MailLog::create([
+            'escaperoom_id' => $order->escaperoom_id,
+            'customer_id'   => $order->customer_id,
+            'order_id'      => $order->id,
+            'to_email'      => $order->customer_email,
+            'type'          => $type,
+            'subject'       => $subject,
+            'body'          => $body,
+        ]);
     }
 
     /**

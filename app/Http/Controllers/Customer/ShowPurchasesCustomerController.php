@@ -18,6 +18,7 @@ class ShowPurchasesCustomerController extends Controller
             'orderedItems.timeSlot.room',
             'orderedItems.giftCard',
             'orderedItems.product',
+            'invoice',
         ])->latest()->paginate(10);
 
         return view('customer.purchases', [

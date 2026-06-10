@@ -3,6 +3,8 @@
         ['name' => 'Gebruikers', 'url' => route('users.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
+        <x-users.nav />
+
         <x-page-header title="Gebruikers" :create="route('users.create')" createTitle="Nieuwe Gebruiker"
             count="{{ $users->count() }}" />
 

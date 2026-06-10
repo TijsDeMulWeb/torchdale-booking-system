@@ -4,6 +4,8 @@
         ['name' => 'Nieuwe Gebruiker', 'url' => route('users.create')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
+        <x-users.nav />
+
         <form method="POST" action="{{ route('users.store') }}">
             @csrf
             <div class="space-y-12 sm:space-y-16">
@@ -83,6 +85,29 @@
                                             clip-rule="evenodd" fill-rule="evenodd" />
                                     </svg>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label for="role"
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Rol</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <div class="grid grid-cols-1 sm:max-w-md">
+                                    <select id="role" name="role"
+                                        class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500">
+                                        @foreach ($roles as $roleName)
+                                            <option value="{{ $roleName }}" {{ old('role') == $roleName ? 'selected' : '' }}>
+                                                {{ $roleName }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true"
+                                        class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4 dark:text-gray-400">
+                                        <path
+                                            d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+                                            clip-rule="evenodd" fill-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <x-form.error name="role" />
                             </div>
                         </div>
                     </div>

@@ -8,8 +8,11 @@ use App\Models\TimeSlot;
 use App\Services\GiftVoucherService;
 use App\Services\MailTemplateService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Mollie\Api\MollieApiClient;
 
 class CancelBookingController extends Controller
@@ -41,18 +44,37 @@ class CancelBookingController extends Controller
         // "openstaand" wordt getoond en de bijhorende Mollie-betaallink niet meer
         // betaald kan worden.
         if ($order && $order->status === 'pending') {
+            $cancelledPdfPath = null;
+
             if ($order->mollie_id) {
                 try {
                     $mollieKey = $escaperoom->escaperoomSetting->mollie_api_key ?? env('MOLLIE_KEY');
                     if ($mollieKey) {
                         $mollie = new MollieApiClient();
                         $mollie->setApiKey($mollieKey);
-                        $mollie->salesInvoices->update($order->mollie_id, ['status' => 'canceled']);
+                        $cancelledInvoice = $mollie->salesInvoices->update($order->mollie_id, ['status' => 'cancelled']);
+
+                        $pdfHref = $cancelledInvoice->_links->pdfLink->href ?? null;
+                        if ($pdfHref) {
+                            $pdfResponse = Http::withToken($mollieKey)->get($pdfHref);
+                            if ($pdfResponse->successful()) {
+                                $invoiceNumber = $cancelledInvoice->invoiceNumber ?? $order->invoice_number ?? ('INV-' . $order->id);
+                                $cancelledPdfPath = 'escaperooms/' . $order->escaperoom_id . '/invoices/' . $invoiceNumber . '.pdf';
+                                Storage::disk('local')->put($cancelledPdfPath, $pdfResponse->body());
+                            }
+                        }
                     }
                 } catch (\Throwable $e) {
                     Log::warning('Kon Mollie-factuur niet annuleren voor order ' . $order->id . ': ' . $e->getMessage());
                 }
             }
+
+            $invoiceUpdate = ['status' => 'cancelled', 'updated_at' => now()];
+            if ($cancelledPdfPath) {
+                $invoiceUpdate['pdf_url'] = $cancelledPdfPath;
+            }
+
+            DB::table('invoices')->where('order_id', $order->id)->update($invoiceUpdate);
 
             $order->status = 'cancelled';
             $order->save();
@@ -65,9 +87,9 @@ class CancelBookingController extends Controller
             $sentCustomTemplate = $mailTemplateService->sendForRoomCancellation($timeSlot, $order, $voucher);
 
             if (! $sentCustomTemplate) {
-                Mail::to($customerEmail)->send(
-                    new BookingCancelledMail($timeSlot, $order, $escaperoom, $voucher)
-                );
+                $mail = new BookingCancelledMail($timeSlot, $order, $escaperoom, $voucher);
+                Mail::to($customerEmail)->send($mail);
+                $mailTemplateService->logMail($order, 'room_cancellation', $mail->envelope()->subject ?? '', $mail->render());
             }
         }
 

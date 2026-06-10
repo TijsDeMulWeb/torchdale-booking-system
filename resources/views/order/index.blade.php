@@ -57,7 +57,7 @@
                     $paymentSteps = function(\App\Models\Order $order): string {
                         $invoice     = $order->invoice;
                         $paid        = $order->status === 'paid';
-                        $receiptSent = $invoice !== null;
+                        $receiptSent = $invoice !== null && $invoice->status === 'paid';
 
                         $isInPerson = in_array($order->payment_method, ['cash', 'kaart']);
 
@@ -131,6 +131,11 @@
                                                                 class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">
                                                                 {{ $order->invoice_number ?? '#' . $order->id }}
                                                             </button>
+                                                        @elseif ($order->payment_link)
+                                                            <a href="{{ route('orders.payment-link', $order) }}" target="_blank"
+                                                                class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">
+                                                                {{ $order->invoice_number ?? '#' . $order->id }}
+                                                            </a>
                                                         @else
                                                             <span class="text-gray-900 dark:text-white font-mono">{{ $order->invoice_number ?? '#' . $order->id }}</span>
                                                         @endif
@@ -210,6 +215,11 @@
                                                                 class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">
                                                                 {{ $order->invoice_number ?? '#' . $order->id }}
                                                             </button>
+                                                        @elseif ($order->payment_link)
+                                                            <a href="{{ route('orders.payment-link', $order) }}" target="_blank"
+                                                                class="text-indigo-600 dark:text-indigo-400 hover:underline font-mono">
+                                                                {{ $order->invoice_number ?? '#' . $order->id }}
+                                                            </a>
                                                         @else
                                                             <span class="text-gray-900 dark:text-white font-mono">{{ $order->invoice_number ?? '#' . $order->id }}</span>
                                                         @endif
@@ -260,6 +270,43 @@
             </div>
         </div>
     </div>
+
+    @if (session('gift_vouchers'))
+        {{-- Gift voucher codes modal --}}
+        <div id="gift-voucher-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+             onclick="if(event.target===this) this.classList.add('hidden')">
+            <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden shadow-2xl">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-white/10">
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Cadeaubon{{ count(session('gift_vouchers')) > 1 ? 'nen' : '' }} aangemaakt</h2>
+                    <button type="button" onclick="document.getElementById('gift-voucher-modal').classList.add('hidden')"
+                        class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="px-6 py-4 space-y-3">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Noteer onderstaande code{{ count(session('gift_vouchers')) > 1 ? 's' : '' }} voor de klant:</p>
+                    @foreach (session('gift_vouchers') as $voucher)
+                        <div class="rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-4 py-3">
+                            @if ($voucher['gift_card_name'])
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ $voucher['gift_card_name'] }} &middot; {{ Number::currency($voucher['amount']) }}</p>
+                            @else
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">{{ Number::currency($voucher['amount']) }}</p>
+                            @endif
+                            <p class="font-mono tracking-widest text-lg font-semibold text-gray-900 dark:text-white select-all">{{ $voucher['code'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-white/10">
+                    <button type="button" onclick="document.getElementById('gift-voucher-modal').classList.add('hidden')"
+                        class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors">
+                        Sluiten
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
 
     {{-- PDF Modal --}}
     <div id="pdf-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm"

@@ -112,7 +112,7 @@ class StoreManualBookingController extends Controller
 
         $timeSlot->loadMissing(['room.escaperoomAddress.country']);
         $order->loadMissing('customer');
-        $mailTemplateService->sendForRoomBooking($timeSlot, $order);
+        $mailTemplateService->sendForRoomConfirmation($timeSlot, $order);
 
         return back()->with('message', 'Afspraak aangemaakt.');
     }

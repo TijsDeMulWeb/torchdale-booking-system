@@ -85,6 +85,38 @@
                             </div>
                         </div>
 
+                        {{-- Delivery methods --}}
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">
+                                Bezorgmethoden
+                                <span class="block mt-0.5 font-normal text-xs text-gray-500 dark:text-gray-400">Hoe klanten deze cadeaubon kunnen ontvangen</span>
+                            </label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0 space-y-3">
+                                <div class="flex items-start gap-3">
+                                    <input id="allow_mail_delivery" type="checkbox" name="allow_mail_delivery" value="1"
+                                        {{ old('allow_mail_delivery', true) ? 'checked' : '' }}
+                                        class="mt-1 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-white/10 dark:bg-white/5" />
+                                    <label for="allow_mail_delivery" class="text-sm text-gray-700 dark:text-gray-300">E-mail</label>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <input id="allow_post_delivery" type="checkbox" name="allow_post_delivery" value="1"
+                                        {{ old('allow_post_delivery', true) ? 'checked' : '' }}
+                                        class="mt-1 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-white/10 dark:bg-white/5" />
+                                    <label for="allow_post_delivery" class="text-sm text-gray-700 dark:text-gray-300">Per post</label>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <input id="allow_pickup_delivery" type="checkbox" name="allow_pickup_delivery" value="1"
+                                        {{ old('allow_pickup_delivery', true) ? 'checked' : '' }}
+                                        class="mt-1 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-white/10 dark:bg-white/5" />
+                                    <label for="allow_pickup_delivery" class="text-sm text-gray-700 dark:text-gray-300">Afhalen</label>
+                                </div>
+                                <x-form.error name="allow_mail_delivery" />
+                                <x-form.error name="allow_post_delivery" />
+                                <x-form.error name="allow_pickup_delivery" />
+                                <x-form.error name="allow_delivery_method" />
+                            </div>
+                        </div>
+
                         <x-form.actions route="giftCards.index" />
                     </div>
                 </div>

@@ -41,7 +41,7 @@ class StoreAccountSetupController extends Controller
         $user->password_set_at = now();
         $user->save();
 
-        User::find($user->id)->assignRole('admin');
+        User::find($user->id)->assignRole('Admin');
 
 
         return redirect()->route('login')->with('message', 'Je account is aangemaakt! Je kan nu inloggen met je e-mailadres en wachtwoord.');

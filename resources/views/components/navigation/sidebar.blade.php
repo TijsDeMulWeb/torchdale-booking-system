@@ -26,7 +26,8 @@
                         <ul role="list" class="flex flex-1 flex-col gap-y-7">
                             <li>
                                 <ul role="list" class="-mx-2 space-y-1">
-                                    <li>
+                                    @can('view dashboard')
+<li>
                                         <a href="{{ route('dashboard.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ Route::currentRouteName() === 'dashboard.show'
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -40,7 +41,9 @@
                                             Dashboard
                                         </a>
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view customers')
+<li>
                                         <a href="{{ route('customers.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('customers.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -53,7 +56,9 @@
                                             Klanten
                                         </a>
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view orders')
+<li>
                                         @if(auth()->user()?->escaperoom?->escaperoomSetting?->mollie_api_key)
                                         <a href="{{ route('orders.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('orders.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -74,7 +79,9 @@
                                         </span>
                                         @endif
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view rooms')
+<li>
                                         <a href="{{ route('rooms.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('rooms.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -87,7 +94,9 @@
                                             Kamers
                                         </a>
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view products')
+<li>
                                         <a href="{{ route('products.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('products.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -100,7 +109,9 @@
                                             Producten
                                         </a>
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view coupons')
+<li>
                                         <a href="{{ route('coupons.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('coupons.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -115,7 +126,9 @@
                                             Kortingsbonnen
                                         </a>
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view gift cards')
+<li>
                                         <a href="{{ route('giftCards.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('giftCards.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -128,7 +141,9 @@
                                             Cadeaubonnen
                                         </a>
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view widgets')
+<li>
                                         <a href="{{ route('widgetSettings.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('widgetSettings.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -142,7 +157,9 @@
                                             Widgets
                                         </a>
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view chatbot')
+<li>
                                         <a href="{{ route('chatbot.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('chatbot.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -157,7 +174,9 @@
                                             Chatbot
                                         </a>
                                     </li>
-                                    <li>
+@endcan
+                                    @can('view users')
+<li>
                                         <a href="{{ route('users.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold {{ request()->routeIs('users.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
@@ -171,9 +190,11 @@
                                             Gebruikers
                                         </a>
                                     </li>
+@endcan
                                 </ul>
                             </li>
-                            <li class="mt-auto">
+                            @can('view settings')
+<li class="mt-auto">
                                 <a href="#"
                                     class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
@@ -188,6 +209,7 @@
                                     Instellingen
                                 </a>
                             </li>
+@endcan
                         </ul>
                     </nav>
                 </div>
@@ -209,7 +231,8 @@
             <ul role="list" class="flex flex-1 flex-col gap-y-7">
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
-                        <li>
+                        @can('view dashboard')
+<li>
                             <a href="{{ route('dashboard.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ Route::currentRouteName() === 'dashboard.show'
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -224,7 +247,9 @@
                                 Dashboard
                             </a>
                         </li>
-                        <li>
+@endcan
+                        @can('view customers')
+<li>
                             <a href="{{ route('customers.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('customers.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -238,7 +263,9 @@
                                 Klanten
                             </a>
                         </li>
-                        <li>
+@endcan
+                        @can('view orders')
+<li>
                             @if(auth()->user()?->escaperoom?->escaperoomSetting?->mollie_api_key)
                             <a href="{{ route('orders.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('orders.*')
@@ -260,7 +287,9 @@
                             </span>
                             @endif
                         </li>
-                        <li>
+@endcan
+                        @can('view rooms')
+<li>
                             <a href="{{ route('rooms.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('rooms.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -274,7 +303,9 @@
                                 Kamers
                             </a>
                         </li>
-                        <li>
+@endcan
+                        @can('view products')
+<li>
                             <a href="{{ route('products.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('products.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -288,7 +319,9 @@
                                 Producten
                             </a>
                         </li>
-                        <li>
+@endcan
+                        @can('view coupons')
+<li>
                             <a href="{{ route('coupons.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('coupons.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -303,7 +336,9 @@
                                 Kortingsbonnen
                             </a>
                         </li>
-                        <li>
+@endcan
+                        @can('view gift cards')
+<li>
                             <a href="{{ route('giftCards.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('giftCards.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -317,7 +352,9 @@
                                 Cadeaubonnen
                             </a>
                         </li>
-                        <li>
+@endcan
+                        @can('view widgets')
+<li>
                             <a href="{{ route('widgetSettings.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('widgetSettings.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -331,7 +368,9 @@
                                 Widgets
                             </a>
                         </li>
-                        <li>
+@endcan
+                        @can('view chatbot')
+<li>
                             <a href="{{ route('chatbot.show') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('chatbot.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -346,7 +385,9 @@
                                 Chatbot
                             </a>
                         </li>
-                        <li>
+@endcan
+                        @can('view users')
+<li>
                             <a href="{{ route('users.index') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold
                                 {{ request()->routeIs('users.*')
     ? 'bg-gray-50 dark:bg-white/5 text-indigo-600 dark:text-white'
@@ -360,9 +401,11 @@
                                 Gebruikers
                             </a>
                         </li>
+@endcan
                     </ul>
                 </li>
-                <li class="mt-auto">
+                @can('view settings')
+<li class="mt-auto">
                     <a href="{{ route('escaperoom.show') }}"
                         class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon"
@@ -377,6 +420,7 @@
                         Instellingen
                     </a>
                 </li>
+@endcan
             </ul>
         </nav>
     </div>

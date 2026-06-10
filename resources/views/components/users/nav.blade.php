@@ -1,8 +1,9 @@
 @php
     $tabs = [
-        ['route' => 'users.index', 'pattern' => ['users.index', 'users.create', 'users.edit'], 'label' => 'Gebruikers'],
-        ['route' => 'roles.index', 'pattern' => ['roles.index', 'roles.create', 'roles.edit'], 'label' => 'Rollen & rechten'],
+        ['route' => 'users.index', 'pattern' => ['users.index', 'users.create', 'users.edit'], 'label' => 'Gebruikers', 'permission' => 'view users'],
+        ['route' => 'roles.index', 'pattern' => ['roles.index', 'roles.create', 'roles.edit'], 'label' => 'Rollen & rechten', 'permission' => 'view roles'],
     ];
+    $tabs = array_filter($tabs, fn ($tab) => auth()->user()->can($tab['permission']));
 @endphp
 
 <div class="mb-6 border-b border-gray-200 dark:border-white/10">

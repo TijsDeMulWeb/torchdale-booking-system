@@ -17,7 +17,10 @@ class MollieWebhookController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $mollieInvoiceId = $request->input('id');
+        // Mollie's nieuwe webhook-payload (JSON) bevat het event-id in 'id' en het
+        // id van de betreffende sales invoice in 'entityId'. Voor de oude,
+        // form-encoded webhook-stijl staat het invoice-id wel direct in 'id'.
+        $mollieInvoiceId = $request->input('entityId') ?? $request->input('id');
 
         if (!$mollieInvoiceId) {
             return response('', 200);
@@ -84,14 +87,14 @@ class MollieWebhookController extends Controller
                     'source'            => 'mollie',
                     'invoice_number'    => $invoiceNumber,
                     'status'            => 'paid',
-                    'amount'            => $order->total,
+                    'amount'            => $order->amount_online,
                     'created_at'        => now(),
                     'updated_at'        => now(),
                 ]);
             }
 
             $order->status              = 'paid';
-            $order->amount_paid_online  = $order->total;
+            $order->amount_paid_online  = $order->amount_online;
             $order->invoice_number      = $invoiceNumber;
             $order->save();
 

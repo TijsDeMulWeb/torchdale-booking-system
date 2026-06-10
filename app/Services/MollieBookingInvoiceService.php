@@ -38,6 +38,11 @@ class MollieBookingInvoiceService
             return true;
         }
 
+        // Niets om online te betalen (volledig ter plekke) -> geen betaallink nodig
+        if ((float) $order->amount_online <= 0) {
+            return true;
+        }
+
         try {
             /** @var \Mollie\Api\MollieApiClient $mollie */
             $street  = trim(($customer->street ?? '') . ' ' . ($customer->house_number ?? ''));
@@ -70,7 +75,7 @@ class MollieBookingInvoiceService
                     description: $description,
                     quantity: 1,
                     vatRate: $vatRate,
-                    unitPrice: new Money('EUR', number_format((float) $order->total, 2, '.', '')),
+                    unitPrice: new Money('EUR', number_format((float) $order->amount_online, 2, '.', '')),
                 ),
             ];
 

@@ -10,9 +10,16 @@ use Illuminate\Support\Facades\Storage;
 
 class MailTemplateController extends Controller
 {
+    private const ROOM_SUBTYPES = ['confirmation', 'reminder', 'cancellation'];
+
     private function validateType(string $type): void
     {
-        abort_unless(in_array($type, ['product', 'gift-card', 'room']), 404);
+        abort_unless(in_array($type, ['product', 'gift-card']), 404);
+    }
+
+    private function validateSubtype(string $subtype): void
+    {
+        abort_unless(in_array($subtype, self::ROOM_SUBTYPES), 404);
     }
 
     private function authorizeRoom(Room $room): void
@@ -32,7 +39,7 @@ class MailTemplateController extends Controller
 
     private function indexUrl(string $type, ?Room $room): string
     {
-        return $room ? route('mail-templates.room.index', $room) : route('mail-templates.index', $type);
+        return $room ? route('mail-templates.room.index', [$room, substr($type, 5)]) : route('mail-templates.index', $type);
     }
 
     // --- Global (product / gift-card) routes ---
@@ -91,54 +98,61 @@ class MailTemplateController extends Controller
 
     // --- Room-scoped routes ---
 
-    public function roomIndex(Room $room)
+    public function roomIndex(Room $room, string $subtype)
     {
         $this->authorizeRoom($room);
+        $this->validateSubtype($subtype);
 
-        return $this->renderIndex('room', $room);
+        return $this->renderIndex('room_' . $subtype, $room);
     }
 
-    public function roomCreate(Room $room)
+    public function roomCreate(Room $room, string $subtype)
     {
         $this->authorizeRoom($room);
+        $this->validateSubtype($subtype);
 
-        return $this->renderCreate('room', $room);
+        return $this->renderCreate('room_' . $subtype, $room);
     }
 
-    public function roomStore(Request $request, Room $room)
+    public function roomStore(Request $request, Room $room, string $subtype)
     {
         $this->authorizeRoom($room);
+        $this->validateSubtype($subtype);
 
-        return $this->handleStore($request, 'room', $room);
+        return $this->handleStore($request, 'room_' . $subtype, $room);
     }
 
-    public function roomEdit(Room $room, MailTemplate $template)
+    public function roomEdit(Room $room, string $subtype, MailTemplate $template)
     {
         $this->authorizeRoom($room);
-        $this->authorizeTemplate($template, 'room', $room);
+        $this->validateSubtype($subtype);
+        $this->authorizeTemplate($template, 'room_' . $subtype, $room);
 
-        return $this->renderEdit('room', $template, $room);
+        return $this->renderEdit('room_' . $subtype, $template, $room);
     }
 
-    public function roomUpdate(Request $request, Room $room, MailTemplate $template)
+    public function roomUpdate(Request $request, Room $room, string $subtype, MailTemplate $template)
     {
         $this->authorizeRoom($room);
-        $this->authorizeTemplate($template, 'room', $room);
+        $this->validateSubtype($subtype);
+        $this->authorizeTemplate($template, 'room_' . $subtype, $room);
 
-        return $this->handleUpdate($request, 'room', $template, $room);
+        return $this->handleUpdate($request, 'room_' . $subtype, $template, $room);
     }
 
-    public function roomDestroy(Room $room, MailTemplate $template)
+    public function roomDestroy(Room $room, string $subtype, MailTemplate $template)
     {
         $this->authorizeRoom($room);
-        $this->authorizeTemplate($template, 'room', $room);
+        $this->validateSubtype($subtype);
+        $this->authorizeTemplate($template, 'room_' . $subtype, $room);
 
-        return $this->handleDestroy('room', $template, $room);
+        return $this->handleDestroy('room_' . $subtype, $template, $room);
     }
 
-    public function roomUploadImage(Request $request, Room $room)
+    public function roomUploadImage(Request $request, Room $room, string $subtype)
     {
         $this->authorizeRoom($room);
+        $this->validateSubtype($subtype);
 
         return $this->handleUploadImage($request);
     }
@@ -154,8 +168,9 @@ class MailTemplateController extends Controller
             ->orderBy('locale')
             ->get();
         $locales = MailTemplate::locales();
+        $subtype = $room ? substr($type, 5) : null;
 
-        return view('mailTemplates.index', compact('type', 'room', 'templates', 'locales'));
+        return view('mailTemplates.index', compact('type', 'room', 'templates', 'locales', 'subtype'));
     }
 
     private function renderCreate(string $type, ?Room $room)
@@ -191,7 +206,7 @@ class MailTemplateController extends Controller
             [
                 'subject'    => $request->subject,
                 'body'       => $request->body,
-                'attach_ics' => $type === 'room' ? $request->boolean('attach_ics') : false,
+                'attach_ics' => in_array($type, ['room_confirmation', 'room_reminder'], true) ? $request->boolean('attach_ics') : false,
             ]
         );
 
@@ -218,7 +233,7 @@ class MailTemplateController extends Controller
         $template->update([
             'subject'    => $request->subject,
             'body'       => $request->body,
-            'attach_ics' => $type === 'room' ? $request->boolean('attach_ics') : false,
+            'attach_ics' => in_array($type, ['room_confirmation', 'room_reminder'], true) ? $request->boolean('attach_ics') : false,
         ]);
 
         return redirect()->to($this->indexUrl($type, $room))
@@ -272,13 +287,24 @@ class MailTemplateController extends Controller
                 '{{voucher_amount}}' => 'Bedrag van de bon (bijv. € 50,00)',
                 '{{valid_until}}'    => 'Geldig tot datum',
             ],
-            'room' => [
+            'room_confirmation', 'room_reminder' => [
                 '{{room_name}}'  => 'Naam van de kamer',
                 '{{date}}'       => 'Datum van de afspraak',
                 '{{start_time}}' => 'Starttijd van de afspraak',
                 '{{end_time}}'   => 'Eindtijd van de afspraak',
                 '{{players}}'    => 'Aantal spelers',
                 '{{address}}'    => 'Adres van de locatie',
+            ],
+            'room_cancellation' => [
+                '{{room_name}}'      => 'Naam van de kamer',
+                '{{date}}'           => 'Datum van de afspraak',
+                '{{start_time}}'     => 'Starttijd van de afspraak',
+                '{{end_time}}'       => 'Eindtijd van de afspraak',
+                '{{players}}'        => 'Aantal spelers',
+                '{{address}}'        => 'Adres van de locatie',
+                '{{voucher_code}}'   => 'Cadeaubon-code, indien er een cadeaubon werd aangemaakt als compensatie (anders leeg)',
+                '{{voucher_amount}}' => 'Bedrag van de cadeaubon (anders leeg)',
+                '{{valid_until}}'    => 'Geldig-tot datum van de cadeaubon (anders leeg)',
             ],
             default => [],
         };

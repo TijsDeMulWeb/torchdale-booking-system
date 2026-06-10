@@ -7,6 +7,7 @@ use App\Http\Requests\StoreManualBookingRequest;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\TimeSlot;
+use App\Services\MailTemplateService;
 use App\Services\MollieBookingInvoiceService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 class StoreManualBookingController extends Controller
 {
-    public function __invoke(StoreManualBookingRequest $request, MollieBookingInvoiceService $invoiceService)
+    public function __invoke(StoreManualBookingRequest $request, MollieBookingInvoiceService $invoiceService, MailTemplateService $mailTemplateService)
     {
         $data       = $request->validated();
         $escaperoom = $request->user()->escaperoom;
@@ -108,6 +109,10 @@ class StoreManualBookingController extends Controller
             $order->load('customer');
             $invoiceService->send($order, $timeSlot, $mollieKey);
         }
+
+        $timeSlot->loadMissing(['room.escaperoomAddress.country']);
+        $order->loadMissing('customer');
+        $mailTemplateService->sendForRoomBooking($timeSlot, $order);
 
         return back()->with('message', 'Afspraak aangemaakt.');
     }

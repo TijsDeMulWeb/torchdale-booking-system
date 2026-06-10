@@ -14,8 +14,11 @@ class ShowMessageCustomerController extends Controller
     {
         $customer = auth()->user()->escaperoom->customers()->findOrFail($id);
 
+        $mails = $customer->mailLogs()->latest()->get();
+
         return view('customer.messages', [
             'customer' => $customer,
+            'mails'    => $mails,
         ]);
     }
 }

@@ -14,8 +14,11 @@ class ShowGiftCardCustomerController extends Controller
     {
         $customer = auth()->user()->escaperoom->customers()->findOrFail($id);
 
+        $vouchers = $customer->giftVouchers()->with('giftCard')->latest()->get();
+
         return view('customer.giftCards', [
             'customer' => $customer,
+            'vouchers' => $vouchers,
         ]);
     }
 }

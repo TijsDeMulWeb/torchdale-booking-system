@@ -112,7 +112,7 @@ class MailTemplateController extends Controller
             'public'
         );
 
-        return response()->json(['url' => Storage::url($path)]);
+        return response()->json(['url' => asset(Storage::url($path))]);
     }
 
     public function destroy(string $type, MailTemplate $template)
@@ -139,7 +139,7 @@ class MailTemplateController extends Controller
                 '{{product_name}}'  => 'Naam van het product',
                 '{{variant_name}}'  => 'Naam van de variatie (indien van toepassing)',
                 '{{quantity}}'      => 'Aantal besteld',
-                '{{product_image}}' => 'URL van de hoofdafbeelding van het product, bijv. <img src="{{product_image}}">',
+                '{{product_image}}' => 'Toont de hoofdafbeelding van het product. Plaats deze variabele op de plek waar de foto moet verschijnen.',
             ],
             'gift-card' => [
                 '{{gift_card_name}}' => 'Naam van de cadeaubon',

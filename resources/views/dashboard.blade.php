@@ -445,7 +445,7 @@
             <div class="px-6 pb-2 space-y-2">
                 {{-- Only cancel --}}
                 <button type="button" id="cancel-action-cancel"
-                    class="w-full flex items-start gap-3 rounded-lg border border-gray-200 dark:border-white/10 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                    class="w-full flex items-start gap-3 rounded-lg border border-gray-200 dark:border-white/10 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none">
                     <svg class="mt-0.5 shrink-0 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
@@ -456,7 +456,7 @@
                 </button>
                 {{-- Voucher --}}
                 <button type="button" id="cancel-action-voucher"
-                    class="w-full flex items-start gap-3 rounded-lg border border-indigo-200 dark:border-indigo-900/50 px-4 py-3 text-left hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors">
+                    class="w-full flex items-start gap-3 rounded-lg border border-indigo-200 dark:border-indigo-900/50 px-4 py-3 text-left hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none">
                     <svg class="mt-0.5 shrink-0 h-5 w-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a4 4 0 00-4-4H5.45a4 4 0 00-3.955 4.55l.18 1.2A4 4 0 005.626 11H12m0 0h6.374a4 4 0 003.955-3.45l.18-1.2A4 4 0 0018.55 2H16a4 4 0 00-4 4v2z"/>
                     </svg>
@@ -564,10 +564,10 @@
                         <div class="grid grid-cols-3 gap-2 items-center border-t border-gray-100 dark:border-white/10 px-4 py-2.5">
                             <span class="text-gray-500 dark:text-gray-400">Ter plekke</span>
                             <span id="bdetail-amount-onsite" class="text-right text-gray-700 dark:text-gray-300"></span>
-                            <div class="flex items-center justify-end gap-2">
+                            <div class="flex flex-col items-end gap-1">
                                 <span id="bdetail-paid-onsite" class="text-gray-700 dark:text-gray-300"></span>
                                 <button type="button" id="bdetail-mark-onsite-btn"
-                                    class="hidden shrink-0 rounded-md bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50">
+                                    class="hidden shrink-0 whitespace-nowrap rounded-md bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50">
                                     Markeer betaald
                                 </button>
                             </div>
@@ -591,7 +591,7 @@
                 {{-- Right: cancel + close --}}
                 <div class="ml-auto flex items-center gap-3">
                     <button type="button" id="bdetail-cancel-btn"
-                        class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-900/20">
+                        class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none">
                         Annuleren
                     </button>
                     <button type="button" data-close-modal="booking-detail" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Sluiten</button>
@@ -1529,7 +1529,14 @@
                         };
 
                         // Helper: execute cancel with chosen action
+                        let cancelRequestInFlight = false;
                         function doCancelBooking(action) {
+                            if (cancelRequestInFlight) return;
+                            cancelRequestInFlight = true;
+
+                            document.getElementById('cancel-action-cancel').disabled  = true;
+                            document.getElementById('cancel-action-voucher').disabled = true;
+                            cancelBtn.disabled = true;
                             document.getElementById('cancel-options-overlay').classList.add('hidden');
 
                             const url = CANCEL_BOOKING_URL_TEMPLATE.replace('__id__', d.id);
@@ -1554,6 +1561,10 @@
                                 }
                             })
                             .catch(() => {
+                                cancelRequestInFlight = false;
+                                document.getElementById('cancel-action-cancel').disabled  = false;
+                                document.getElementById('cancel-action-voucher').disabled = false;
+                                cancelBtn.disabled = false;
                                 alert('Er ging iets mis bij het annuleren. Probeer opnieuw.');
                             });
                         }

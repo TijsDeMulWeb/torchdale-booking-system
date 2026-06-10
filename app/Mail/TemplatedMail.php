@@ -5,6 +5,7 @@ namespace App\Mail;
 use App\Models\MailTemplate;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -15,11 +16,16 @@ class TemplatedMail extends Mailable
 
     private string $renderedSubject;
     private string $renderedBody;
+    private array $rawAttachments;
 
-    public function __construct(MailTemplate $template, array $variables = [])
+    /**
+     * @param array<int, array{data: string, filename: string, mime: string}> $attachments
+     */
+    public function __construct(MailTemplate $template, array $variables = [], array $attachments = [])
     {
         $this->renderedSubject = $template->renderSubject($variables);
         $this->renderedBody    = $template->render($variables);
+        $this->rawAttachments  = $attachments;
     }
 
     public function envelope(): Envelope
@@ -34,6 +40,10 @@ class TemplatedMail extends Mailable
 
     public function attachments(): array
     {
-        return [];
+        return array_map(
+            fn (array $attachment) => Attachment::fromData(fn () => $attachment['data'], $attachment['filename'])
+                ->withMime($attachment['mime']),
+            $this->rawAttachments
+        );
     }
 }

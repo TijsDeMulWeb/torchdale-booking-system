@@ -8,7 +8,7 @@
     ]" />
 
     <div class="px-4 py-1 sm:px-6 lg:px-8 my-10">
-        <form method="POST"
+        <form id="mail-template-form" method="POST"
             action="{{ isset($template) ? route('mail-templates.update', [$type, $template]) : route('mail-templates.store', $type) }}">
             @csrf
             @if(isset($template))
@@ -73,19 +73,13 @@
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="body" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Inhoud</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <div class="mb-2 flex items-center gap-3">
-                                    <button type="button" onclick="document.getElementById('image-upload-input').click()"
-                                        class="inline-flex items-center gap-1.5 rounded-md bg-white px-2.5 py-1.5 text-xs font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:inset-ring-white/20 dark:hover:bg-white/20 transition-colors">
-                                        <svg class="size-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3 16.5V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18v-1.5m-18 0V6A2.25 2.25 0 015.25 3.75h13.5A2.25 2.25 0 0121 6v10.5m-18 0h18M8.25 8.25a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
-                                        Afbeelding invoegen
-                                    </button>
-                                    <span id="image-upload-status" class="text-xs text-gray-500 dark:text-gray-400"></span>
-                                    <input type="file" id="image-upload-input" accept="image/*" class="hidden" onchange="uploadImage(this)" />
+                                <div id="quill-editor-wrapper" class="rounded-md outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 overflow-hidden bg-white">
+                                    <div id="quill-editor" style="min-height: 300px;"></div>
                                 </div>
-                                <textarea id="body" name="body" rows="16"
-                                    placeholder="Beste &#123;&#123;customer_name&#125;&#125;,&#10;&#10;Bedankt voor uw bestelling..."
-                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500 font-mono text-xs">{{ old('body', $template->body ?? '') }}</textarea>
-                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">HTML is toegestaan. Gebruik variabelen zoals <code class="rounded bg-gray-100 dark:bg-white/10 px-1">&#123;&#123;customer_name&#125;&#125;</code>. Plaats de cursor op de gewenste positie en klik op "Afbeelding invoegen" om daar een afbeelding te plaatsen.</p>
+                                <textarea id="body" name="body" class="hidden">{{ old('body', $template->body ?? '') }}</textarea>
+                                <input type="file" id="image-upload-input" accept="image/*" class="hidden" onchange="uploadImage(this)" />
+                                <span id="image-upload-status" class="mt-1.5 inline-block text-xs text-gray-500 dark:text-gray-400"></span>
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Gebruik variabelen zoals <code class="rounded bg-gray-100 dark:bg-white/10 px-1">&#123;&#123;customer_name&#125;&#125;</code>. Plaats de cursor op de gewenste positie en klik op een variabele of de afbeelding-knop in de werkbalk om iets in te voegen.</p>
                                 <x-form.error name="body" />
                             </div>
                         </div>
@@ -125,32 +119,87 @@
         </form>
     </div>
 
+    <link href="https://cdn.quilljs.com/2.0.3/quill.snow.css" rel="stylesheet" />
+    <style>
+        .ql-snow .ql-picker.ql-size .ql-picker-label::before,
+        .ql-snow .ql-picker.ql-size .ql-picker-item::before {
+            content: 'Normaal';
+        }
+        .ql-snow .ql-picker.ql-size .ql-picker-label[data-value]::before,
+        .ql-snow .ql-picker.ql-size .ql-picker-item[data-value]::before {
+            content: attr(data-value);
+        }
+    </style>
+    <script src="https://cdn.quilljs.com/2.0.3/quill.js"></script>
     <script>
-        var lastCursorPosition = null;
+        var SizeStyle = Quill.import('attributors/style/size');
+        SizeStyle.whitelist = ['12px', '14px', '16px', '20px', '24px', '32px', '40px'];
+        Quill.register(SizeStyle, true);
 
-        document.getElementById('body').addEventListener('keyup', rememberCursorPosition);
-        document.getElementById('body').addEventListener('click', rememberCursorPosition);
+        var AlignStyle = Quill.import('attributors/style/align');
+        var ColorStyle = Quill.import('attributors/style/color');
+        var BackgroundStyle = Quill.import('attributors/style/background');
+        Quill.register(AlignStyle, true);
+        Quill.register(ColorStyle, true);
+        Quill.register(BackgroundStyle, true);
 
-        function rememberCursorPosition() {
-            var textarea = document.getElementById('body');
-            lastCursorPosition = { start: textarea.selectionStart, end: textarea.selectionEnd };
+        var quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ size: ['12px', false, '16px', '20px', '24px', '32px', '40px'] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ color: [] }, { background: [] }],
+                    [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['link', 'image'],
+                    ['clean'],
+                ],
+            },
+        });
+
+        var bodyField = document.getElementById('body');
+
+        // Oude sjablonen zijn opgeslagen als platte tekst met regeleinden. Zet elke
+        // alinea om in een eigen <p>, zodat uitlijning per alinea kan worden ingesteld
+        // i.p.v. op de hele inhoud tegelijk.
+        function legacyTextToHtml(text) {
+            if (/<p[\s>]|<div[\s>]|<br/i.test(text)) {
+                return text;
+            }
+            return text.split(/\n\n+/).map(function (paragraph) {
+                return '<p>' + paragraph.replace(/\n/g, '<br>') + '</p>';
+            }).join('');
         }
 
-        function insertAtCursor(text) {
-            var textarea = document.getElementById('body');
-            var start = lastCursorPosition ? lastCursorPosition.start : textarea.value.length;
-            var end = lastCursorPosition ? lastCursorPosition.end : textarea.value.length;
-            var before = textarea.value.substring(0, start);
-            var after = textarea.value.substring(end);
-            textarea.value = before + text + after;
-            var newPosition = start + text.length;
-            textarea.focus();
-            textarea.selectionStart = textarea.selectionEnd = newPosition;
-            lastCursorPosition = { start: newPosition, end: newPosition };
+        if (bodyField.value.trim() !== '') {
+            quill.setContents([]);
+            quill.clipboard.dangerouslyPasteHTML(0, legacyTextToHtml(bodyField.value), 'silent');
         }
+
+        quill.getModule('toolbar').addHandler('image', function () {
+            document.getElementById('image-upload-input').click();
+        });
+
+        document.getElementById('mail-template-form').addEventListener('submit', function () {
+            bodyField.value = quill.root.innerHTML;
+        });
 
         function insertVariable(variable) {
-            insertAtCursor(variable);
+            var range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
+            var index = range.index;
+
+            if (variable === '@{{product_image}}') {
+                // Op een eigen regel zodat de afbeelding apart uitgelijnd kan worden.
+                quill.insertText(index, '\n', 'user');
+                quill.insertText(index + 1, variable, 'user');
+                quill.insertText(index + 1 + variable.length, '\n', 'user');
+                quill.setSelection(index + 1 + variable.length, 0);
+                return;
+            }
+
+            quill.insertText(index, variable, 'user');
+            quill.setSelection(index + variable.length, 0);
         }
 
         function uploadImage(input) {
@@ -177,7 +226,15 @@
                     return response.json();
                 })
                 .then(function (data) {
-                    insertAtCursor('<img src="' + data.url + '" alt="" style="max-width:100%;">');
+                    var range = quill.getSelection(true) || { index: quill.getLength(), length: 0 };
+                    var index = range.index;
+
+                    // Plaats de afbeelding op een eigen regel, zodat ze los uitgelijnd
+                    // kan worden (links/midden/rechts) zonder de omliggende tekst te raken.
+                    quill.insertText(index, '\n', 'user');
+                    quill.insertEmbed(index + 1, 'image', data.url, 'user');
+                    quill.insertText(index + 2, '\n', 'user');
+                    quill.setSelection(index + 1, 0);
                     status.textContent = '';
                 })
                 .catch(function () {

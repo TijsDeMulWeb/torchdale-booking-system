@@ -218,8 +218,8 @@
                                 Mail-sjablonen
                             </label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <p class="mb-3 text-sm text-gray-500 dark:text-gray-400">Stel de bevestigingsmail in die klanten ontvangen na het boeken van deze kamer.</p>
-                                <a href="{{ route('mail-templates.room.index', $room) }}"
+                                <p class="mb-3 text-sm text-gray-500 dark:text-gray-400">Stel de bevestigings-, herinnerings- en annuleringsmails in die klanten ontvangen voor boekingen van deze kamer.</p>
+                                <a href="{{ route('mail-templates.room.index', [$room, 'confirmation']) }}"
                                     class="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">
                                     Mail-sjablonen beheren
                                 </a>

@@ -138,6 +138,17 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Herinneringsmail (dagen op voorhand)
+                        </dt>
+                        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
+                            {{ $escaperoom->escaperoomSetting->reminder_days_before ?? 'Niet ingesteld' }}
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+            <div class="border-t border-gray-100 dark:border-white/10">
+                <dl class="divide-y divide-gray-100 dark:divide-white/10">
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Mollie Key</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
                             {{ $escaperoom->escaperoomSetting->mollie_api_key ?: 'Niet ingesteld' }}

@@ -149,6 +149,19 @@
                             </div>
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label for="reminderDaysBefore"
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Herinneringsmail
+                                (dagen op voorhand)</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <input id="reminderDaysBefore" type="number" name="reminder_days_before" min="0" max="30"
+                                    placeholder="bijv. 1"
+                                    value="{{ old('reminder_days_before', $escaperoom->escaperoomSetting->reminder_days_before) }}"
+                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xs sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Aantal dagen voor de afspraak waarop een herinneringsmail naar de klant wordt gestuurd. Laat leeg of 0 om geen herinneringen te versturen.</p>
+                                <x-form.error name="reminder_days_before" />
+                            </div>
+                        </div>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="mollie_api_key"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Mollie API
                                 Key</label>

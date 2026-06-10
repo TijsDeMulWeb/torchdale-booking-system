@@ -219,14 +219,17 @@ Route::middleware('auth')->group(function () {
     Route::put('/mail-templates/{type}/{template}', [MailTemplateController::class, 'update'])->name('mail-templates.update')->where('type', 'product|gift-card');
     Route::delete('/mail-templates/{type}/{template}', [MailTemplateController::class, 'destroy'])->name('mail-templates.destroy')->where('type', 'product|gift-card');
 
-    // Room-specific mail templates
-    Route::get('/rooms/{room}/mail-templates', [MailTemplateController::class, 'roomIndex'])->name('mail-templates.room.index');
-    Route::post('/rooms/{room}/mail-templates/upload-image', [MailTemplateController::class, 'roomUploadImage'])->name('mail-templates.room.upload-image');
-    Route::get('/rooms/{room}/mail-templates/create', [MailTemplateController::class, 'roomCreate'])->name('mail-templates.room.create');
-    Route::post('/rooms/{room}/mail-templates', [MailTemplateController::class, 'roomStore'])->name('mail-templates.room.store');
-    Route::get('/rooms/{room}/mail-templates/{template}/edit', [MailTemplateController::class, 'roomEdit'])->name('mail-templates.room.edit');
-    Route::put('/rooms/{room}/mail-templates/{template}', [MailTemplateController::class, 'roomUpdate'])->name('mail-templates.room.update');
-    Route::delete('/rooms/{room}/mail-templates/{template}', [MailTemplateController::class, 'roomDestroy'])->name('mail-templates.room.destroy');
+    // Room-specific mail templates (subtype = confirmation | reminder | cancellation)
+    Route::get('/rooms/{room}/mail-templates', function (\App\Models\Room $room) {
+        return redirect()->route('mail-templates.room.index', [$room, 'confirmation']);
+    })->name('mail-templates.room.index.default');
+    Route::get('/rooms/{room}/mail-templates/{subtype}', [MailTemplateController::class, 'roomIndex'])->name('mail-templates.room.index')->where('subtype', 'confirmation|reminder|cancellation');
+    Route::post('/rooms/{room}/mail-templates/{subtype}/upload-image', [MailTemplateController::class, 'roomUploadImage'])->name('mail-templates.room.upload-image')->where('subtype', 'confirmation|reminder|cancellation');
+    Route::get('/rooms/{room}/mail-templates/{subtype}/create', [MailTemplateController::class, 'roomCreate'])->name('mail-templates.room.create')->where('subtype', 'confirmation|reminder|cancellation');
+    Route::post('/rooms/{room}/mail-templates/{subtype}', [MailTemplateController::class, 'roomStore'])->name('mail-templates.room.store')->where('subtype', 'confirmation|reminder|cancellation');
+    Route::get('/rooms/{room}/mail-templates/{subtype}/{template}/edit', [MailTemplateController::class, 'roomEdit'])->name('mail-templates.room.edit')->where('subtype', 'confirmation|reminder|cancellation');
+    Route::put('/rooms/{room}/mail-templates/{subtype}/{template}', [MailTemplateController::class, 'roomUpdate'])->name('mail-templates.room.update')->where('subtype', 'confirmation|reminder|cancellation');
+    Route::delete('/rooms/{room}/mail-templates/{subtype}/{template}', [MailTemplateController::class, 'roomDestroy'])->name('mail-templates.room.destroy')->where('subtype', 'confirmation|reminder|cancellation');
 
     // GiftCards routes
     Route::get('/gift-cards', IndexGiftCardController::class)->name('giftCards.index');

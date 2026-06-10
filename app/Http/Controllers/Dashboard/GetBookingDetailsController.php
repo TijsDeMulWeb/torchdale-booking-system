@@ -59,7 +59,7 @@ class GetBookingDetailsController extends Controller
             'steps' => [
                 'invoice_sent'  => !empty($order?->mollie_id),   // Betaallink verstuurd (mollie_id on order)
                 'paid'          => $order?->status === 'paid',   // Betaald
-                'receipt_sent'  => $invoice !== null,            // Betaald factuur ontvangen (Invoice record created by webhook)
+                'receipt_sent'  => $invoice !== null && $invoice->status === 'paid', // Betaalde factuur ontvangen
             ],
 
             'order_id' => $order?->id,

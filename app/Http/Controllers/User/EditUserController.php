@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class EditUserController extends Controller
 {
@@ -16,8 +17,11 @@ class EditUserController extends Controller
         $user = User::findOrFail($id);
         abort_if($user->escaperoom_id !== auth()->user()->escaperoom_id, 403);
 
+        $roles = Role::orderBy('name')->pluck('name');
+
         return view('user.edit', [
             'user' => $user,
+            'roles' => $roles,
         ]);
     }
 }

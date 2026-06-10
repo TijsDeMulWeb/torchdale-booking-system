@@ -20,13 +20,17 @@ class StoreUserController extends Controller
     {
         $escaperoom = auth()->user()->escaperoom;
 
+        $data = $request->validated();
+        $role = $data['role'];
+        unset($data['role']);
+
         $user = new User();
-        $user->fill($request->validated());
+        $user->fill($data);
         $user->escaperoom_id = $escaperoom->id;
         $user->password = Str::random(40);
         $user->save();
 
-        User::find($user->id)->assignRole('admin');
+        $user->assignRole($role);
 
         $passwordSetupUrl = URL::temporarySignedRoute(
             'passwordSetup.show',

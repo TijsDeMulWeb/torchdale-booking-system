@@ -16,7 +16,12 @@ class UpdateUserController extends Controller
         $user = User::findOrFail($id);
         abort_if($user->escaperoom_id !== auth()->user()->escaperoom_id, 403);
 
-        $user->update($request->validated());
+        $data = $request->validated();
+        $role = $data['role'];
+        unset($data['role']);
+
+        $user->update($data);
+        $user->syncRoles($role);
 
         return redirect()->route('users.index')->with('message', 'Gebruiker succesvol bijgewerkt.');
     }

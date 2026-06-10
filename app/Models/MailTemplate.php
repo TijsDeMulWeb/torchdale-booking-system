@@ -13,13 +13,19 @@ class MailTemplate extends Model
         return $this->belongsTo(Escaperoom::class);
     }
 
+    /**
+     * Variabelen waarvan de waarde zelf HTML bevat en dus niet ge-escaped mag worden.
+     */
+    private const RAW_VARIABLES = ['product_image'];
+
     public function render(array $variables): string
     {
         $body = $this->body;
         foreach ($variables as $key => $value) {
-            $body = str_replace('{{' . $key . '}}', e((string) $value), $body);
+            $replacement = in_array($key, self::RAW_VARIABLES, true) ? (string) $value : e((string) $value);
+            $body = str_replace('{{' . $key . '}}', $replacement, $body);
         }
-        return $body;
+        return nl2br($body);
     }
 
     public function renderSubject(array $variables): string
@@ -39,6 +45,26 @@ class MailTemplate extends Model
             'fr' => 'Français',
             'de' => 'Deutsch',
         ];
+    }
+
+    /**
+     * Leid de mailtaal af van een 2-letter ISO landcode van de klant.
+     */
+    public static function localeFromCountry(?string $countryIso): string
+    {
+        $map = [
+            'NL' => 'nl',
+            'BE' => 'nl',
+            'FR' => 'fr',
+            'DE' => 'de',
+            'AT' => 'de',
+            'CH' => 'de',
+            'GB' => 'en',
+            'IE' => 'en',
+            'US' => 'en',
+        ];
+
+        return $map[strtoupper((string) $countryIso)] ?? 'nl';
     }
 
     public static function resolveFor(int $escaperoomId, string $type, string $locale): ?self

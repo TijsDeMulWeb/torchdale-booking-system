@@ -18,7 +18,7 @@ class ShowAppointmentCustomerController extends Controller
             ->with(['orderedItems.timeSlot.room', 'orderedItems.order'])
             ->get()
             ->flatMap(fn($order) => $order->orderedItems)
-            ->filter(fn($item) => $item->time_slot_id !== null)
+            ->filter(fn($item) => $item->timeSlot !== null)
             ->sortBy('timeSlot.start_time');
 
         return view('customer.appointments', [

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Order\IndexOrderController;
 use App\Http\Controllers\Order\ShowCheckoutController;
 use App\Http\Controllers\Order\ShowOrderInvoiceController;
+use App\Http\Controllers\Order\ShowOrderPaymentLinkController;
 use App\Http\Controllers\Order\StoreOrderController;
 use App\Http\Controllers\AccountSetup\ShowAccountSetupController;
 use App\Http\Controllers\AccountSetup\StoreAccountSetupController;
@@ -286,6 +287,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders/gift-vouchers', \App\Http\Controllers\Order\StoreManualGiftVoucherController::class)->name('orders.gift-vouchers.store');
     Route::patch('/orders/gift-vouchers/{voucher}/delivery', \App\Http\Controllers\Order\UpdateGiftVoucherDeliveryController::class)->name('orders.gift-vouchers.delivery');
     Route::get('/orders/{order}/invoice', ShowOrderInvoiceController::class)->name('orders.invoice');
+    Route::get('/orders/{order}/payment-link', ShowOrderPaymentLinkController::class)->name('orders.payment-link');
 
     // API Keys routes
     Route::get('/api-keys', IndexApiKeyController::class)->name('apiKeys.index');

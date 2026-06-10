@@ -88,6 +88,12 @@ class StoreEscaperoomRequest extends FormRequest
                 'nullable',
                 'string',
             ],
+            'reminder_days_before' => [
+                'nullable',
+                'integer',
+                'min:0',
+                'max:30',
+            ],
         ];
     }
 
@@ -112,6 +118,7 @@ class StoreEscaperoomRequest extends FormRequest
             'confirmation_gift_card_url',
             'mollie_api_key',
             'openai_api_key',
+            'reminder_days_before',
         ]);
     }
 }

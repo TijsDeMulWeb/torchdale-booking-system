@@ -251,8 +251,12 @@ class MailTemplateController extends Controller
     {
         $common = [
             '{{customer_name}}'  => 'Volledige naam van de klant',
+            '{{first_name}}'     => 'Voornaam van de klant',
+            '{{last_name}}'      => 'Achternaam van de klant',
             '{{customer_email}}' => 'E-mailadres van de klant',
             '{{order_number}}'   => 'Ordernummer',
+            '{{company_name}}'   => 'Naam van de escaperoom',
+            '{{company_email}}'  => 'E-mailadres van de escaperoom',
         ];
 
         $specific = match ($type) {

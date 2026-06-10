@@ -8,7 +8,9 @@ use App\Models\TimeSlot;
 use App\Services\GiftVoucherService;
 use App\Services\MailTemplateService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Mollie\Api\MollieApiClient;
 
 class CancelBookingController extends Controller
 {
@@ -34,6 +36,27 @@ class CancelBookingController extends Controller
         }
 
         $timeSlot->delete(); // soft delete
+
+        // Order die nog niet betaald is: annuleren zodat de bestelling niet meer als
+        // "openstaand" wordt getoond en de bijhorende Mollie-betaallink niet meer
+        // betaald kan worden.
+        if ($order && $order->status === 'pending') {
+            if ($order->mollie_id) {
+                try {
+                    $mollieKey = $escaperoom->escaperoomSetting->mollie_api_key ?? env('MOLLIE_KEY');
+                    if ($mollieKey) {
+                        $mollie = new MollieApiClient();
+                        $mollie->setApiKey($mollieKey);
+                        $mollie->salesInvoices->update($order->mollie_id, ['status' => 'canceled']);
+                    }
+                } catch (\Throwable $e) {
+                    Log::warning('Kon Mollie-factuur niet annuleren voor order ' . $order->id . ': ' . $e->getMessage());
+                }
+            }
+
+            $order->status = 'cancelled';
+            $order->save();
+        }
 
         // Annuleringsmail sturen naar de klant: eerst het sjabloon van de escaperoom proberen,
         // anders terugvallen op de ingebouwde mail.

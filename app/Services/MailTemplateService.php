@@ -22,7 +22,7 @@ class MailTemplateService
             return;
         }
 
-        $locale = 'nl';
+        $locale   = MailTemplate::localeFromCountry($order->customer?->country);
         $template = MailTemplate::resolveFor($order->escaperoom_id, 'product', $locale);
 
         if (! $template) {
@@ -42,7 +42,9 @@ class MailTemplateService
             'product_name'   => $product?->name ?? '',
             'variant_name'   => $variant?->name ?? '',
             'quantity'       => (string) $item->quantity,
-            'product_image'  => $productImage ? Storage::url($productImage->url) : '',
+            'product_image'  => $productImage
+                ? '<img src="' . asset(Storage::url($productImage->url)) . '" alt="" style="max-width:100%;border-radius:8px;">'
+                : '',
         ];
 
         try {
@@ -61,7 +63,7 @@ class MailTemplateService
             return;
         }
 
-        $locale = 'nl';
+        $locale   = MailTemplate::localeFromCountry($order->customer?->country);
         $template = MailTemplate::resolveFor($order->escaperoom_id, 'gift-card', $locale);
 
         if (! $template) {

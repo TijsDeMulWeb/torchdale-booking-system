@@ -212,6 +212,20 @@
                             </div>
                         </div>
 
+                        {{-- Mail templates --}}
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">
+                                Mail-sjablonen
+                            </label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <p class="mb-3 text-sm text-gray-500 dark:text-gray-400">Stel de bevestigingsmail in die klanten ontvangen na het boeken van deze kamer.</p>
+                                <a href="{{ route('mail-templates.room.index', $room) }}"
+                                    class="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">
+                                    Mail-sjablonen beheren
+                                </a>
+                            </div>
+                        </div>
+
                         <x-form.actions route="rooms.index" />
                     </div>
                 </div>

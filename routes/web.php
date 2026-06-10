@@ -211,13 +211,22 @@ Route::middleware('auth')->group(function () {
     Route::delete('/coupons/{id}/delete', DeleteCouponController::class)->name('coupons.destroy');
 
     // Mail templates
-    Route::get('/mail-templates/{type}', [MailTemplateController::class, 'index'])->name('mail-templates.index');
-    Route::post('/mail-templates/{type}/upload-image', [MailTemplateController::class, 'uploadImage'])->name('mail-templates.upload-image');
-    Route::get('/mail-templates/{type}/create', [MailTemplateController::class, 'create'])->name('mail-templates.create');
-    Route::post('/mail-templates/{type}', [MailTemplateController::class, 'store'])->name('mail-templates.store');
-    Route::get('/mail-templates/{type}/{template}/edit', [MailTemplateController::class, 'edit'])->name('mail-templates.edit');
-    Route::put('/mail-templates/{type}/{template}', [MailTemplateController::class, 'update'])->name('mail-templates.update');
-    Route::delete('/mail-templates/{type}/{template}', [MailTemplateController::class, 'destroy'])->name('mail-templates.destroy');
+    Route::get('/mail-templates/{type}', [MailTemplateController::class, 'index'])->name('mail-templates.index')->where('type', 'product|gift-card');
+    Route::post('/mail-templates/{type}/upload-image', [MailTemplateController::class, 'uploadImage'])->name('mail-templates.upload-image')->where('type', 'product|gift-card');
+    Route::get('/mail-templates/{type}/create', [MailTemplateController::class, 'create'])->name('mail-templates.create')->where('type', 'product|gift-card');
+    Route::post('/mail-templates/{type}', [MailTemplateController::class, 'store'])->name('mail-templates.store')->where('type', 'product|gift-card');
+    Route::get('/mail-templates/{type}/{template}/edit', [MailTemplateController::class, 'edit'])->name('mail-templates.edit')->where('type', 'product|gift-card');
+    Route::put('/mail-templates/{type}/{template}', [MailTemplateController::class, 'update'])->name('mail-templates.update')->where('type', 'product|gift-card');
+    Route::delete('/mail-templates/{type}/{template}', [MailTemplateController::class, 'destroy'])->name('mail-templates.destroy')->where('type', 'product|gift-card');
+
+    // Room-specific mail templates
+    Route::get('/rooms/{room}/mail-templates', [MailTemplateController::class, 'roomIndex'])->name('mail-templates.room.index');
+    Route::post('/rooms/{room}/mail-templates/upload-image', [MailTemplateController::class, 'roomUploadImage'])->name('mail-templates.room.upload-image');
+    Route::get('/rooms/{room}/mail-templates/create', [MailTemplateController::class, 'roomCreate'])->name('mail-templates.room.create');
+    Route::post('/rooms/{room}/mail-templates', [MailTemplateController::class, 'roomStore'])->name('mail-templates.room.store');
+    Route::get('/rooms/{room}/mail-templates/{template}/edit', [MailTemplateController::class, 'roomEdit'])->name('mail-templates.room.edit');
+    Route::put('/rooms/{room}/mail-templates/{template}', [MailTemplateController::class, 'roomUpdate'])->name('mail-templates.room.update');
+    Route::delete('/rooms/{room}/mail-templates/{template}', [MailTemplateController::class, 'roomDestroy'])->name('mail-templates.room.destroy');
 
     // GiftCards routes
     Route::get('/gift-cards', IndexGiftCardController::class)->name('giftCards.index');

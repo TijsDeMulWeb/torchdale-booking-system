@@ -30,6 +30,7 @@ class StoreUserRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:20'],
             'profile_picture' => ['nullable', 'image', 'max:2048'],
             'language' => ['required', 'string', 'max:10', Rule::in(['en', 'nl', 'de', 'fr'])],
+            'role' => ['required', 'string', Rule::exists('roles', 'name')],
         ];
     }
 }

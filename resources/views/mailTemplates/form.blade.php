@@ -1,20 +1,21 @@
 <x-layouts.app>
     @php
-        $indexUrl = $room ? route('mail-templates.room.index', $room) : route('mail-templates.index', $type);
+        $subtype = $room ? substr($type, 5) : null;
+        $indexUrl = $room ? route('mail-templates.room.index', [$room, $subtype]) : route('mail-templates.index', $type);
         $formAction = isset($template)
-            ? ($room ? route('mail-templates.room.update', [$room, $template]) : route('mail-templates.update', [$type, $template]))
-            : ($room ? route('mail-templates.room.store', $room) : route('mail-templates.store', $type));
-        $uploadImageUrl = $room ? route('mail-templates.room.upload-image', $room) : route('mail-templates.upload-image', $type);
+            ? ($room ? route('mail-templates.room.update', [$room, $subtype, $template]) : route('mail-templates.update', [$type, $template]))
+            : ($room ? route('mail-templates.room.store', [$room, $subtype]) : route('mail-templates.store', $type));
+        $uploadImageUrl = $room ? route('mail-templates.room.upload-image', [$room, $subtype]) : route('mail-templates.upload-image', $type);
     @endphp
 
     <x-navigation.breadcrumb :breadcrumbs="$room
         ? [
             ['name' => 'Kamers', 'url' => route('rooms.index')],
             ['name' => $room->name, 'url' => route('rooms.edit', $room->id)],
-            ['name' => 'Mail-sjablonen', 'url' => route('mail-templates.room.index', $room)],
+            ['name' => 'Mail-sjablonen', 'url' => route('mail-templates.room.index', [$room, $subtype])],
             isset($template)
-                ? ['name' => 'Bewerken', 'url' => route('mail-templates.room.edit', [$room, $template])]
-                : ['name' => 'Nieuw sjabloon', 'url' => route('mail-templates.room.create', $room)],
+                ? ['name' => 'Bewerken', 'url' => route('mail-templates.room.edit', [$room, $subtype, $template])]
+                : ['name' => 'Nieuw sjabloon', 'url' => route('mail-templates.room.create', [$room, $subtype])],
         ]
         : [
             ['name' => $type === 'product' ? 'Producten' : 'Cadeaubonnen', 'url' => $type === 'product' ? route('products.index') : route('giftCards.index')],
@@ -100,7 +101,7 @@
                             </div>
                         </div>
 
-                        @if($type === 'room')
+                        @if(in_array($type, ['room_confirmation', 'room_reminder']))
                             {{-- ICS attachment --}}
                             <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                                 <label for="attach_ics" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Agenda-bijlage</label>

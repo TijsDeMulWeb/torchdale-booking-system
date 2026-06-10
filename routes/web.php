@@ -103,6 +103,12 @@ use App\Http\Controllers\User\IndexUserController;
 use App\Http\Controllers\User\StoreUserController;
 use App\Http\Controllers\User\UpdateUserController;
 use App\Http\Controllers\MailTemplate\MailTemplateController;
+use App\Http\Controllers\Role\CreateRoleController;
+use App\Http\Controllers\Role\DeleteRoleController;
+use App\Http\Controllers\Role\EditRoleController;
+use App\Http\Controllers\Role\IndexRoleController;
+use App\Http\Controllers\Role\StoreRoleController;
+use App\Http\Controllers\Role\UpdateRoleController;
 use App\Http\Controllers\Webhook\MollieWebhookController;
 use Illuminate\Support\Facades\Route;
 
@@ -176,6 +182,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/users/{id}/edit', UpdateUserController::class)->name('users.update');
     Route::delete('/users/{id}/delete', DeleteUserController::class)->name('users.destroy');
     Route::post('/users/{id}/resend-invitation', ResendUserInvitationController::class)->name('users.resendInvitation');
+
+    // Roles & permissions routes
+    Route::get('/roles', IndexRoleController::class)->name('roles.index');
+    Route::get('/roles/create', CreateRoleController::class)->name('roles.create');
+    Route::post('/roles', StoreRoleController::class)->name('roles.store');
+    Route::get('/roles/{role}/edit', EditRoleController::class)->name('roles.edit');
+    Route::put('/roles/{role}', UpdateRoleController::class)->name('roles.update');
+    Route::delete('/roles/{role}', DeleteRoleController::class)->name('roles.destroy');
 
     // Profile routes
     Route::get('/profile', ShowProfileController::class)->name('profile.show');

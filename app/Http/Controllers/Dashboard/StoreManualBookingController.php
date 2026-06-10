@@ -110,9 +110,14 @@ class StoreManualBookingController extends Controller
             $invoiceService->send($order, $timeSlot, $mollieKey);
         }
 
-        $timeSlot->loadMissing(['room.escaperoomAddress.country']);
-        $order->loadMissing('customer');
-        $mailTemplateService->sendForRoomConfirmation($timeSlot, $order);
+        // Bevestigingsmail enkel meteen versturen als er niets online te betalen valt.
+        // Is er nog een online bedrag verschuldigd, dan wordt de mail pas verstuurd
+        // zodra de Mollie-webhook bevestigt dat dit bedrag betaald is.
+        if ((float) $order->amount_online <= 0) {
+            $timeSlot->loadMissing(['room.escaperoomAddress.country']);
+            $order->loadMissing('customer');
+            $mailTemplateService->sendForRoomConfirmation($timeSlot, $order);
+        }
 
         return back()->with('message', 'Afspraak aangemaakt.');
     }

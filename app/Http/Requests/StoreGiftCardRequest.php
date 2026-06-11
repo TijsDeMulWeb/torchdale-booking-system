@@ -45,6 +45,7 @@ class StoreGiftCardRequest extends FormRequest
                     ->ignore($this->route('id')),
             ],
             'description'           => ['nullable', 'string'],
+            'image'                 => ['nullable', 'image', 'max:5120'],
             'amount'                => ['required', 'numeric', 'min:0'],
             'valid_from'            => ['required', 'date'],
             'valid_until'           => ['nullable', 'date', 'after:valid_from'],

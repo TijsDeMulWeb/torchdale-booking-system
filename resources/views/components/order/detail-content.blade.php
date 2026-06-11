@@ -36,6 +36,12 @@
             <dt class="text-gray-500 dark:text-gray-400">{{ __('orders.order_modal_status') }}</dt>
             <dd class="text-gray-900 dark:text-white">{{ $order->status }}</dd>
         </div>
+        @if ($order->referral_source)
+            <div>
+                <dt class="text-gray-500 dark:text-gray-400">{{ __('orders.order_modal_referral_source') }}</dt>
+                <dd class="text-gray-900 dark:text-white">{{ $order->referral_source }}</dd>
+            </div>
+        @endif
         <div>
             <dt class="text-gray-500 dark:text-gray-400">{{ __('orders.order_modal_invoice') }}</dt>
             <dd>
@@ -70,7 +76,19 @@
             <tbody class="divide-y divide-gray-100 dark:divide-white/5">
                 @foreach ($order->orderedItems as $item)
                     <tr>
-                        <td class="py-2 pr-3 text-gray-900 dark:text-white">{{ $item->item_name ?? $item->description ?? '—' }}</td>
+                        <td class="py-2 pr-3 text-gray-900 dark:text-white">
+                            {{ $item->item_name ?? $item->description ?? '—' }}
+                            @if ($item->timeSlot?->language)
+                                <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                                    {{ __('orders.order_modal_language') }}: {{ $item->timeSlot->language->name }}
+                                </p>
+                            @endif
+                            @if (!empty($item->player_names))
+                                <p class="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+                                    {{ __('orders.order_modal_players') }}: {{ implode(', ', $item->player_names) }}
+                                </p>
+                            @endif
+                        </td>
                         <td class="px-3 py-2 text-right text-gray-600 dark:text-gray-400">{{ $item->quantity }}</td>
                         <td class="px-3 py-2 text-right text-gray-600 dark:text-gray-400">{{ Number::currency($item->unit_price ?? 0) }}</td>
                         <td class="py-2 pl-3 text-right text-gray-900 dark:text-white">{{ Number::currency($item->total_price ?? 0) }}</td>
@@ -100,6 +118,13 @@
             </div>
         </dl>
     </div>
+
+    @if ($order->notes)
+        <div>
+            <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ __('orders.order_modal_notes') }}</h4>
+            <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{{ $order->notes }}</p>
+        </div>
+    @endif
 
     <div>
         <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">{{ __('orders.order_modal_legal_documents') }}</h4>

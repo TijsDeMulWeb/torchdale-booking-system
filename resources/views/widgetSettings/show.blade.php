@@ -11,6 +11,10 @@
                     class="main-tab whitespace-nowrap border-b-2 px-1 py-3 text-sm font-medium transition-colors border-indigo-500 text-indigo-600 dark:border-indigo-400 dark:text-indigo-400">
                     {{ __('widgets.tab_colors') }}
                 </button>
+                <button type="button" data-main-tab="boeken"
+                    class="main-tab whitespace-nowrap border-b-2 px-1 py-3 text-sm font-medium transition-colors border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+                    {{ __('widgets.tab_booking') }}
+                </button>
                 <button type="button" data-main-tab="integreren"
                     class="main-tab whitespace-nowrap border-b-2 px-1 py-3 text-sm font-medium transition-colors border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
                     {{ __('widgets.tab_integrate') }}
@@ -103,6 +107,55 @@
                 </div>
             </div>
 
+        </div>
+
+        <div id="main-panel-boeken" class="main-panel mt-10 hidden space-y-12">
+            <div>
+                <div class="px-4 sm:px-0">
+                    <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ __('widgets.booking_options_title') }}</h3>
+                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-500 dark:text-gray-400">
+                        {{ __('widgets.booking_options_description') }}
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ route('widgetSettings.update') }}" id="booking-form">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="mt-6 space-y-8 divide-y divide-gray-900/10 dark:divide-white/10">
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4">
+                            <label for="hear_about_us_options"
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('widgets.hear_about_us_options_label') }}</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <textarea id="hear_about_us_options" name="hear_about_us_options" rows="6"
+                                    placeholder="{{ __('widgets.hear_about_us_options_placeholder') }}"
+                                    class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500">{{ old('hear_about_us_options', implode("\n", $bookingSettings['hear_about_us_options'] ?? [])) }}</textarea>
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('widgets.hear_about_us_options_hint') }}</p>
+                                <x-form.error name="hear_about_us_options" />
+                            </div>
+                        </div>
+
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:pt-8">
+                            <label for="collect_player_names"
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('widgets.collect_player_names_label') }}</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <div class="flex items-start gap-3">
+                                    <input id="collect_player_names" type="checkbox" name="collect_player_names" value="1"
+                                        {{ old('collect_player_names', $bookingSettings['collect_player_names'] ?? true) ? 'checked' : '' }}
+                                        class="mt-1 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-white/10 dark:bg-white/5" />
+                                    <label for="collect_player_names" class="text-sm text-gray-700 dark:text-gray-300">
+                                        {{ __('widgets.collect_player_names_checkbox_label') }}
+                                    </label>
+                                </div>
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('widgets.collect_player_names_hint') }}</p>
+                                <x-form.error name="collect_player_names" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <x-form.actions route="widgetSettings.show" />
+                </form>
+            </div>
         </div>
 
         <div id="main-panel-integreren" class="main-panel mt-10 hidden">

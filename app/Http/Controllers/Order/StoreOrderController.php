@@ -138,6 +138,8 @@ class StoreOrderController extends Controller
                     if ($productShipping > 0) {
                         $orderedItem->total_price = round(($unitPrice + $productShipping) * $qty, 2);
                     }
+                } elseif (str_starts_with($itemId, 'custom_')) {
+                    $orderedItem->description = $item['name'] ?? null;
                 } else {
                     $orderedItem->product_id = (int) $itemId ?: null;
                 }

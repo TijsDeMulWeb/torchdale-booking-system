@@ -239,11 +239,15 @@
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
                             <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                                 <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.products_section_title') }}</h3>
-                                <div class="flex flex-wrap gap-1.5">
+                                <div class="flex flex-wrap items-center gap-1.5">
                                     <button onclick="filterItems('all')" data-filter="all" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">{{ __('orders.filter_all') }}</button>
                                     <button onclick="filterItems('room')" data-filter="room" class="filter-btn rounded-md bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 text-xs font-medium text-indigo-700 dark:text-indigo-300">{{ __('orders.filter_rooms', ['count' => $rooms->count()]) }}</button>
                                     <button onclick="filterItems('product')" data-filter="product" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">{{ __('orders.filter_products', ['count' => $products->count()]) }}</button>
                                     <button onclick="filterItems('giftcard')" data-filter="giftcard" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">{{ __('orders.filter_gift_cards', ['count' => $giftCards->count()]) }}</button>
+                                    <button onclick="openCustomItemModal()" type="button" class="flex items-center gap-1 rounded-md border border-dashed border-gray-300 dark:border-white/15 px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 hover:border-indigo-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                                        <svg class="size-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                        {{ __('orders.custom_item_button') }}
+                                    </button>
                                 </div>
                             </div>
 
@@ -610,6 +614,54 @@
         </div>
     </div>
 
+    {{-- Custom item modal --}}
+    <div id="custom-modal-backdrop" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onclick="closeCustomItemModal(event)">
+        <div class="w-full max-w-sm rounded-2xl bg-white dark:bg-gray-900 shadow-xl" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between border-b border-gray-200 dark:border-white/10 px-5 py-4">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.custom_item_modal_title') }}</h3>
+                <button onclick="closeCustomItemModal()" class="rounded-md p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="px-5 py-4 space-y-3">
+                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('orders.custom_item_modal_description') }}</p>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_description') }}</label>
+                    <input type="text" id="custom-modal-description" placeholder="{{ __('orders.placeholder_description') }}"
+                        class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_price_incl_vat') }}</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
+                            <input type="number" id="custom-modal-price" min="0" step="0.01" placeholder="0.00"
+                                class="w-full pl-7 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_vat_percentage') }}</label>
+                        <div class="relative">
+                            <input type="number" id="custom-modal-vat" min="0" max="100" step="0.01" value="21"
+                                class="w-full pl-3 pr-7 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <span class="absolute inset-y-0 right-3 flex items-center text-sm text-gray-400">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_quantity') }}</label>
+                    <input type="number" id="custom-modal-qty" min="1" step="1" value="1"
+                        class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <p id="custom-modal-error" class="hidden text-xs text-red-500"></p>
+            </div>
+            <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
+                <button onclick="closeCustomItemModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">{{ __('common.cancel') }}</button>
+                <button onclick="addCustomItemToCart()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">{{ __('orders.add_button') }}</button>
+            </div>
+        </div>
+    </div>
+
     {{-- Room modal --}}
     <div id="room-modal-backdrop" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onclick="closeRoomModal(event)">
         <div class="w-full max-w-md rounded-2xl bg-white dark:bg-gray-900 shadow-xl" onclick="event.stopPropagation()">
@@ -692,6 +744,7 @@
             'place_order_button' => __('orders.place_order_button'),
             'shipping_hint' => __('orders.js_shipping_hint'),
             'required_fields_error' => __('orders.js_required_fields_error'),
+            'custom_item_required_fields_error' => __('orders.custom_item_required_fields_error'),
             'generic_error' => __('orders.js_generic_error'),
             'no_results' => __('orders.js_no_results'),
             'discount_percent' => __('orders.discount_percent', ['value' => ':value']),
@@ -1791,6 +1844,58 @@
             document.getElementById('prod-modal-backdrop').classList.add('hidden');
             document.getElementById('prod-modal-backdrop').classList.remove('flex');
             prodModalItem = null;
+        }
+        // ─────────────────────────────────────────────────────────────
+
+        // ── Custom item modal ───────────────────────────────────────
+        function openCustomItemModal() {
+            document.getElementById('custom-modal-description').value = '';
+            document.getElementById('custom-modal-price').value = '';
+            document.getElementById('custom-modal-vat').value = '21';
+            document.getElementById('custom-modal-qty').value = '1';
+            var errEl = document.getElementById('custom-modal-error');
+            errEl.textContent = '';
+            errEl.classList.add('hidden');
+
+            document.getElementById('custom-modal-backdrop').classList.remove('hidden');
+            document.getElementById('custom-modal-backdrop').classList.add('flex');
+            document.getElementById('custom-modal-description').focus();
+        }
+
+        function closeCustomItemModal(e) {
+            if (e && e.target !== document.getElementById('custom-modal-backdrop')) return;
+            document.getElementById('custom-modal-backdrop').classList.add('hidden');
+            document.getElementById('custom-modal-backdrop').classList.remove('flex');
+        }
+
+        function addCustomItemToCart() {
+            var description = document.getElementById('custom-modal-description').value.trim();
+            var price        = parseFloat(document.getElementById('custom-modal-price').value);
+            var vat          = parseFloat(document.getElementById('custom-modal-vat').value) || 0;
+            var qty          = parseInt(document.getElementById('custom-modal-qty').value, 10) || 1;
+            var errEl        = document.getElementById('custom-modal-error');
+
+            if (!description || isNaN(price) || price < 0) {
+                errEl.textContent = i18n.custom_item_required_fields_error;
+                errEl.classList.remove('hidden');
+                return;
+            }
+
+            cart.push({
+                id: 'custom_' + Date.now(),
+                name: description,
+                price: price,
+                originalPrice: price,
+                discountType: '',
+                discountValue: 0,
+                vat: vat,
+                qty: qty,
+                stock: -1,
+                shippingCost: 0,
+            });
+
+            renderCart();
+            closeCustomItemModal();
         }
         // ─────────────────────────────────────────────────────────────
 

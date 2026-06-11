@@ -5,7 +5,7 @@
         ['name' => __('common.edit'), 'url' => route('giftCards.edit', $giftCard->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
-        <form method="POST" action="{{ route('giftCards.update', $giftCard->id) }}">
+        <form method="POST" action="{{ route('giftCards.update', $giftCard->id) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
@@ -34,6 +34,36 @@
                                 <x-form.error name="description" />
                             </div>
                         </div>
+                        {{-- Image --}}
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">
+                                {{ __('giftCards.image_label') }}
+                                <span class="block mt-0.5 font-normal text-xs text-gray-500 dark:text-gray-400">{{ __('giftCards.image_helper') }}</span>
+                            </label>
+                            <div class="mt-2 flex items-center gap-x-3 sm:col-span-2 sm:mt-0">
+                                <img id="gc-image-preview"
+                                    src="{{ $giftCard->image ? Storage::url($giftCard->image) : 'https://placehold.co/400x400' }}"
+                                    alt="Cadeaubon afbeelding preview"
+                                    class="max-h-24 w-auto rounded-lg object-contain border border-gray-200 dark:border-white/10">
+                                <input id="gc-image" name="image" type="file" accept="image/*" class="hidden" onchange="previewGiftCardImage(event)">
+
+                                <button type="button" onclick="document.getElementById('gc-image').click()"
+                                    class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">
+                                    {{ __('common.edit') }}
+                                </button>
+                                <x-form.error name="image" />
+                            </div>
+                        </div>
+                        <script>
+                            function previewGiftCardImage(event) {
+                                const file = event.target.files[0];
+                                if (!file) return;
+
+                                const img = document.getElementById('gc-image-preview');
+                                img.src = URL.createObjectURL(file);
+                            }
+                        </script>
+
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="discountValue"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('giftCards.amount_label') }}</label>

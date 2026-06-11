@@ -15,6 +15,9 @@ return [
     'label_reminder_days_before' => 'Reminder email (days in advance)',
     'helper_reminder_days_before' => 'Number of days before the appointment that a reminder email is sent to the customer. Leave empty or 0 to send no reminders.',
     'reminder_days_placeholder' => 'e.g. 1',
+    'label_notify_new_order' => 'New order notifications',
+    'notify_new_order_checkbox_label' => 'Send an email for every new order',
+    'helper_notify_new_order' => 'For every new (paid) order in the webshop you will receive an email with the order details and the invoice attached, sent to the billing email address above (or the general email address if that is not set).',
     'label_mollie_key' => 'Mollie API Key',
     'label_openai_key' => 'OpenAI API Key',
 
@@ -23,6 +26,8 @@ return [
     'api_keys_button' => 'Api Keys',
     'label_phone_display' => 'Phone',
     'not_set' => 'Not set',
+    'status_enabled' => 'On',
+    'status_disabled' => 'Off',
     'sr_addresses' => 'Addresses',
     'sr_status' => 'Status',
     'label_address' => 'Address',

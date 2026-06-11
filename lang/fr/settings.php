@@ -15,6 +15,9 @@ return [
     'label_reminder_days_before' => 'E-mail de rappel (jours à l\'avance)',
     'helper_reminder_days_before' => 'Nombre de jours avant le rendez-vous où un e-mail de rappel est envoyé au client. Laissez vide ou 0 pour ne pas envoyer de rappels.',
     'reminder_days_placeholder' => 'p.ex. 1',
+    'label_notify_new_order' => 'Notifications de nouvelles commandes',
+    'notify_new_order_checkbox_label' => 'Envoyer un e-mail à chaque nouvelle commande',
+    'helper_notify_new_order' => 'Pour chaque nouvelle commande (payée) sur la boutique en ligne, vous recevez un e-mail avec les détails de la commande et la facture en pièce jointe, à l\'adresse e-mail de facturation ci-dessus (ou à l\'adresse e-mail générale si elle n\'est pas définie).',
     'label_mollie_key' => 'Clé API Mollie',
     'label_openai_key' => 'Clé API OpenAI',
 
@@ -23,6 +26,8 @@ return [
     'api_keys_button' => 'Clés API',
     'label_phone_display' => 'Téléphone',
     'not_set' => 'Non défini',
+    'status_enabled' => 'Activé',
+    'status_disabled' => 'Désactivé',
     'sr_addresses' => 'Adresses',
     'sr_status' => 'Statut',
     'label_address' => 'Adresse',

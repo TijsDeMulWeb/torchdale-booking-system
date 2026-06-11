@@ -15,6 +15,9 @@ return [
     'label_reminder_days_before' => 'Herinneringsmail (dagen op voorhand)',
     'helper_reminder_days_before' => 'Aantal dagen voor de afspraak waarop een herinneringsmail naar de klant wordt gestuurd. Laat leeg of 0 om geen herinneringen te versturen.',
     'reminder_days_placeholder' => 'bijv. 1',
+    'label_notify_new_order' => 'Meldingen nieuwe bestellingen',
+    'notify_new_order_checkbox_label' => 'Stuur een e-mail bij elke nieuwe bestelling',
+    'helper_notify_new_order' => 'Bij elke nieuwe (betaalde) bestelling in de webshop ontvang je een e-mail met de bestelgegevens en de factuur als bijlage, op het facturatie e-mailadres hierboven (of het algemene e-mailadres als dat niet is ingesteld).',
     'label_mollie_key' => 'Mollie API Key',
     'label_openai_key' => 'OpenAI API Key',
 
@@ -23,6 +26,8 @@ return [
     'api_keys_button' => 'Api Keys',
     'label_phone_display' => 'Telefoon',
     'not_set' => 'Niet ingesteld',
+    'status_enabled' => 'Aan',
+    'status_disabled' => 'Uit',
     'sr_addresses' => 'Adressen',
     'sr_status' => 'Status',
     'label_address' => 'Adres',

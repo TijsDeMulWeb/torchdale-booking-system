@@ -12,7 +12,7 @@ class OpenOrdersController extends Controller
     {
         $escaperoomId = auth()->user()->escaperoom_id;
 
-        $orders = Order::with('customer')
+        $orders = Order::with('customer', 'invoice')
             ->where('escaperoom_id', $escaperoomId)
             ->where('status', 'pending')
             ->whereNotNull('payment_method')

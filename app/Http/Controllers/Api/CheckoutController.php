@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Support\ContactNormalizer;
 use App\Models\LegalDocument;
 use App\Models\Order;
 use App\Models\TimeSlot;
@@ -470,14 +471,29 @@ class CheckoutController extends Controller
         return response()->json(['success' => true, 'order' => $order, 'invoice' => $salesInvoice]);
     }
 
+    /**
+     * Find the customer this order belongs to, or create a new one.
+     *
+     * Matching is based primarily on identity signals that survive a customer
+     * giving a different address each time (email, phone, name, IP), since
+     * those are what allow us to recognize a returning - or banned - customer.
+     * Address fields are only used as weak corroborating signals.
+     */
     private function matchOrCreateCustomer($escaperoom, array $input, ?string $ip): Customer
     {
+        $emailNormalized = ContactNormalizer::normalizeEmail($input['email'] ?? null);
+        $phoneNormalized = ContactNormalizer::normalizePhone($input['phone'] ?? null);
+
         $candidates = $escaperoom->customers()
-            ->where(function ($q) use ($input, $ip) {
-                $q->where('email', $input['email'] ?? '')
-                    ->orWhere(function ($q) use ($input) {
-                        if (!empty($input['phone'])) {
-                            $q->where('phone', $input['phone']);
+            ->where(function ($q) use ($input, $ip, $emailNormalized, $phoneNormalized) {
+                $q->where(function ($q) use ($emailNormalized) {
+                        if ($emailNormalized) {
+                            $q->where('email_normalized', $emailNormalized);
+                        }
+                    })
+                    ->orWhere(function ($q) use ($phoneNormalized) {
+                        if ($phoneNormalized) {
+                            $q->where('phone_normalized', $phoneNormalized);
                         }
                     })
                     ->orWhere(function ($q) use ($input) {
@@ -491,14 +507,14 @@ class CheckoutController extends Controller
                             $q->where('ip_address', $ip);
                         }
                     })
-                    ->orWhereHas('identifiers', function ($q) use ($input, $ip) {
-                        $q->where(function ($q) use ($input) {
-                            if (!empty($input['email'])) {
-                                $q->where('type', 'email')->where('value', $input['email']);
+                    ->orWhereHas('identifiers', function ($q) use ($emailNormalized, $phoneNormalized, $ip) {
+                        $q->where(function ($q) use ($emailNormalized) {
+                            if ($emailNormalized) {
+                                $q->where('type', 'email')->where('value_normalized', $emailNormalized);
                             }
-                        })->orWhere(function ($q) use ($input) {
-                            if (!empty($input['phone'])) {
-                                $q->where('type', 'phone')->where('value', $input['phone']);
+                        })->orWhere(function ($q) use ($phoneNormalized) {
+                            if ($phoneNormalized) {
+                                $q->where('type', 'phone')->where('value_normalized', $phoneNormalized);
                             }
                         })->orWhere(function ($q) use ($ip) {
                             if ($ip) {
@@ -518,31 +534,32 @@ class CheckoutController extends Controller
         foreach ($candidates as $candidate) {
             $score = 0;
 
-            $knownEmails = $candidate->identifiers->where('type', 'email')->pluck('value')->push($candidate->email);
-            $knownPhones = $candidate->identifiers->where('type', 'phone')->pluck('value')->push($candidate->phone);
-            $knownIps = $candidate->identifiers->where('type', 'ip_address')->pluck('value')->push($candidate->ip_address);
+            $knownEmails = $candidate->identifiers->where('type', 'email')->pluck('value_normalized')->push($candidate->email_normalized)->filter();
+            $knownPhones = $candidate->identifiers->where('type', 'phone')->pluck('value_normalized')->push($candidate->phone_normalized)->filter();
+            $knownIps = $candidate->identifiers->where('type', 'ip_address')->pluck('value')->push($candidate->ip_address)->filter();
 
-            if (!empty($input['email']) && $knownEmails->contains($input['email'])) {
+            // Email and phone are hard to fake/avoid for a returning customer
+            // and are weighted heavily on their own.
+            if ($emailNormalized && $knownEmails->contains($emailNormalized)) {
                 $score += 60;
             }
-            if (!empty($input['phone']) && $knownPhones->contains($input['phone'])) {
-                $score += 50;
+            if ($phoneNormalized && $knownPhones->contains($phoneNormalized)) {
+                $score += 55;
             }
-            if (
-                !empty($input['first_name']) && !empty($input['last_name'])
-                && strtolower($candidate->first_name) === strtolower($input['first_name'])
-                && strtolower($candidate->last_name) === strtolower($input['last_name'])
-            ) {
-                $score += 30;
-            }
-            if (!empty($input['city']) && strtolower($candidate->city) === strtolower($input['city'])) {
-                $score += 10;
-            }
-            if (!empty($input['street']) && strtolower($candidate->street) === strtolower($input['street'])) {
-                $score += 10;
-            }
+
+            $score += $this->nameMatchScore($candidate, $input);
+
             if ($ip && $knownIps->contains($ip)) {
                 $score += 15;
+            }
+
+            // Address fields change often (and can be filled in differently
+            // on purpose), so they only nudge the score, never decide it.
+            if (!empty($input['city']) && strtolower($candidate->city) === strtolower($input['city'])) {
+                $score += 5;
+            }
+            if (!empty($input['street']) && strtolower($candidate->street) === strtolower($input['street'])) {
+                $score += 5;
             }
 
             if ($score > $bestScore) {
@@ -556,19 +573,22 @@ class CheckoutController extends Controller
             }
         }
 
-        if ($bestBanned && $bestBannedScore >= 30) {
+        // A banned customer is flagged as soon as any single strong identity
+        // signal (email, phone, exact/near name match, or recognized IP)
+        // lines up - regardless of what address they entered this time.
+        if ($bestBanned && $bestBannedScore >= 20) {
             return $bestBanned;
         }
 
         if ($best && $bestScore >= 50) {
-            if (!empty($input['email']) && !$best->identifiers->where('type', 'email')->where('value', $input['email'])->count() && $best->email !== $input['email']) {
-                $best->identifiers()->firstOrCreate(['type' => 'email', 'value' => $input['email']]);
+            if ($emailNormalized && !$best->identifiers->where('type', 'email')->where('value_normalized', $emailNormalized)->count() && $best->email_normalized !== $emailNormalized) {
+                $best->identifiers()->create(['type' => 'email', 'value' => $input['email']]);
             }
-            if (!empty($input['phone']) && !$best->identifiers->where('type', 'phone')->where('value', $input['phone'])->count() && $best->phone !== $input['phone']) {
-                $best->identifiers()->firstOrCreate(['type' => 'phone', 'value' => $input['phone']]);
+            if ($phoneNormalized && !$best->identifiers->where('type', 'phone')->where('value_normalized', $phoneNormalized)->count() && $best->phone_normalized !== $phoneNormalized) {
+                $best->identifiers()->create(['type' => 'phone', 'value' => $input['phone']]);
             }
             if ($ip && !$best->identifiers->where('type', 'ip_address')->where('value', $ip)->count() && $best->ip_address !== $ip) {
-                $best->identifiers()->firstOrCreate(['type' => 'ip_address', 'value' => $ip]);
+                $best->identifiers()->create(['type' => 'ip_address', 'value' => $ip]);
             }
 
             return $best;
@@ -590,5 +610,35 @@ class CheckoutController extends Controller
         ));
 
         return $customer;
+    }
+
+    /**
+     * Score how well a candidate's name matches the given input, allowing
+     * for small typos (e.g. "Jhon" vs "John") on an otherwise matching name.
+     */
+    private function nameMatchScore(Customer $candidate, array $input): int
+    {
+        if (empty($input['first_name']) || empty($input['last_name'])) {
+            return 0;
+        }
+
+        $candidateFirst = strtolower($candidate->first_name);
+        $candidateLast = strtolower($candidate->last_name);
+        $inputFirst = strtolower($input['first_name']);
+        $inputLast = strtolower($input['last_name']);
+
+        if ($candidateFirst === $inputFirst && $candidateLast === $inputLast) {
+            return 30;
+        }
+
+        $candidateFull = $candidateFirst . ' ' . $candidateLast;
+        $inputFull = $inputFirst . ' ' . $inputLast;
+        $maxLength = max(strlen($candidateFull), strlen($inputFull));
+
+        if ($maxLength >= 6 && levenshtein($candidateFull, $inputFull) <= 2) {
+            return 20;
+        }
+
+        return 0;
     }
 }

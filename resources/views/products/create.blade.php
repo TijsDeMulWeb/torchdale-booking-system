@@ -23,7 +23,7 @@
                             </div>
                         </div>
 
-                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                        <div id="sku-row" class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="sku"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('products.sku_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
@@ -88,10 +88,25 @@
                                 <input id="sellingPrice" type="text" name="selling_price" placeholder="{{ __('products.selling_price_label') }}"
                                     value="{{ old('selling_price') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
+                                <p id="selling-price-fallback-helper" class="mt-1.5 text-xs text-gray-500 dark:text-gray-400 hidden">{{ __('products.selling_price_fallback_helper') }}</p>
                                 <x-form.error name="selling_price" />
                             </div>
                         </div>
-                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6" id="variants-section">
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label for="hasVariants"
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('products.has_variants_label') }}</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <div class="flex items-start gap-3">
+                                    <input id="hasVariants" type="checkbox" onchange="toggleVariantsSection()"
+                                        class="mt-1 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-white/10 dark:bg-white/5" />
+                                    <label for="hasVariants" class="text-sm text-gray-700 dark:text-gray-300">
+                                        {{ __('products.has_variants_checkbox_label') }}
+                                    </label>
+                                </div>
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('products.has_variants_helper') }}</p>
+                            </div>
+                        </div>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6" id="variants-section" style="display:none;">
                             <div class="sm:pt-1.5">
                                 <label class="block text-sm/6 font-medium text-gray-900 dark:text-white">{{ __('products.variants_label') }}</label>
                                 <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ __('products.variants_helper') }}</p>
@@ -280,6 +295,23 @@ function syncStockRow() {
     row.style.display   = hasVariants ? 'none' : '';
     input.disabled      = hasVariants;
     if (hasVariants) input.value = '';
+}
+
+function toggleVariantsSection() {
+    var enabled = document.getElementById('hasVariants').checked;
+    document.getElementById('variants-section').style.display = enabled ? '' : 'none';
+    document.getElementById('sku-row').style.display = enabled ? 'none' : '';
+    document.getElementById('selling-price-fallback-helper').classList.toggle('hidden', !enabled);
+
+    if (enabled) {
+        var skuInput = document.getElementById('sku');
+        skuInput.value = '';
+        if (document.querySelectorAll('.variant-row').length === 0) addVariantRow();
+    } else {
+        document.getElementById('variants-list').innerHTML = '';
+    }
+
+    syncStockRow();
 }
 
 function addVariantRow(data) {

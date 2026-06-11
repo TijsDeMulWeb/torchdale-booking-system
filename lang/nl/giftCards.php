@@ -14,6 +14,9 @@ return [
     'amount_label' => 'Cadeaubonwaarde',
     'available_until_label' => 'Beschikbaar tot',
 
+    'image_label' => 'Afbeelding',
+    'image_helper' => 'Optionele foto/afbeelding voor deze cadeaubon (vierkant, ideaal 400x400px). Indien leeg wordt de standaardweergave getoond.',
+
     'shipping_cost_helper' => 'Bij levering per post',
     'shipping_cost_note' => 'Wordt automatisch toegepast wanneer "Per post" gekozen wordt bij een bon.',
 

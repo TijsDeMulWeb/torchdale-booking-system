@@ -3,6 +3,7 @@
 return [
     'breadcrumb_widget' => 'Widget',
     'tab_colors' => 'Colors',
+    'tab_booking' => 'Booking',
     'tab_integrate' => 'Integrate',
     'colors_title' => 'Widget colors',
     'colors_description' => 'Customize the colors of your widget. Changes are visible immediately in the preview below.',
@@ -31,4 +32,13 @@ return [
     'works_only_on' => 'This widget only works on :origin.',
     'copy_button' => 'Copy',
     'copied_js' => 'Copied!',
+
+    'booking_options_title' => 'Booking options',
+    'booking_options_description' => 'Configure what information customers can or must fill in while booking.',
+    'hear_about_us_options_label' => '"How did you hear about us?" options',
+    'hear_about_us_options_placeholder' => "Google / search engine\nInstagram\nFacebook\nWord of mouth",
+    'hear_about_us_options_hint' => 'One option per line. These options are shown in the checkout step of the widget.',
+    'collect_player_names_label' => 'Player first names',
+    'collect_player_names_checkbox_label' => 'Ask for the first names of all players during checkout',
+    'collect_player_names_hint' => 'If disabled, this field is not shown to customers in the widget.',
 ];

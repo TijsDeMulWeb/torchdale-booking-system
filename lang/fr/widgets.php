@@ -3,6 +3,7 @@
 return [
     'breadcrumb_widget' => 'Widget',
     'tab_colors' => 'Couleurs',
+    'tab_booking' => 'Réservation',
     'tab_integrate' => 'Intégrer',
     'colors_title' => 'Couleurs du widget',
     'colors_description' => 'Personnalisez les couleurs de votre widget. Les modifications sont visibles immédiatement dans l\'aperçu ci-dessous.',
@@ -31,4 +32,13 @@ return [
     'works_only_on' => 'Ce widget fonctionne uniquement sur :origin.',
     'copy_button' => 'Copier',
     'copied_js' => 'Copié !',
+
+    'booking_options_title' => 'Options de réservation',
+    'booking_options_description' => 'Définissez les informations que les clients peuvent ou doivent renseigner lors de la réservation.',
+    'hear_about_us_options_label' => 'Options « Comment nous avez-vous trouvés ? »',
+    'hear_about_us_options_placeholder' => "Google / moteur de recherche\nInstagram\nFacebook\nBouche-à-oreille",
+    'hear_about_us_options_hint' => 'Une option par ligne. Ces options sont affichées lors du paiement dans le widget.',
+    'collect_player_names_label' => 'Prénoms des joueurs',
+    'collect_player_names_checkbox_label' => 'Demander les prénoms de tous les joueurs lors du paiement',
+    'collect_player_names_hint' => 'Si désactivé, ce champ ne sera pas affiché aux clients dans le widget.',
 ];

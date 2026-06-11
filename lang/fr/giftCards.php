@@ -14,6 +14,9 @@ return [
     'amount_label' => 'Valeur du bon cadeau',
     'available_until_label' => 'Disponible jusqu\'au',
 
+    'image_label' => 'Image',
+    'image_helper' => 'Photo/image facultative pour ce bon cadeau (carrée, idéalement 400x400px). Si vide, l\'affichage par défaut est utilisé.',
+
     'shipping_cost_helper' => 'Pour la livraison par courrier',
     'shipping_cost_note' => 'Sera automatiquement appliqué lorsque « Par courrier » est sélectionné pour un bon.',
 

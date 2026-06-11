@@ -3,6 +3,7 @@
 return [
     'breadcrumb_widget' => 'Widget',
     'tab_colors' => 'Kleuren',
+    'tab_booking' => 'Boeken',
     'tab_integrate' => 'Integreren',
     'colors_title' => 'Widgetkleuren',
     'colors_description' => 'Pas de kleuren van je widget aan. De wijzigingen zijn direct zichtbaar in de voorbeeld hieronder.',
@@ -31,4 +32,13 @@ return [
     'works_only_on' => 'Deze widget werkt enkel op :origin.',
     'copy_button' => 'Kopiëren',
     'copied_js' => 'Gekopieerd!',
+
+    'booking_options_title' => 'Boekingsopties',
+    'booking_options_description' => 'Stel in welke informatie klanten kunnen of moeten invullen tijdens het boeken.',
+    'hear_about_us_options_label' => '"Hoe heb je ons gevonden?" opties',
+    'hear_about_us_options_placeholder' => "Google / zoekmachine\nInstagram\nFacebook\nMond-tot-mond reclame",
+    'hear_about_us_options_hint' => 'Eén optie per regel. Deze opties worden getoond in de afrekenstap van de widget.',
+    'collect_player_names_label' => 'Voornamen van spelers',
+    'collect_player_names_checkbox_label' => 'Vraag de voornamen van alle spelers tijdens het afrekenen',
+    'collect_player_names_hint' => 'Indien uitgeschakeld wordt dit veld niet getoond aan klanten in de widget.',
 ];

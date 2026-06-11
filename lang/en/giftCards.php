@@ -14,6 +14,9 @@ return [
     'amount_label' => 'Gift card value',
     'available_until_label' => 'Available until',
 
+    'image_label' => 'Image',
+    'image_helper' => 'Optional photo/image for this gift card (square, ideally 400x400px). If left empty, the default design is shown.',
+
     'shipping_cost_helper' => 'For delivery by mail',
     'shipping_cost_note' => 'Will be automatically applied when "By mail" is selected for a voucher.',
 

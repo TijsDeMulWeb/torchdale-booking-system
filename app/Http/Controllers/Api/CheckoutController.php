@@ -290,21 +290,21 @@ class CheckoutController extends Controller
 
                     if ($roomPrice->payment_location === 'online') {
                         $roomTotal = round($roomPrice->price, 2);
-                        $roomSubtotal = round($roomPrice->price, 2);
-                        $roomVatTotal = round($roomSubtotal * $roomPrice->vat_percentage / (100 + $roomPrice->vat_percentage), 2);
+                        $roomVatTotal = round($roomTotal * $roomPrice->vat_percentage / (100 + $roomPrice->vat_percentage), 2);
+                        $roomSubtotal = round($roomTotal - $roomVatTotal, 2);
                     }
 
                     if ($roomPrice->payment_location === 'location') {
                         if ($roomPrice->base_price >= $roomPrice->price) {
                             $roomTotal = round($roomPrice->price, 2);
-                            $roomSubtotal = round($roomPrice->price, 2);
-                            $roomVatTotal = round($roomSubtotal * $roomPrice->vat_percentage / (100 + $roomPrice->vat_percentage), 2);
+                            $roomVatTotal = round($roomTotal * $roomPrice->vat_percentage / (100 + $roomPrice->vat_percentage), 2);
+                            $roomSubtotal = round($roomTotal - $roomVatTotal, 2);
                         }
 
                         if ($roomPrice->base_price < $roomPrice->price) {
                             $roomTotal = round($roomPrice->base_price, 2);
-                            $roomSubtotal = round($roomPrice->base_price, 2);
-                            $roomVatTotal = round($roomSubtotal * $roomPrice->vat_percentage / (100 + $roomPrice->vat_percentage), 2);
+                            $roomVatTotal = round($roomTotal * $roomPrice->vat_percentage / (100 + $roomPrice->vat_percentage), 2);
+                            $roomSubtotal = round($roomTotal - $roomVatTotal, 2);
                             $roomLeftToPay = round($roomPrice->price - $roomPrice->base_price, 2);
                         }
                     }
@@ -409,6 +409,9 @@ class CheckoutController extends Controller
             $order->subtotal = $subtotal;
             $order->discount = $discount;
             $order->vat_amount = $vatTotal;
+            $order->amount_online = $total;
+            $order->amount_onsite = $leftToPay;
+            $order->payment_method = 'online';
             $order->save();
         });
 
@@ -458,6 +461,7 @@ class CheckoutController extends Controller
             recipientIdentifier: 'customer-' . $customer->id . '-' . ($order->is_business ? 'business' : 'consumer'),
             recipient: $recipient,
             lines: new DataCollection($mollieLines),
+            webhookUrl: route('webhook.mollie'),
             discount: $invoiceDiscount,
             isEInvoice: false
         );
@@ -465,10 +469,47 @@ class CheckoutController extends Controller
         $salesInvoice = $mollie->send($invoiceRequest);
 
         $order->mollie_id = $salesInvoice->id;
-        $order->payment_link = $salesInvoice->_links->paymentLink->href ?? null;
+        $order->payment_link = $salesInvoice->_links->invoicePayment->href ?? null;
         $order->save();
 
-        return response()->json(['success' => true, 'order' => $order, 'invoice' => $salesInvoice]);
+        $redirectUrl = $this->resolveConfirmationLink($request->escaperoom, $items);
+
+        return response()->json([
+            'success' => true,
+            'order_id' => $order->id,
+            'payment_url' => $order->payment_link,
+            'redirect_url' => $redirectUrl,
+        ]);
+    }
+
+    /**
+     * Determine which confirmation page the customer should be sent back to
+     * after paying, based on what's in their order. Priority: a room
+     * (escaperoom) booking takes precedence, then a product, then a gift card.
+     */
+    private function resolveConfirmationLink($escaperoom, array $items): ?string
+    {
+        $settings = $escaperoom->escaperoomSetting;
+
+        if (!$settings) {
+            return null;
+        }
+
+        $types = array_column($items, 'type');
+
+        if (in_array('escaperoom', $types, true) && $settings->confirmation_room_url) {
+            return $settings->confirmation_room_url;
+        }
+
+        if (in_array('product', $types, true) && $settings->confirmation_product_url) {
+            return $settings->confirmation_product_url;
+        }
+
+        if (in_array('giftcard', $types, true) && $settings->confirmation_gift_card_url) {
+            return $settings->confirmation_gift_card_url;
+        }
+
+        return null;
     }
 
     /**

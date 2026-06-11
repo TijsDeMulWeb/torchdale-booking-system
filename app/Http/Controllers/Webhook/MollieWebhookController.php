@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Webhook;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Services\GiftVoucherService;
 use App\Services\MailTemplateService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -48,9 +48,7 @@ class MollieWebhookController extends Controller
             }
 
             // Voorkom dubbele verwerking — skip als de invoice al als 'paid' is verwerkt
-            $existingInvoice = DB::table('invoices')
-                ->where('mollie_invoice_id', $mollieInvoiceId)
-                ->first();
+            $existingInvoice = Invoice::where('mollie_invoice_id', $mollieInvoiceId)->first();
 
             if ($existingInvoice && $existingInvoice->status === 'paid') {
                 return response('', 200);
@@ -71,16 +69,13 @@ class MollieWebhookController extends Controller
 
             // Update bestaande invoice record (issued → paid) of maak nieuw aan
             if ($existingInvoice) {
-                DB::table('invoices')
-                    ->where('id', $existingInvoice->id)
-                    ->update([
-                        'status'         => 'paid',
-                        'pdf_url'        => $pdfPath,
-                        'invoice_number' => $invoiceNumber,
-                        'updated_at'     => now(),
-                    ]);
+                $existingInvoice->update([
+                    'status'         => 'paid',
+                    'pdf_url'        => $pdfPath,
+                    'invoice_number' => $invoiceNumber,
+                ]);
             } else {
-                DB::table('invoices')->insert([
+                Invoice::create([
                     'customer_id'       => $order->customer_id,
                     'order_id'          => $order->id,
                     'mollie_invoice_id' => $mollieInvoiceId,
@@ -89,8 +84,6 @@ class MollieWebhookController extends Controller
                     'invoice_number'    => $invoiceNumber,
                     'status'            => 'paid',
                     'amount'            => $order->amount_online,
-                    'created_at'        => now(),
-                    'updated_at'        => now(),
                 ]);
             }
 

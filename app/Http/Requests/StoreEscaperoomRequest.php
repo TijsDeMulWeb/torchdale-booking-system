@@ -94,6 +94,10 @@ class StoreEscaperoomRequest extends FormRequest
                 'min:0',
                 'max:30',
             ],
+            'notify_new_order' => [
+                'nullable',
+                'boolean',
+            ],
         ];
     }
 
@@ -112,13 +116,18 @@ class StoreEscaperoomRequest extends FormRequest
 
     public function escaperoomSettingsData(): array
     {
-        return $this->only([
-            'confirmation_room_url',
-            'confirmation_product_url',
-            'confirmation_gift_card_url',
-            'mollie_api_key',
-            'openai_api_key',
-            'reminder_days_before',
-        ]);
+        return array_merge(
+            $this->only([
+                'confirmation_room_url',
+                'confirmation_product_url',
+                'confirmation_gift_card_url',
+                'mollie_api_key',
+                'openai_api_key',
+                'reminder_days_before',
+            ]),
+            [
+                'notify_new_order' => $this->boolean('notify_new_order'),
+            ],
+        );
     }
 }

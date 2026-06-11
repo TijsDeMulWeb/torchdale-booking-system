@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Order;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderedItem;
 use App\Models\Product;
@@ -226,6 +227,17 @@ class StoreOrderController extends Controller
                     unitPrice: new Money('EUR', number_format($originalPrice, 2, '.', '')),
                     discount: $lineDiscount,
                 );
+
+                $shippingCost = (float) ($item['shippingCost'] ?? 0);
+                $deliveryMethod = $item['deliveryMethod'] ?? null;
+                if ($shippingCost > 0 && (!$deliveryMethod || $deliveryMethod === 'post')) {
+                    $lines[] = new InvoiceLine(
+                        description: 'Verzendkosten',
+                        quantity: (int) ($item['qty'] ?? 1),
+                        vatRate: number_format((float) ($item['vat'] ?? 0), 2, '.', ''),
+                        unitPrice: new Money('EUR', number_format($shippingCost, 2, '.', '')),
+                    );
+                }
             }
 
             $isCash = $paymentMethod === 'cash';
@@ -285,7 +297,7 @@ class StoreOrderController extends Controller
                 }
             }
 
-            DB::table('invoices')->insert([
+            Invoice::create([
                 'customer_id'       => $customer->id,
                 'order_id'          => $order->id,
                 'mollie_invoice_id' => $mollieInvoice->id,
@@ -294,8 +306,6 @@ class StoreOrderController extends Controller
                 'invoice_number'    => $invoiceNumber,
                 'status'            => $isCash ? 'paid' : 'issued',
                 'amount'            => round($totals['totaal_incl_btw'] ?? 0, 2),
-                'created_at'        => now(),
-                'updated_at'        => now(),
             ]);
 
             $order->invoice_number = $invoiceNumber;

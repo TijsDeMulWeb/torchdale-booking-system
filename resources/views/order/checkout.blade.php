@@ -867,7 +867,6 @@
             searchWrap.classList.add('hidden');
             document.getElementById('business-section').classList.remove('hidden');
             closeDropdown();
-            recalculateProductShipping();
             renderCart();
             updatePlaceOrderBtn();
         }
@@ -889,7 +888,6 @@
             document.getElementById('business-company-name').value = '';
             document.getElementById('business-vat-number').value   = '';
             document.getElementById('business-reg-number').value   = '';
-            recalculateProductShipping();
             renderCart();
             updatePlaceOrderBtn();
         }
@@ -1157,21 +1155,6 @@
             return selectedCustomerCountryIso.toUpperCase() === escaperoomCountryIso.toUpperCase()
                 ? domestic
                 : international;
-        }
-
-        function recalculateProductShipping() {
-            cart.forEach(function (item) {
-                if (!item.shippingDomestic && !item.shippingInternational) return;
-                var domestic      = item.shippingDomestic || 0;
-                var international = item.shippingInternational || 0;
-                if (!selectedCustomerCountryIso || !escaperoomCountryIso) {
-                    item.shippingCost = domestic;
-                } else {
-                    item.shippingCost = selectedCustomerCountryIso.toUpperCase() === escaperoomCountryIso.toUpperCase()
-                        ? domestic
-                        : international;
-                }
-            });
         }
 
         function addToCart(btn) {

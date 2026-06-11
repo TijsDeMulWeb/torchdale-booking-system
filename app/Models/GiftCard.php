@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
-#[Fillable(['name', 'description', 'code', 'amount', 'valid_from', 'valid_until', 'shipping_cost', 'allow_mail_delivery', 'allow_post_delivery', 'allow_pickup_delivery'])]
+#[Fillable(['name', 'description', 'image', 'code', 'amount', 'valid_from', 'valid_until', 'shipping_cost', 'allow_mail_delivery', 'allow_post_delivery', 'allow_pickup_delivery'])]
 class GiftCard extends Model
 {
     use softDeletes;

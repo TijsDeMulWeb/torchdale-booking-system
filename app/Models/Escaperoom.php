@@ -53,6 +53,11 @@ class Escaperoom extends Model
         return $this->hasMany(GiftCard::class);
     }
 
+    public function giftVouchers()
+    {
+        return $this->hasMany(GiftVoucher::class);
+    }
+
     public function rooms()
     {
         return $this->hasMany(Room::class);

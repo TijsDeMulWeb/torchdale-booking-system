@@ -24,6 +24,7 @@ return [
     'section_title_info' => 'Escaperoom Informatie',
     'section_description_info' => 'Informatie over het escaperoom.',
     'api_keys_button' => 'Api Keys',
+    'legal_documents_button' => 'Juridische documenten',
     'label_phone_display' => 'Telefoon',
     'not_set' => 'Niet ingesteld',
     'status_enabled' => 'Aan',

@@ -24,6 +24,7 @@ return [
     'section_title_info' => 'Escape Room Information',
     'section_description_info' => 'Information about the escape room.',
     'api_keys_button' => 'Api Keys',
+    'legal_documents_button' => 'Legal documents',
     'label_phone_display' => 'Phone',
     'not_set' => 'Not set',
     'status_enabled' => 'On',

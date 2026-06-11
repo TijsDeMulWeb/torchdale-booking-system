@@ -24,6 +24,7 @@ return [
     'section_title_info' => 'Informations sur l\'escape game',
     'section_description_info' => 'Informations sur l\'escape game.',
     'api_keys_button' => 'Clés API',
+    'legal_documents_button' => 'Documents juridiques',
     'label_phone_display' => 'Téléphone',
     'not_set' => 'Non défini',
     'status_enabled' => 'Activé',

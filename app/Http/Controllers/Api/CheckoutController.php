@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\LegalDocument;
 use App\Models\Order;
+use App\Models\TimeSlot;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -43,12 +45,21 @@ class CheckoutController extends Controller
 
         $discountCodeInput = $request->input('discount_code');
         $discountCode = null;
+        $giftVoucher = null;
 
         if ($discountCodeInput) {
             $discountCode = $request->escaperoom->coupons()->where('code', $discountCodeInput)->first();
 
-            if (!$discountCode || $discountCode->valid_from > now() || ($discountCode->valid_until && $discountCode->valid_until < now()) || ($discountCode->usage_limit !== null && $discountCode->usage_limit === 0)) {
-                return response()->json(['success' => false, 'message' => 'Invalid discount code.'], 422);
+            if ($discountCode) {
+                if ($discountCode->valid_from > now() || ($discountCode->valid_until && $discountCode->valid_until < now()) || ($discountCode->usage_limit !== null && $discountCode->usage_limit === 0)) {
+                    return response()->json(['success' => false, 'message' => 'Invalid discount code.'], 422);
+                }
+            } else {
+                $giftVoucher = $request->escaperoom->giftVouchers()->where('code', $discountCodeInput)->first();
+
+                if (!$giftVoucher || !$giftVoucher->isActive()) {
+                    return response()->json(['success' => false, 'message' => 'Invalid discount code.'], 422);
+                }
             }
         }
 
@@ -82,7 +93,17 @@ class CheckoutController extends Controller
                     return response()->json(['success' => false, 'message' => 'Product not found: ' . $item['product_id']], 422);
                 }
 
-                if ($product->stock_quantity !== null && $product->stock_quantity === 0) {
+                if (!empty($item['product_variant_id'])) {
+                    $variant = $product->variants()->find($item['product_variant_id']);
+
+                    if (!$variant) {
+                        return response()->json(['success' => false, 'message' => 'Product variant not found: ' . $item['product_variant_id']], 422);
+                    }
+
+                    if ($variant->stock_quantity !== null && $variant->stock_quantity === 0) {
+                        return response()->json(['success' => false, 'message' => 'Product variant out of stock: ' . $item['product_variant_id']], 422);
+                    }
+                } elseif ($product->stock_quantity !== null && $product->stock_quantity === 0) {
                     return response()->json(['success' => false, 'message' => 'Product out of stock: ' . $item['product_id']], 422);
                 }
             }
@@ -121,12 +142,38 @@ class CheckoutController extends Controller
                     return response()->json(['success' => false, 'message' => 'No price found for room ' . $item['room_id'] . ' on day ' . $dayOfWeek . ' for ' . $item['players'] . ' players.'], 422);
                 }
 
+                $slotStart = Carbon::parse($item['date'] . ' ' . $item['start_time']);
+                $slotEnd = Carbon::parse($item['date'] . ' ' . $item['end_time']);
+
+                if ($slotEnd->lessThanOrEqualTo($slotStart)) {
+                    $slotEnd->addDay();
+                }
+
+                $hasConflict = TimeSlot::where('room_id', $room->id)
+                    ->where('start_time', '<', $slotEnd)
+                    ->where('end_time', '>', $slotStart)
+                    ->where(function ($q) {
+                        $q->whereNull('reserved_until')->orWhere('reserved_until', '>=', now());
+                    })
+                    ->exists();
+
+                if ($hasConflict) {
+                    return response()->json(['success' => false, 'message' => 'This time slot is no longer available: ' . $item['room_id']], 422);
+                }
+
+                if (!empty($item['player_names']) && !is_array($item['player_names'])) {
+                    return response()->json(['success' => false, 'message' => 'player_names must be an array.'], 422);
+                }
+
+                if (!empty($item['language_id']) && !$room->languages()->where('languages.id', $item['language_id'])->exists()) {
+                    return response()->json(['success' => false, 'message' => 'Invalid language for room ' . $item['room_id'] . '.'], 422);
+                }
             }
         }
 
 
 
-        DB::transaction(function () use ($request, $items, $customer, $customerInput, $discountCode, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice, &$order, &$invoiceLineData, &$invoiceDiscount) {
+        DB::transaction(function () use ($request, $items, $customer, $customerInput, $discountCode, $giftVoucher, &$total, &$subtotal, &$discount, &$vatTotal, &$leftToPay, &$roomPrice, &$order, &$invoiceLineData, &$invoiceDiscount) {
             $order = new Order();
             $order->escaperoom_id = $request->escaperoom->id;
             $order->customer_id = $customer->id;
@@ -138,6 +185,10 @@ class CheckoutController extends Controller
             $order->company_name = $customerInput['company_name'] ?? null;
             $order->vat_number = $customerInput['vat_number'] ?? null;
             $order->registration_number = $customerInput['registration_number'] ?? null;
+            $order->privacy_policy_legal_document_id = $request->escaperoom->latestLegalDocument(LegalDocument::TYPE_PRIVACY_POLICY)?->id;
+            $order->terms_conditions_legal_document_id = $request->escaperoom->latestLegalDocument(LegalDocument::TYPE_TERMS_CONDITIONS)?->id;
+            $order->referral_source = $customerInput['hear_about_us'] ?? null;
+            $order->notes = $customerInput['notes'] ?? null;
             $order->save();
 
             foreach ($items as $item) {
@@ -147,8 +198,19 @@ class CheckoutController extends Controller
                     $productDiscountTotal = 0;
                     $productVatTotal = 0;
                     $product = $request->escaperoom->products()->find($item['product_id']);
+                    $variant = !empty($item['product_variant_id']) ? $product->variants()->find($item['product_variant_id']) : null;
+                    $unitPrice = $variant ? $variant->effectivePrice() : (float) $product->selling_price;
 
-                    if ($product->stock_quantity !== null) {
+                    if ($variant) {
+                        if ($variant->stock_quantity !== null) {
+                            if ($variant->stock_quantity < $item['qty']) {
+                                $item['qty'] = $variant->stock_quantity;
+                            }
+
+                            $variant->stock_quantity -= $item['qty'];
+                            $variant->save();
+                        }
+                    } elseif ($product->stock_quantity !== null) {
                         if ($product->stock_quantity < $item['qty']) {
                             $item['qty'] = $product->stock_quantity;
                         }
@@ -157,7 +219,7 @@ class CheckoutController extends Controller
                         $product->save();
                     }
 
-                    $productTotalInclVat = round($product->selling_price * $item['qty'], 2);
+                    $productTotalInclVat = round($unitPrice * $item['qty'], 2);
 
                     if ($product->discount_type) {
                         if ($product->discount_type === 'percentage') {
@@ -180,18 +242,19 @@ class CheckoutController extends Controller
 
                     $order->orderedItems()->create([
                         'product_id' => $product->id,
+                        'product_variant_id' => $variant?->id,
                         'quantity' => $item['qty'],
-                        'unit_price' => $product->selling_price,
+                        'unit_price' => $unitPrice,
                         'total_price' => $productTotal,
                         'vat_percentage' => $product->vat_percentage,
                         'vat_amount' => $productVatTotal,
                     ]);
 
                     $invoiceLineData[] = [
-                        'description' => $product->name,
+                        'description' => $variant ? $product->name . ' – ' . $variant->name : $product->name,
                         'quantity' => $item['qty'],
                         'vatRate' => number_format((float) $product->vat_percentage, 2, '.', ''),
-                        'unitPrice' => $product->selling_price,
+                        'unitPrice' => $unitPrice,
                         'discountType' => $product->discount_type,
                         'discountValue' => $product->discount_value ? number_format((float) $product->discount_value, 2, '.', '') : null,
                     ];
@@ -251,6 +314,38 @@ class CheckoutController extends Controller
                     $vatTotal += $roomVatTotal;
                     $leftToPay += $roomLeftToPay;
 
+                    $slotStart = Carbon::parse($item['date'] . ' ' . $item['start_time']);
+                    $slotEnd = Carbon::parse($item['date'] . ' ' . $item['end_time']);
+
+                    if ($slotEnd->lessThanOrEqualTo($slotStart)) {
+                        $slotEnd->addDay();
+                    }
+
+                    $timeSlot = TimeSlot::create([
+                        'room_id' => $room->id,
+                        'language_id' => $item['language_id'] ?? null,
+                        'start_time' => $slotStart,
+                        'end_time' => $slotEnd,
+                        'reserved_until' => now()->addMinutes(15),
+                    ]);
+
+                    $playerNames = collect($item['player_names'] ?? [])
+                        ->map(fn ($name) => trim((string) $name))
+                        ->filter()
+                        ->values()
+                        ->all();
+
+                    $order->orderedItems()->create([
+                        'time_slot_id' => $timeSlot->id,
+                        'room_id' => $room->id,
+                        'player_names' => !empty($playerNames) ? $playerNames : null,
+                        'quantity' => $item['players'],
+                        'unit_price' => $roomTotal,
+                        'total_price' => $roomTotal,
+                        'vat_percentage' => $roomPrice->vat_percentage,
+                        'vat_amount' => $roomVatTotal,
+                    ]);
+
                     $invoiceLineData[] = [
                         'description' => $room->name . ' — ' . $item['date'] . ' (' . $item['players'] . ' spelers)',
                         'quantity' => 1,
@@ -262,15 +357,20 @@ class CheckoutController extends Controller
                 }
             }
 
-            if ($discountCode) {
+            if ($discountCode || $giftVoucher) {
                 $totalBeforeDiscount = $total;
+                $couponDiscount = 0;
 
-                if ($discountCode->discount_type === 'percentage') {
-                    $couponDiscount = round($totalBeforeDiscount * ($discountCode->discount_value / 100), 2);
-                }
+                if ($discountCode) {
+                    if ($discountCode->discount_type === 'percentage') {
+                        $couponDiscount = round($totalBeforeDiscount * ($discountCode->discount_value / 100), 2);
+                    }
 
-                if ($discountCode->discount_type === 'fixed') {
-                    $couponDiscount = round(min($discountCode->discount_value, $totalBeforeDiscount), 2);
+                    if ($discountCode->discount_type === 'fixed') {
+                        $couponDiscount = round(min($discountCode->discount_value, $totalBeforeDiscount), 2);
+                    }
+                } else {
+                    $couponDiscount = round(min((float) $giftVoucher->amount, $totalBeforeDiscount), 2);
                 }
 
                 $discount += $couponDiscount;
@@ -280,16 +380,28 @@ class CheckoutController extends Controller
 
                 $vatTotal = round($total - $subtotal, 2);
 
-                if ($discountCode->usage_limit !== null) {
-                    $discountCode->usage_limit -= 1;
-                    $discountCode->times_used += 1;
-                    $discountCode->save();
-                }
+                if ($discountCode) {
+                    if ($discountCode->usage_limit !== null) {
+                        $discountCode->usage_limit -= 1;
+                        $discountCode->times_used += 1;
+                        $discountCode->save();
+                    }
 
-                $invoiceDiscount = new Discount(
-                    type: $discountCode->discount_type === 'fixed' ? 'amount' : 'percentage',
-                    value: number_format((float) $discountCode->discount_value, 2, '.', ''),
-                );
+                    $invoiceDiscount = new Discount(
+                        type: $discountCode->discount_type === 'fixed' ? 'amount' : 'percentage',
+                        value: number_format((float) $discountCode->discount_value, 2, '.', ''),
+                    );
+                } else {
+                    $giftVoucher->status = 'used';
+                    $giftVoucher->used_at = now();
+                    $giftVoucher->used_order_id = $order->id;
+                    $giftVoucher->save();
+
+                    $invoiceDiscount = new Discount(
+                        type: 'amount',
+                        value: number_format($couponDiscount, 2, '.', ''),
+                    );
+                }
             }
 
             $order->total = $total;
@@ -300,7 +412,7 @@ class CheckoutController extends Controller
         });
 
         $mollie = new MollieApiClient();
-        $mollie->setApiKey('test_McAeHWQHyjAAnkjEkzDdTm7nuAbgkd');
+        $mollie->setApiKey($request->escaperoom->escaperoomSetting?->mollie_api_key ?: 'test_McAeHWQHyjAAnkjEkzDdTm7nuAbgkd');
 
         $streetAndNumber = trim(($customerInput['street'] ?? '') . ' ' . ($customerInput['house_number'] ?? ''));
 
@@ -350,6 +462,10 @@ class CheckoutController extends Controller
         );
 
         $salesInvoice = $mollie->send($invoiceRequest);
+
+        $order->mollie_id = $salesInvoice->id;
+        $order->payment_link = $salesInvoice->_links->paymentLink->href ?? null;
+        $order->save();
 
         return response()->json(['success' => true, 'order' => $order, 'invoice' => $salesInvoice]);
     }

@@ -19,7 +19,7 @@ class ProductCategoryController extends Controller
             $categories = $request->escaperoom->categories()
                 ->where('id', $request->category_id)
                 ->whereHas('products', $productFilter)
-                ->with(['products' => $productFilter, 'products.product_images'])
+                ->with(['products' => $productFilter, 'products.product_images', 'products.variants'])
                 ->get();
 
             return response()->json(['success' => true, 'categories' => $categories]);
@@ -27,7 +27,7 @@ class ProductCategoryController extends Controller
 
         $categories = $request->escaperoom->categories()
             ->whereHas('products', $productFilter)
-            ->with(['products' => $productFilter, 'products.product_images'])
+            ->with(['products' => $productFilter, 'products.product_images', 'products.variants'])
             ->get();
 
         return response()->json(['success' => true, 'categories' => $categories]);

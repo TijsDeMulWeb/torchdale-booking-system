@@ -12,13 +12,35 @@ class ValidateCouponController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $couponCode = null;
-        $couponCode = $request->escaperoom->coupons()->where('code', $request->input('coupon_code'))->first();
+        $code = $request->input('coupon_code');
 
-        if (!$couponCode) {
-            return response()->json(['valid' => false, 'coupon' => $couponCode]);
+        $coupon = $request->escaperoom->coupons()->where('code', $code)->first();
+
+        if ($coupon) {
+            $expired = ($coupon->valid_from && $coupon->valid_from > now())
+                || ($coupon->valid_until && $coupon->valid_until < now())
+                || ($coupon->usage_limit !== null && $coupon->usage_limit <= 0);
+
+            if ($expired) {
+                return response()->json(['valid' => false, 'message' => 'Invalid discount code.']);
+            }
+
+            return response()->json(['valid' => true, 'type' => 'coupon', 'coupon' => $coupon]);
         }
 
-        return response()->json(['valid' => true, 'coupon' => $couponCode]);
+        $voucher = $request->escaperoom->giftVouchers()->where('code', $code)->first();
+
+        if ($voucher) {
+            if (!$voucher->isActive()) {
+                return response()->json(['valid' => false, 'message' => 'This gift voucher is no longer valid.']);
+            }
+
+            return response()->json(['valid' => true, 'type' => 'gift_voucher', 'gift_voucher' => [
+                'code' => $voucher->code,
+                'amount' => $voucher->amount,
+            ]]);
+        }
+
+        return response()->json(['valid' => false, 'message' => 'Invalid discount code.']);
     }
 }

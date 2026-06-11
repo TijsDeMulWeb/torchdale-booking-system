@@ -12,8 +12,8 @@ class WidgetConfigController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $escaperoomSettings = $request->escaperoom->escaperoomSetting()->first()->only(['widget_color_primary', 'widget_color_primary_dark', 'widget_color_background_dark', 'widget_color_text', 'widget_color_sale', 'widget_color_success']);
-        
+        $escaperoomSettings = $request->escaperoom->escaperoomSetting()->first()->only(['widget_color_primary', 'widget_color_primary_dark', 'widget_color_background_dark', 'widget_color_text', 'widget_color_sale', 'widget_color_success', 'hear_about_us_options', 'collect_player_names']);
+
         return response()->json([
             'success' => true,
             'colors' => [
@@ -24,6 +24,8 @@ class WidgetConfigController extends Controller
                 'sale' => $escaperoomSettings['widget_color_sale'],
                 'success' => $escaperoomSettings['widget_color_success'],
             ],
+            'hear_about_us_options' => $escaperoomSettings['hear_about_us_options'] ?? [],
+            'collect_player_names' => $escaperoomSettings['collect_player_names'] ?? true,
         ]);
     }
 }

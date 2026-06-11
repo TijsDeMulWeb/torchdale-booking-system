@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Invoice;
+use App\Observers\InvoiceObserver;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Number;
@@ -25,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::before(function ($user, string $ability) {
             return method_exists($user, 'hasRole') && $user->hasRole('Admin') ? true : null;
         });
+
+        Invoice::observe(InvoiceObserver::class);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\TimeSlot;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -122,7 +122,7 @@ class MollieBookingInvoiceService
                 }
             }
 
-            DB::table('invoices')->insert([
+            Invoice::create([
                 'customer_id'       => $customer->id,
                 'order_id'          => $order->id,
                 'mollie_invoice_id' => $mollieInvoice->id,
@@ -131,8 +131,6 @@ class MollieBookingInvoiceService
                 'invoice_number'    => $invoiceNumber,
                 'status'            => 'issued',
                 'amount'            => $order->amount_online,
-                'created_at'        => now(),
-                'updated_at'        => now(),
             ]);
 
             return true;

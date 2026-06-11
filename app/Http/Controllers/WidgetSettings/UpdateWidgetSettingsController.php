@@ -10,8 +10,24 @@ class UpdateWidgetSettingsController extends Controller
 {
     public function __invoke(StoreWidgetSettingsRequest $request)
     {
-        auth()->user()->escaperoom->escaperoomSetting()->update($request->validated());
+        $data = $request->validated();
 
-        return redirect()->route('widgetSettings.show')->with('message', 'Widgetkleuren opgeslagen.');
+        if ($request->has('hear_about_us_options')) {
+            $data['hear_about_us_options'] = collect(preg_split('/\r\n|\r|\n/', (string) $data['hear_about_us_options']))
+                ->map(fn ($option) => trim($option))
+                ->filter()
+                ->values()
+                ->all();
+        }
+
+        if ($request->has('collect_player_names')) {
+            $data['collect_player_names'] = $request->boolean('collect_player_names');
+        } elseif ($request->has('hear_about_us_options')) {
+            $data['collect_player_names'] = false;
+        }
+
+        auth()->user()->escaperoom->escaperoomSetting()->update($data);
+
+        return redirect()->route('widgetSettings.show')->with('message', 'Widgetinstellingen opgeslagen.');
     }
 }

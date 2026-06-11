@@ -14,16 +14,21 @@ class ShowWidgetSettingsController extends Controller
     {
         $escaperoom = auth()->user()->escaperoom;
 
-        $widgetSettings = $escaperoom->escaperoomSetting()
-            ->first()
-            ->only([
-                'widget_color_primary',
-                'widget_color_primary_dark',
-                'widget_color_background_dark',
-                'widget_color_text',
-                'widget_color_sale',
-                'widget_color_success',
-            ]);
+        $escaperoomSetting = $escaperoom->escaperoomSetting()->first();
+
+        $widgetSettings = $escaperoomSetting->only([
+            'widget_color_primary',
+            'widget_color_primary_dark',
+            'widget_color_background_dark',
+            'widget_color_text',
+            'widget_color_sale',
+            'widget_color_success',
+        ]);
+
+        $bookingSettings = $escaperoomSetting->only([
+            'hear_about_us_options',
+            'collect_player_names',
+        ]);
 
         $defaultApiKey = $escaperoom->apiKeys()
             ->where('name', 'Default API Key')
@@ -37,6 +42,7 @@ class ShowWidgetSettingsController extends Controller
 
         return view('widgetSettings.show', [
             'widgetSettings' => $widgetSettings,
+            'bookingSettings' => $bookingSettings,
             'apiKeys' => $apiKeys,
             'defaultApiKey' => $defaultApiKey,
         ]);

@@ -23,12 +23,14 @@ class StoreWidgetSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'widget_color_primary' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'widget_color_primary_dark' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'widget_color_background_dark' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'widget_color_text' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'widget_color_sale' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
-            'widget_color_success' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'widget_color_primary' => ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'widget_color_primary_dark' => ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'widget_color_background_dark' => ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'widget_color_text' => ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'widget_color_sale' => ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'widget_color_success' => ['sometimes', 'required', 'regex:/^#[0-9a-fA-F]{6}$/'],
+            'hear_about_us_options' => ['sometimes', 'nullable', 'string'],
+            'collect_player_names' => ['sometimes', 'boolean'],
         ];
     }
 }

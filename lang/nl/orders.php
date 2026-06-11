@@ -56,7 +56,7 @@ return [
     'order_modal_item_header_qty' => 'Aantal',
     'order_modal_item_header_price' => 'Prijs',
     'order_modal_item_header_total' => 'Totaal',
-    'order_modal_subtotal' => 'Subtotaal',
+    'order_modal_subtotal' => 'Subtotaal excl. BTW',
     'order_modal_discount' => 'Korting',
     'order_modal_vat' => 'BTW',
     'order_modal_total' => 'Totaal',

@@ -56,7 +56,7 @@ return [
     'order_modal_item_header_qty' => 'Qté',
     'order_modal_item_header_price' => 'Prix',
     'order_modal_item_header_total' => 'Total',
-    'order_modal_subtotal' => 'Sous-total',
+    'order_modal_subtotal' => 'Sous-total hors TVA',
     'order_modal_discount' => 'Remise',
     'order_modal_vat' => 'TVA',
     'order_modal_total' => 'Total',

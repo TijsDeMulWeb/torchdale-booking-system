@@ -382,6 +382,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
             Route::patch('/orders/gift-vouchers/{voucher}/delivery', \App\Http\Controllers\Order\UpdateGiftVoucherDeliveryController::class)->name('orders.gift-vouchers.delivery');
             Route::get('/orders/{order}/invoice', ShowOrderInvoiceController::class)->name('orders.invoice');
             Route::get('/orders/{order}/payment-link', ShowOrderPaymentLinkController::class)->name('orders.payment-link');
+            Route::post('/orders/{order}/send-payment-reminder', \App\Http\Controllers\Order\SendPaymentReminderController::class)->name('orders.send-payment-reminder');
+            Route::post('/orders/{order}/mark-onsite-paid', \App\Http\Controllers\Order\MarkOrderOnsitePaidController::class)->name('orders.mark-onsite-paid');
         });
 
         // API Keys routes

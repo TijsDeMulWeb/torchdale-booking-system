@@ -108,7 +108,7 @@ class MollieBookingInvoiceService
 
             $order->mollie_id      = $mollieInvoice->id;
             $order->invoice_number = $invoiceNumber;
-            $order->payment_link   = $mollieInvoice->_links->paymentLink->href ?? null;
+            $order->payment_link   = $mollieInvoice->_links->invoicePayment->href ?? null;
             $order->save();
 
             // PDF van de issued betaallink-factuur downloaden en opslaan

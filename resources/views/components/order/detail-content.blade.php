@@ -5,6 +5,21 @@
     $customerEmail = $order->customer_email ?? $order->customer?->email;
     $customerPhone = $order->customer_phone ?? $order->customer?->phone;
     $hasInvoicePdf = $order->invoice && $order->invoice->pdf_url;
+
+    // `order->subtotal`/`vat_amount` aren't reliably excl.-VAT (escape room items store the
+    // incl.-VAT price as "subtotal"), so derive the breakdown from `total`, `discount` and
+    // the per-item vat_amount/total_price instead, which are correct for every item type.
+    $total = (float) ($order->total ?? 0);
+    $discount = (float) ($order->discount ?? 0);
+    $totalBeforeDiscount = $total + $discount;
+    $vatBeforeDiscount = (float) $order->orderedItems->sum('vat_amount');
+    $subtotalExclVatBeforeDiscount = $totalBeforeDiscount - $vatBeforeDiscount;
+
+    $ratio = $totalBeforeDiscount > 0 ? $total / $totalBeforeDiscount : 1;
+    $vatAmount = round($vatBeforeDiscount * $ratio, 2);
+    $subtotalExclVatAfterDiscount = $total - $vatAmount;
+    $discountExclVat = round($subtotalExclVatBeforeDiscount - $subtotalExclVatAfterDiscount, 2);
+    $subtotalExclVat = $subtotalExclVatBeforeDiscount;
 @endphp
 
 <div class="space-y-6">
@@ -100,21 +115,21 @@
         <dl class="mt-3 space-y-1 text-sm border-t border-gray-100 dark:border-white/10 pt-3">
             <div class="flex justify-between">
                 <dt class="text-gray-500 dark:text-gray-400">{{ __('orders.order_modal_subtotal') }}</dt>
-                <dd class="text-gray-900 dark:text-white">{{ Number::currency($order->subtotal ?? 0) }}</dd>
+                <dd class="text-gray-900 dark:text-white">{{ Number::currency($subtotalExclVat) }}</dd>
             </div>
-            @if ($order->discount)
+            @if ($discount)
                 <div class="flex justify-between">
                     <dt class="text-gray-500 dark:text-gray-400">{{ __('orders.order_modal_discount') }}</dt>
-                    <dd class="text-gray-900 dark:text-white">-{{ Number::currency($order->discount) }}</dd>
+                    <dd class="text-gray-900 dark:text-white">-{{ Number::currency($discountExclVat) }}</dd>
                 </div>
             @endif
             <div class="flex justify-between">
                 <dt class="text-gray-500 dark:text-gray-400">{{ __('orders.order_modal_vat') }}</dt>
-                <dd class="text-gray-900 dark:text-white">{{ Number::currency($order->vat_amount ?? 0) }}</dd>
+                <dd class="text-gray-900 dark:text-white">{{ Number::currency($vatAmount) }}</dd>
             </div>
             <div class="flex justify-between font-semibold">
                 <dt class="text-gray-900 dark:text-white">{{ __('orders.order_modal_total') }}</dt>
-                <dd class="text-gray-900 dark:text-white">{{ Number::currency($order->total ?? 0) }}</dd>
+                <dd class="text-gray-900 dark:text-white">{{ Number::currency($total) }}</dd>
             </div>
         </dl>
     </div>

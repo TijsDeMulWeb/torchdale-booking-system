@@ -67,4 +67,17 @@ class Escaperoom extends Model
     {
         return $this->hasMany(ApiKey::class);
     }
+
+    public function legalDocuments()
+    {
+        return $this->hasMany(LegalDocument::class);
+    }
+
+    public function latestLegalDocument(string $type): ?LegalDocument
+    {
+        return $this->legalDocuments()
+            ->where('type', $type)
+            ->orderByDesc('version')
+            ->first();
+    }
 }

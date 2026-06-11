@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\ContactNormalizer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -100,7 +101,16 @@ class Customer extends Model
 
     public function setEmailAttribute($value)
     {
-        $this->attributes['email'] = strtolower(trim($value));
+        $email = strtolower(trim($value));
+        $this->attributes['email'] = $email;
+        $this->attributes['email_normalized'] = ContactNormalizer::normalizeEmail($email);
+    }
+
+    public function setPhoneAttribute($value)
+    {
+        $phone = $value !== null ? trim($value) : $value;
+        $this->attributes['phone'] = $phone;
+        $this->attributes['phone_normalized'] = ContactNormalizer::normalizePhone($phone);
     }
 
     public function setStreetAttribute($value)

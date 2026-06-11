@@ -52,6 +52,7 @@ use App\Http\Controllers\Dashboard\UnblockTimeSlotRangeController;
 use App\Http\Controllers\Escaperoom\EditEscaperoomController;
 use App\Http\Controllers\Escaperoom\ShowEscaperoomController;
 use App\Http\Controllers\Escaperoom\UpdateEscaperoomController;
+use App\Http\Controllers\LegalDocument\LegalDocumentController;
 use App\Http\Controllers\EscaperoomAddress\CreateEscaperoomAddressController;
 use App\Http\Controllers\EscaperoomAddress\DeleteEscaperoomAddressController;
 use App\Http\Controllers\EscaperoomAddress\EditEscaperoomAddressController;
@@ -188,6 +189,15 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
             Route::get('/escaperoom-address/{id}/edit', EditEscaperoomAddressController::class)->name('escaperoomAddress.edit');
             Route::put('/escaperoom-address/{id}/edit', UpdateEscaperoomAddressController::class)->name('escaperoomAddress.update');
             Route::delete('/escaperoom-address/{id}/delete', DeleteEscaperoomAddressController::class)->name('escaperoomAddress.destroy');
+        });
+
+        // Legal documents routes
+        Route::middleware('permission:view settings')->group(function () {
+            Route::get('/legal-documents', [LegalDocumentController::class, 'index'])->name('legalDocuments.index');
+        });
+        Route::middleware('permission:edit settings')->group(function () {
+            Route::post('/legal-documents', [LegalDocumentController::class, 'store'])->name('legalDocuments.store');
+            Route::delete('/legal-documents/{legalDocument}', [LegalDocumentController::class, 'destroy'])->name('legalDocuments.destroy');
         });
 
         // Employees routes

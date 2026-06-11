@@ -54,6 +54,15 @@ return [
     'view_link' => 'Voir',
     'empty_no_outstanding' => 'Aucun paiement en attente',
     'empty_all_paid' => 'Toutes les commandes sont payées.',
+    'send_reminder_button' => 'Envoyer un rappel',
+    'payment_reminder_sent' => 'Rappel de paiement envoyé.',
+    'payment_reminder_error' => "Impossible d'envoyer le rappel de paiement pour cette commande.",
+    'payment_reminder_log_subject' => 'Rappel de paiement envoyé',
+    'payment_reminder_log_body' => 'Un rappel de paiement avec le lien de paiement a été renvoyé au client.',
+    'amount_online_label' => 'En ligne',
+    'amount_onsite_label' => 'Sur place',
+    'mark_onsite_paid_button' => 'Marquer comme payé',
+    'onsite_payment_marked' => 'Paiement sur place marqué comme reçu.',
 
     // gift-vouchers.blade.php
     'gift_vouchers_title' => 'Bons cadeaux',

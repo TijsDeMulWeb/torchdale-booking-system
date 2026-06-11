@@ -54,6 +54,15 @@ return [
     'view_link' => 'View',
     'empty_no_outstanding' => 'No outstanding payments',
     'empty_all_paid' => 'All orders are paid.',
+    'send_reminder_button' => 'Send reminder',
+    'payment_reminder_sent' => 'Payment reminder sent.',
+    'payment_reminder_error' => 'Could not send the payment reminder for this order.',
+    'payment_reminder_log_subject' => 'Payment reminder sent',
+    'payment_reminder_log_body' => 'A payment reminder with the payment link was resent to the customer.',
+    'amount_online_label' => 'Online',
+    'amount_onsite_label' => 'On-site',
+    'mark_onsite_paid_button' => 'Mark as paid',
+    'onsite_payment_marked' => 'On-site payment marked as received.',
 
     // gift-vouchers.blade.php
     'gift_vouchers_title' => 'Gift cards',

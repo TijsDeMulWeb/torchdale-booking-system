@@ -54,6 +54,15 @@ return [
     'view_link' => 'Bekijken',
     'empty_no_outstanding' => 'Geen openstaande betalingen',
     'empty_all_paid' => 'Alle bestellingen zijn betaald.',
+    'send_reminder_button' => 'Stuur herinnering',
+    'payment_reminder_sent' => 'Betalingsherinnering verstuurd.',
+    'payment_reminder_error' => 'Kon geen betalingsherinnering versturen voor deze bestelling.',
+    'payment_reminder_log_subject' => 'Betalingsherinnering verstuurd',
+    'payment_reminder_log_body' => 'Een betalingsherinnering met de betaallink is opnieuw naar de klant verstuurd.',
+    'amount_online_label' => 'Online',
+    'amount_onsite_label' => 'Ter plekke',
+    'mark_onsite_paid_button' => 'Markeer als betaald',
+    'onsite_payment_marked' => 'Betaling ter plekke gemarkeerd als ontvangen.',
 
     // gift-vouchers.blade.php
     'gift_vouchers_title' => 'Cadeaubonnen',

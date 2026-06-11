@@ -1,16 +1,15 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Kamer', 'url' => route('rooms.index')],
+        ['name' => __('nav.rooms'), 'url' => route('rooms.index')],
         ['name' => $room->name, 'url' => route('rooms.edit', $room->id)],
-        ['name' => 'Prijzen', 'url' => route('rooms.timeslots.show', $room->id)],
+        ['name' => __('rooms.prices'), 'url' => route('rooms.timeslots.show', $room->id)],
     ]" />
 
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         <div class="sm:flex sm:items-start sm:justify-between mb-8">
             <div>
-                <h1 class="text-base font-semibold text-gray-900 dark:text-white">Prijzen — {{ $room->name }}</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Stel per dag een basisprijs en prijs per speler
-                    in.</p>
+                <h1 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('rooms.prices_title', ['room' => $room->name]) }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('rooms.prices_description') }}</p>
                 @if ($last_updated)
                     <x-last-updated :model="$last_updated" />
                 @endif
@@ -20,7 +19,7 @@
         <form method="POST" action="{{ route('rooms.prices.store', $room->id) }}">
             @csrf
             @php
-                $days = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag', 'Zondag'];
+                $days = [__('common.day_monday'), __('common.day_tuesday'), __('common.day_wednesday'), __('common.day_thursday'), __('common.day_friday'), __('common.day_saturday'), __('common.day_sunday')];
                 $playerRange = range($room->min_players, $room->max_players);
             @endphp
 
@@ -40,7 +39,7 @@
                         <div class="p-5 bg-white dark:bg-gray-900">
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-5 mb-5 border-b border-gray-100 dark:border-white/10">
                                 <div class="flex flex-col gap-1">
-                                    <label class="text-sm text-gray-500 dark:text-gray-400">Basisprijs</label>
+                                    <label class="text-sm text-gray-500 dark:text-gray-400">{{ __('rooms.base_price') }}</label>
                                     <div class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
                                         <span class="px-3 py-2 text-sm text-gray-400 bg-gray-50 dark:bg-white/5 border-r border-gray-300 dark:border-white/20">€</span>
                                         <input type="text" name="pricings[{{ $dayIndex }}][base_price]"
@@ -49,7 +48,7 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-col gap-1">
-                                    <label class="text-sm text-gray-500 dark:text-gray-400">BTW</label>
+                                    <label class="text-sm text-gray-500 dark:text-gray-400">{{ __('rooms.vat') }}</label>
                                     <div class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
                                         <input type="text" name="pricings[{{ $dayIndex }}][vat_percentage]"
                                             value="{{ number_format($pricings[$dayIndex]['vat_percentage'] ?? 21, 2, '.', '') }}"
@@ -58,12 +57,12 @@
                                     </div>
                                 </div>
                                 <div class="flex flex-col gap-1">
-                                    <label class="text-sm text-gray-500 dark:text-gray-400">Extra betaling</label>
+                                    <label class="text-sm text-gray-500 dark:text-gray-400">{{ __('rooms.extra_payment') }}</label>
                                     <div class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">
                                         <select name="pricings[{{ $dayIndex }}][payment_location]"
                                             class="w-full px-3 py-2 text-sm text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-none outline-none focus:ring-0">
-                                            <option value="online" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'online' ? 'selected' : '' }}>Online</option>
-                                            <option value="location" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'location' ? 'selected' : '' }}>Ter plaatse</option>
+                                            <option value="online" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'online' ? 'selected' : '' }}>{{ __('dashboard.online') }}</option>
+                                            <option value="location" {{ ($pricings[$dayIndex]['payment_location'] ?? 'online') === 'location' ? 'selected' : '' }}>{{ __('rooms.on_location') }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -71,14 +70,14 @@
 
                             {{-- Per speler --}}
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wide">
-                                Prijs per persoon</p>
+                                {{ __('rooms.price_per_person') }}</p>
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
                                 @foreach ($playerRange as $players)
                                     @php $playerPricing = $pricings[$dayIndex]['players'][$players] ?? null; @endphp
                                     <div class="flex flex-col gap-1">
                                         <span
                                             class="inline-flex items-center gap-1 text-xs text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 rounded px-2 py-0.5 w-fit">
-                                            {{ $players }} spelers
+                                            {{ __('rooms.players_label', ['count' => $players]) }}
                                         </span>
                                         <div
                                             class="flex items-center border border-gray-300 dark:border-white/20 rounded-lg overflow-hidden">

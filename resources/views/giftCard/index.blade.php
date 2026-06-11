@@ -1,23 +1,23 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Cadeaubonnen', 'url' => route('giftCards.index')],
+        ['name' => __('giftCards.breadcrumb_plural'), 'url' => route('giftCards.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
                     <h1 class="text-base font-semibold text-gray-900 dark:text-white">
-                        Cadeaubonnen
+                        {{ __('giftCards.breadcrumb_plural') }}
                     </h1>
 
                     <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">
-                        Een lijst van alle cadeaubonnen.
+                        {{ __('giftCards.description') }}
                     </p>
                 </div>
 
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex items-center gap-3">
                     <form method="GET" action="{{ route('giftCards.index') }}" class="relative">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Zoek cadeaubon..."
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="{{ __('giftCards.search_placeholder') }}"
                             class="w-64 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 py-2 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500" />
 
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -30,12 +30,12 @@
 
                     <a href="{{ route('mail-templates.index', 'gift-card') }}"
                         class="block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:inset-ring-white/20 dark:hover:bg-white/20">
-                        Mail-sjablonen
+                        {{ __('products.mail_templates_button') }}
                     </a>
 
                     <a href="{{ route('giftCards.create') }}"
                         class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
-                        Cadeaubon Toevoegen
+                        {{ __('giftCards.add_gift_card') }}
                     </a>
                 </div>
             </div>
@@ -48,15 +48,15 @@
                                     <tr>
                                         <th scope="col"
                                             class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8 dark:text-white">
-                                            Naam</th>
+                                            {{ __('customers.table_name') }}</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Waarde</th>
+                                            {{ __('giftCards.table_value') }}</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Verzendkosten</th>
+                                            {{ __('products.shipping_label') }}</th>
                                         <th scope="col" class="py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8">
-                                            <span class="sr-only">Acties</span>
+                                            <span class="sr-only">{{ __('common.actions') }}</span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -84,7 +84,7 @@
 
                                                     <a href="{{ route('giftCards.edit', $giftCard->id) }}"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                                        Wijzigen
+                                                        {{ __('common.edit') }}
                                                         <span class="sr-only">, {{ $giftCard->name }}</span>
                                                     </a>
 
@@ -93,7 +93,7 @@
                                                         @method('DELETE')
                                                         <button type="submit"
                                                             class="text-red-600 cursor-pointer hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                            Verwijderen
+                                                            {{ __('common.delete') }}
                                                         </button>
                                                     </form>
                                                 </div>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             @else
-                <x-empty-state name='giftCard' :route="route('giftCards.create')" />
+                <x-empty-state :name="__('common.noun_gift_card')" :route="route('giftCards.create')" />
             @endif
             {{ $giftCards->links() }}
         </div>

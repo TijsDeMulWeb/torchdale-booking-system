@@ -1,31 +1,31 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Instellingen: ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
+        ['name' => __('nav.settings') . ': ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         <div>
             <div class="px-4 sm:px-0 sm:flex sm:items-center sm:justify-between">
                 <div>
-                    <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">Escaperoom Informatie</h3>
-                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-500 dark:text-gray-400">Informatie over het escaperoom.
+                    <h3 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ __('settings.section_title_info') }}</h3>
+                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-500 dark:text-gray-400">{{ __('settings.section_description_info') }}
                     </p>
                     <x-last-updated :model="$escaperoom" />
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
                     <a href="{{ route('apiKeys.index') }}"
                         class="mt-4 sm:mt-0 block rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-gray-500">
-                        Api Keys
+                        {{ __('settings.api_keys_button') }}
                     </a>
                     <a href="{{ route('escaperoom.edit') }}"
                         class="mt-4 sm:mt-0 block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500">
-                        Bewerken
+                        {{ __('common.edit') }}
                     </a>
                 </div>
             </div>
             <div class="mt-6 border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Naam</dt>
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('roles.label_name') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
                             {{ $escaperoom->name }}
                         </dd>
@@ -35,7 +35,7 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Telefoon</dt>
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_phone_display') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
                             {{ $escaperoom->phone }}
                         </dd>
@@ -45,7 +45,7 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Email</dt>
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('users.label_email') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
                             {{ $escaperoom->email }}
                         </dd>
@@ -55,9 +55,9 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Factuur Email</dt>
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_invoice_email') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->invoice_email ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->invoice_email ?? __('settings.not_set') }}
                         </dd>
                     </div>
                 </dl>
@@ -65,7 +65,7 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">BTW Nummer</dt>
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_vat_number') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
                             {{ $escaperoom->vat_number }}
                         </dd>
@@ -75,9 +75,9 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Registratie Nummer</dt>
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_registration_number') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->registration_number ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->registration_number ?? __('settings.not_set') }}
                         </dd>
                     </div>
                 </dl>
@@ -86,17 +86,17 @@
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">
-                            Logo
+                            {{ __('settings.label_logo') }}
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
                             @if($escaperoom->logo_url)
                                 <img src="{{ $escaperoom->logo_url ? Storage::url($escaperoom->logo_url) : 'https://placehold.co/400x400' }}"
-                                    alt="Logo {{ $escaperoom->name }}"
+                                    alt="{{ __('settings.label_logo') }} {{ $escaperoom->name }}"
                                     class="max-h-24 w-auto rounded-lg object-contain border border-gray-200 dark:border-white/10">
                             @endif
 
                             @if (!$escaperoom->logo_url)
-                                Niet ingesteld
+                                {{ __('settings.not_set') }}
                             @endif
                         </dd>
                     </div>
@@ -105,10 +105,10 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Bevestigingspagina Kamer
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_confirmation_room_url') }}
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->escaperoomSetting->confirmation_room_url ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->escaperoomSetting->confirmation_room_url ?? __('settings.not_set') }}
                         </dd>
                     </div>
                 </dl>
@@ -116,10 +116,10 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Bevestigingspagina Product
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_confirmation_product_url') }}
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->escaperoomSetting->confirmation_product_url ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->escaperoomSetting->confirmation_product_url ?? __('settings.not_set') }}
                         </dd>
                     </div>
                 </dl>
@@ -127,10 +127,10 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Bevestigingspagina Cadeaubon
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_confirmation_giftcard_url') }}
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->escaperoomSetting->confirmation_gift_card_url ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->escaperoomSetting->confirmation_gift_card_url ?? __('settings.not_set') }}
                         </dd>
                     </div>
                 </dl>
@@ -138,10 +138,10 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Herinneringsmail (dagen op voorhand)
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_reminder_days_before') }}
                         </dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->escaperoomSetting->reminder_days_before ?? 'Niet ingesteld' }}
+                            {{ $escaperoom->escaperoomSetting->reminder_days_before ?? __('settings.not_set') }}
                         </dd>
                     </div>
                 </dl>
@@ -149,9 +149,9 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">Mollie Key</dt>
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_mollie_key') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ $escaperoom->escaperoomSetting->mollie_api_key ?: 'Niet ingesteld' }}
+                            {{ $escaperoom->escaperoomSetting->mollie_api_key ?: __('settings.not_set') }}
                         </dd>
                     </div>
                 </dl>
@@ -159,16 +159,16 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">OpenAI Key</dt>
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_openai_key') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
-                            {{ Str::limit($escaperoom->escaperoomSetting->openai_api_key ?: 'Niet ingesteld', 50) }}
+                            {{ Str::limit($escaperoom->escaperoomSetting->openai_api_key ?: __('settings.not_set'), 50) }}
                         </dd>
                     </div>
                 </dl>
             </div>
             <div class="px-4 sm:px-0 lg:px-0 my-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <h2 class="sr-only">Adressen</h2>
+                    <h2 class="sr-only">{{ __('settings.sr_addresses') }}</h2>
                     @foreach ($escaperoomAddresses as $escaperoomAddress)
                         <div
                             class="relative rounded-lg bg-gray-50 shadow-xs outline-1 outline-gray-900/5 dark:bg-gray-800/50 dark:shadow-none dark:-outline-offset-1 dark:outline-white/10">
@@ -187,24 +187,24 @@
                             </form>
                             <dl class="flex flex-wrap">
                                 <div class="flex-auto pt-6 pl-6">
-                                    <dt class="text-sm/6 font-semibold text-gray-900 dark:text-gray-100">Adres</dt>
+                                    <dt class="text-sm/6 font-semibold text-gray-900 dark:text-gray-100">{{ __('settings.label_address') }}</dt>
                                     <dd class="mt-1 text-base font-semibold text-gray-900 dark:text-white">
                                         {{ $escaperoomAddress->street }} {{ $escaperoomAddress->house_number }}
                                     </dd>
                                 </div>
                                 <div class="flex-none self-end px-6 pt-4">
-                                    <dt class="sr-only">Status</dt>
+                                    <dt class="sr-only">{{ __('settings.sr_status') }}</dt>
                                     @if ($escaperoomAddress->is_primary)
                                         <dd
                                             class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20 dark:bg-green-500/15 dark:text-green-400 dark:inset-ring-green-500/20">
 
-                                            Primary</dd>
+                                            {{ __('settings.primary_badge') }}</dd>
                                     @endif
                                 </div>
                                 <div
                                     class="mt-6 flex w-full flex-none gap-x-4 border-t border-gray-900/5 px-6 pt-6 dark:border-white/5">
                                     <dt class="flex-none">
-                                        <span class="sr-only">City</span>
+                                        <span class="sr-only">{{ __('settings.sr_city') }}</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20"
                                             class="h-6 w-5 text-gray-400">
                                             <path fill-rule="evenodd"
@@ -218,7 +218,7 @@
                                 </div>
                                 <div class="mt-4 flex w-full flex-none gap-x-4 px-6">
                                     <dt class="flex-none">
-                                        <span class="sr-only">Country</span>
+                                        <span class="sr-only">{{ __('settings.sr_country') }}</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor" class="h-6 w-5 text-gray-400">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -232,7 +232,7 @@
                             </dl>
                             <div class="mt-6 border-t border-gray-900/5 px-6 py-6 dark:border-white/5">
                                 <a href="{{ route('escaperoomAddress.edit', $escaperoomAddress->id) }}"
-                                    class="text-sm/6 font-semibold text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">Bewerken
+                                    class="text-sm/6 font-semibold text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-gray-300">{{ __('common.edit') }}
                                     <span aria-hidden="true">&rarr;</span></a>
                             </div>
                         </div>
@@ -245,14 +245,14 @@
                                 d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
                         <h3 class="text-sm font-semibold text-gray-900 dark:text-white">
-                            Nieuw adres
+                            {{ __('settings.new_address_title') }}
                         </h3>
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                            Voeg een nieuw adres toe
+                            {{ __('settings.new_address_description') }}
                         </p>
                         <a href="{{ route('escaperoomAddress.create') }}"
                             class="mt-4 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
-                            Toevoegen
+                            {{ __('settings.add_button') }}
                         </a>
                     </div>
                 </div>

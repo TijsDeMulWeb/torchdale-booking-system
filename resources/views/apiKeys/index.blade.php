@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Instellingen: ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
-        ['name' => 'API Keys', 'url' => route('apiKeys.index')],
+        ['name' => __('nav.settings') . ': ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
+        ['name' => __('apiKeys.breadcrumb_plural'), 'url' => route('apiKeys.index')],
     ]" />
 
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
@@ -11,9 +11,9 @@
                 <div
                     class="flex flex-col justify-between gap-5 border-b border-gray-200 py-4 sm:flex-row sm:items-center dark:border-gray-800">
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white/90">API Keys</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white/90">{{ __('apiKeys.breadcrumb_plural') }}</h3>
                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                            API keys worden gebruikt om requests te authenticeren naar de booking integratie.
+                            {{ __('apiKeys.section_description') }}
                         </p>
                     </div>
                     <button id="open-modal-btn"
@@ -21,7 +21,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none">
                             <path d="M5 10H15M10 5V15" stroke="white" stroke-width="2" stroke-linecap="round" />
                         </svg>
-                        API Key Toevoegen
+                        {{ __('apiKeys.add_button') }}
                     </button>
                 </div>
                 @if (session('new_public_key') && session('new_secret_key'))
@@ -29,15 +29,14 @@
                         class="my-4 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/20 dark:bg-amber-500/10">
                         <div class="mb-3 flex items-start gap-2.5">
                             <div>
-                                <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">Sla je secret key nu op!
+                                <p class="text-sm font-semibold text-amber-800 dark:text-amber-300">{{ __('apiKeys.secret_warning_title') }}
                                 </p>
-                                <p class="text-xs text-amber-700 dark:text-amber-400">De secret key wordt maar <strong>één
-                                        keer</strong> getoond en kan daarna niet meer worden opgezocht.</p>
+                                <p class="text-xs text-amber-700 dark:text-amber-400">{!! __('apiKeys.secret_warning_description') !!}</p>
                             </div>
                         </div>
                         <div class="space-y-2.5">
                             <div>
-                                <p class="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">Public Key</p>
+                                <p class="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">{{ __('apiKeys.public_key_label') }}</p>
                                 <div class="relative">
                                     <input type="text" value="{{ session('new_public_key') }}" readonly
                                         class="h-10 w-full rounded-lg border border-gray-300 bg-white pr-24 pl-3.5 font-mono text-xs text-gray-700 select-all dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
@@ -52,13 +51,13 @@
                                             <path fill-rule="evenodd" clip-rule="evenodd"
                                                 d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z" />
                                         </svg>
-                                        <span class="copy-text">Copy</span>
+                                        <span class="copy-text">{{ __('apiKeys.copy_text_js') }}</span>
                                     </button>
                                 </div>
                             </div>
                             <div>
-                                <p class="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">Secret Key <span
-                                        class="font-normal">(bewaar deze nu!)</span></p>
+                                <p class="mb-1 text-xs font-medium text-gray-700 dark:text-gray-400">{{ __('apiKeys.secret_key_label') }} <span
+                                        class="font-normal">{{ __('apiKeys.secret_key_save_now') }}</span></p>
                                 <div class="relative">
                                     <input type="text" value="{{ session('new_secret_key') }}" readonly
                                         class="h-10 w-full rounded-lg border border-gray-300 bg-white pr-24 pl-3.5 font-mono text-xs text-gray-700 select-all dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
@@ -73,7 +72,7 @@
                                             <path fill-rule="evenodd" clip-rule="evenodd"
                                                 d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z" />
                                         </svg>
-                                        <span class="copy-text">Copy</span>
+                                        <span class="copy-text">{{ __('apiKeys.copy_text_js') }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -87,17 +86,17 @@
                             <thead>
                                 <tr class="border-b border-gray-100 dark:border-gray-800">
                                     <th class="py-3 pr-5 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                                        Naam</th>
+                                        {{ __('customers.table_name') }}</th>
                                     <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                                        Status</th>
+                                        {{ __('apiKeys.table_status') }}</th>
                                     <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                                        Aangemaakt</th>
+                                        {{ __('apiKeys.table_created') }}</th>
                                     <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                                        Laatste gebruik</th>
+                                        {{ __('apiKeys.table_last_used') }}</th>
                                     <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                                        Allowed origin</th>
+                                        {{ __('apiKeys.table_allowed_origin') }}</th>
                                     <th class="px-5 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400">
-                                        Acties</th>
+                                        {{ __('common.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
@@ -122,22 +121,22 @@
                                                         <path fill-rule="evenodd" clip-rule="evenodd"
                                                             d="M16.707 5.293a1 1 0 0 1 0 1.414l-8 8a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L8 12.586l7.293-7.293a1 1 0 0 1 1.414 0z" />
                                                     </svg>
-                                                    <span class="copy-text">Copy</span>
+                                                    <span class="copy-text">{{ __('apiKeys.copy_text_js') }}</span>
                                                 </button>
                                             </div>
                                             <p
                                                 class="copy-feedback mt-1.5 hidden text-xs font-medium text-green-600 dark:text-green-400">
-                                                ✓ Gekopieerd naar klembord
+                                                {{ __('apiKeys.copy_feedback_js') }}
                                             </p>
                                         </td>
                                         <td class="px-5 py-4 whitespace-nowrap">
                                             @if ($key->is_active)
                                                 <span
                                                     class="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-green-200 dark:bg-green-500/15 dark:text-green-400 dark:ring-green-500/20">
-                                                    <span class="size-1.5 rounded-full bg-green-500"></span>Actief
+                                                    <span class="size-1.5 rounded-full bg-green-500"></span>{{ __('common.status_active') }}
                                             </span>@else<span
                                                     class="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-600 ring-1 ring-red-200 dark:bg-red-500/15 dark:text-red-400 dark:ring-red-500/20">
-                                                    <span class="size-1.5 rounded-full bg-red-400"></span>Uitgeschakeld
+                                                    <span class="size-1.5 rounded-full bg-red-400"></span>{{ __('common.status_disabled') }}
                                                 </span>
                                             @endif
                                         </td>
@@ -152,7 +151,7 @@
                                                 <span
                                                     class="font-mono text-xs text-gray-600 dark:text-gray-400">{{ $key->allowed_origin }}</span>
                                             @else
-                                                <span class="text-xs text-gray-400 dark:text-gray-600">Alle origins</span>
+                                                <span class="text-xs text-gray-400 dark:text-gray-600">{{ __('apiKeys.all_origins') }}</span>
                                             @endif
                                         </td>
                                         <td class="px-5 py-4 whitespace-nowrap">
@@ -179,7 +178,7 @@
                                                     @method('DELETE')
                                                     <button type="submit"
                                                         class="delete-btn text-gray-400 transition-colors hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400"
-                                                        title="Verwijderen">
+                                                        title="{{ __('apiKeys.delete_title') }}">
                                                         <svg class="size-5 fill-current" viewBox="0 0 21 21"
                                                             xmlns="http://www.w3.org/2000/svg">
                                                             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -203,9 +202,8 @@
                                         clip-rule="evenodd" />
                                 </svg>
                             </div>
-                            <h3 class="mt-4 text-sm font-semibold text-gray-900 dark:text-white">Geen API keys</h3>
-                            <p class="mt-1.5 text-sm text-gray-500 dark:text-gray-400">Maak een API key aan om je booking
-                                integratie te koppelen.</p>
+                            <h3 class="mt-4 text-sm font-semibold text-gray-900 dark:text-white">{{ __('apiKeys.empty_title') }}</h3>
+                            <p class="mt-1.5 text-sm text-gray-500 dark:text-gray-400">{{ __('apiKeys.empty_description') }}</p>
                         </div>
                     @endif
                 </div>
@@ -228,40 +226,39 @@
                 </svg>
             </button>
 
-            <h4 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">API Key Aanmaken</h4>
+            <h4 class="mb-1 text-lg font-semibold text-gray-900 dark:text-white">{{ __('apiKeys.modal_title') }}</h4>
             <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">
-                Geef je API key een naam zodat je hem later makkelijk herkent.
+                {{ __('apiKeys.modal_description') }}
             </p>
 
             <form method="POST" action="{{ route('apiKeys.create') }}">
                 @csrf
                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Naam van de applicatie
+                    {{ __('apiKeys.app_name_label') }}
                 </label>
-                <input type="text" name="name" value="{{ old('name') }}" placeholder="bijv. Mijn Booking Widget"
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="{{ __('apiKeys.app_name_placeholder') }}"
                     class="h-11 w-full rounded-lg border bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-gray-700 dark:focus:border-indigo-400">
                 <x-form.error name="name" />
 
                 <label class="mb-1.5 mt-5 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Website
+                    {{ __('apiKeys.website_label') }}
                 </label>
                 <input type="text" name="allowed_origin" value="{{ old('allowed_origin') }}"
-                    placeholder="bijv. https://mijnwebsite.be"
+                    placeholder="{{ __('apiKeys.website_placeholder') }}"
                     class="h-11 w-full rounded-lg border bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:ring-2 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500/20 dark:border-gray-700 dark:focus:border-indigo-400">
                 <x-form.error name="allowed_origin" />
 
                 <p class="mt-4 text-xs text-gray-500 dark:text-gray-400">
-                    De <strong class="text-gray-700 dark:text-gray-300">secret key</strong> wordt eenmalig getoond na
-                    aanmaak. Bewaar het op een veilige plek.
+                    {!! __('apiKeys.secret_helper') !!}
                 </p>
                 <div class="mt-6 flex gap-3">
                     <button type="button" id="cancel-modal-btn"
                         class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
-                        Annuleren
+                        {{ __('common.cancel') }}
                     </button>
                     <button type="submit"
                         class="flex w-full justify-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-500">
-                        Genereer API Key
+                        {{ __('apiKeys.generate_button') }}
                     </button>
                 </div>
             </form>
@@ -269,6 +266,11 @@
     </div>
 
     <script>
+        const I18N = {!! \Illuminate\Support\Js::from([
+            'copy' => __('apiKeys.copy_text_js'),
+            'copied' => __('apiKeys.copied_text_js'),
+        ]) !!};
+
         // ── Modal ──────────────────────────────────────────────
         const modal = document.getElementById('api-key-modal');
         const modalPanel = modal.querySelector('.relative.z-10');
@@ -323,14 +325,14 @@
                 copyToClipboard(this.dataset.key).then(() => {
                     self.querySelector('.copy-icon').classList.add('hidden');
                     self.querySelector('.check-icon').classList.remove('hidden');
-                    self.querySelector('.copy-text').textContent = 'Copied!';
+                    self.querySelector('.copy-text').textContent = I18N.copied;
                     if (feedback) feedback.classList.remove('hidden');
 
                     clearTimeout(self._copyTimer);
                     self._copyTimer = setTimeout(() => {
                         self.querySelector('.copy-icon').classList.remove('hidden');
                         self.querySelector('.check-icon').classList.add('hidden');
-                        self.querySelector('.copy-text').textContent = 'Copy';
+                        self.querySelector('.copy-text').textContent = I18N.copy;
                         if (feedback) feedback.classList.add('hidden');
                     }, 2000);
                 });

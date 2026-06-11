@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Chatbot', 'url' => route('chatbot.show')],
-        ['name' => 'Wijzigen', 'url' => route('chatbot.edit')],
+        ['name' => __('chatbot.breadcrumb'), 'url' => route('chatbot.show')],
+        ['name' => __('common.edit'), 'url' => route('chatbot.edit')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <form action="{{ route('chatbot.update') }}" method="POST">
@@ -9,14 +9,14 @@
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
                 <div>
-                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Chatbot Informatie</h2>
-                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Informatie over de chatbot.</p>
+                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ __('chatbot.section_title') }}</h2>
+                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">{{ __('chatbot.section_description') }}</p>
                     <x-last-updated :model="$chatbot" />
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="username"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Naam</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('chatbot.name_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="name" type="text" name="name" value="{{ old('name', $chatbot->name) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-2xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
@@ -26,12 +26,11 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="about"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Prompt</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('chatbot.prompt_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <textarea id="prompt" name="prompt" rows="20"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-2xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500">{{ old('prompt', $chatbot->prompt) }}</textarea>
-                                <p class="mt-3 text-sm/6 text-gray-600 dark:text-gray-400">Probeer een zo duidelijk
-                                    mogelijk prompt te schrijven. Liefst in het Engels</p>
+                                <p class="mt-3 text-sm/6 text-gray-600 dark:text-gray-400">{{ __('chatbot.prompt_helper') }}</p>
                                 <x-form.error name="prompt" />
                             </div>
                         </div>

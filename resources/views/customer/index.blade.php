@@ -1,17 +1,17 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Klanten', 'url' => route('customers.index')],
+        ['name' => __('nav.customers'), 'url' => route('customers.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">Klanten</h1>
-                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Een lijst van alle klanten.</p>
+                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('nav.customers') }}</h1>
+                    <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">{{ __('customers.description') }}</p>
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
                     <form method="GET" action="{{ route('customers.index') }}" class="relative">
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Zoek klant..."
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="{{ __('customers.search_placeholder') }}"
                             class="w-64 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 py-2 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500" />
 
                         {{-- Search icon --}}
@@ -33,24 +33,24 @@
                                         <tr>
                                             <th scope="col"
                                                 class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8 dark:text-white">
-                                                Klant ID</th>
+                                                {{ __('customers.table_customer_id') }}</th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                                Naam</th>
+                                                {{ __('customers.table_name') }}</th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                                Adres</th>
+                                                {{ __('customers.table_address') }}</th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                                Telefoon</th>
+                                                {{ __('customers.table_phone') }}</th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                                Email</th>
+                                                {{ __('customers.table_email') }}</th>
                                             <th scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                                Aangemaakt</th>
+                                                {{ __('customers.table_created') }}</th>
                                             <th scope="col" class="py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8">
-                                                <span class="sr-only">Acties</span>
+                                                <span class="sr-only">{{ __('common.actions') }}</span>
                                             </th>
                                         </tr>
                                     </thead>
@@ -70,7 +70,7 @@
                                                     {{ $customer->postal_code }} {{ $customer->city }}
                                                 </td>
                                                 <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                    {{ $customer->phone ?? 'Niet opgegeven' }}
+                                                    {{ $customer->phone ?? __('common.not_provided') }}
                                                 </td>
                                                 <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                     {{ $customer->email }}
@@ -83,7 +83,7 @@
                                                     <div class="flex items-center justify-end gap-4">
                                                         <a href="{{ route('customers.show.overview', $customer->id) }}"
                                                             class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                                            Bekijken
+                                                            {{ __('common.view') }}
                                                             <span class="sr-only">, {{ $customer->name }}</span>
                                                         </a>
                                                         <form method="POST" action="{{ route('rooms.destroy', $customer->id) }}">
@@ -91,7 +91,7 @@
                                                             @method('DELETE')
                                                             <button type="submit"
                                                                 class="text-red-600 cursor-pointer hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                                Verwijderen
+                                                                {{ __('common.delete') }}
                                                             </button>
                                                         </form>
                                                     </div>
@@ -105,7 +105,7 @@
                     </div>
                 </div>
             @else
-            <x-empty-state name='customer' />
+            <x-empty-state :name="__('common.noun_customer')" />
         @endif
         {{ $customers->links() }}
     </div>

@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Klant', 'url' => route('customers.index')],
+        ['name' => __('customers.breadcrumb_singular'), 'url' => route('customers.index')],
         ['name' => $customer->full_name, 'url' => route('customers.show.overview', $customer)],
     ]" />
     <x-profile.header :customer="$customer" />
@@ -10,28 +10,28 @@
         <div>
             <dl class="grid grid-cols-1 sm:grid-cols-2">
                 <div class="border-t border-gray-200 dark:border-white/10 px-4 py-6 sm:col-span-1 sm:px-0">
-                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">Volledige Naam</dt>
+                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">{{ __('customers.full_name') }}</dt>
                     <dd class="mt-1 text-sm/6 text-gray-600 dark:text-gray-400 sm:mt-2">{{ $customer->full_name }}
                     </dd>
                 </div>
                 <div class="border-t border-gray-200 dark:border-white/10 px-4 py-6 sm:col-span-1 sm:px-0">
-                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">Telefoonnummer</dt>
+                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">{{ __('customers.phone_number') }}</dt>
                     <dd class="mt-1 text-sm/6 text-gray-600 dark:text-gray-400 sm:mt-2">
-                        {{ $customer->phone ?? 'Geen telefoonnummer opgegeven' }}
+                        {{ $customer->phone ?? __('customers.no_phone') }}
                     </dd>
                 </div>
                 <div class="border-t border-gray-200 dark:border-white/10 px-4 py-6 sm:col-span-1 sm:px-0">
-                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">Email</dt>
+                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">{{ __('customers.table_email') }}</dt>
                     <dd class="mt-1 text-sm/6 text-gray-600 dark:text-gray-400 sm:mt-2">{{ $customer->email }}</dd>
                 </div>
                 <div class="border-t border-gray-200 dark:border-white/10 px-4 py-6 sm:col-span-1 sm:px-0">
-                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">Adres</dt>
+                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">{{ __('customers.address_label') }}</dt>
                     <dd class="mt-1 text-sm/6 text-gray-600 dark:text-gray-400 sm:mt-2">{{ $customer->full_address}}
                     </dd>
                 </div>
 
                 <div class="border-t border-gray-200 dark:border-white/10 px-4 py-6 sm:col-span-2 sm:px-0">
-                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">Aanmaakdatum</dt>
+                    <dt class="text-sm/6 font-medium text-gray-900 dark:text-white">{{ __('customers.created_date') }}</dt>
                     <dd class="mt-1 text-sm/6 text-gray-600 dark:text-gray-400 sm:mt-2">{{ $customer->created_at->format('d-m-Y') }}</dd>
                 </div>
             </dl>

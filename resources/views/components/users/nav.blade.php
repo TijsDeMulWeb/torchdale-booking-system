@@ -1,7 +1,7 @@
 @php
     $tabs = [
-        ['route' => 'users.index', 'pattern' => ['users.index', 'users.create', 'users.edit'], 'label' => 'Gebruikers', 'permission' => 'view users'],
-        ['route' => 'roles.index', 'pattern' => ['roles.index', 'roles.create', 'roles.edit'], 'label' => 'Rollen & rechten', 'permission' => 'view roles'],
+        ['route' => 'users.index', 'pattern' => ['users.index', 'users.create', 'users.edit'], 'label' => __('nav.users'), 'permission' => 'view users'],
+        ['route' => 'roles.index', 'pattern' => ['roles.index', 'roles.create', 'roles.edit'], 'label' => __('nav.roles'), 'permission' => 'view roles'],
     ];
     $tabs = array_filter($tabs, fn ($tab) => auth()->user()->can($tab['permission']));
 @endphp

@@ -1,11 +1,11 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Gebruikers', 'url' => route('users.index')],
+        ['name' => __('nav.users'), 'url' => route('users.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <x-users.nav />
 
-        <x-page-header title="Gebruikers" :create="route('users.create')" createTitle="Nieuwe Gebruiker"
+        <x-page-header title="{{ __('nav.users') }}" :create="route('users.create')" createTitle="{{ __('users.create_button') }}"
             count="{{ $users->count() }}" />
 
         <ul role="list" class="mt-3 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -22,7 +22,7 @@
                                     class="inline-flex shrink-0 items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20 dark:bg-green-500/10 dark:text-green-500 dark:inset-ring-green-500/10">{{ $user->getRoleNames()->first() }}</span>
                                 @if (is_null($user->password_set_at))
                                     <span
-                                        class="inline-flex shrink-0 items-center rounded-full bg-amber-50 px-1.5 py-0.5 text-xs font-medium text-amber-700 inset-ring inset-ring-amber-600/20 dark:bg-amber-500/10 dark:text-amber-400 dark:inset-ring-amber-400/20">In afwachting</span>
+                                        class="inline-flex shrink-0 items-center rounded-full bg-amber-50 px-1.5 py-0.5 text-xs font-medium text-amber-700 inset-ring inset-ring-amber-600/20 dark:bg-amber-500/10 dark:text-amber-400 dark:inset-ring-amber-400/20">{{ __('users.pending_badge') }}</span>
                                 @endif
                             </div>
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
@@ -45,7 +45,7 @@
                                                 d="M2 3.5A1.5 1.5 0 0 1 3.5 2h1.148a1.5 1.5 0 0 1 1.465 1.175l.716 3.223a1.5 1.5 0 0 1-1.052 1.767l-.933.267c-.41.117-.643.555-.48.95a11.542 11.542 0 0 0 6.254 6.254c.395.163.833-.07.95-.48l.267-.933a1.5 1.5 0 0 1 1.767-1.052l3.223.716A1.5 1.5 0 0 1 18 15.352V16.5a1.5 1.5 0 0 1-1.5 1.5H15c-1.149 0-2.263-.15-3.326-.43A13.022 13.022 0 0 1 2.43 8.326 13.019 13.019 0 0 1 2 5V3.5Z"
                                                 clip-rule="evenodd" fill-rule="evenodd" />
                                         </svg>
-                                        Bellen
+                                        {{ __('users.call_button') }}
                                     </a>
                                 </div>
                             @endif
@@ -56,7 +56,7 @@
                                         <path
                                             d="M5.433 13.917 4 18l4.083-1.433L16.5 8.15a1.768 1.768 0 0 0-2.5-2.5l-8.567 8.267Z" />
                                     </svg>
-                                    Bewerken
+                                    {{ __('common.edit') }}
                                 </a>
                             </div>
                             @if (is_null($user->password_set_at))
@@ -72,7 +72,7 @@
                                                 <path
                                                     d="m19 8.839-7.77 3.885a2.75 2.75 0 0 1-2.46 0L1 8.839V14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.839Z" />
                                             </svg>
-                                            Uitnodigen
+                                            {{ __('users.invite_button') }}
                                         </button>
                                     </form>
                                 </div>
@@ -88,7 +88,7 @@
                                                 d="M8.75 2a.75.75 0 0 0-.75.75V4H5.5a.75.75 0 0 0 0 1.5h.443l.664 9.298A2.25 2.25 0 0 0 8.85 17h2.3a2.25 2.25 0 0 0 2.243-2.202l.664-9.298h.443a.75.75 0 0 0 0-1.5H12V2.75A.75.75 0 0 0 11.25 2h-2.5Zm1.5 2V3.5h-1.5V4h1.5Z"
                                                 clip-rule="evenodd" />
                                         </svg>
-                                        Verwijderen
+                                        {{ __('common.delete') }}
                                     </button>
                                 </form>
                             </div>

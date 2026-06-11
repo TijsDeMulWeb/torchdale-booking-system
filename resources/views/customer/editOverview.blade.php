@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Klant', 'url' => route('customers.index')],
+        ['name' => __('customers.breadcrumb_singular'), 'url' => route('customers.index')],
         ['name' => $customer->full_name, 'url' => route('customers.show.overview', $customer)],
     ]" />
     <x-profile.header :customer="$customer" />
@@ -15,7 +15,7 @@
                     class="space-y-8 border-b border-gray-200 dark:border-white/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-200 dark:sm:divide-white/10 sm:border-t sm:border-t-gray-200 dark:sm:border-t-white/10 sm:pb-0">
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="firstName"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Voornaam</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.first_name') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="firstName" type="text" name="first_name"
                                 value="{{ old('first_name', $customer->first_name) }}" autocomplete="given-name"
@@ -25,7 +25,7 @@
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="lastName"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Achternaam</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.last_name') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="lastName" type="text" name="last_name"
                                 value="{{ old('last_name', $customer->last_name) }}" autocomplete="family-name"
@@ -35,7 +35,7 @@
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="email"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Email</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.table_email') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="email" type="email" name="email" value="{{ old('email', $customer->email) }}"
                                 autocomplete="email"
@@ -45,7 +45,7 @@
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="phone"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Telefoonnummer</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.phone_number') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="phone" type="text" name="phone" value="{{ old('phone', $customer->phone) }}"
                                 autocomplete="tel"
@@ -55,7 +55,7 @@
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="street"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Straat</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.street') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="street" type="text" name="street" value="{{ old('street', $customer->street) }}"
                                 autocomplete="street-address"
@@ -65,7 +65,7 @@
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="houseNumber"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Huisnummer</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.house_number') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="houseNumber" type="text" name="house_number"
                                 value="{{ old('house_number', $customer->house_number) }}"
@@ -75,7 +75,7 @@
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="city"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Stad</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.city') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="city" type="text" name="city" value="{{ old('city', $customer->city) }}"
                                 autocomplete="address-level2"
@@ -85,7 +85,7 @@
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="postalCode"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Postcode</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.postal_code') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="postalCode" type="text" name="postal_code"
                                 value="{{ old('postal_code', $customer->postal_code) }}" autocomplete="postal-code"
@@ -95,7 +95,7 @@
                     </div>
                     <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                         <label for="country"
-                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">Land</label>
+                            class="block text-sm/6 font-medium text-gray-900 dark:text-white sm:pt-1.5">{{ __('customers.country') }}</label>
                         <div class="mt-2 sm:col-span-2 sm:mt-0">
                             <input id="country" type="text" name="country"
                                 value="{{ old('country', $customer->country) }}" autocomplete="country"

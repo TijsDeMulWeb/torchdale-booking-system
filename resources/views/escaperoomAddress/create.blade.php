@@ -1,22 +1,22 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Instellingen: ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
-        ['name' => 'Adres toevoegen', 'url' => route('escaperoomAddress.create')],
+        ['name' => __('nav.settings') . ': ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
+        ['name' => __('escaperoomAddress.breadcrumb_add'), 'url' => route('escaperoomAddress.create')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <form method="POST" action="{{ route('escaperoomAddress.store') }}">
             @csrf
             <div class="space-y-12 sm:space-y-16">
                 <div>
-                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Escaperoom Adres</h2>
-                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Vul hier het adres in van jouw escaperoom. Dit adres wordt gebruikt om bezoekers te laten zien waar ze moeten zijn.</p>
+                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ __('escaperoomAddress.section_title') }}</h2>
+                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">{{ __('escaperoomAddress.section_description') }}</p>
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="street"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Straat</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('escaperoomAddress.label_street') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="street" type="text" name="street" placeholder="Straat"
+                                <input id="street" type="text" name="street" placeholder="{{ __('escaperoomAddress.label_street') }}"
                                     value="{{ old('street') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="street" />
@@ -25,9 +25,9 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="house_number"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Huisnummer</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('escaperoomAddress.label_house_number') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="house_number" type="text" name="house_number" placeholder="Huisnummer"
+                                <input id="house_number" type="text" name="house_number" placeholder="{{ __('escaperoomAddress.label_house_number') }}"
                                     value="{{ old('house_number') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="house_number" />
@@ -35,9 +35,9 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="postal_code"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Postcode</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('escaperoomAddress.label_postal_code') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="postal_code" type="text" name="postal_code" placeholder="Postcode"
+                                <input id="postal_code" type="text" name="postal_code" placeholder="{{ __('escaperoomAddress.label_postal_code') }}"
                                     value="{{ old('postal_code') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="postal_code" />
@@ -45,9 +45,9 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="city"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Stad</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('escaperoomAddress.label_city') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="city" type="text" name="city" placeholder="Stad"
+                                <input id="city" type="text" name="city" placeholder="{{ __('escaperoomAddress.label_city') }}"
                                     value="{{ old('city') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="city" />
@@ -55,7 +55,7 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="country"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Country</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('escaperoomAddress.label_country') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <div class="grid grid-cols-1 sm:max-w-md">
                                     <select id="country" name="country_id" autocomplete="country-name"
@@ -77,10 +77,10 @@
                             </div>
                         </div>
                         <fieldset>
-                            <legend class="sr-only">Hoofdlocatie</legend>
+                            <legend class="sr-only">{{ __('escaperoomAddress.label_primary') }}</legend>
                             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:py-6">
                                 <div aria-hidden="true" class="text-sm/6 font-semibold text-gray-900 dark:text-white">
-                                    Hoofdlocatie</div>
+                                    {{ __('escaperoomAddress.label_primary') }}</div>
                                 <div class="mt-4 sm:col-span-2 sm:mt-0">
                                     <div class="max-w-lg space-y-6">
                                         <div class="flex gap-3">
@@ -102,9 +102,9 @@
                                             </div>
                                             <div class="text-sm/6">
                                                 <label for="isPrimary"
-                                                    class="font-medium text-gray-900 dark:text-white">Hoofdlocatie</label>
+                                                    class="font-medium text-gray-900 dark:text-white">{{ __('escaperoomAddress.label_primary') }}</label>
                                                 <p id="isPrimary-description" class="text-gray-500 dark:text-gray-400">
-                                                    Is dit de hoofdlocatie? Dit adres wordt gebruikt voor facturatie.
+                                                    {{ __('escaperoomAddress.helper_primary') }}
                                                 </p>
                                                 <x-form.error name="is_primary" />
                                             </div>
@@ -119,9 +119,9 @@
 
             <div class="mt-6 flex items-center justify-end gap-x-6">
                 <a href="{{ route('escaperoom.show') }}"
-                    class="text-sm/6 font-semibold text-gray-900 dark:text-white">Cancel</a>
+                    class="text-sm/6 font-semibold text-gray-900 dark:text-white">{{ __('common.cancel') }}</a>
                 <button type="submit"
-                    class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">Save</button>
+                    class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:shadow-none dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">{{ __('common.save') }}</button>
             </div>
         </form>
     </div>

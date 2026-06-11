@@ -21,6 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'mollie.key' => \App\Http\Middleware\RequiresMollieKey::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
+            'localizationRedirect' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
+            'localeViewPath' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

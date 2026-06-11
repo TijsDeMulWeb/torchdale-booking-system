@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Bestellingen', 'url' => route('orders.index')],
+        ['name' => __('orders.index_title'), 'url' => route('orders.index')],
     ]" />
 
     <div class="px-4 sm:px-6 lg:px-8 my-6 pb-4">
@@ -8,8 +8,8 @@
 
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">Bestellingen</h1>
-                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">Overzicht van bestellingen.</p>
+                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('orders.index_title') }}</h1>
+                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">{{ __('orders.index_description') }}</p>
                 </div>
             </div>
 
@@ -18,33 +18,33 @@
 
                 <div class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Omzet vandaag</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_revenue_today') }}</p>
                         <p class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{{ Number::currency($todayRevenue) }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Betaalde bestellingen</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_paid_orders') }}</p>
                     </div>
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Totale omzet</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_total_revenue') }}</p>
                         <p class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{{ Number::currency($totalRevenue) }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Betaalde bestellingen</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_paid_orders') }}</p>
                     </div>
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Bestellingen vandaag</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_orders_today') }}</p>
                         <p class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{{ $todayOrderCount }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Alle statussen</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_all_statuses') }}</p>
                     </div>
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Totaal bestellingen</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_total_orders') }}</p>
                         <p class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{{ $totalOrderCount }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Alle statussen</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_all_statuses') }}</p>
                     </div>
                 </div>
 
                 @php
                     $statusBadge = function(string $status): string {
                         return match($status) {
-                            'paid'      => '<span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Betaald</span>',
-                            'pending'   => '<span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">Open</span>',
-                            'cancelled' => '<span class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/20 px-2 py-1 text-xs font-medium text-red-700 dark:text-red-400 ring-1 ring-inset ring-red-600/20">Geannuleerd</span>',
+                            'paid'      => '<span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">' . __('common.status_paid') . '</span>',
+                            'pending'   => '<span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">' . __('common.status_open') . '</span>',
+                            'cancelled' => '<span class="inline-flex items-center rounded-md bg-red-50 dark:bg-red-900/20 px-2 py-1 text-xs font-medium text-red-700 dark:text-red-400 ring-1 ring-inset ring-red-600/20">' . __('common.status_cancelled') . '</span>',
                             default     => '<span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">' . e($status) . '</span>',
                         };
                     };
@@ -63,21 +63,21 @@
 
                         if ($isInPerson) {
                             // Cash / kaart: geen betaallink stap
-                            $methodLabel = $order->payment_method === 'cash' ? 'Cash' : 'Kaart';
+                            $methodLabel = $order->payment_method === 'cash' ? __('common.payment_cash') : __('orders.payment_method_card');
                             $steps = [
-                                ['label' => 'Betaald',  'done' => $paid],
-                                ['label' => 'Factuur',  'done' => $receiptSent],
+                                ['label' => __('orders.payment_step_paid'),   'done' => $paid],
+                                ['label' => __('orders.payment_step_invoice'), 'done' => $receiptSent],
                             ];
                             $badge = '<span class="inline-flex items-center rounded-md bg-gray-100 dark:bg-white/10 px-1.5 py-0.5 text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">' . $methodLabel . '</span>';
                         } else {
                             // Online / manual: Mollie betaallink flow
                             $invoiceSent = !empty($order->mollie_id);
                             $steps = [
-                                ['label' => 'Betaallink', 'done' => $invoiceSent],
-                                ['label' => 'Betaald',    'done' => $paid],
-                                ['label' => 'Factuur',    'done' => $receiptSent],
+                                ['label' => __('orders.payment_step_payment_link'), 'done' => $invoiceSent],
+                                ['label' => __('orders.payment_step_paid'),         'done' => $paid],
+                                ['label' => __('orders.payment_step_invoice'),      'done' => $receiptSent],
                             ];
-                            $methodLabel = $order->payment_method === 'manual' ? 'Handmatig' : 'Online';
+                            $methodLabel = $order->payment_method === 'manual' ? __('orders.payment_method_manual') : __('common.payment_online');
                             $badge = '<span class="inline-flex items-center rounded-md bg-indigo-50 dark:bg-indigo-900/20 px-1.5 py-0.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 mb-1">' . $methodLabel . '</span>';
                         }
 
@@ -102,7 +102,7 @@
 
                 {{-- Vandaag --}}
                 <div class="mt-8">
-                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Bestellingen vandaag</h2>
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.today_section_title') }}</h2>
                     @if ($todayOrders->count() > 0)
                         <div class="mt-3 flow-root">
                             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -110,12 +110,12 @@
                                     <table class="min-w-full divide-y divide-gray-300 dark:divide-white/15">
                                         <thead>
                                             <tr>
-                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">#</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Klant</th>
-                                                <th scope="col" class="hidden sm:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Omschrijving</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Tijdstip</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Bedrag</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">{{ __('orders.table_header_number') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_customer') }}</th>
+                                                <th scope="col" class="hidden sm:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_description') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_time') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_amount') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_status') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
@@ -179,13 +179,13 @@
                             {{ $todayOrders->links() }}
                         </div>
                     @else
-                        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Geen bestellingen vandaag.</p>
+                        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">{{ __('orders.empty_today') }}</p>
                     @endif
                 </div>
 
                 {{-- Eerdere bestellingen --}}
                 <div class="mt-10">
-                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Eerdere bestellingen</h2>
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.earlier_section_title') }}</h2>
 
                     @if ($orders->count() > 0)
                         <div class="mt-3 flow-root">
@@ -194,12 +194,12 @@
                                     <table class="min-w-full divide-y divide-gray-300 dark:divide-white/15">
                                         <thead>
                                             <tr>
-                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">#</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Klant</th>
-                                                <th scope="col" class="hidden sm:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Omschrijving</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Datum</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Bedrag</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">{{ __('orders.table_header_number') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_customer') }}</th>
+                                                <th scope="col" class="hidden sm:table-cell px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_description') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_date') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_amount') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_status') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
@@ -263,7 +263,7 @@
                             {{ $orders->links() }}
                         </div>
                     @else
-                        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Geen eerdere bestellingen.</p>
+                        <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">{{ __('orders.empty_earlier') }}</p>
                     @endif
                 </div>
 
@@ -277,7 +277,7 @@
              onclick="if(event.target===this) this.classList.add('hidden')">
             <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden shadow-2xl">
                 <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-white/10">
-                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Cadeaubon{{ count(session('gift_vouchers')) > 1 ? 'nen' : '' }} aangemaakt</h2>
+                    <h2 class="text-sm font-semibold text-gray-900 dark:text-white">{{ trans_choice('orders.voucher_modal_title', count(session('gift_vouchers'))) }}</h2>
                     <button type="button" onclick="document.getElementById('gift-voucher-modal').classList.add('hidden')"
                         class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10">
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,7 +286,7 @@
                     </button>
                 </div>
                 <div class="px-6 py-4 space-y-3">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Noteer onderstaande code{{ count(session('gift_vouchers')) > 1 ? 's' : '' }} voor de klant:</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ trans_choice('orders.voucher_modal_description', count(session('gift_vouchers'))) }}</p>
                     @foreach (session('gift_vouchers') as $voucher)
                         <div class="rounded-lg border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-4 py-3">
                             @if ($voucher['gift_card_name'])
@@ -301,7 +301,7 @@
                 <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-white/10">
                     <button type="button" onclick="document.getElementById('gift-voucher-modal').classList.add('hidden')"
                         class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors">
-                        Sluiten
+                        {{ __('orders.voucher_modal_close') }}
                     </button>
                 </div>
             </div>
@@ -313,14 +313,14 @@
          onclick="closePdfModal(event)">
         <div class="relative w-full max-w-4xl h-[85vh] bg-white dark:bg-gray-900 rounded-xl shadow-2xl flex flex-col overflow-hidden">
             <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-white/10">
-                <span class="text-sm font-semibold text-gray-900 dark:text-white">Factuur</span>
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.pdf_modal_invoice') }}</span>
                 <div class="flex items-center gap-2">
                     <a id="pdf-download-link" href="#" download
                        class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-indigo-500 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                         </svg>
-                        Download
+                        {{ __('orders.pdf_modal_download') }}
                     </a>
                     <button onclick="closePdfModal()" class="rounded-lg p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">

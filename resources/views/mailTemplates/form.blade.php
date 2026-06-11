@@ -10,19 +10,19 @@
 
     <x-navigation.breadcrumb :breadcrumbs="$room
         ? [
-            ['name' => 'Kamers', 'url' => route('rooms.index')],
+            ['name' => __('nav.rooms'), 'url' => route('rooms.index')],
             ['name' => $room->name, 'url' => route('rooms.edit', $room->id)],
-            ['name' => 'Mail-sjablonen', 'url' => route('mail-templates.room.index', [$room, $subtype])],
+            ['name' => __('mailTemplates.breadcrumb_plural'), 'url' => route('mail-templates.room.index', [$room, $subtype])],
             isset($template)
-                ? ['name' => 'Bewerken', 'url' => route('mail-templates.room.edit', [$room, $subtype, $template])]
-                : ['name' => 'Nieuw sjabloon', 'url' => route('mail-templates.room.create', [$room, $subtype])],
+                ? ['name' => __('common.edit'), 'url' => route('mail-templates.room.edit', [$room, $subtype, $template])]
+                : ['name' => __('mailTemplates.form_new_title'), 'url' => route('mail-templates.room.create', [$room, $subtype])],
         ]
         : [
-            ['name' => $type === 'product' ? 'Producten' : 'Cadeaubonnen', 'url' => $type === 'product' ? route('products.index') : route('giftCards.index')],
-            ['name' => 'Mail-sjablonen', 'url' => route('mail-templates.index', $type)],
+            ['name' => $type === 'product' ? __('nav.products') : __('giftCards.breadcrumb_plural'), 'url' => $type === 'product' ? route('products.index') : route('giftCards.index')],
+            ['name' => __('mailTemplates.breadcrumb_plural'), 'url' => route('mail-templates.index', $type)],
             isset($template)
-                ? ['name' => 'Bewerken', 'url' => route('mail-templates.edit', [$type, $template])]
-                : ['name' => 'Nieuw sjabloon', 'url' => route('mail-templates.create', $type)],
+                ? ['name' => __('common.edit'), 'url' => route('mail-templates.edit', [$type, $template])]
+                : ['name' => __('mailTemplates.form_new_title'), 'url' => route('mail-templates.create', $type)],
         ]" />
 
     <div class="px-4 py-1 sm:px-6 lg:px-8 my-10">
@@ -35,24 +35,24 @@
             <div class="space-y-12 sm:space-y-16">
                 <div>
                     <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">
-                        {{ isset($template) ? 'Sjabloon bewerken' : 'Nieuw mail-sjabloon' }}
+                        {{ isset($template) ? __('mailTemplates.form_edit_title') : __('mailTemplates.form_new_title') }}
                     </h2>
                     <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">
-                        Gebruik <code class="rounded bg-gray-100 dark:bg-white/10 px-1 text-xs">&#123;&#123;variabele&#125;&#125;</code> om dynamische waarden in te voegen.
+                        {!! __('mailTemplates.variable_helper', ['example' => '<code class="rounded bg-gray-100 dark:bg-white/10 px-1 text-xs">&#123;&#123;variabele&#125;&#125;</code>']) !!}
                     </p>
 
                     <div class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
 
                         {{-- Locale --}}
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                            <label for="locale" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Taal</label>
+                            <label for="locale" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('mailTemplates.locale_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 @if(isset($template))
                                     <input type="hidden" name="locale" value="{{ $template->locale }}" />
                                     <span class="inline-flex items-center rounded-md px-2 py-1 text-sm font-medium bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 ring-1 ring-inset ring-indigo-700/10 dark:ring-indigo-500/20">
                                         {{ strtoupper($template->locale) }} — {{ $locales[$template->locale] ?? $template->locale }}
                                     </span>
-                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Taal kan niet worden gewijzigd. Verwijder dit sjabloon als u een andere taal wilt.</p>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ __('mailTemplates.locale_locked_helper') }}</p>
                                 @else
                                     <div class="grid grid-cols-1 sm:max-w-xs">
                                         <select id="locale" name="locale"
@@ -76,10 +76,10 @@
 
                         {{-- Subject --}}
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                            <label for="subject" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Onderwerp</label>
+                            <label for="subject" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('mailTemplates.subject_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="subject" type="text" name="subject"
-                                    placeholder="bijv. Uw bestelling — &#123;&#123;product_name&#125;&#125;"
+                                    placeholder="{{ __('mailTemplates.subject_placeholder') }}"
                                     value="{{ old('subject', $template->subject ?? '') }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="subject" />
@@ -88,7 +88,7 @@
 
                         {{-- Body --}}
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                            <label for="body" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Inhoud</label>
+                            <label for="body" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('mailTemplates.body_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <div id="quill-editor-wrapper" class="rounded-md outline-1 -outline-offset-1 outline-gray-300 dark:outline-white/10 overflow-hidden bg-white">
                                     <div id="quill-editor" style="min-height: 300px;"></div>
@@ -96,7 +96,7 @@
                                 <textarea id="body" name="body" class="hidden">{{ old('body', $template->body ?? '') }}</textarea>
                                 <input type="file" id="image-upload-input" accept="image/*" class="hidden" onchange="uploadImage(this)" />
                                 <span id="image-upload-status" class="mt-1.5 inline-block text-xs text-gray-500 dark:text-gray-400"></span>
-                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Gebruik variabelen zoals <code class="rounded bg-gray-100 dark:bg-white/10 px-1">&#123;&#123;customer_name&#125;&#125;</code>. Plaats de cursor op de gewenste positie en klik op een variabele of de afbeelding-knop in de werkbalk om iets in te voegen.</p>
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{!! __('mailTemplates.body_helper', ['example' => '<code class="rounded bg-gray-100 dark:bg-white/10 px-1">&#123;&#123;customer_name&#125;&#125;</code>']) !!}</p>
                                 <x-form.error name="body" />
                             </div>
                         </div>
@@ -104,14 +104,14 @@
                         @if(in_array($type, ['room_confirmation', 'room_reminder']))
                             {{-- ICS attachment --}}
                             <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                                <label for="attach_ics" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Agenda-bijlage</label>
+                                <label for="attach_ics" class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('mailTemplates.ics_label') }}</label>
                                 <div class="mt-2 sm:col-span-2 sm:mt-0">
                                     <div class="flex items-start gap-3">
                                         <input id="attach_ics" type="checkbox" name="attach_ics" value="1"
                                             {{ old('attach_ics', $template->attach_ics ?? false) ? 'checked' : '' }}
                                             class="mt-1 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-white/10 dark:bg-white/5" />
                                         <label for="attach_ics" class="text-sm text-gray-700 dark:text-gray-300">
-                                            Voeg een agenda-bestand (.ics) toe aan deze e-mail, zodat klanten de afspraak kunnen toevoegen aan hun agenda.
+                                            {{ __('mailTemplates.ics_checkbox_label') }}
                                         </label>
                                     </div>
                                     <x-form.error name="attach_ics" />
@@ -121,7 +121,7 @@
 
                         {{-- Variable hints --}}
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-                            <div class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Beschikbare variabelen</div>
+                            <div class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('mailTemplates.variables_label') }}</div>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <div class="rounded-lg border border-gray-200 dark:border-white/10 divide-y divide-gray-100 dark:divide-white/5 overflow-hidden">
                                     @foreach($variables as $variable => $description)
@@ -135,7 +135,7 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Klik op een variabele om deze in te voegen op de cursorpositie.</p>
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('mailTemplates.variables_helper') }}</p>
                             </div>
                         </div>
 
@@ -145,10 +145,10 @@
 
             <div class="mt-6 flex items-center justify-end gap-x-6">
                 <a href="{{ $indexUrl }}"
-                    class="text-sm/6 font-semibold text-gray-900 dark:text-white hover:underline">Annuleren</a>
+                    class="text-sm/6 font-semibold text-gray-900 dark:text-white hover:underline">{{ __('common.cancel') }}</a>
                 <button type="submit"
                     class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-colors">
-                    Opslaan
+                    {{ __('common.save') }}
                 </button>
             </div>
         </form>
@@ -157,7 +157,7 @@
     <style>
         .ql-snow .ql-picker.ql-size .ql-picker-label::before,
         .ql-snow .ql-picker.ql-size .ql-picker-item::before {
-            content: 'Normaal';
+            content: '{{ __('mailTemplates.quill_normal') }}';
         }
         .ql-snow .ql-picker.ql-size .ql-picker-label[data-value]::before,
         .ql-snow .ql-picker.ql-size .ql-picker-item[data-value]::before {
@@ -168,6 +168,10 @@
         window.mailTemplateConfig = {
             uploadImageUrl: '{{ $uploadImageUrl }}',
             csrfToken: '{{ csrf_token() }}',
+            i18n: {!! \Illuminate\Support\Js::from([
+                'uploading' => __('mailTemplates.uploading_js'),
+                'uploadFailed' => __('mailTemplates.upload_failed_js'),
+            ]) !!},
         };
     </script>
     @vite('resources/js/mail-template-editor.js')

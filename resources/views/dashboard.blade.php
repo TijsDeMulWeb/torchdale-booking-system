@@ -47,14 +47,14 @@
     <div class="px-4 py-6 sm:px-6 lg:px-8">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-                <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">Planning</h1>
+                <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ __('dashboard.title') }}</h1>
                 <p id="period-label" class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ $periodLabel }}</p>
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
                 <div class="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-sm dark:border-white/10 dark:bg-white/5">
-                    <button type="button" data-view="day" class="view-toggle rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors dark:text-gray-300">Dag</button>
-                    <button type="button" data-view="week" class="view-toggle rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors dark:text-gray-300">Week</button>
+                    <button type="button" data-view="day" class="view-toggle rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors dark:text-gray-300">{{ __('dashboard.view_day') }}</button>
+                    <button type="button" data-view="week" class="view-toggle rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition-colors dark:text-gray-300">{{ __('dashboard.view_week') }}</button>
                 </div>
 
                 <div class="inline-flex items-center gap-1">
@@ -66,7 +66,7 @@
                     </button>
                     <button type="button" data-nav="today"
                         class="inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/10 dark:text-gray-200 dark:hover:bg-white/5">
-                        Vandaag
+                        {{ __('dashboard.today') }}
                     </button>
                     <button type="button" data-nav="next"
                         class="inline-flex size-9 items-center justify-center rounded-md border border-gray-300 text-gray-500 hover:bg-gray-50 dark:border-white/10 dark:text-gray-400 dark:hover:bg-white/5">
@@ -82,21 +82,21 @@
                         <svg viewBox="0 0 20 20" fill="currentColor" class="size-4">
                             <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
                         </svg>
-                        Nieuwe afspraak
+                        {{ __('dashboard.new_booking') }}
                     </button>
                     <button type="button" id="open-range-block-modal"
                         class="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/10 dark:text-gray-200 dark:hover:bg-white/5">
                         <svg viewBox="0 0 20 20" fill="currentColor" class="size-4">
                             <path fill-rule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2ZM3.5 8.5v6.75c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25V8.5h-13Z" clip-rule="evenodd" />
                         </svg>
-                        Periode blokkeren
+                        {{ __('dashboard.block_period') }}
                     </button>
                     <button type="button" id="open-range-unblock-modal"
                         class="inline-flex items-center gap-2 rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/10 dark:text-gray-200 dark:hover:bg-white/5">
                         <svg viewBox="0 0 20 20" fill="currentColor" class="size-4">
                             <path fill-rule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2ZM3.5 8.5v6.75c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25V8.5h-13Zm2.5 3.25a.75.75 0 0 1 .75-.75h6.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
                         </svg>
-                        Periode deblokkeren
+                        {{ __('dashboard.unblock_period') }}
                     </button>
                 @endif
             </div>
@@ -112,11 +112,11 @@
                     <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ $room->name }}</span>
                 </label>
             @empty
-                <p class="text-sm text-gray-500 dark:text-gray-400">Er zijn nog geen kamers aangemaakt.</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.no_rooms') }}</p>
             @endforelse
         </div>
         @if ($rooms->count() > 4)
-            <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Je kan maximaal 4 kamers tegelijk weergeven — vink er eerst één uit om een andere te kunnen tonen.</p>
+            <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">{{ __('dashboard.max_rooms_hint') }}</p>
         @endif
 
         {{-- Calendar --}}
@@ -149,13 +149,13 @@
     <div id="slot-menu" class="hidden fixed z-40 w-60 rounded-lg border border-gray-200 bg-white p-1.5 text-sm shadow-lg dark:border-white/10 dark:bg-gray-800">
         <p id="slot-menu-label" class="truncate px-3 py-1.5 text-xs font-medium text-gray-400 dark:text-gray-500"></p>
         <button type="button" data-slot-action="book" class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-white/5">
-            Nieuwe afspraak aanmaken
+            {{ __('dashboard.create_new_booking') }}
         </button>
         <button type="button" data-slot-action="block" class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-white/5">
-            Tijdslot blokkeren
+            {{ __('dashboard.block_time_slot') }}
         </button>
         <button type="button" data-slot-action="unblock" class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10">
-            Tijdslot deblokkeren
+            {{ __('dashboard.unblock_time_slot') }}
         </button>
     </div>
 
@@ -169,7 +169,7 @@
     <div id="block-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
         <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 dark:border-white/10 dark:bg-gray-900">
             <div class="mb-6 flex items-center justify-between">
-                <h2 class="text-base font-semibold text-gray-900 dark:text-white">Tijdslot blokkeren</h2>
+                <h2 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('dashboard.block_time_slot') }}</h2>
                 <button type="button" data-close-modal="block" class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -184,13 +184,13 @@
                 <input type="hidden" name="end" id="block-end">
                 <p id="block-summary" class="mb-5 text-sm text-gray-500 dark:text-gray-400"></p>
                 <div class="mb-6">
-                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Reden (optioneel)</label>
-                    <input type="text" name="reason" maxlength="150" placeholder="Bv. onderhoud, privégebruik..."
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.reason_optional') }}</label>
+                    <input type="text" name="reason" maxlength="150" placeholder="{{ __('dashboard.reason_placeholder_block') }}"
                         class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                 </div>
                 <div class="flex items-center justify-end gap-4">
-                    <button type="button" data-close-modal="block" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Annuleren</button>
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500">Blokkeren</button>
+                    <button type="button" data-close-modal="block" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('dashboard.cancel') }}</button>
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500">{{ __('dashboard.block') }}</button>
                 </div>
             </form>
         </div>
@@ -200,7 +200,7 @@
     <div id="range-block-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
         <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 dark:border-white/10 dark:bg-gray-900">
             <div class="mb-6 flex items-center justify-between">
-                <h2 class="text-base font-semibold text-gray-900 dark:text-white">Periode blokkeren</h2>
+                <h2 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('dashboard.block_period') }}</h2>
                 <button type="button" data-close-modal="range-block" class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -209,10 +209,10 @@
             </div>
             <form id="range-block-form" method="POST" action="{{ route('dashboard.timeslots.blockRange') }}">
                 @csrf
-                <p class="mb-5 text-sm text-gray-500 dark:text-gray-400">Blokkeer in één keer meerdere dagen en/of tijdsloten voor een kamer — bijvoorbeeld voor onderhoud, verbouwing of een sluitingsperiode.</p>
+                <p class="mb-5 text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.block_period_description') }}</p>
 
                 <div class="mb-5">
-                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Kamer</label>
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.room') }}</label>
                     <select name="room_id" id="range-block-room" required
                         class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                         @foreach ($rooms as $room)
@@ -223,12 +223,12 @@
 
                 <div class="mb-5 grid grid-cols-2 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Vanaf</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.from_date') }}</label>
                         <input type="date" name="start_date" id="range-block-start-date" required
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Tot en met</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.to_date') }}</label>
                         <input type="date" name="end_date" id="range-block-end-date" required
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
@@ -237,31 +237,31 @@
                 <label class="mb-5 flex cursor-pointer items-center gap-2 select-none">
                     <input type="checkbox" name="all_day" id="range-block-all-day" value="1"
                         class="size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-white/20">
-                    <span class="text-sm text-gray-700 dark:text-gray-200">Hele dag(en) blokkeren</span>
+                    <span class="text-sm text-gray-700 dark:text-gray-200">{{ __('dashboard.block_whole_days') }}</span>
                 </label>
 
                 <div id="range-block-time-fields" class="mb-5 grid grid-cols-2 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Van</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.from_time') }}</label>
                         <input type="time" name="start" id="range-block-start"
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Tot</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.to_time') }}</label>
                         <input type="time" name="end" id="range-block-end"
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
-                <p class="-mt-3 mb-5 text-xs text-gray-400 dark:text-gray-500">Dit tijdsbereik wordt op elke dag in de gekozen periode toegepast. Overlapt het met een bestaande boeking of blokkade? Dan wordt er gewoon rond geblokkeerd — de bestaande boeking of blokkade blijft altijd staan.</p>
+                <p class="-mt-3 mb-5 text-xs text-gray-400 dark:text-gray-500">{{ __('dashboard.range_block_time_hint') }}</p>
 
                 <div class="mb-6">
-                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Reden (optioneel)</label>
-                    <input type="text" name="reason" maxlength="150" placeholder="Bv. onderhoud, verbouwing, sluitingsperiode..."
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.reason_optional') }}</label>
+                    <input type="text" name="reason" maxlength="150" placeholder="{{ __('dashboard.reason_placeholder_range') }}"
                         class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                 </div>
                 <div class="flex items-center justify-end gap-4">
-                    <button type="button" data-close-modal="range-block" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Annuleren</button>
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500">Blokkeren</button>
+                    <button type="button" data-close-modal="range-block" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('dashboard.cancel') }}</button>
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500">{{ __('dashboard.block') }}</button>
                 </div>
             </form>
         </div>
@@ -271,7 +271,7 @@
     <div id="range-unblock-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
         <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white p-8 dark:border-white/10 dark:bg-gray-900">
             <div class="mb-6 flex items-center justify-between">
-                <h2 class="text-base font-semibold text-gray-900 dark:text-white">Periode deblokkeren</h2>
+                <h2 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('dashboard.unblock_period') }}</h2>
                 <button type="button" data-close-modal="range-unblock" class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -280,10 +280,10 @@
             </div>
             <form id="range-unblock-form" method="POST" action="{{ route('dashboard.timeslots.unblockRange') }}">
                 @csrf
-                <p class="mb-5 text-sm text-gray-500 dark:text-gray-400">Hef in één keer alle blokkades voor een kamer in een bepaalde periode op — handig om bijvoorbeeld een maandlange sluiting weer ongedaan te maken zonder elke dag apart te deblokkeren. Echte boekingen worden hierdoor nooit verwijderd.</p>
+                <p class="mb-5 text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.range_unblock_description') }}</p>
 
                 <div class="mb-5">
-                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Kamer</label>
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.room') }}</label>
                     <select name="room_id" id="range-unblock-room" required
                         class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                         @foreach ($rooms as $room)
@@ -294,19 +294,19 @@
 
                 <div class="mb-6 grid grid-cols-2 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Vanaf</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.from_date') }}</label>
                         <input type="date" name="start_date" id="range-unblock-start-date" required
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Tot en met</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.to_date') }}</label>
                         <input type="date" name="end_date" id="range-unblock-end-date" required
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
                 <div class="flex items-center justify-end gap-4">
-                    <button type="button" data-close-modal="range-unblock" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Annuleren</button>
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-500">Deblokkeren</button>
+                    <button type="button" data-close-modal="range-unblock" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('dashboard.cancel') }}</button>
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-500">{{ __('dashboard.unblock') }}</button>
                 </div>
             </form>
         </div>
@@ -316,7 +316,7 @@
     <div id="booking-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
         <div class="w-full max-w-lg rounded-xl border border-gray-200 bg-white p-8 dark:border-white/10 dark:bg-gray-900 max-h-[90vh] overflow-y-auto">
             <div class="mb-6 flex items-center justify-between">
-                <h2 class="text-base font-semibold text-gray-900 dark:text-white">Nieuwe afspraak aanmaken</h2>
+                <h2 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('dashboard.create_new_booking') }}</h2>
                 <button type="button" data-close-modal="booking" class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -328,7 +328,7 @@
                 <input type="hidden" name="idempotency_key" id="booking-idempotency-key">
                 {{-- Timing & room --}}
                 <div class="mb-5">
-                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Kamer</label>
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.room') }}</label>
                     <select name="room_id" id="booking-room-id" required
                         class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                         @foreach ($rooms as $room)
@@ -338,17 +338,17 @@
                 </div>
                 <div class="mb-5 grid grid-cols-3 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Datum</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.date') }}</label>
                         <input type="date" name="date" id="booking-date" required
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Van</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.from_time') }}</label>
                         <input type="time" name="start" id="booking-start" required
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Tot</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.to_time') }}</label>
                         <input type="time" name="end" id="booking-end" required
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
@@ -356,51 +356,51 @@
                 {{-- Customer --}}
                 <div class="mb-5 grid grid-cols-2 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Voornaam</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.first_name') }}</label>
                         <input type="text" name="first_name" required class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Achternaam</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.last_name') }}</label>
                         <input type="text" name="last_name" required class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
                 <div class="mb-5">
-                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">E-mailadres</label>
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.email') }}</label>
                     <input type="email" name="email" required class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                 </div>
                 <div class="mb-5 grid grid-cols-3 gap-4">
                     <div class="col-span-2">
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Straat <span class="text-gray-400">(optioneel)</span></label>
-                        <input type="text" name="street" placeholder="Kerkstraat" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.street') }} <span class="text-gray-400">{{ __('dashboard.optional') }}</span></label>
+                        <input type="text" name="street" placeholder="{{ __('dashboard.street_placeholder') }}" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Nr.</label>
-                        <input type="text" name="house_number" placeholder="12" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.house_number') }}</label>
+                        <input type="text" name="house_number" placeholder="{{ __('dashboard.house_number_placeholder') }}" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
                 <div class="mb-5 grid grid-cols-3 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Postcode</label>
-                        <input type="text" name="postal_code" placeholder="2000" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.postal_code') }}</label>
+                        <input type="text" name="postal_code" placeholder="{{ __('dashboard.postal_code_placeholder') }}" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div class="col-span-2">
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Gemeente</label>
-                        <input type="text" name="city" placeholder="Antwerpen" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.city') }}</label>
+                        <input type="text" name="city" placeholder="{{ __('dashboard.city_placeholder') }}" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
                 <div class="mb-5 grid grid-cols-2 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Telefoon (optioneel)</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.phone_optional') }}</label>
                         <input type="tel" name="phone" class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Aantal spelers</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.players_count') }}</label>
                         <input type="number" name="players" id="booking-players" min="1" required class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
                 {{-- Language --}}
                 <div class="mb-5">
-                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Taal</label>
+                    <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.language') }}</label>
                     <select name="language_id" id="booking-language-id" required
                         class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </select>
@@ -408,7 +408,7 @@
                 {{-- Pricing --}}
                 <div class="mb-2">
                     <div class="flex items-center justify-between mb-2">
-                        <label class="block text-sm text-gray-500 dark:text-gray-400">Prijs (incl. BTW)</label>
+                        <label class="block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.price_incl_vat') }}</label>
                         <span id="booking-price-hint" class="text-xs text-gray-400 dark:text-gray-500"></span>
                     </div>
                     <input type="number" name="custom_price" id="booking-custom-price" step="0.01" min="0" placeholder="0.00"
@@ -416,19 +416,19 @@
                 </div>
                 <div class="mb-6 grid grid-cols-2 gap-4">
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Online te betalen</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.amount_online') }}</label>
                         <input type="number" name="amount_online" id="booking-amount-online" step="0.01" min="0" value="0"
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">Ter plekke te betalen</label>
+                        <label class="mb-2 block text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.amount_onsite') }}</label>
                         <input type="number" name="amount_onsite" id="booking-amount-onsite" step="0.01" min="0" value="0"
                             class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-white/20 dark:bg-gray-900 dark:text-white">
                     </div>
                 </div>
                 <div class="flex items-center justify-end gap-4">
-                    <button type="button" data-close-modal="booking" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Annuleren</button>
-                    <button type="submit" id="booking-submit-btn" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed">Afspraak aanmaken</button>
+                    <button type="button" data-close-modal="booking" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('dashboard.cancel') }}</button>
+                    <button type="submit" id="booking-submit-btn" class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed">{{ __('dashboard.create_booking_action') }}</button>
                 </div>
             </form>
         </div>
@@ -439,8 +439,8 @@
     <div id="cancel-options-overlay" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black/50 px-4">
         <div class="w-full max-w-sm rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden shadow-2xl">
             <div class="px-6 py-5">
-                <p class="text-base font-semibold text-gray-900 dark:text-white">Afspraak annuleren</p>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Kies wat er moet gebeuren met de betaling.</p>
+                <p class="text-base font-semibold text-gray-900 dark:text-white">{{ __('dashboard.cancel_booking') }}</p>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.cancel_booking_choose_payment') }}</p>
             </div>
             <div class="px-6 pb-2 space-y-2">
                 {{-- Only cancel --}}
@@ -450,8 +450,8 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                     <div>
-                        <p class="text-sm font-medium text-gray-900 dark:text-white">Alleen annuleren</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Tijdslot verwijderen, geen verdere actie.</p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('dashboard.cancel_only') }}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('dashboard.cancel_only_description') }}</p>
                     </div>
                 </button>
                 {{-- Voucher --}}
@@ -461,14 +461,14 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a4 4 0 00-4-4H5.45a4 4 0 00-3.955 4.55l.18 1.2A4 4 0 005.626 11H12m0 0h6.374a4 4 0 003.955-3.45l.18-1.2A4 4 0 0018.55 2H16a4 4 0 00-4 4v2z"/>
                     </svg>
                     <div>
-                        <p class="text-sm font-medium text-indigo-700 dark:text-indigo-400">Cadeaubon sturen</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Annuleren en een cadeaubon aanmaken voor het betaalde bedrag (1 jaar geldig).</p>
+                        <p class="text-sm font-medium text-indigo-700 dark:text-indigo-400">{{ __('dashboard.send_voucher') }}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('dashboard.send_voucher_description') }}</p>
                     </div>
                 </button>
             </div>
             <div class="flex justify-end px-6 py-4 border-t border-gray-100 dark:border-white/10">
                 <button type="button" id="cancel-options-back"
-                    class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Terug</button>
+                    class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('dashboard.back') }}</button>
             </div>
         </div>
     </div>
@@ -482,16 +482,16 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
                 </div>
-                <p class="text-base font-semibold text-gray-900 dark:text-white">Cadeaubon aangemaakt</p>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Deel deze code met de klant:</p>
+                <p class="text-base font-semibold text-gray-900 dark:text-white">{{ __('dashboard.voucher_created') }}</p>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('dashboard.voucher_share_code') }}</p>
                 <div class="mt-4 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-4 py-3">
                     <p id="voucher-code-display" class="font-mono text-xl font-bold tracking-widest text-gray-900 dark:text-white"></p>
                 </div>
-                <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">12 maanden geldig · staat ook opgeslagen in het systeem</p>
+                <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">{{ __('dashboard.voucher_validity_note') }}</p>
             </div>
             <div class="flex justify-center px-6 py-4 border-t border-gray-100 dark:border-white/10">
                 <button type="button" id="voucher-confirm-close"
-                    class="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Sluiten</button>
+                    class="rounded-lg bg-indigo-600 px-6 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">{{ __('dashboard.close') }}</button>
             </div>
         </div>
     </div>
@@ -519,12 +519,12 @@
                 {{-- When & who --}}
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                        <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">Datum & tijd</p>
+                        <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">{{ __('dashboard.date_time') }}</p>
                         <p id="bdetail-date" class="text-gray-900 dark:text-white font-medium"></p>
                         <p id="bdetail-time" class="text-gray-500 dark:text-gray-400 text-xs"></p>
                     </div>
                     <div>
-                        <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">Spelers & taal</p>
+                        <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1">{{ __('dashboard.players_language') }}</p>
                         <p id="bdetail-players" class="text-gray-900 dark:text-white font-medium"></p>
                         <p id="bdetail-language" class="text-gray-500 dark:text-gray-400 text-xs"></p>
                     </div>
@@ -532,7 +532,7 @@
 
                 {{-- Contact --}}
                 <div>
-                    <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">Contactgegevens</p>
+                    <p class="text-xs font-medium uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-2">{{ __('dashboard.contact_details') }}</p>
                     <div class="space-y-1 text-sm">
                         <p id="bdetail-email" class="text-gray-700 dark:text-gray-300"></p>
                         <p id="bdetail-phone" class="text-gray-500 dark:text-gray-400 text-xs"></p>
@@ -551,30 +551,30 @@
                         {{-- Header --}}
                         <div class="grid grid-cols-3 gap-2 bg-gray-50 dark:bg-white/5 px-4 py-2 text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">
                             <span></span>
-                            <span class="text-right">Te betalen</span>
-                            <span class="text-right">Betaald</span>
+                            <span class="text-right">{{ __('dashboard.to_pay') }}</span>
+                            <span class="text-right">{{ __('dashboard.paid') }}</span>
                         </div>
                         {{-- Online row --}}
                         <div class="grid grid-cols-3 gap-2 items-center border-t border-gray-100 dark:border-white/10 px-4 py-2.5">
-                            <span class="text-gray-500 dark:text-gray-400">Online</span>
+                            <span class="text-gray-500 dark:text-gray-400">{{ __('dashboard.online') }}</span>
                             <span id="bdetail-amount-online" class="text-right text-gray-700 dark:text-gray-300"></span>
                             <span id="bdetail-paid-online" class="text-right text-gray-700 dark:text-gray-300"></span>
                         </div>
                         {{-- Onsite row --}}
                         <div class="grid grid-cols-3 gap-2 items-center border-t border-gray-100 dark:border-white/10 px-4 py-2.5">
-                            <span class="text-gray-500 dark:text-gray-400">Ter plekke</span>
+                            <span class="text-gray-500 dark:text-gray-400">{{ __('dashboard.onsite') }}</span>
                             <span id="bdetail-amount-onsite" class="text-right text-gray-700 dark:text-gray-300"></span>
                             <div class="flex flex-col items-end gap-1">
                                 <span id="bdetail-paid-onsite" class="text-gray-700 dark:text-gray-300"></span>
                                 <button type="button" id="bdetail-mark-onsite-btn"
                                     class="hidden shrink-0 whitespace-nowrap rounded-md bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50">
-                                    Markeer betaald
+                                    {{ __('dashboard.mark_paid') }}
                                 </button>
                             </div>
                         </div>
                         {{-- Total + status --}}
                         <div class="grid grid-cols-3 gap-2 items-center border-t border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-4 py-2.5">
-                            <span class="font-medium text-gray-700 dark:text-gray-200">Totaal</span>
+                            <span class="font-medium text-gray-700 dark:text-gray-200">{{ __('dashboard.total') }}</span>
                             <span id="bdetail-total" class="text-right font-semibold text-gray-900 dark:text-white"></span>
                             <div class="flex justify-end">
                                 <span id="bdetail-status" class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"></span>
@@ -592,9 +592,9 @@
                 <div class="ml-auto flex items-center gap-3">
                     <button type="button" id="bdetail-cancel-btn"
                         class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-900/50 dark:text-red-400 dark:hover:bg-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none">
-                        Annuleren
+                        {{ __('dashboard.cancel') }}
                     </button>
-                    <button type="button" data-close-modal="booking-detail" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Sluiten</button>
+                    <button type="button" data-close-modal="booking-detail" class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('dashboard.close') }}</button>
                 </div>
             </div>
         </div>
@@ -610,6 +610,32 @@
                 return;
             }
 
+            const I18N = {!! \Illuminate\Support\Js::from([
+                'processing' => __('dashboard.processing'),
+                'this_room' => __('dashboard.this_room'),
+                'confirm_unblock_range' => __('dashboard.confirm_unblock_range'),
+                'confirm_unblock_slot' => __('dashboard.confirm_unblock_slot'),
+                'looking_up_price' => __('dashboard.looking_up_price'),
+                'price_found' => __('dashboard.price_found'),
+                'price_not_found' => __('dashboard.price_not_found'),
+                'loading' => __('dashboard.loading'),
+                'unknown_customer' => __('dashboard.unknown_customer'),
+                'player_singular' => __('dashboard.player_singular'),
+                'player_plural' => __('dashboard.player_plural'),
+                'step_invoice_sent' => __('dashboard.step_invoice_sent'),
+                'step_paid' => __('dashboard.paid'),
+                'step_receipt_sent' => __('dashboard.step_receipt_sent'),
+                'status_paid' => __('dashboard.status_paid'),
+                'status_pending' => __('dashboard.status_pending'),
+                'status_cancelled' => __('dashboard.status_cancelled'),
+                'status_failed' => __('dashboard.status_failed'),
+                'status_unknown' => __('dashboard.status_unknown'),
+                'cancel_error' => __('dashboard.cancel_error'),
+                'load_error' => __('dashboard.load_error'),
+                'mark_paid' => __('dashboard.mark_paid'),
+                'create_booking_action' => __('dashboard.create_booking_action'),
+                'intl_locale' => __('dashboard.intl_locale'),
+            ]) !!};
             const CALENDAR = {!! $calendarDataJson !!};
             const UNBLOCK_URL_TEMPLATE = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.unblock', ['timeSlot' => '__id__'])) !!};
             const BOOKING_DETAILS_URL_TEMPLATE = {!! \Illuminate\Support\Js::from(route('dashboard.timeslots.bookingDetails', ['timeSlot' => '__id__'])) !!};
@@ -1094,7 +1120,7 @@
             function formatSlotLabel(slot) {
                 const room = ROOMS_BY_ID.get(slot.roomId);
                 const date = new Date(`${slot.date}T00:00:00`);
-                const dateLabel = new Intl.DateTimeFormat('nl-BE', { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
+                const dateLabel = new Intl.DateTimeFormat(I18N.intl_locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
 
                 return `${room ? room.name + ' · ' : ''}${dateLabel} · ${slot.start} - ${slot.end}`;
             }
@@ -1198,12 +1224,12 @@
             function confirmRangeUnblock(event) {
                 const roomSelect = document.getElementById('range-unblock-room');
                 const room = ROOMS_BY_ID.get(Number(roomSelect.value));
-                const roomLabel = room ? room.name : 'deze kamer';
+                const roomLabel = room ? room.name : I18N.this_room;
                 const startDate = document.getElementById('range-unblock-start-date').value;
                 const endDate = document.getElementById('range-unblock-end-date').value;
 
                 const confirmed = window.confirm(
-                    `Weet je zeker dat je alle blokkades voor "${roomLabel}" tussen ${startDate} en ${endDate} wilt opheffen?\n\nEchte boekingen blijven gewoon staan — alleen geblokkeerde tijdsloten worden verwijderd.`
+                    I18N.confirm_unblock_range.replace(':room', roomLabel).replace(':start', startDate).replace(':end', endDate)
                 );
 
                 if (!confirmed) {
@@ -1242,7 +1268,7 @@
                 document.getElementById('booking-idempotency-key').value = crypto.randomUUID();
                 const submitBtn = document.getElementById('booking-submit-btn');
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Afspraak aanmaken';
+                submitBtn.textContent = I18N.create_booking_action;
 
                 // Trigger price lookup if we have enough context
                 schedulePriceLookup();
@@ -1319,7 +1345,7 @@
 
                 if (!roomId || !date || !players) return;
 
-                hint.textContent = 'Prijs opzoeken…';
+                hint.textContent = I18N.looking_up_price;
                 try {
                     const res = await fetch(`${ROOM_PRICE_URL}?room_id=${roomId}&date=${date}&players=${players}`, {
                         headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -1327,10 +1353,10 @@
                     const data = await res.json();
                     if (data.found) {
                         priceEl.value = parseFloat(data.price).toFixed(2);
-                        hint.textContent = `Gevonden (${data.vat_percentage}% BTW)`;
+                        hint.textContent = I18N.price_found.replace(':vat', data.vat_percentage);
                         applyPaymentLocation(data.payment_location, parseFloat(data.price));
                     } else {
-                        hint.textContent = 'Geen prijs gevonden — vul manueel in';
+                        hint.textContent = I18N.price_not_found;
                     }
                 } catch {
                     hint.textContent = '';
@@ -1387,7 +1413,7 @@
                 const overlay = document.getElementById('booking-detail-modal-overlay');
                 const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val ?? '—'; };
 
-                setText('bdetail-customer-name', 'Laden…');
+                setText('bdetail-customer-name', I18N.loading);
                 setText('bdetail-room-name', '');
                 setText('bdetail-date', '');
                 setText('bdetail-time', '');
@@ -1415,20 +1441,20 @@
                         const dot = document.getElementById('bdetail-color-dot');
                         dot.style.backgroundColor = d.room_color || '#6366f1';
 
-                        setText('bdetail-customer-name', d.customer_name || 'Onbekende klant');
+                        setText('bdetail-customer-name', d.customer_name || I18N.unknown_customer);
                         setText('bdetail-room-name', d.room || '');
                         setText('bdetail-date', d.date || '');
                         setText('bdetail-time', d.start && d.end ? `${d.start} – ${d.end}` : '');
-                        setText('bdetail-players', d.players ? `${d.players} speler${d.players !== 1 ? 's' : ''}` : '—');
+                        setText('bdetail-players', d.players ? `${d.players} ${d.players !== 1 ? I18N.player_plural : I18N.player_singular}` : '—');
                         setText('bdetail-language', d.language || '—');
                         setText('bdetail-email', d.customer_email || '—');
                         setText('bdetail-phone', d.customer_phone || '');
 
                         // Step tracker
                         const steps = [
-                            { label: 'Betaallink verstuurd', done: d.steps?.invoice_sent },
-                            { label: 'Betaald',              done: d.steps?.paid },
-                            { label: 'Factuur ontvangen',    done: d.steps?.receipt_sent },
+                            { label: I18N.step_invoice_sent, done: d.steps?.invoice_sent },
+                            { label: I18N.step_paid,         done: d.steps?.paid },
+                            { label: I18N.step_receipt_sent, done: d.steps?.receipt_sent },
                         ];
                         const stepsEl = document.getElementById('bdetail-steps');
                         // Build: [step] [line] [step] [line] [step]
@@ -1474,7 +1500,7 @@
                             markOnsiteBtn.classList.remove('hidden');
                             markOnsiteBtn.onclick = () => {
                                 markOnsiteBtn.disabled = true;
-                                markOnsiteBtn.textContent = 'Bezig…';
+                                markOnsiteBtn.textContent = I18N.processing;
                                 fetch(MARK_ONSITE_PAID_URL_TEMPLATE.replace('__id__', d.id), {
                                     method: 'POST',
                                     headers: {
@@ -1493,7 +1519,7 @@
                                 })
                                 .catch(() => {
                                     markOnsiteBtn.disabled = false;
-                                    markOnsiteBtn.textContent = 'Markeer betaald';
+                                    markOnsiteBtn.textContent = I18N.mark_paid;
                                 });
                             };
                         } else {
@@ -1504,13 +1530,13 @@
                         function updateStatusBadge(status) {
                             const statusEl = document.getElementById('bdetail-status');
                             const statusMap = {
-                                paid:      ['Betaald',     'bg-green-100  text-green-700  dark:bg-green-900/30  dark:text-green-400'],
-                                pending:   ['Openstaand',  'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
-                                open:      ['Openstaand',  'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
-                                cancelled: ['Geannuleerd', 'bg-red-100    text-red-700    dark:bg-red-900/30    dark:text-red-400'],
-                                failed:    ['Mislukt',     'bg-red-100    text-red-700    dark:bg-red-900/30    dark:text-red-400'],
+                                paid:      [I18N.status_paid,      'bg-green-100  text-green-700  dark:bg-green-900/30  dark:text-green-400'],
+                                pending:   [I18N.status_pending,   'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
+                                open:      [I18N.status_pending,   'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'],
+                                cancelled: [I18N.status_cancelled, 'bg-red-100    text-red-700    dark:bg-red-900/30    dark:text-red-400'],
+                                failed:    [I18N.status_failed,    'bg-red-100    text-red-700    dark:bg-red-900/30    dark:text-red-400'],
                             };
-                            const [label, cls] = statusMap[status] ?? ['Onbekend', 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300'];
+                            const [label, cls] = statusMap[status] ?? [I18N.status_unknown, 'bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300'];
                             statusEl.textContent = label;
                             statusEl.className = `inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${cls}`;
                         }
@@ -1565,7 +1591,7 @@
                                 document.getElementById('cancel-action-cancel').disabled  = false;
                                 document.getElementById('cancel-action-voucher').disabled = false;
                                 cancelBtn.disabled = false;
-                                alert('Er ging iets mis bij het annuleren. Probeer opnieuw.');
+                                alert(I18N.cancel_error);
                             });
                         }
 
@@ -1576,7 +1602,7 @@
                         };
                     })
                     .catch(() => {
-                        setText('bdetail-customer-name', 'Fout bij laden');
+                        setText('bdetail-customer-name', I18N.load_error);
                     });
             }
             // ── End booking detail modal ─────────────────────────────────────
@@ -1614,7 +1640,7 @@
                     return;
                 }
 
-                if (!window.confirm('Weet je zeker dat je dit tijdslot wilt deblokkeren?')) {
+                if (!window.confirm(I18N.confirm_unblock_slot)) {
                     return;
                 }
 
@@ -1748,7 +1774,7 @@
                 document.getElementById('booking-form')?.addEventListener('submit', () => {
                     const btn = document.getElementById('booking-submit-btn');
                     btn.disabled = true;
-                    btn.textContent = 'Bezig…';
+                    btn.textContent = I18N.processing;
                 });
 
                 document.querySelectorAll('.room-toggle').forEach((checkbox) => {

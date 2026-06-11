@@ -1,27 +1,27 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Producten', 'url' => route('products.index')],
+        ['name' => __('nav.products'), 'url' => route('products.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         @if ($products->count() > 0)
             <div class="px-4 sm:px-6 lg:px-8">
                 <div class="sm:flex sm:items-center">
                     <div class="sm:flex-auto">
-                        <h1 class="text-base font-semibold text-gray-900 dark:text-white">Producten</h1>
-                        <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">Een lijst van alle producten.</p>
+                        <h1 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('nav.products') }}</h1>
+                        <p class="mt-2 text-sm text-gray-700 dark:text-gray-300">{{ __('products.description') }}</p>
                     </div>
                     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
                         <a href="{{ route('categories.index') }}"
                             class="block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:inset-ring-white/20 dark:hover:bg-white/20">
-                            Categorieën
+                            {{ __('products.categories_button') }}
                         </a>
                         <a href="{{ route('mail-templates.index', 'product') }}"
                             class="block rounded-md bg-white px-3 py-2 text-center text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:inset-ring-white/20 dark:hover:bg-white/20">
-                            Mail-sjablonen
+                            {{ __('products.mail_templates_button') }}
                         </a>
                         <a href="{{ route('products.create') }}"
                             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500">
-                            Product Toevoegen
+                            {{ __('products.add_product') }}
                         </a>
                     </div>
                 </div>
@@ -33,27 +33,27 @@
                                     <tr>
                                         <th scope="col"
                                             class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8 dark:text-white">
-                                            Product ID</th>
+                                            {{ __('products.table_id') }}</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Category</th>
+                                            {{ __('products.table_category') }}</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Naam</th>
+                                            {{ __('customers.table_name') }}</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Aankoopprijs</th>
+                                            {{ __('products.table_cost_price') }}</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Retailprijs</th>
+                                            {{ __('products.table_selling_price') }}</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            BTW-percentage</th>
+                                            {{ __('products.table_vat') }}</th>
                                         <th scope="col"
                                             class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                            Voorraad</th>
+                                            {{ __('products.table_stock') }}</th>
                                         <th scope="col" class="py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8">
-                                            <span class="sr-only">Acties</span>
+                                            <span class="sr-only">{{ __('common.actions') }}</span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -71,7 +71,7 @@
                                                 {{ $product->name }}
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
-                                                {{ $product->cost_price ? Number::currency($product->cost_price) : 'Niet ingesteld' }}
+                                                {{ $product->cost_price ? Number::currency($product->cost_price) : __('products.not_set') }}
                                             </td>
                                             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
                                                 {{ Number::currency($product->selling_price) }}</td>
@@ -88,7 +88,7 @@
 
                                                     <a href="{{ route('products.edit', $product->id) }}"
                                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
-                                                        Wijzigen
+                                                        {{ __('common.edit') }}
                                                         <span class="sr-only">, {{ $product->name }}</span>
                                                     </a>
 
@@ -97,7 +97,7 @@
                                                         @method('DELETE')
                                                         <button type="submit"
                                                             class="text-red-600 cursor-pointer hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
-                                                            Verwijderen
+                                                            {{ __('common.delete') }}
                                                         </button>
                                                     </form>
                                                 </div>
@@ -111,7 +111,7 @@
                 </div>
             </div>
         @else
-            <x-empty-state name='product' :route="route('products.create')" />
+            <x-empty-state :name="__('common.noun_product')" :route="route('products.create')" />
         @endif
         {{ $products->links() }}
     </div>

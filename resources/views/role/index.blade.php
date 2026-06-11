@@ -1,13 +1,13 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Gebruikers', 'url' => route('users.index')],
-        ['name' => 'Rollen & rechten', 'url' => route('roles.index')],
+        ['name' => __('nav.users'), 'url' => route('users.index')],
+        ['name' => __('nav.roles'), 'url' => route('roles.index')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <x-users.nav />
 
-        <x-page-header title="Rollen & rechten" :create="route('roles.create')" createTitle="Nieuwe Rol"
-            count="{{ $roles->count() }}" />
+        <x-page-header :title="__('nav.roles')" :create="route('roles.create')" createTitle="{{ __('roles.create_button') }}"
+            count="{{ $roles->count() }}" countLabel="{{ Str::lower(__('roles.index_title')) }}" />
 
         <ul role="list" class="mt-3 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($roles as $role)
@@ -21,9 +21,9 @@
                                 </h3>
                             </div>
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                {{ $role->permissions_count }} {{ Str::plural('recht', $role->permissions_count) }}
+                                {{ trans_choice('roles.permissions_count', $role->permissions_count, ['count' => $role->permissions_count]) }}
                                 &middot;
-                                {{ $role->users_count }} {{ Str::plural('gebruiker', $role->users_count) }}
+                                {{ trans_choice('roles.users_count', $role->users_count, ['count' => $role->users_count]) }}
                             </p>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
                                         <path
                                             d="M5.433 13.917 4 18l4.083-1.433L16.5 8.15a1.768 1.768 0 0 0-2.5-2.5l-8.567 8.267Z" />
                                     </svg>
-                                    Bewerken
+                                    {{ __('common.edit') }}
                                 </a>
                             </div>
                             @if ($role->name !== 'Admin')
@@ -51,7 +51,7 @@
                                                     d="M8.75 2a.75.75 0 0 0-.75.75V4H5.5a.75.75 0 0 0 0 1.5h.443l.664 9.298A2.25 2.25 0 0 0 8.85 17h2.3a2.25 2.25 0 0 0 2.243-2.202l.664-9.298h.443a.75.75 0 0 0 0-1.5H12V2.75A.75.75 0 0 0 11.25 2h-2.5Zm1.5 2V3.5h-1.5V4h1.5Z"
                                                     clip-rule="evenodd" />
                                             </svg>
-                                            Verwijderen
+                                            {{ __('common.delete') }}
                                         </button>
                                     </form>
                                 </div>

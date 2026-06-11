@@ -38,7 +38,7 @@
                                                     d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
                                                     stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
-                                            Dashboard
+                                            {{ __('nav.dashboard') }}
                                         </a>
                                     </li>
 @endcan
@@ -53,7 +53,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                             </svg>
-                                            Klanten
+                                            {{ __('nav.customers') }}
                                         </a>
                                     </li>
 @endcan
@@ -65,14 +65,14 @@
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
 }}">
                                         @else
-                                        <span title="Stel een Mollie API-sleutel in om bestellingen te beheren" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-300 dark:text-gray-600 cursor-not-allowed">
+                                        <span title="{{ __('nav.orders_disabled_title') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-300 dark:text-gray-600 cursor-not-allowed">
                                         @endif
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                 stroke-width="1.5" aria-hidden="true" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185ZM9.75 9h.008v.008H9.75V9Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                             </svg>
-                                            Bestellingen
+                                            {{ __('nav.orders') }}
                                         @if(auth()->user()?->escaperoom?->escaperoomSetting?->mollie_api_key)
                                         </a>
                                         @else
@@ -91,7 +91,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                                             </svg>
-                                            Kamers
+                                            {{ __('nav.rooms') }}
                                         </a>
                                     </li>
 @endcan
@@ -106,7 +106,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
                                             </svg>
-                                            Producten
+                                            {{ __('nav.products') }}
                                         </a>
                                     </li>
 @endcan
@@ -123,7 +123,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M6 6h.008v.008H6V6Z" />
                                             </svg>
-                                            Kortingsbonnen
+                                            {{ __('nav.coupons') }}
                                         </a>
                                     </li>
 @endcan
@@ -138,7 +138,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H4.5a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                                             </svg>
-                                            Cadeaubonnen
+                                            {{ __('nav.gift_cards') }}
                                         </a>
                                     </li>
 @endcan
@@ -154,7 +154,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
                                             </svg>
-                                            Widgets
+                                            {{ __('nav.widgets') }}
                                         </a>
                                     </li>
 @endcan
@@ -171,7 +171,7 @@
                                                     d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
                                                     stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
-                                            Chatbot
+                                            {{ __('nav.chatbot') }}
                                         </a>
                                     </li>
 @endcan
@@ -187,7 +187,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                             </svg>
-                                            Gebruikers
+                                            {{ __('nav.users') }}
                                         </a>
                                     </li>
 @endcan
@@ -206,7 +206,7 @@
                                         <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke-linecap="round"
                                             stroke-linejoin="round" />
                                     </svg>
-                                    Instellingen
+                                    {{ __('nav.settings') }}
                                 </a>
                             </li>
 @endcan
@@ -244,7 +244,7 @@
                                         d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
                                         stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                Dashboard
+                                {{ __('nav.dashboard') }}
                             </a>
                         </li>
 @endcan
@@ -260,7 +260,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                 </svg>
-                                Klanten
+                                {{ __('nav.customers') }}
                             </a>
                         </li>
 @endcan
@@ -273,14 +273,14 @@
     : 'text-gray-700 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5'
                                 }}">
                             @else
-                            <span title="Stel een Mollie API-sleutel in om bestellingen te beheren" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-300 dark:text-gray-600 cursor-not-allowed">
+                            <span title="{{ __('nav.orders_disabled_title') }}" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-300 dark:text-gray-600 cursor-not-allowed">
                             @endif
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
                                     aria-hidden="true" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185ZM9.75 9h.008v.008H9.75V9Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                                 </svg>
-                                Bestellingen
+                                {{ __('nav.orders') }}
                             @if(auth()->user()?->escaperoom?->escaperoomSetting?->mollie_api_key)
                             </a>
                             @else
@@ -300,7 +300,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
                                 </svg>
-                                Kamers
+                                {{ __('nav.rooms') }}
                             </a>
                         </li>
 @endcan
@@ -316,7 +316,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007Z" />
                                 </svg>
-                                Producten
+                                {{ __('nav.products') }}
                             </a>
                         </li>
 @endcan
@@ -333,7 +333,7 @@
                                         d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
                                 </svg>
-                                Kortingsbonnen
+                                {{ __('nav.coupons') }}
                             </a>
                         </li>
 @endcan
@@ -349,7 +349,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H4.5a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
                                 </svg>
-                                Cadeaubonnen
+                                {{ __('nav.gift_cards') }}
                             </a>
                         </li>
 @endcan
@@ -365,7 +365,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 0 1-1.125-1.125v-3.75ZM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-8.25ZM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 0 1-1.125-1.125v-2.25Z" />
                                 </svg>
-                                Widgets
+                                {{ __('nav.widgets') }}
                             </a>
                         </li>
 @endcan
@@ -382,7 +382,7 @@
                                         d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
                                         stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                Chatbot
+                                {{ __('nav.chatbot') }}
                             </a>
                         </li>
 @endcan
@@ -398,7 +398,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                                 </svg>
-                                Gebruikers
+                                {{ __('nav.users') }}
                             </a>
                         </li>
 @endcan
@@ -417,7 +417,7 @@
                             <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" stroke-linecap="round"
                                 stroke-linejoin="round" />
                         </svg>
-                        Instellingen
+                        {{ __('nav.settings') }}
                     </a>
                 </li>
 @endcan

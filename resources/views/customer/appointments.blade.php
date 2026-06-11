@@ -1,12 +1,12 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Klant', 'url' => route('customers.index')],
+        ['name' => __('customers.breadcrumb_singular'), 'url' => route('customers.index')],
     ]" />
     <x-profile.header :customer="$customer" />
     <div class="px-4 sm:px-6 lg:px-8 my-10 pb-4">
         <x-profile.nav :customer="$customer" />
         @if ($appointments->isEmpty())
-            <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Geen afspraken gevonden.</p>
+            <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">{{ __('customers.no_appointments') }}</p>
         @endif
         <ul role="list" class="divide-y divide-gray-200 dark:divide-white/5">
             @foreach ($appointments as $item)
@@ -30,8 +30,8 @@
                     </div>
                     <div class="flex shrink-0 items-center gap-x-4">
                         <div class="hidden sm:flex sm:flex-col sm:items-end">
-                            <p class="text-sm/6 text-gray-900 dark:text-white">Datum Afspraak: {{ $item->timeSlot->start_time->format('d-m-Y H:i') }}</p>
-                            <p class="mt-1 text-xs/5 text-gray-600 dark:text-gray-400">Geboekt op: {{ $item->order->created_at->format('d-m-Y H:i') }}</p>
+                            <p class="text-sm/6 text-gray-900 dark:text-white">{{ __('customers.appointment_date', ['date' => $item->timeSlot->start_time->format('d-m-Y H:i')]) }}</p>
+                            <p class="mt-1 text-xs/5 text-gray-600 dark:text-gray-400">{{ __('customers.booked_on', ['date' => $item->order->created_at->format('d-m-Y H:i')]) }}</p>
                         </div>
                         <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"
                             class="size-5 flex-none text-gray-400 dark:text-gray-500">

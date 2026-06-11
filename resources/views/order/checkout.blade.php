@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Bestellingen', 'url' => route('orders.index')],
-        ['name' => 'Afrekenen', 'url' => route('orders.checkout')],
+        ['name' => __('orders.index_title'), 'url' => route('orders.index')],
+        ['name' => __('orders.tab_checkout'), 'url' => route('orders.checkout')],
     ]" />
 
     <div class="px-4 sm:px-6 lg:px-8 my-6 pb-4">
@@ -9,8 +9,8 @@
 
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">Bestellingen</h1>
-                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">Nieuwe bestelling aanmaken en afrekenen.</p>
+                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('orders.checkout_title') }}</h1>
+                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">{{ __('orders.checkout_description') }}</p>
                 </div>
             </div>
 
@@ -25,7 +25,7 @@
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-indigo-500">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                             </svg>
-                            Winkelwagen
+                            {{ __('orders.cart_label') }}
                         </span>
                         <span class="flex items-center gap-2">
                             <span id="mobile-cart-toggle-total" class="font-semibold text-gray-900 dark:text-white">€ 0,00</span>
@@ -39,62 +39,62 @@
                 <div id="mobile-cart-panel" class="hidden lg:hidden flex-col gap-3 mt-3">
 
                 <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Winkelwagen</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">{{ __('orders.cart_label') }}</h3>
 
                     <div id="cart-empty-state-mobile" class="flex flex-col items-center justify-center py-6 text-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-10 text-gray-300 dark:text-gray-600 mb-2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                         </svg>
-                        <p class="text-sm text-gray-400 dark:text-gray-500">Nog geen items toegevoegd</p>
+                        <p class="text-sm text-gray-400 dark:text-gray-500">{{ __('orders.cart_empty') }}</p>
                     </div>
 
                     <ul id="cart-items-list-mobile" class="hidden divide-y divide-gray-100 dark:divide-white/5 -mx-1"></ul>
                 </div>
 
                 <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 space-y-2">
-                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span id="cart-subtotaal-label-mobile">Subtotaal excl. BTW</span><span id="cart-subtotaal-mobile">€ 0,00</span></div>
+                    <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span id="cart-subtotaal-label-mobile">{{ __('orders.cart_subtotal_excl_vat') }}</span><span id="cart-subtotaal-mobile">€ 0,00</span></div>
                     <div id="cart-btw-rows-mobile"></div>
-                    <div id="cart-korting-row-mobile" class="hidden flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Korting</span><span id="cart-korting-mobile" class="text-green-600 dark:text-green-400"></span></div>
-                    <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>Totaal incl. BTW</span><span id="cart-totaal-mobile">€ 0,00</span></div>
+                    <div id="cart-korting-row-mobile" class="hidden flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>{{ __('orders.cart_discount') }}</span><span id="cart-korting-mobile" class="text-green-600 dark:text-green-400"></span></div>
+                    <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>{{ __('orders.cart_total_incl_vat') }}</span><span id="cart-totaal-mobile">€ 0,00</span></div>
                 </div>
 
                 <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">Betaalmethode</p>
+                    <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">{{ __('orders.payment_method_label') }}</p>
                     <div class="grid grid-cols-3 gap-2">
                         <button data-method="kaart" onclick="selectPayment('kaart')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 p-3 text-xs font-medium text-indigo-700 dark:text-indigo-300 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" /></svg>
-                            Kaart
+                            {{ __('orders.payment_method_card') }}
                         </button>
                         <button data-method="cash" onclick="selectPayment('cash')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-gray-200 dark:border-white/10 p-3 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75" /></svg>
-                            Cash
+                            {{ __('common.payment_cash') }}
                         </button>
                         <button data-method="online" onclick="selectPayment('online')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-gray-200 dark:border-white/10 p-3 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
-                            Online
+                            {{ __('common.payment_online') }}
                         </button>
                     </div>
 
                     <div id="payment-term-block-mobile" class="hidden mt-4 border-t border-gray-100 dark:border-white/5 pt-4">
-                        <label for="payment_term_mobile" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Betaaltermijn</label>
+                        <label for="payment_term_mobile" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">{{ __('orders.payment_term_label') }}</label>
                         <select
                             id="payment_term_mobile"
                             name="payment_term"
                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 px-3 text-sm text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                            <option value="7">7 dagen</option>
-                            <option value="14">14 dagen</option>
-                            <option value="30" selected>30 dagen (standaard)</option>
-                            <option value="45">45 dagen</option>
-                            <option value="60">60 dagen</option>
-                            <option value="90">90 dagen</option>
-                            <option value="120">120 dagen</option>
+                            <option value="7">{{ __('orders.payment_term_option', ['days' => 7]) }}</option>
+                            <option value="14">{{ __('orders.payment_term_option', ['days' => 14]) }}</option>
+                            <option value="30" selected>{{ __('orders.payment_term_option_default', ['days' => 30]) }}</option>
+                            <option value="45">{{ __('orders.payment_term_option', ['days' => 45]) }}</option>
+                            <option value="60">{{ __('orders.payment_term_option', ['days' => 60]) }}</option>
+                            <option value="90">{{ __('orders.payment_term_option', ['days' => 90]) }}</option>
+                            <option value="120">{{ __('orders.payment_term_option', ['days' => 120]) }}</option>
                         </select>
-                        <p class="mt-1.5 text-xs text-gray-400 dark:text-gray-500">Factuur wordt verstuurd naar het e-mailadres van de klant.</p>
+                        <p class="mt-1.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.invoice_email_note') }}</p>
                     </div>
                 </div>
 
                 <button id="place-order-btn" onclick="submitOrder()" disabled class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-                    Bestelling plaatsen
+                    {{ __('orders.place_order_button') }}
                 </button>
 
                 
@@ -104,11 +104,11 @@
                     <div class="flex-1 min-w-0 flex flex-col gap-4">
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
                             <div class="flex items-center justify-between mb-2">
-                                <label class="block text-xs font-medium text-gray-500 dark:text-gray-400">Klant</label>
+                                <label class="block text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.customer_label') }}</label>
                                 <button onclick="openNewCustomerForm()" type="button" id="btn-new-customer"
                                     class="flex items-center gap-1 rounded-md bg-indigo-50 dark:bg-indigo-900/20 px-2 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                    Klant toevoegen
+                                    {{ __('orders.add_customer_button') }}
                                 </button>
                             </div>
 
@@ -129,7 +129,7 @@
                                     id="customer-search-input"
                                     type="text"
                                     autocomplete="off"
-                                    placeholder="Naam of e-mailadres..."
+                                    placeholder="{{ __('orders.customer_search_placeholder') }}"
                                     class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 pl-9 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="pointer-events-none absolute left-3 top-2.5 size-4 text-gray-400">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m0 0A7.5 7.5 0 1 0 5.4 5.4a7.5 7.5 0 0 0 11.25 11.25Z" />
@@ -140,56 +140,56 @@
 
                             {{-- Nieuwe klant aanmaken (inline) --}}
                             <div id="new-customer-form" class="hidden mt-3 rounded-lg border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-900/10 p-3 space-y-2.5">
-                                <p class="text-xs font-semibold text-indigo-700 dark:text-indigo-300">Nieuwe klant aanmaken</p>
+                                <p class="text-xs font-semibold text-indigo-700 dark:text-indigo-300">{{ __('orders.new_customer_form_title') }}</p>
                                 <div class="grid grid-cols-2 gap-2">
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Voornaam <span class="text-red-500">*</span></label>
-                                        <input id="nc-first-name" type="text" placeholder="Jan"
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('customers.first_name') }} <span class="text-red-500">*</span></label>
+                                        <input id="nc-first-name" type="text" placeholder="{{ __('orders.placeholder_first_name') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Achternaam <span class="text-red-500">*</span></label>
-                                        <input id="nc-last-name" type="text" placeholder="Janssen"
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('customers.last_name') }} <span class="text-red-500">*</span></label>
+                                        <input id="nc-last-name" type="text" placeholder="{{ __('orders.placeholder_last_name') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">E-mailadres <span class="text-red-500">*</span></label>
-                                    <input id="nc-email" type="email" placeholder="jan@voorbeeld.be"
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_email') }} <span class="text-red-500">*</span></label>
+                                    <input id="nc-email" type="email" placeholder="{{ __('orders.placeholder_email') }}"
                                         class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Telefoon <span class="text-gray-400">(optioneel)</span></label>
-                                    <input id="nc-phone" type="tel" placeholder="+32 470 00 00 00"
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_phone_optional') }}</label>
+                                    <input id="nc-phone" type="tel" placeholder="{{ __('orders.placeholder_phone') }}"
                                         class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                 </div>
                                 <div class="grid grid-cols-3 gap-2">
                                     <div class="col-span-2">
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Straat <span class="text-gray-400">(optioneel)</span></label>
-                                        <input id="nc-street" type="text" placeholder="Kerkstraat"
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_street_optional') }}</label>
+                                        <input id="nc-street" type="text" placeholder="{{ __('orders.placeholder_street') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Nr.</label>
-                                        <input id="nc-house-number" type="text" placeholder="12"
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_house_number_short') }}</label>
+                                        <input id="nc-house-number" type="text" placeholder="{{ __('orders.placeholder_house_number') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-3 gap-2">
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Postcode</label>
-                                        <input id="nc-postal-code" type="text" placeholder="2000"
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_postal_code') }}</label>
+                                        <input id="nc-postal-code" type="text" placeholder="{{ __('orders.placeholder_postal_code') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                     <div class="col-span-2">
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Gemeente</label>
-                                        <input id="nc-city" type="text" placeholder="Antwerpen"
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_municipality') }}</label>
+                                        <input id="nc-city" type="text" placeholder="{{ __('orders.placeholder_city') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                 </div>
                                 <div class="relative">
-                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Land</label>
-                                    <input id="nc-country-search" type="text" placeholder="Zoek land…" autocomplete="off"
+                                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('escaperoomAddress.label_country') }}</label>
+                                    <input id="nc-country-search" type="text" placeholder="{{ __('orders.placeholder_country_search') }}" autocomplete="off"
                                         class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     <input id="nc-country" type="hidden" value="" />
                                     <ul id="nc-country-dropdown" class="hidden absolute z-30 mt-1 w-full max-h-44 overflow-y-auto rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-800 shadow-lg"></ul>
@@ -198,11 +198,11 @@
                                 <div class="flex gap-2 pt-0.5">
                                     <button onclick="cancelNewCustomer()" type="button"
                                         class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                                        Annuleren
+                                        {{ __('common.cancel') }}
                                     </button>
                                     <button onclick="saveNewCustomer()" type="button" id="nc-save-btn"
                                         class="flex-1 rounded-lg bg-indigo-600 py-2 text-xs font-semibold text-white hover:bg-indigo-500 transition-colors disabled:opacity-50">
-                                        Aanmaken
+                                        {{ __('common.create') }}
                                     </button>
                                 </div>
                             </div>
@@ -213,23 +213,23 @@
                                     class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                                     <span id="business-toggle-icon" class="flex h-5 w-5 items-center justify-center rounded border-2 border-gray-300 dark:border-white/20 transition-colors">
                                     </span>
-                                    Zakelijke klant
+                                    {{ __('orders.business_customer_toggle') }}
                                 </button>
 
                                 <div id="business-fields" class="hidden space-y-2.5">
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Bedrijfsnaam <span class="text-red-500">*</span></label>
-                                        <input id="business-company-name" type="text" placeholder="Bedrijfsnaam..."
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_company_name') }} <span class="text-red-500">*</span></label>
+                                        <input id="business-company-name" type="text" placeholder="{{ __('orders.placeholder_company_name') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">BTW-nummer <span class="text-red-500">*</span></label>
-                                        <input id="business-vat-number" type="text" placeholder="BE0123456789..."
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_vat_number') }} <span class="text-red-500">*</span></label>
+                                        <input id="business-vat-number" type="text" placeholder="{{ __('orders.placeholder_vat_number') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Ondernemingsnummer <span class="text-gray-400">(optioneel)</span></label>
-                                        <input id="business-reg-number" type="text" placeholder="0123.456.789..."
+                                        <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">{{ __('orders.label_registration_number_optional') }}</label>
+                                        <input id="business-reg-number" type="text" placeholder="{{ __('orders.placeholder_registration_number') }}"
                                             class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2 px-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                     </div>
                                 </div>
@@ -238,12 +238,12 @@
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
                             <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-                                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Producten</h3>
+                                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.products_section_title') }}</h3>
                                 <div class="flex flex-wrap gap-1.5">
-                                    <button onclick="filterItems('all')" data-filter="all" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">Alles</button>
-                                    <button onclick="filterItems('room')" data-filter="room" class="filter-btn rounded-md bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 text-xs font-medium text-indigo-700 dark:text-indigo-300">Kamers ({{ $rooms->count() }})</button>
-                                    <button onclick="filterItems('product')" data-filter="product" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">Producten ({{ $products->count() }})</button>
-                                    <button onclick="filterItems('giftcard')" data-filter="giftcard" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">Cadeaubonnen ({{ $giftCards->count() }})</button>
+                                    <button onclick="filterItems('all')" data-filter="all" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">{{ __('orders.filter_all') }}</button>
+                                    <button onclick="filterItems('room')" data-filter="room" class="filter-btn rounded-md bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 text-xs font-medium text-indigo-700 dark:text-indigo-300">{{ __('orders.filter_rooms', ['count' => $rooms->count()]) }}</button>
+                                    <button onclick="filterItems('product')" data-filter="product" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">{{ __('orders.filter_products', ['count' => $products->count()]) }}</button>
+                                    <button onclick="filterItems('giftcard')" data-filter="giftcard" class="filter-btn rounded-md px-3 py-1.5 text-xs font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/5">{{ __('orders.filter_gift_cards', ['count' => $giftCards->count()]) }}</button>
                                 </div>
                             </div>
 
@@ -270,10 +270,10 @@
                                         </div>
                                         <span class="text-xs font-medium text-gray-900 dark:text-white leading-snug">{{ $room->name }}</span>
                                         <span class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
-                                            {{ $basePrice ? 'v.a. ' . Number::currency($basePrice) : 'Prijs niet ingesteld' }}
+                                            {{ $basePrice ? __('orders.room_price_from', ['price' => Number::currency($basePrice)]) : __('orders.room_price_not_set') }}
                                         </span>
                                         @if($noPrice)
-                                            <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400">Geen prijs</span>
+                                            <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400">{{ __('orders.room_no_price_badge') }}</span>
                                         @endif
                                     </button>
                                 @empty
@@ -332,9 +332,9 @@
                                                 <span class="text-xs font-medium text-gray-900 dark:text-white leading-snug">{{ $variant->name }}</span>
                                                 <span class="mt-0.5 text-xs text-gray-400 dark:text-gray-500 leading-snug">{{ Number::currency($vPrice) }}</span>
                                                 @if($vOutOfStock)
-                                                    <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">Uitverkocht</span>
+                                                    <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">{{ __('orders.product_sold_out') }}</span>
                                                 @elseif(!is_null($vStock) && $vStock <= 5)
-                                                    <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">Nog {{ $vStock }} op voorraad</span>
+                                                    <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">{{ __('orders.stock_remaining', ['count' => $vStock]) }}</span>
                                                 @endif
                                             </button>
                                         @endforeach
@@ -377,12 +377,12 @@
                                                 @endif
                                             </span>
                                             @if($outOfStock)
-                                                <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">Uitverkocht</span>
+                                                <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400">{{ __('orders.product_sold_out') }}</span>
                                             @elseif(!is_null($product->stock_quantity) && $product->stock_quantity <= 5)
-                                                <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">Nog {{ $product->stock_quantity }} op voorraad</span>
+                                                <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400">{{ __('orders.stock_remaining', ['count' => $product->stock_quantity]) }}</span>
                                             @elseif($hasDiscount)
                                                 <span class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400">
-                                                    {{ $discountType === 'percentage' ? $discountValue . '% korting' : '−' . Number::currency($discountValue) }}
+                                                    {{ $discountType === 'percentage' ? __('orders.discount_percent', ['value' => $discountValue]) : '−' . Number::currency($discountValue) }}
                                                 </span>
                                             @endif
                                         </button>
@@ -419,18 +419,18 @@
 
                                 @if ($rooms->isEmpty() && $products->isEmpty() && $giftCards->isEmpty())
                                     <div class="col-span-full flex flex-col items-center justify-center py-10 text-center">
-                                        <p class="text-sm text-gray-400 dark:text-gray-500">Geen items gevonden.</p>
+                                        <p class="text-sm text-gray-400 dark:text-gray-500">{{ __('orders.empty_no_items_found') }}</p>
                                     </div>
                                 @endif
                             </div>
 
                             <div id="items-empty" class="hidden py-8 text-center">
-                                <p class="text-sm text-gray-400 dark:text-gray-500">Geen items in deze categorie.</p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">{{ __('orders.empty_no_items_in_category') }}</p>
                             </div>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Kortingscode</label>
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">{{ __('orders.coupon_label') }}</label>
 
                             <div id="selected-coupon" class="hidden mb-3 flex items-center justify-between rounded-lg bg-green-50 dark:bg-green-900/20 px-3 py-2.5 border border-green-200 dark:border-green-500/30">
                                 <div>
@@ -449,7 +449,7 @@
                                     id="coupon-search-input"
                                     type="text"
                                     autocomplete="off"
-                                    placeholder="Zoek op code of naam..."
+                                    placeholder="{{ __('orders.coupon_search_placeholder') }}"
                                     class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 pl-9 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none" />
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="pointer-events-none absolute left-3 top-2.5 size-4 text-gray-400">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25l6-6m4.5-3.493V21.75l-4.5-4.5-4.5 4.5-4.5-4.5-4.5 4.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185Z" />
@@ -461,27 +461,27 @@
 
                     <div class="hidden lg:flex lg:w-80 xl:w-96 flex-col gap-3 lg:sticky lg:top-6">
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">Winkelwagen</h3>
+                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3">{{ __('orders.cart_label') }}</h3>
 
                             <div id="cart-empty-state" class="flex flex-col items-center justify-center py-8 text-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-10 text-gray-300 dark:text-gray-600 mb-2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                                 </svg>
-                                <p class="text-sm text-gray-400 dark:text-gray-500">Nog geen items toegevoegd</p>
+                                <p class="text-sm text-gray-400 dark:text-gray-500">{{ __('orders.cart_empty') }}</p>
                             </div>
 
                             <ul id="cart-items-list" class="hidden divide-y divide-gray-100 dark:divide-white/5 -mx-1"></ul>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4 space-y-2">
-                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span id="cart-subtotaal-label">Subtotaal excl. BTW</span><span id="cart-subtotaal">€ 0,00</span></div>
+                            <div class="flex justify-between text-sm text-gray-600 dark:text-gray-400"><span id="cart-subtotaal-label">{{ __('orders.cart_subtotal_excl_vat') }}</span><span id="cart-subtotaal">€ 0,00</span></div>
                             <div id="cart-btw-rows"></div>
-                            <div id="cart-korting-row" class="hidden flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>Korting</span><span id="cart-korting" class="text-green-600 dark:text-green-400"></span></div>
-                            <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>Totaal incl. BTW</span><span id="cart-totaal">€ 0,00</span></div>
+                            <div id="cart-korting-row" class="hidden flex justify-between text-sm text-gray-600 dark:text-gray-400"><span>{{ __('orders.cart_discount') }}</span><span id="cart-korting" class="text-green-600 dark:text-green-400"></span></div>
+                            <div class="border-t border-gray-200 dark:border-white/10 pt-2 flex justify-between text-base font-semibold text-gray-900 dark:text-white"><span>{{ __('orders.cart_total_incl_vat') }}</span><span id="cart-totaal">€ 0,00</span></div>
                         </div>
 
                         <div class="rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 p-4">
-                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">Betaalmethode</p>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">{{ __('orders.payment_method_label') }}</p>
                             <div class="grid grid-cols-2 gap-2">
                                 {{-- <button data-method="kaart" onclick="selectPayment('kaart')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 p-3 text-xs font-medium text-indigo-700 dark:text-indigo-300 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
@@ -493,36 +493,36 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75" />
                                     </svg>
-                                    Cash
+                                    {{ __('common.payment_cash') }}
                                 </button>
                                 <button data-method="online" onclick="selectPayment('online')" class="payment-btn flex flex-col items-center gap-1.5 rounded-lg border-2 border-gray-200 dark:border-white/10 p-3 text-xs font-medium text-gray-600 dark:text-gray-400 transition-colors">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
                                     </svg>
-                                    Online
+                                    {{ __('common.payment_online') }}
                                 </button>
                             </div>
 
                             <div id="payment-term-block" class="hidden mt-4 border-t border-gray-100 dark:border-white/5 pt-4">
-                                <label for="payment_term" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Betaaltermijn</label>
+                                <label for="payment_term" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">{{ __('orders.payment_term_label') }}</label>
                                 <select
                                     id="payment_term"
                                     name="payment_term"
                                     class="w-full rounded-lg border border-gray-300 dark:border-white/10 bg-white dark:bg-gray-800 py-2.5 px-3 text-sm text-gray-900 dark:text-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                                    <option value="7">7 dagen</option>
-                                    <option value="14">14 dagen</option>
-                                    <option value="30" selected>30 dagen (standaard)</option>
-                                    <option value="45">45 dagen</option>
-                                    <option value="60">60 dagen</option>
-                                    <option value="90">90 dagen</option>
-                                    <option value="120">120 dagen</option>
+                                    <option value="7">{{ __('orders.payment_term_option', ['days' => 7]) }}</option>
+                                    <option value="14">{{ __('orders.payment_term_option', ['days' => 14]) }}</option>
+                                    <option value="30" selected>{{ __('orders.payment_term_option_default', ['days' => 30]) }}</option>
+                                    <option value="45">{{ __('orders.payment_term_option', ['days' => 45]) }}</option>
+                                    <option value="60">{{ __('orders.payment_term_option', ['days' => 60]) }}</option>
+                                    <option value="90">{{ __('orders.payment_term_option', ['days' => 90]) }}</option>
+                                    <option value="120">{{ __('orders.payment_term_option', ['days' => 120]) }}</option>
                                 </select>
-                                <p class="mt-1.5 text-xs text-gray-400 dark:text-gray-500">Factuur wordt verstuurd naar het e-mailadres van de klant.</p>
+                                <p class="mt-1.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.invoice_email_note') }}</p>
                             </div>
                         </div>
 
                         <button id="place-order-btn-mobile" onclick="submitOrder()" disabled class="w-full rounded-xl bg-indigo-600 px-4 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
-                            Bestelling plaatsen
+                            {{ __('orders.place_order_button') }}
                         </button>
                     </div>
                 </div>
@@ -540,12 +540,12 @@
                 </button>
             </div>
             <div class="px-5 py-4 space-y-4">
-                <p class="text-xs text-gray-500 dark:text-gray-400">Kies hoe deze cadeaubon bezorgd wordt.</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('orders.gift_card_modal_description') }}</p>
                 <div class="grid grid-cols-3 gap-2">
                     @foreach ([
-                        ['value' => 'mail',   'label' => 'E-mail',   'icon' => 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
-                        ['value' => 'post',   'label' => 'Per post', 'icon' => 'M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.235 2.235 0 00-.1.661z'],
-                        ['value' => 'pickup', 'label' => 'Afhalen',  'icon' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
+                        ['value' => 'mail',   'label' => __('orders.delivery_mail'),   'icon' => 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
+                        ['value' => 'post',   'label' => __('orders.delivery_post'), 'icon' => 'M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.235 2.235 0 00-.1.661z'],
+                        ['value' => 'pickup', 'label' => __('orders.delivery_pickup'),  'icon' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
                     ] as $opt)
                         <label data-delivery-option="{{ $opt['value'] }}" class="gc-delivery-option relative flex flex-col items-center gap-1.5 rounded-lg border-2 px-3 py-3 cursor-pointer transition-colors
                             has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20
@@ -562,7 +562,7 @@
                 </div>
 
                 <div id="gc-modal-shipping-field" class="hidden">
-                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Verzendkosten</label>
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_shipping_cost') }}</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
                         <input type="number" id="gc-modal-shipping-cost" min="0" max="99.99" step="0.01"
@@ -572,8 +572,8 @@
                 </div>
             </div>
             <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
-                <button onclick="closeGiftCardModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Annuleren</button>
-                <button onclick="addGiftCardToCart()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Toevoegen</button>
+                <button onclick="closeGiftCardModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">{{ __('common.cancel') }}</button>
+                <button onclick="addGiftCardToCart()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">{{ __('orders.add_button') }}</button>
             </div>
         </div>
     </div>
@@ -591,9 +591,9 @@
                 </button>
             </div>
             <div class="px-5 py-4 space-y-3">
-                <p class="text-xs text-gray-500 dark:text-gray-400">Pas de verzendkosten aan indien nodig.</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('orders.product_shipping_modal_description') }}</p>
                 <div>
-                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Verzendkosten</label>
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_shipping_cost') }}</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
                         <input type="number" id="prod-modal-shipping-cost" min="0" step="0.01"
@@ -604,8 +604,8 @@
                 </div>
             </div>
             <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
-                <button onclick="closeProductModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Annuleren</button>
-                <button onclick="addProductFromModal()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">Toevoegen</button>
+                <button onclick="closeProductModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">{{ __('common.cancel') }}</button>
+                <button onclick="addProductFromModal()" class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">{{ __('orders.add_button') }}</button>
             </div>
         </div>
     </div>
@@ -625,7 +625,7 @@
             <div class="px-5 py-4 space-y-4">
                 {{-- Date --}}
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Datum</label>
+                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">{{ __('orders.room_modal_date_label') }}</label>
                     <input
                         id="room-modal-date"
                         type="date"
@@ -635,7 +635,7 @@
 
                 {{-- Players --}}
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Aantal spelers</label>
+                    <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">{{ __('orders.room_modal_players_label') }}</label>
                     <div class="flex items-center gap-3">
                         <button onclick="changeRoomPlayers(-1)" class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 text-lg font-medium">−</button>
                         <span id="room-modal-players" class="w-8 text-center text-sm font-semibold text-gray-900 dark:text-white">1</span>
@@ -646,15 +646,15 @@
 
                 {{-- Price result --}}
                 <div id="room-modal-price-block" class="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 px-4 py-3">
-                    <p class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">Prijs</p>
+                    <p class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">{{ __('orders.room_modal_price_label') }}</p>
                     <p id="room-modal-price-display" class="text-base font-semibold text-gray-900 dark:text-white">—</p>
                     <p id="room-modal-price-note" class="text-xs text-gray-400 dark:text-gray-500 mt-0.5"></p>
                 </div>
             </div>
 
             <div class="border-t border-gray-200 dark:border-white/10 px-5 py-4 flex gap-3">
-                <button onclick="closeRoomModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">Annuleren</button>
-                <button id="room-modal-add-btn" onclick="addRoomToCart()" disabled class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">Toevoegen</button>
+                <button onclick="closeRoomModal()" class="flex-1 rounded-lg border border-gray-300 dark:border-white/10 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">{{ __('common.cancel') }}</button>
+                <button id="room-modal-add-btn" onclick="addRoomToCart()" disabled class="flex-1 rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed">{{ __('orders.add_button') }}</button>
             </div>
         </div>
     </div>
@@ -672,6 +672,48 @@
     </form>
 
     <script>
+        var i18n = {!! \Illuminate\Support\Js::from([
+            'no_customers_found' => __('orders.js_no_customers_found'),
+            'no_coupons_found' => __('orders.js_no_coupons_found'),
+            'new_customer_form_title' => __('orders.new_customer_form_title'),
+            'choose_date' => __('orders.js_choose_date'),
+            'player_singular' => __('orders.js_player_singular'),
+            'player_plural' => __('orders.js_player_plural'),
+            'vat_incl_suffix' => __('orders.js_vat_incl_suffix'),
+            'no_price_found' => __('orders.js_no_price_found'),
+            'room_cart_label' => __('orders.js_room_cart_label'),
+            'remove' => __('orders.js_remove'),
+            'max_stock' => __('orders.js_max_stock'),
+            'per_unit' => __('orders.js_per_unit'),
+            'shipping_suffix' => __('orders.js_shipping_suffix'),
+            'vat_label' => __('orders.js_vat_label'),
+            'processing' => __('orders.js_processing'),
+            'processing_ellipsis' => __('orders.js_processing_ellipsis'),
+            'place_order_button' => __('orders.place_order_button'),
+            'shipping_hint' => __('orders.js_shipping_hint'),
+            'required_fields_error' => __('orders.js_required_fields_error'),
+            'generic_error' => __('orders.js_generic_error'),
+            'no_results' => __('orders.js_no_results'),
+            'discount_percent' => __('orders.discount_percent', ['value' => ':value']),
+            'discount_suffix' => __('orders.js_discount_suffix'),
+            'item_singular' => __('orders.js_item_singular'),
+            'item_plural' => __('orders.js_item_plural'),
+            'cart_subtotal_excl_vat' => __('orders.cart_subtotal_excl_vat'),
+            'delivery_mail' => __('orders.delivery_mail'),
+            'delivery_post' => __('orders.delivery_post'),
+            'delivery_pickup' => __('orders.delivery_pickup'),
+            'create' => __('common.create'),
+            'day_names' => [
+                __('common.day_sunday'),
+                __('common.day_monday'),
+                __('common.day_tuesday'),
+                __('common.day_wednesday'),
+                __('common.day_thursday'),
+                __('common.day_friday'),
+                __('common.day_saturday'),
+            ],
+        ]) !!};
+
         var customerSearchUrl = '{{ route('customers.search') }}';
         var couponSearchUrl   = '{{ route('coupons.search') }}';
         var selectedCustomerId = null;
@@ -729,7 +771,7 @@
             if (!customers.length) {
                 var emptyLi = document.createElement('li');
                 emptyLi.className = 'px-4 py-3 text-sm text-gray-400 dark:text-gray-500';
-                emptyLi.textContent = 'Geen klanten gevonden.';
+                emptyLi.textContent = i18n.no_customers_found;
                 dropdown.appendChild(emptyLi);
             } else {
                 customers.forEach(function (c) {
@@ -745,7 +787,7 @@
             // Always show "Nieuwe klant aanmaken" at the bottom
             var newLi = document.createElement('li');
             newLi.className = 'flex items-center gap-2 px-4 py-2.5 cursor-pointer text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 border-t border-gray-100 dark:border-white/5 text-sm font-medium';
-            newLi.innerHTML = '<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> Nieuwe klant aanmaken';
+            newLi.innerHTML = '<svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg> ' + escHtml(i18n.new_customer_form_title);
             newLi.addEventListener('click', function () { openNewCustomerForm(); });
             dropdown.appendChild(newLi);
 
@@ -878,7 +920,7 @@
             couponFocusIdx = -1;
 
             if (!coupons.length) {
-                couponDropdown.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">Geen kortingscodes gevonden.</li>';
+                couponDropdown.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 dark:text-gray-500">' + escHtml(i18n.no_coupons_found) + '</li>';
                 couponDropdown.classList.remove('hidden');
                 return;
             }
@@ -907,8 +949,8 @@
             selectedCoupon = c;
             document.getElementById('selected-coupon-name').textContent = c.code + ' — ' + c.name;
             var discountLabel = c.discount_type === 'percentage'
-                ? c.discount_value + '% korting'
-                : '€\xa0' + parseFloat(c.discount_value).toFixed(2).replace('.', ',') + ' korting';
+                ? i18n.discount_percent.replace(':value', c.discount_value)
+                : '€\xa0' + parseFloat(c.discount_value).toFixed(2).replace('.', ',') + ' ' + i18n.discount_suffix;
             document.getElementById('selected-coupon-detail').textContent = discountLabel;
             couponChip.classList.remove('hidden');
             couponWrap.classList.add('hidden');
@@ -937,7 +979,11 @@
             prices: [], selectedPrice: null, selectedDate: null
         };
 
-        var DAY_NAMES = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
+        var DAY_NAMES = i18n.day_names;
+
+        function playersLabel(n) {
+            return n + ' ' + (n === 1 ? i18n.player_singular : i18n.player_plural);
+        }
 
         function openRoomModal(btn) {
             roomModal.id         = btn.dataset.id;
@@ -952,7 +998,7 @@
             document.getElementById('room-modal-title').textContent = roomModal.name;
             document.getElementById('room-modal-players').textContent = roomModal.players;
             document.getElementById('room-modal-players-range').textContent =
-                roomModal.minPlayers + '–' + roomModal.maxPlayers + ' spelers';
+                roomModal.minPlayers + '–' + roomModal.maxPlayers + ' ' + i18n.player_plural;
 
             // Default date = today
             var today = new Date();
@@ -991,7 +1037,7 @@
 
             if (!dateVal) {
                 priceDisplay.textContent = '—';
-                priceNote.textContent = 'Kies een datum';
+                priceNote.textContent = i18n.choose_date;
                 addBtn.disabled = true;
                 return;
             }
@@ -1015,12 +1061,12 @@
                 roomModal.selectedPrice = match;
                 var fmtPrice = function (n) { return '€\xa0' + parseFloat(n).toFixed(2).replace('.', ','); };
                 priceDisplay.textContent = fmtPrice(match.base_price);
-                priceNote.textContent = DAY_NAMES[dow] + ' · ' + roomModal.players + ' speler' + (roomModal.players !== 1 ? 's' : '')
-                    + (match.vat ? ' · ' + match.vat + '% BTW incl.' : '');
+                priceNote.textContent = DAY_NAMES[dow] + ' · ' + playersLabel(roomModal.players)
+                    + (match.vat ? ' · ' + match.vat + '% ' + i18n.vat_incl_suffix : '');
                 addBtn.disabled = false;
             } else {
                 priceDisplay.textContent = '—';
-                priceNote.textContent = 'Geen prijs gevonden voor ' + DAY_NAMES[dow] + ' met ' + roomModal.players + ' speler' + (roomModal.players !== 1 ? 's' : '');
+                priceNote.textContent = i18n.no_price_found.replace(':day', DAY_NAMES[dow]).replace(':players', playersLabel(roomModal.players));
                 addBtn.disabled = true;
             }
         }
@@ -1030,7 +1076,7 @@
             var p     = roomModal.selectedPrice;
             var total = parseFloat(p.base_price);
             var id    = 'room_' + roomModal.id + '_' + roomModal.players + '_' + roomModal.selectedDate;
-            var label = roomModal.name + ' (' + roomModal.players + ' spelers, ' + roomModal.selectedDate + ')';
+            var label = i18n.room_cart_label.replace(':name', roomModal.name).replace(':players', playersLabel(roomModal.players)).replace(':date', roomModal.selectedDate);
 
             var existing = cart.find(function (i) { return i.id === id; });
             if (existing) {
@@ -1170,8 +1216,8 @@
                 emptyEl.classList.toggle('hidden', !isEmpty);
                 listEl.classList.toggle('hidden', isEmpty);
 
-                var artikelLabel = itemCount === 1 ? '1 artikel' : itemCount + ' artikelen';
-                if (subLabel) subLabel.textContent = isEmpty ? 'Subtotaal excl. BTW' : 'Subtotaal excl. BTW (' + artikelLabel + ')';
+                var artikelLabel = itemCount + ' ' + (itemCount === 1 ? i18n.item_singular : i18n.item_plural);
+                if (subLabel) subLabel.textContent = isEmpty ? i18n.cart_subtotal_excl_vat : i18n.cart_subtotal_excl_vat + ' (' + artikelLabel + ')';
                 subEl.textContent = fmt(subtotaalExcl);
                 totEl.textContent = fmt(totaal);
 
@@ -1180,7 +1226,7 @@
                     Object.keys(scaledBtw).sort(function(a,b){return a-b;}).forEach(function (rate) {
                         var row = document.createElement('div');
                         row.className = 'flex justify-between text-sm text-gray-600 dark:text-gray-400';
-                        row.innerHTML = '<span>BTW ' + rate + '%</span><span>' + fmt(scaledBtw[rate]) + '</span>';
+                        row.innerHTML = '<span>' + i18n.vat_label.replace(':rate', rate) + '</span><span>' + fmt(scaledBtw[rate]) + '</span>';
                         btwRows.appendChild(row);
                     });
                 }
@@ -1203,33 +1249,33 @@
                     if (isRoom) {
                         subLabel = '';
                     } else if (isGiftCard) {
-                        var dmLabels = { mail: 'E-mail', post: 'Per post', pickup: 'Afhalen' };
+                        var dmLabels = { mail: i18n.delivery_mail, post: i18n.delivery_post, pickup: i18n.delivery_pickup };
                         var dmColors = { mail: 'text-sky-600 dark:text-sky-400', post: 'text-purple-600 dark:text-purple-400', pickup: 'text-teal-600 dark:text-teal-400' };
                         var dm = item.deliveryMethod || 'mail';
                         subLabel = '<span class="text-xs ' + (dmColors[dm] || 'text-gray-400') + '">' + (dmLabels[dm] || dm) + '</span>';
                         if (dm === 'post' && item.shippingCost > 0) {
-                            subLabel += '<span class="text-xs text-gray-400 dark:text-gray-500"> + ' + fmt(item.shippingCost) + ' verzending</span>';
+                            subLabel += '<span class="text-xs text-gray-400 dark:text-gray-500"> + ' + fmt(item.shippingCost) + ' ' + i18n.shipping_suffix + '</span>';
                         }
                     } else if (hasDiscount) {
-                        var stockSuffix = item.stock !== -1 ? ' · max ' + item.stock : ' / stuk';
+                        var stockSuffix = item.stock !== -1 ? ' · ' + i18n.max_stock.replace(':count', item.stock) : ' ' + i18n.per_unit;
                         subLabel = '<span class="text-xs line-through text-gray-400 dark:text-gray-500">' + fmt(item.originalPrice) + '</span>' +
                                    '<span class="text-xs text-green-600 dark:text-green-400 font-medium ml-1">' + fmt(item.price) + '</span>' +
                                    '<span class="text-xs text-gray-400 dark:text-gray-500">' + stockSuffix + '</span>';
                         if (item.shippingCost > 0) {
-                            subLabel += '<span class="text-xs text-indigo-500 dark:text-indigo-400"> + ' + fmt(item.shippingCost) + ' verzending</span>';
+                            subLabel += '<span class="text-xs text-indigo-500 dark:text-indigo-400"> + ' + fmt(item.shippingCost) + ' ' + i18n.shipping_suffix + '</span>';
                         }
                     } else {
-                        var perUnitLabel = item.stock !== -1 ? fmt(item.price) + ' · max ' + item.stock : fmt(item.price) + ' / stuk';
+                        var perUnitLabel = item.stock !== -1 ? fmt(item.price) + ' · ' + i18n.max_stock.replace(':count', item.stock) : fmt(item.price) + ' ' + i18n.per_unit;
                         subLabel = '<span class="text-xs text-gray-400 dark:text-gray-500">' + perUnitLabel + '</span>';
                         if (item.shippingCost > 0) {
-                            subLabel += '<span class="text-xs text-indigo-500 dark:text-indigo-400"> + ' + fmt(item.shippingCost) + ' verzending</span>';
+                            subLabel += '<span class="text-xs text-indigo-500 dark:text-indigo-400"> + ' + fmt(item.shippingCost) + ' ' + i18n.shipping_suffix + '</span>';
                         }
                     }
 
                     var qtyControls;
                     if (isRoom) {
                         qtyControls =
-                            '<button onclick="changeQty(\'' + item.id + '\', -1)" title="Verwijderen" class="flex h-6 w-6 items-center justify-center rounded-md border border-gray-200 dark:border-white/10 text-gray-400 hover:text-red-500 hover:border-red-300 dark:hover:border-red-500 dark:hover:text-red-400 text-sm leading-none transition-colors">' +
+                            '<button onclick="changeQty(\'' + item.id + '\', -1)" title="' + escHtml(i18n.remove) + '" class="flex h-6 w-6 items-center justify-center rounded-md border border-gray-200 dark:border-white/10 text-gray-400 hover:text-red-500 hover:border-red-300 dark:hover:border-red-500 dark:hover:text-red-400 text-sm leading-none transition-colors">' +
                                 '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" /></svg>' +
                             '</button>';
                     } else {
@@ -1331,7 +1377,7 @@
             btns.forEach(function(btn) {
                 if (!btn) return;
                 btn.disabled = true;
-                btn.textContent = 'Bezig...';
+                btn.textContent = i18n.processing;
             });
 
             // Unique key per submit attempt — prevents duplicate orders on multi-click or back+resubmit
@@ -1438,7 +1484,7 @@
                 ddEl.innerHTML = '';
                 focusIdx = -1;
                 if (!list.length) {
-                    ddEl.innerHTML = '<li class="px-3 py-2 text-xs text-gray-400">Geen resultaten</li>';
+                    ddEl.innerHTML = '<li class="px-3 py-2 text-xs text-gray-400">' + escHtml(i18n.no_results) + '</li>';
                     ddEl.classList.remove('hidden');
                     return;
                 }
@@ -1532,13 +1578,13 @@
             errEl.textContent = '';
 
             if (!firstName || !lastName || !email) {
-                errEl.textContent = 'Voornaam, achternaam en e-mail zijn verplicht.';
+                errEl.textContent = i18n.required_fields_error;
                 errEl.classList.remove('hidden');
                 return;
             }
 
             saveBtn.disabled = true;
-            saveBtn.textContent = 'Bezig…';
+            saveBtn.textContent = i18n.processing_ellipsis;
 
             var street      = document.getElementById('nc-street').value.trim();
             var houseNumber = document.getElementById('nc-house-number').value.trim();
@@ -1569,7 +1615,7 @@
             .then(function (r) {
                 if (!r.ok) {
                     return r.json().then(function (data) {
-                        var msg = 'Er ging iets mis.';
+                        var msg = i18n.generic_error;
                         if (data && data.errors) {
                             msg = Object.values(data.errors).flat().join(' ');
                         } else if (data && data.message) {
@@ -1591,7 +1637,7 @@
             })
             .finally(function () {
                 saveBtn.disabled = false;
-                saveBtn.textContent = 'Aanmaken';
+                saveBtn.textContent = i18n.create;
             });
         }
         // ── End quick new customer ────────────────────────────────────────────
@@ -1703,12 +1749,12 @@
 
             var fmt = function (n) { return '€ ' + n.toFixed(2).replace('.', ','); };
             document.getElementById('prod-modal-title').textContent = btn.dataset.name;
-            document.getElementById('prod-modal-price').textContent = fmt(prodModalItem.price) + ' / stuk';
+            document.getElementById('prod-modal-price').textContent = fmt(prodModalItem.price) + ' ' + i18n.per_unit;
             document.getElementById('prod-modal-shipping-cost').value = computed > 0 ? computed.toFixed(2) : '';
 
             var hint = '';
             if (domestic > 0 || international > 0) {
-                hint = 'Binnenland: ' + fmt(domestic) + ' · Internationaal: ' + fmt(international);
+                hint = i18n.shipping_hint.replace(':domestic', fmt(domestic)).replace(':international', fmt(international));
             }
             document.getElementById('prod-modal-shipping-hint').textContent = hint;
 

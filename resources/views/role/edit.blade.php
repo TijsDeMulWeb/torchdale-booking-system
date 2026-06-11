@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Gebruikers', 'url' => route('users.index')],
-        ['name' => 'Rollen & rechten', 'url' => route('roles.index')],
+        ['name' => __('nav.users'), 'url' => route('users.index')],
+        ['name' => __('nav.roles'), 'url' => route('roles.index')],
         ['name' => $role->name, 'url' => route('roles.edit', $role)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">

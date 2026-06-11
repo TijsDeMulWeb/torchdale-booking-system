@@ -16,13 +16,13 @@
                             </svg>
                         </div>
                         <div class="ml-3 w-0 flex-1 pt-0.5">
-                            <p class="text-sm font-medium text-gray-900 dark:text-white">Successfully saved!</p>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('common.toast_saved_title') }}</p>
                             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $message }}</p>
                         </div>
                         <div class="ml-4 flex shrink-0">
                             <button type="button"
                                 class="closeNotification inline-flex rounded-md text-gray-400 hover:text-gray-500 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-600 dark:hover:text-white dark:focus:outline-indigo-500">
-                                <span class="sr-only">Close</span>
+                                <span class="sr-only">{{ __('common.close') }}</span>
                                 <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true"
                                     class="size-5">
                                     <path

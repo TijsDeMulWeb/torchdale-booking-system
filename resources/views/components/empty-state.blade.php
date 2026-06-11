@@ -3,8 +3,8 @@
         <path d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke-width="2"
             vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
-    <h3 class="mt-2 text-sm font-semibold text-white">No {{ $name }}</h3>
-    <p class="mt-1 text-sm text-gray-400">Get started by creating a new {{ $name }}.</p>
+    <h3 class="mt-2 text-sm font-semibold text-white">{{ __('common.empty_state_title', ['name' => $name]) }}</h3>
+    <p class="mt-1 text-sm text-gray-400">{{ __('common.empty_state_description', ['name' => $name]) }}</p>
     @if (!empty($route))
         <div class="mt-6">
             <a href="{{ $route }}"
@@ -14,7 +14,7 @@
                     <path
                         d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
                 </svg>
-                New {{ ucfirst($name) }}
+                {{ __('common.empty_state_action', ['name' => $name]) }}
             </a>
         </div>
     @endif

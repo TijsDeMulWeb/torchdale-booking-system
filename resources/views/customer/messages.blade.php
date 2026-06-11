@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Klant', 'url' => route('customers.index')],
+        ['name' => __('customers.breadcrumb_singular'), 'url' => route('customers.index')],
         ['name' => $customer->full_name, 'url' => route('customers.show.overview', $customer)],
     ]" />
     <x-profile.header :customer="$customer" />
@@ -9,11 +9,11 @@
 
         @php
             $typeLabels = [
-                'product' => 'Product',
-                'gift-card' => 'Cadeaubon',
-                'room_confirmation' => 'Boekingsbevestiging',
-                'room_reminder' => 'Herinnering',
-                'room_cancellation' => 'Annulering',
+                'product' => __('customers.mail_type_product'),
+                'gift-card' => __('customers.mail_type_gift_card'),
+                'room_confirmation' => __('customers.mail_type_room_confirmation'),
+                'room_reminder' => __('customers.mail_type_room_reminder'),
+                'room_cancellation' => __('customers.mail_type_room_cancellation'),
             ];
         @endphp
 
@@ -33,13 +33,13 @@
                     <div class="flex shrink-0 items-center gap-x-4">
                         <div class="hidden sm:flex sm:flex-col sm:items-end">
                             <p class="mt-1 text-xs/5 text-gray-400">
-                                Verzonden op {{ $mail->created_at->format('d/m/Y H:i') }}
+                                {{ __('customers.sent_on', ['date' => $mail->created_at->format('d/m/Y H:i')]) }}
                             </p>
                         </div>
                         <button type="button"
                             onclick="openMailModal({{ $mail->id }})"
                             class="rounded-md bg-white/10 px-2.5 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-white/20">
-                            Toon
+                            {{ __('common.show') }}
                         </button>
                     </div>
                 </li>
@@ -51,7 +51,7 @@
                             <div class="min-w-0">
                                 <h2 class="text-base font-semibold text-white truncate">{{ $mail->subject }}</h2>
                                 <p class="mt-1 text-xs text-gray-400">
-                                    Verzonden naar {{ $mail->to_email }} op {{ $mail->created_at->format('d/m/Y \o\m H:i') }}
+                                    {{ __('customers.sent_to_on', ['email' => $mail->to_email, 'date' => $mail->created_at->format('d/m/Y \o\m H:i')]) }}
                                 </p>
                             </div>
                             <button type="button" onclick="closeMailModal({{ $mail->id }})" class="text-gray-400 hover:text-white">
@@ -69,7 +69,7 @@
         </ul>
 
         @if ($mails->isEmpty())
-            <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Geen berichten gevonden.</p>
+            <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">{{ __('customers.no_messages') }}</p>
         @endif
     </div>
 

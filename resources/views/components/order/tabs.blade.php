@@ -6,7 +6,7 @@
                     ? 'border-indigo-500 text-indigo-600 dark:text-white dark:border-white'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}"
             @if(request()->routeIs('orders.index')) aria-current="page" @endif>
-            Overzicht
+            {{ __('orders.tab_overview') }}
         </a>
         <a href="{{ route('orders.checkout') }}"
             class="whitespace-nowrap border-b-2 px-1 pb-3 text-sm font-medium transition-colors
@@ -14,7 +14,7 @@
                     ? 'border-indigo-500 text-indigo-600 dark:text-white dark:border-white'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}"
             @if(request()->routeIs('orders.checkout')) aria-current="page" @endif>
-            Afrekenen
+            {{ __('orders.tab_checkout') }}
         </a>
         <a href="{{ route('orders.open-orders') }}"
             class="whitespace-nowrap border-b-2 px-1 pb-3 text-sm font-medium transition-colors
@@ -22,7 +22,7 @@
                     ? 'border-indigo-500 text-indigo-600 dark:text-white dark:border-white'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}"
             @if(request()->routeIs('orders.open-orders')) aria-current="page" @endif>
-            Openstaande betalingen
+            {{ __('orders.tab_open_orders') }}
         </a>
         <a href="{{ route('orders.gift-vouchers') }}"
             class="whitespace-nowrap border-b-2 px-1 pb-3 text-sm font-medium transition-colors
@@ -30,7 +30,7 @@
                     ? 'border-indigo-500 text-indigo-600 dark:text-white dark:border-white'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:border-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }}"
             @if(request()->routeIs('orders.gift-vouchers')) aria-current="page" @endif>
-            Cadeaubonnen
+            {{ __('nav.gift_cards') }}
         </a>
     </nav>
 </div>

@@ -82,7 +82,7 @@ if (editorEl) {
         }
 
         var status = document.getElementById('image-upload-status');
-        status.textContent = 'Bezig met uploaden...';
+        status.textContent = (config.i18n && config.i18n.uploading) || '';
 
         var formData = new FormData();
         formData.append('image', file);
@@ -111,7 +111,7 @@ if (editorEl) {
                 status.textContent = '';
             })
             .catch(function () {
-                status.textContent = 'Uploaden mislukt.';
+                status.textContent = (config.i18n && config.i18n.uploadFailed) || '';
             })
             .finally(function () {
                 input.value = '';

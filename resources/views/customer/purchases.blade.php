@@ -1,6 +1,6 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Klant', 'url' => route('customers.index')],
+        ['name' => __('customers.breadcrumb_singular'), 'url' => route('customers.index')],
         ['name' => $customer->full_name, 'url' => route('customers.show.overview', $customer)],
     ]" />
     <x-profile.header :customer="$customer" />
@@ -18,22 +18,22 @@
                                         ID</th>
                                     <th scope="col"
                                         class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                        Datum
+                                        {{ __('dashboard.date') }}
                                     </th>
                                     <th scope="col"
                                         class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                        Omschrijving Aankoop
+                                        {{ __('customers.table_purchase_description') }}
                                     </th>
                                     <th scope="col"
                                         class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                        Bedrag
+                                        {{ __('customers.table_amount') }}
                                     </th>
                                     <th scope="col"
                                         class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                                        Status
+                                        {{ __('customers.table_status') }}
                                     </th>
                                     <th scope="col" class="py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8">
-                                        <span class="sr-only">Edit</span>
+                                        <span class="sr-only">{{ __('common.edit') }}</span>
                                     </th>
                                 </tr>
                             </thead>
@@ -56,19 +56,19 @@
                                         <td class="px-3 py-4 text-sm whitespace-nowrap">
                                             @if ($order->status === 'paid' && $order->payment_method === 'cash')
                                                 <span class="inline-flex items-center gap-1 rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
-                                                    Cash
+                                                    {{ __('common.payment_cash') }}
                                                 </span>
                                             @elseif ($order->status === 'paid' && $order->payment_method === 'online')
                                                 <span class="inline-flex items-center gap-1 rounded-md bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-400 ring-1 ring-inset ring-blue-600/20">
-                                                    Online
+                                                    {{ __('common.payment_online') }}
                                                 </span>
                                             @elseif ($order->status === 'paid')
                                                 <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">
-                                                    Betaald
+                                                    {{ __('common.status_paid') }}
                                                 </span>
                                             @elseif ($order->status === 'pending')
                                                 <span class="inline-flex items-center rounded-md bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 text-xs font-medium text-yellow-700 dark:text-yellow-400 ring-1 ring-inset ring-yellow-600/20">
-                                                    Open
+                                                    {{ __('common.status_open') }}
                                                 </span>
                                             @else
                                                 <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">
@@ -80,14 +80,14 @@
                                             class="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6 lg:pr-8">
                                             @if ($order->invoice && $order->invoice->pdf_url)
                                                 <a href="{{ route('orders.invoice', $order) }}" target="_blank"
-                                                    class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">Toon factuur<span
+                                                    class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">{{ __('customers.show_invoice') }}<span
                                                         class="sr-only">, {{ $order->id }}</span></a>
                                             @elseif ($order->payment_link)
                                                 <a href="{{ route('orders.payment-link', $order) }}" target="_blank"
-                                                    class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">Toon betaallink<span
+                                                    class="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">{{ __('customers.show_payment_link') }}<span
                                                         class="sr-only">, {{ $order->id }}</span></a>
                                             @else
-                                                <span class="text-gray-400 dark:text-gray-600">Geen factuur</span>
+                                                <span class="text-gray-400 dark:text-gray-600">{{ __('customers.no_invoice') }}</span>
                                             @endif
                                         </td>
                                     </tr>

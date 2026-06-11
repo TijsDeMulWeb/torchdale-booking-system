@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Instellingen: ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
-        ['name' => 'Wijzigen', 'url' => route('escaperoom.edit')],
+        ['name' => __('nav.settings') . ': ' . auth()->user()->escaperoom->name, 'url' => route('escaperoom.show')],
+        ['name' => __('common.edit'), 'url' => route('escaperoom.edit')],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <form method="POST" action="{{ route('escaperoom.update') }}" enctype="multipart/form-data">
@@ -9,16 +9,15 @@
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
                 <div>
-                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Escaperoom</h2>
-                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Deze informatie bevat alle info
-                        over jouw bedrijf.</p>
+                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ __('settings.section_title') }}</h2>
+                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">{{ __('settings.section_description') }}</p>
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="name"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Bedrijfsnaam</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_company_name') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="name" type="text" name="name" placeholder="Bedrijfsnaam"
+                                <input id="name" type="text" name="name" placeholder="{{ __('settings.label_company_name') }}"
                                     value="{{ old('name', $escaperoom->name) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="name" />
@@ -27,9 +26,9 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="phone"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Telefoonnummer</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('users.label_phone') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="phone" type="text" name="phone" placeholder="Telefoonnummer"
+                                <input id="phone" type="text" name="phone" placeholder="{{ __('users.label_phone') }}"
                                     value="{{ old('phone', $escaperoom->phone) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="phone" />
@@ -38,9 +37,9 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="email"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Email</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('users.label_email') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="email" type="email" name="email" placeholder="Email"
+                                <input id="email" type="email" name="email" placeholder="{{ __('users.label_email') }}"
                                     value="{{ old('email', $escaperoom->email) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="email" />
@@ -49,10 +48,9 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="invoiceEmail"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Factuur
-                                Email</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_invoice_email') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="invoiceEmail" type="email" name="invoice_email" placeholder="Factuur Email"
+                                <input id="invoiceEmail" type="email" name="invoice_email" placeholder="{{ __('settings.label_invoice_email') }}"
                                     value="{{ old('invoice_email', $escaperoom->invoice_email) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="invoice_email" />
@@ -61,10 +59,9 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="vat_number"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">BTW
-                                Nummer</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_vat_number') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="vat_number" type="text" name="vat_number" placeholder="BTW Nummer"
+                                <input id="vat_number" type="text" name="vat_number" placeholder="{{ __('settings.label_vat_number') }}"
                                     value="{{ old('vat_number', $escaperoom->vat_number) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="vat_number" />
@@ -73,11 +70,10 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="registration_number"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Registratie
-                                Nummer</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_registration_number') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="registration_number" type="text" name="registration_number"
-                                    placeholder="Registratie Nummer"
+                                    placeholder="{{ __('settings.label_registration_number') }}"
                                     value="{{ old('registration_number', $escaperoom->registration_number) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="registration_number" />
@@ -86,19 +82,19 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">
-                                Logo
+                                {{ __('settings.label_logo') }}
                             </label>
                             <div class="mt-2 flex items-center gap-x-3">
                                 <img id="logo-preview"
                                     src="{{ $escaperoom->logo_url ? Storage::url($escaperoom->logo_url) : 'https://placehold.co/400x400' }}"
-                                    alt="Logo preview"
+                                    alt="{{ __('settings.logo_preview_alt') }}"
                                     class="max-h-24 w-auto rounded-lg object-contain border border-gray-200 dark:border-white/10">
 
                                 <input id="logo" name="logo" type="file" class="hidden" onchange="previewLogo(event)">
 
                                 <button type="button" onclick="document.getElementById('logo').click()"
                                     class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs inset-ring inset-ring-gray-300 hover:bg-gray-50 dark:bg-white/10 dark:text-white dark:shadow-none dark:inset-ring-white/5 dark:hover:bg-white/20">
-                                    Aanpassen
+                                    {{ __('common.edit') }}
                                 </button>
                                 <x-form.error name="logo" />
                             </div>
@@ -114,11 +110,10 @@
                         </script>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="confirmationRoomUrl"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Bevestigingspagina
-                                Kamer</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_confirmation_room_url') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="confirmationRoomUrl" type="text" name="confirmation_room_url"
-                                    placeholder="Bevestigingspagina Kamer"
+                                    placeholder="{{ __('settings.label_confirmation_room_url') }}"
                                     value="{{ old('confirmation_room_url', $escaperoom->escaperoomSetting->confirmation_room_url) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="confirmation_room_url" />
@@ -126,11 +121,10 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="confirmationProductUrl"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Bevestigingspagina
-                                Product</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_confirmation_product_url') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="confirmationProductUrl" type="text" name="confirmation_product_url"
-                                    placeholder="Bevestigingspagina Product"
+                                    placeholder="{{ __('settings.label_confirmation_product_url') }}"
                                     value="{{ old('confirmation_product_url', $escaperoom->escaperoomSetting->confirmation_product_url) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="confirmation_product_url" />
@@ -138,11 +132,10 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="confirmationGiftCardUrl"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Bevestigingspagina
-                                Cadeaubon</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_confirmation_giftcard_url') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="confirmationGiftCardUrl" type="text" name="confirmation_gift_card_url"
-                                    placeholder="Bevestigingspagina Cadeaubon"
+                                    placeholder="{{ __('settings.label_confirmation_giftcard_url') }}"
                                     value="{{ old('confirmation_gift_card_url', $escaperoom->escaperoomSetting->confirmation_gift_card_url) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="confirmation_gift_card_url" />
@@ -150,24 +143,22 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="reminderDaysBefore"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Herinneringsmail
-                                (dagen op voorhand)</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_reminder_days_before') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="reminderDaysBefore" type="number" name="reminder_days_before" min="0" max="30"
-                                    placeholder="bijv. 1"
+                                    placeholder="{{ __('settings.reminder_days_placeholder') }}"
                                     value="{{ old('reminder_days_before', $escaperoom->escaperoomSetting->reminder_days_before) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xs sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
-                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">Aantal dagen voor de afspraak waarop een herinneringsmail naar de klant wordt gestuurd. Laat leeg of 0 om geen herinneringen te versturen.</p>
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('settings.helper_reminder_days_before') }}</p>
                                 <x-form.error name="reminder_days_before" />
                             </div>
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="mollie_api_key"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Mollie API
-                                Key</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_mollie_key') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="mollie_api_key" type="text" name="mollie_api_key"
-                                    placeholder="Mollie API Key"
+                                    placeholder="{{ __('settings.label_mollie_key') }}"
                                     value="{{ old('mollie_api_key', $escaperoom->escaperoomSetting->mollie_api_key) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="mollie_api_key" />
@@ -176,11 +167,10 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="openai_api_key"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">OpenAI API
-                                Key</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_openai_key') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="openai_api_key" type="text" name="openai_api_key"
-                                    placeholder="OpenAI API Key"
+                                    placeholder="{{ __('settings.label_openai_key') }}"
                                     value="{{ old('openai_api_key', $escaperoom->escaperoomSetting->openai_api_key) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="openai_api_key" />

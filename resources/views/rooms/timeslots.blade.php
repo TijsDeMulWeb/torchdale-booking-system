@@ -1,21 +1,21 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Kamer', 'url' => route('rooms.index')],
+        ['name' => __('nav.rooms'), 'url' => route('rooms.index')],
         ['name' => $room->name, 'url' => route('rooms.edit', $room->id)],
     ]" />
 
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <div class="sm:flex sm:items-start sm:justify-between mb-8">
             <div>
-                <h1 class="text-base font-semibold text-gray-900 dark:text-white">Tijdsloten — {{ $room->name }}</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Beheer beschikbare tijdslots per dag.</p>
+                <h1 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('rooms.timeslots_title', ['room' => $room->name]) }}</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ __('rooms.timeslots_description') }}</p>
                 @if ($last_updated)
                     <x-last-updated :model="$last_updated" />
                 @endif
             </div>
         </div>
         <div class="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-            @foreach (['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag', 'Zondag'] as $dayIndex => $day)
+            @foreach ([__('common.day_monday'), __('common.day_tuesday'), __('common.day_wednesday'), __('common.day_thursday'), __('common.day_friday'), __('common.day_saturday'), __('common.day_sunday')] as $dayIndex => $day)
                 @php $daySlots = $slots[$dayIndex] ?? collect(); @endphp
                 <div
                     class="grid grid-cols-[140px_1fr] {{ !$loop->last ? 'border-b border-gray-100 dark:border-white/10' : '' }}">
@@ -68,7 +68,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4v16m8-8H4" />
                                 </svg>
-                                Toevoegen
+                                {{ __('rooms.add_slot') }}
                             </button>
                         </div>
                     </div>
@@ -95,18 +95,18 @@
                     <input type="hidden" id="modal-method" name="_method" value="POST" />
                     <input type="hidden" id="modal-day" name="day_of_week" />
                     <div class="mb-5">
-                        <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">Dag</label>
+                        <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">{{ __('rooms.modal_day') }}</label>
                         <input type="text" id="modal-day-label" readonly
                             class="w-full px-4 py-2.5 text-sm bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-gray-500 dark:text-gray-400" />
                     </div>
                     <div class="grid grid-cols-2 gap-5 mb-6">
                         <div>
-                            <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">Starttijd</label>
+                            <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">{{ __('rooms.modal_start_time') }}</label>
                             <input type="time" name="start_time" id="modal-start"
                                 class="w-full px-4 py-2.5 text-sm border border-gray-300 dark:border-white/20 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" />
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">Eindtijd</label>
+                            <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">{{ __('rooms.modal_end_time') }}</label>
                             <input type="time" name="end_time" id="modal-end"
                                 class="w-full px-4 py-2.5 text-sm border border-gray-300 dark:border-white/20 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" />
                         </div>
@@ -114,11 +114,11 @@
                     <div class="flex items-center justify-end gap-4">
                         <button type="button" onclick="closeModal()"
                             class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                            Annuleren
+                            {{ __('common.cancel') }}
                         </button>
                         <button type="submit"
                             class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-500">
-                            Opslaan
+                            {{ __('common.save') }}
                         </button>
                     </div>
                 </form>
@@ -127,11 +127,15 @@
     </div>
 
     <script>
+        const I18N = {!! \Illuminate\Support\Js::from([
+            'modal_title_edit' => __('rooms.modal_title_edit'),
+            'modal_title_add' => __('rooms.modal_title_add'),
+        ]) !!};
         const storeUrl = '{{ route('rooms.timeslots.store', $room->id) }}';
         const updateUrl = '{{ route('rooms.timeslots.update', [$room->id, '__id__']) }}';
 
         function openModal(dayIndex, dayLabel, slotId = null, start = '10:00', end = '11:30') {
-            document.querySelector('#modal-title').textContent = slotId ? 'Tijdslot wijzigen' : 'Tijdslot toevoegen';
+            document.querySelector('#modal-title').textContent = slotId ? I18N.modal_title_edit : I18N.modal_title_add;
             document.querySelector('#modal-day').value = dayIndex;
             document.querySelector('#modal-day-label').value = dayLabel;
             document.querySelector('#modal-start').value = start;

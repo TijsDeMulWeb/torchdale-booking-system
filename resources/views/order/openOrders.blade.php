@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Bestellingen', 'url' => route('orders.index')],
-        ['name' => 'Openstaande betalingen', 'url' => route('orders.open-orders')],
+        ['name' => __('orders.index_title'), 'url' => route('orders.index')],
+        ['name' => __('orders.open_orders_title'), 'url' => route('orders.open-orders')],
     ]" />
 
     <div class="px-4 sm:px-6 lg:px-8 my-6 pb-4">
@@ -9,8 +9,8 @@
 
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">Openstaande betalingen</h1>
-                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">Bestellingen waarvoor nog geen betaling ontvangen is.</p>
+                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('orders.open_orders_title') }}</h1>
+                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">{{ __('orders.open_orders_description') }}</p>
                 </div>
             </div>
 
@@ -20,19 +20,19 @@
                 {{-- Stats --}}
                 <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Openstaand</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_outstanding') }}</p>
                         <p class="mt-1 text-xl font-semibold text-orange-600 dark:text-orange-400">{{ $stats['count'] }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Bestellingen</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_orders') }}</p>
                     </div>
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Openstaand bedrag</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_outstanding_amount') }}</p>
                         <p class="mt-1 text-xl font-semibold text-orange-600 dark:text-orange-400">{{ Number::currency($stats['total']) }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Totaal te ontvangen</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_total_to_receive') }}</p>
                     </div>
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Facturen verstuurd</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_invoices_sent') }}</p>
                         <p class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{{ $stats['online'] }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Online betaling</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_online_payment') }}</p>
                     </div>
                 </div>
 
@@ -45,13 +45,13 @@
                                     <table class="min-w-full divide-y divide-gray-300 dark:divide-white/15">
                                         <thead>
                                             <tr>
-                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">Klant</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Bedrag</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Betaalmethode</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Factuurnr.</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Datum</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Wachttijd</th>
-                                                <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8"><span class="sr-only">Acties</span></th>
+                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">{{ __('orders.table_header_customer') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_amount') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_payment_method') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_invoice_number') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_date') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_wait_time') }}</th>
+                                                <th scope="col" class="relative py-3.5 pr-4 pl-3 sm:pr-6 lg:pr-8"><span class="sr-only">{{ __('orders.table_header_actions_sr') }}</span></th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
@@ -86,9 +86,9 @@
                                                     {{-- Payment method --}}
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
                                                         @if ($order->payment_method === 'online')
-                                                            <span class="inline-flex items-center rounded-md bg-indigo-50 dark:bg-indigo-900/20 px-2 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-400 ring-1 ring-inset ring-indigo-700/10">Online</span>
+                                                            <span class="inline-flex items-center rounded-md bg-indigo-50 dark:bg-indigo-900/20 px-2 py-1 text-xs font-medium text-indigo-700 dark:text-indigo-400 ring-1 ring-inset ring-indigo-700/10">{{ __('common.payment_online') }}</span>
                                                         @elseif ($order->payment_method === 'manual')
-                                                            <span class="inline-flex items-center rounded-md bg-purple-50 dark:bg-purple-900/20 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-400 ring-1 ring-inset ring-purple-700/10">Manueel</span>
+                                                            <span class="inline-flex items-center rounded-md bg-purple-50 dark:bg-purple-900/20 px-2 py-1 text-xs font-medium text-purple-700 dark:text-purple-400 ring-1 ring-inset ring-purple-700/10">{{ __('orders.payment_method_manual_badge') }}</span>
                                                         @else
                                                             <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">{{ $order->payment_method ?? '—' }}</span>
                                                         @endif
@@ -121,7 +121,7 @@
                                                             ];
                                                         @endphp
                                                         <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset {{ $urgencyClasses[$urgency] }}">
-                                                            {{ $daysAgo === 0 ? 'Vandaag' : $daysAgo . ' dag' . ($daysAgo !== 1 ? 'en' : '') }}
+                                                            {{ trans_choice('orders.wait_days', $daysAgo, ['count' => $daysAgo]) }}
                                                         </span>
                                                     </td>
 
@@ -129,7 +129,7 @@
                                                     <td class="py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-6 lg:pr-8">
                                                         <a href="{{ route('orders.index') }}?search={{ urlencode($order->invoice_number ?? $order->id) }}"
                                                            class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 text-xs font-medium">
-                                                            Bekijken
+                                                            {{ __('orders.view_link') }}
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -147,8 +147,8 @@
                             <svg class="mx-auto h-10 w-10 text-gray-300 dark:text-gray-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
-                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Geen openstaande betalingen</p>
-                            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Alle bestellingen zijn betaald.</p>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('orders.empty_no_outstanding') }}</p>
+                            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.empty_all_paid') }}</p>
                         </div>
                     @endif
                 </div>

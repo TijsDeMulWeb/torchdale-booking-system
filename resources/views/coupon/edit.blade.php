@@ -1,8 +1,8 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Kortingsbonnen', 'url' => route('coupons.index')],
+        ['name' => __('coupons.breadcrumb_plural'), 'url' => route('coupons.index')],
         ['name' => $coupon->name, 'url' => route('coupons.edit', $coupon->id)],
-        ['name' => 'Wijzigen', 'url' => route('coupons.edit', $coupon->id)],
+        ['name' => __('common.edit'), 'url' => route('coupons.edit', $coupon->id)],
     ]" />
     <div class="px-4 sm:px-6 lg:px-8 my-10">
         <form method="POST" action="{{ route('coupons.update', $coupon->id) }}">
@@ -10,18 +10,16 @@
             @method('PUT')
             <div class="space-y-12 sm:space-y-16">
                 <div>
-                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">Kortingsbon</h2>
-                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">Deze informatie bevat alle info
-                        over de kortingsbon.</p>
+                    <h2 class="text-base/7 font-semibold text-gray-900 dark:text-white">{{ __('coupons.section_title') }}</h2>
+                    <p class="mt-1 max-w-2xl text-sm/6 text-gray-600 dark:text-gray-400">{{ __('coupons.section_description') }}</p>
                     <x-last-updated :model="$coupon" />
                     <div
                         class="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:border-t-gray-900/10 sm:pb-0 dark:border-white/10 dark:sm:divide-white/10 dark:sm:border-t-white/10">
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="name"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Kortingsbon
-                                Naam</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('coupons.name_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="name" type="text" name="name" placeholder="Kortingsbon Naam"
+                                <input id="name" type="text" name="name" placeholder="{{ __('coupons.name_label') }}"
                                     value="{{ old('name', $coupon->name) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="name" />
@@ -30,7 +28,7 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="description"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Beschrijving</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('coupons.description_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <textarea id="description" name="description" rows="3"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-2xl sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500">{{ old('description', $coupon->description) }}</textarea>
@@ -39,10 +37,9 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="code"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Kortingsbon
-                                CODE</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('coupons.code_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="code" type="text" name="code" placeholder="Kortingsbon CODE"
+                                <input id="code" type="text" name="code" placeholder="{{ __('coupons.code_label') }}"
                                     value="{{ old('code', $coupon->code) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="code" />
@@ -51,15 +48,14 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="discountType"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Kortings
-                                Type</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('products.discount_type_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <div class="grid grid-cols-1 sm:max-w-md">
                                     <select id="discountType" name="discount_type"
                                         class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:*:bg-gray-800 dark:focus:outline-indigo-500">
                                         <option value="fixed" {{ old('discount_type', $coupon->discount_type) === 'fixed' ? 'selected' : '' }}>
-                                            Fixed</option>
-                                        <option value="percentage" {{ old('discount_type', $coupon->discount_type) === 'percentage' ? 'selected' : '' }}>Percentage
+                                            {{ __('products.discount_fixed') }}</option>
+                                        <option value="percentage" {{ old('discount_type', $coupon->discount_type) === 'percentage' ? 'selected' : '' }}>{{ __('products.discount_percentage') }}
                                         </option>
                                     </select>
                                     <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true"
@@ -73,9 +69,9 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="discountValue"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Kortingswaarde</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('products.discount_value_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="discountValue" type="text" name="discount_value" placeholder="Kortingswaarde"
+                                <input id="discountValue" type="text" name="discount_value" placeholder="{{ __('products.discount_value_label') }}"
                                     value="{{ old('discount_value', $coupon->discount_value) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="discount_value" />
@@ -83,9 +79,9 @@
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="usageLimit"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Gebruikslimiet</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('coupons.usage_limit_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
-                                <input id="usageLimit" type="text" name="usage_limit" placeholder="Gebruikslimiet"
+                                <input id="usageLimit" type="text" name="usage_limit" placeholder="{{ __('coupons.usage_limit_label') }}"
                                     value="{{ old('usage_limit', $coupon->usage_limit) }}"
                                     class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:max-w-md sm:text-sm/6 dark:bg-white/5 dark:text-white dark:outline-white/10 dark:placeholder:text-gray-500 dark:focus:outline-indigo-500" />
                                 <x-form.error name="usage_limit" />
@@ -94,8 +90,7 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="availableFrom"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Beschikbaar
-                                vanaf</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('products.available_from_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="availableFrom" type="date" name="valid_from"
                                     value="{{ old('valid_from', $coupon->valid_from->format('Y-m-d')) }}"
@@ -106,8 +101,7 @@
 
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="availableUntil"
-                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">Beschikbaar
-                                tot</label>
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('coupons.available_until_label') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">
                                 <input id="availableUntil" type="date" name="valid_until"
                                     value="{{ old('valid_until', $coupon->valid_until?->format('Y-m-d')) }}"

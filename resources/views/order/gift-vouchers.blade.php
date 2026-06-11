@@ -1,7 +1,7 @@
 <x-layouts.app>
     <x-navigation.breadcrumb :breadcrumbs="[
-        ['name' => 'Bestellingen', 'url' => route('orders.index')],
-        ['name' => 'Cadeaubonnen', 'url' => route('orders.gift-vouchers')],
+        ['name' => __('orders.index_title'), 'url' => route('orders.index')],
+        ['name' => __('nav.gift_cards'), 'url' => route('orders.gift-vouchers')],
     ]" />
 
     <div class="px-4 sm:px-6 lg:px-8 my-6 pb-4">
@@ -9,8 +9,8 @@
 
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">Cadeaubonnen</h1>
-                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">Overzicht van alle uitgegeven cadeauboncodes.</p>
+                    <h1 class="text-base font-semibold text-gray-900 dark:text-white">{{ __('orders.gift_vouchers_title') }}</h1>
+                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-300">{{ __('orders.gift_vouchers_description') }}</p>
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button type="button" onclick="document.getElementById('create-voucher-overlay').classList.remove('hidden')"
@@ -18,7 +18,7 @@
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        Cadeaubon aanmaken
+                        {{ __('orders.create_voucher_button') }}
                     </button>
                 </div>
             </div>
@@ -35,24 +35,24 @@
                 {{-- Stats --}}
                 <div class="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Totaal uitgegeven</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_total_issued') }}</p>
                         <p class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{{ $stats['total'] }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Alle bonnen</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_all_vouchers') }}</p>
                     </div>
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Actief</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('common.status_active') }}</p>
                         <p class="mt-1 text-xl font-semibold text-green-600 dark:text-green-400">{{ $stats['active'] }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Nog niet ingelost</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_not_redeemed') }}</p>
                     </div>
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Ingelost</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('common.status_redeemed') }}</p>
                         <p class="mt-1 text-xl font-semibold text-gray-900 dark:text-white">{{ $stats['used'] }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Gebruikt</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_used') }}</p>
                     </div>
                     <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-gray-900 px-5 py-4">
-                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Openstaande waarde</p>
+                        <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ __('orders.stat_outstanding_value') }}</p>
                         <p class="mt-1 text-xl font-semibold text-indigo-600 dark:text-indigo-400">{{ Number::currency($stats['value']) }}</p>
-                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">Actieve bonnen</p>
+                        <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.stat_active_vouchers') }}</p>
                     </div>
                 </div>
 
@@ -65,14 +65,14 @@
                                     <table class="min-w-full divide-y divide-gray-300 dark:divide-white/15">
                                         <thead>
                                             <tr>
-                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">Code</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Klant</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Waarde</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Bron</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Levering</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Geldig tot</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Aangemaakt</th>
-                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+                                                <th scope="col" class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6 lg:pl-8">{{ __('orders.table_header_code') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_customer') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_value') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_source') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_delivery') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_valid_until') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_created') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_status') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
@@ -109,9 +109,9 @@
                                                     {{-- Source --}}
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
                                                         @if ($voucher->source === 'cancellation')
-                                                            <span class="inline-flex items-center rounded-md bg-orange-50 dark:bg-orange-900/20 px-2 py-1 text-xs font-medium text-orange-700 dark:text-orange-400 ring-1 ring-inset ring-orange-600/20">Annulering</span>
+                                                            <span class="inline-flex items-center rounded-md bg-orange-50 dark:bg-orange-900/20 px-2 py-1 text-xs font-medium text-orange-700 dark:text-orange-400 ring-1 ring-inset ring-orange-600/20">{{ __('orders.source_cancellation') }}</span>
                                                         @else
-                                                            <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-400 ring-1 ring-inset ring-blue-600/20">Aankoop</span>
+                                                            <span class="inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900/20 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-400 ring-1 ring-inset ring-blue-600/20">{{ __('orders.source_purchase') }}</span>
                                                         @endif
                                                     </td>
 
@@ -119,9 +119,9 @@
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
                                                         @php
                                                             $delivery = match($voucher->delivery_method) {
-                                                                'post'   => ['label' => 'Per post',  'class' => 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 ring-purple-600/20'],
-                                                                'pickup' => ['label' => 'Afhalen',   'class' => 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 ring-teal-600/20'],
-                                                                default  => ['label' => 'E-mail',    'class' => 'bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 ring-sky-600/20'],
+                                                                'post'   => ['label' => __('orders.delivery_post'),   'class' => 'bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-400 ring-purple-600/20'],
+                                                                'pickup' => ['label' => __('orders.delivery_pickup'), 'class' => 'bg-teal-50 dark:bg-teal-900/20 text-teal-700 dark:text-teal-400 ring-teal-600/20'],
+                                                                default  => ['label' => __('orders.delivery_mail'),   'class' => 'bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 ring-sky-600/20'],
                                                             };
                                                         @endphp
                                                         <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset {{ $delivery['class'] }}">
@@ -153,16 +153,16 @@
                                                     {{-- Status --}}
                                                     <td class="px-3 py-4 text-sm whitespace-nowrap">
                                                         @if ($isExpired)
-                                                            <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">Verlopen</span>
+                                                            <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">{{ __('common.status_expired') }}</span>
                                                         @elseif ($voucher->status === 'used')
                                                             <span class="inline-flex items-center rounded-md bg-gray-50 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">
-                                                                Ingelost
+                                                                {{ __('common.status_redeemed') }}
                                                                 @if ($voucher->used_at)
                                                                     <span class="ml-1 text-gray-400">{{ $voucher->used_at->format('d/m/Y') }}</span>
                                                                 @endif
                                                             </span>
                                                         @else
-                                                            <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">Actief</span>
+                                                            <span class="inline-flex items-center rounded-md bg-green-50 dark:bg-green-900/20 px-2 py-1 text-xs font-medium text-green-700 dark:text-green-400 ring-1 ring-inset ring-green-600/20">{{ __('common.status_active') }}</span>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -177,8 +177,8 @@
                         </div>
                     @else
                         <div class="mt-6 text-center py-12 rounded-xl border border-dashed border-gray-300 dark:border-white/10">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Nog geen cadeaubonnen uitgegeven.</p>
-                            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Bonnen worden automatisch aangemaakt bij aankoop of bij het annuleren van een boeking.</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('orders.empty_no_vouchers') }}</p>
+                            <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">{{ __('orders.empty_vouchers_description') }}</p>
                         </div>
                     @endif
                 </div>
@@ -192,7 +192,7 @@
         <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden shadow-2xl">
 
             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-white/10">
-                <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Cadeaubon aanmaken</h2>
+                <h2 class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.create_voucher_button') }}</h2>
                 <button type="button" onclick="document.getElementById('create-voucher-overlay').classList.add('hidden')"
                     class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10">
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -206,7 +206,7 @@
 
                 {{-- Amount --}}
                 <div>
-                    <label for="vc-amount" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Waarde <span class="text-red-500">*</span></label>
+                    <label for="vc-amount" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_value') }} <span class="text-red-500">*</span></label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
                         <input type="number" id="vc-amount" name="amount" min="1" max="9999" step="0.01"
@@ -218,7 +218,7 @@
                 {{-- Valid until --}}
                 <div>
                     <label for="vc-valid-until" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Geldig tot <span class="text-gray-400 font-normal">(standaard 1 jaar)</span>
+                        {{ __('orders.label_valid_until') }} <span class="text-gray-400 font-normal">{{ __('orders.valid_until_default') }}</span>
                     </label>
                     <input type="date" id="vc-valid-until" name="valid_until"
                         min="{{ now()->addDay()->format('Y-m-d') }}"
@@ -228,12 +228,12 @@
 
                 {{-- Delivery method --}}
                 <div>
-                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">Leveringswijze <span class="text-red-500">*</span></label>
+                    <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('orders.label_delivery_method') }} <span class="text-red-500">*</span></label>
                     <div class="grid grid-cols-3 gap-2">
                         @foreach ([
-                            ['value' => 'mail',   'label' => 'E-mail',    'icon' => 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
-                            ['value' => 'post',   'label' => 'Per post',  'icon' => 'M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.235 2.235 0 00-.1.661z'],
-                            ['value' => 'pickup', 'label' => 'Afhalen',   'icon' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
+                            ['value' => 'mail',   'label' => __('orders.delivery_mail'),   'icon' => 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
+                            ['value' => 'post',   'label' => __('orders.delivery_post'),   'icon' => 'M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.235 2.235 0 00-.1.661z'],
+                            ['value' => 'pickup', 'label' => __('orders.delivery_pickup'), 'icon' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
                         ] as $opt)
                             <label class="relative flex flex-col items-center gap-1.5 rounded-lg border-2 px-3 py-3 cursor-pointer transition-colors
                                 has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20
@@ -253,28 +253,28 @@
 
                 {{-- Shipping cost — only visible when 'post' is selected --}}
                 <div id="shipping-cost-field" class="hidden">
-                    <label for="vc-shipping-cost" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Verzendkosten</label>
+                    <label for="vc-shipping-cost" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_shipping_cost') }}</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
                         <input type="number" id="vc-shipping-cost" name="shipping_cost" min="0" max="99.99" step="0.01"
                             placeholder="0.00"
                             class="w-full pl-7 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-white/15 bg-white dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
-                    <p class="mt-1 text-xs text-gray-400">Wordt apart geregistreerd, bovenop de waarde van de bon.</p>
+                    <p class="mt-1 text-xs text-gray-400">{{ __('orders.shipping_cost_helper') }}</p>
                 </div>
 
                 {{-- Preview --}}
                 <div class="rounded-lg bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800 px-4 py-3">
-                    <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium mb-1">De code wordt automatisch gegenereerd</p>
-                    <p class="text-xs text-indigo-500 dark:text-indigo-500">Formaat: <span class="font-mono">XXXX-XXXX-XXXX-XXXX</span></p>
+                    <p class="text-xs text-indigo-600 dark:text-indigo-400 font-medium mb-1">{{ __('orders.preview_code_generated') }}</p>
+                    <p class="text-xs text-indigo-500 dark:text-indigo-500">{{ __('orders.preview_format') }} <span class="font-mono">XXXX-XXXX-XXXX-XXXX</span></p>
                 </div>
 
                 <div class="flex items-center justify-end gap-3 pt-2 border-t border-gray-100 dark:border-white/10">
                     <button type="button" onclick="document.getElementById('create-voucher-overlay').classList.add('hidden')"
-                        class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Annuleren</button>
+                        class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('common.cancel') }}</button>
                     <button type="submit"
                         class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">
-                        Aanmaken
+                        {{ __('common.create') }}
                     </button>
                 </div>
             </form>
@@ -286,7 +286,7 @@
      onclick="if(event.target===this) closeDeliveryModal()">
     <div class="w-full max-w-sm rounded-xl border border-gray-200 bg-white dark:border-white/10 dark:bg-gray-900 overflow-hidden shadow-2xl">
         <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-white/10">
-            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Leveringswijze aanpassen</h2>
+            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.delivery_modal_title') }}</h2>
             <button type="button" onclick="closeDeliveryModal()"
                 class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -300,9 +300,9 @@
 
             <div class="grid grid-cols-3 gap-2">
                 @foreach ([
-                    ['value' => 'mail',   'label' => 'E-mail',   'icon' => 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
-                    ['value' => 'post',   'label' => 'Per post', 'icon' => 'M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.235 2.235 0 00-.1.661z'],
-                    ['value' => 'pickup', 'label' => 'Afhalen',  'icon' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
+                    ['value' => 'mail',   'label' => __('orders.delivery_mail'),   'icon' => 'M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75'],
+                    ['value' => 'post',   'label' => __('orders.delivery_post'),   'icon' => 'M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H6.911a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.235 2.235 0 00-.1.661z'],
+                    ['value' => 'pickup', 'label' => __('orders.delivery_pickup'), 'icon' => 'M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z'],
                 ] as $opt)
                     <label class="relative flex flex-col items-center gap-1.5 rounded-lg border-2 px-3 py-3 cursor-pointer transition-colors
                         has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50 dark:has-[:checked]:bg-indigo-900/20
@@ -319,7 +319,7 @@
             </div>
 
             <div id="dm-shipping-field" class="hidden">
-                <label for="dm-shipping-cost" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Verzendkosten</label>
+                <label for="dm-shipping-cost" class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{{ __('orders.label_shipping_cost') }}</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-3 flex items-center text-sm text-gray-400">€</span>
                     <input type="number" id="dm-shipping-cost" name="shipping_cost" min="0" max="99.99" step="0.01"
@@ -330,10 +330,10 @@
 
             <div class="flex items-center justify-end gap-3 pt-2 border-t border-gray-100 dark:border-white/10">
                 <button type="button" onclick="closeDeliveryModal()"
-                    class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">Annuleren</button>
+                    class="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">{{ __('common.cancel') }}</button>
                 <button type="submit"
                     class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors">
-                    Opslaan
+                    {{ __('common.save') }}
                 </button>
             </div>
         </form>

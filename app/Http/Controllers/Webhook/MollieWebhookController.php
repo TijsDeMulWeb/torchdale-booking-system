@@ -95,8 +95,18 @@ class MollieWebhookController extends Controller
             // Cadeaubonnen aanmaken voor eventuele gift_card-items in deze order
             app(GiftVoucherService::class)->createForPaidOrder($order);
 
+            // Tijdelijke reservering definitief maken nu de betaling is voldaan,
+            // zodat de geplande opruimtaak het tijdslot niet meer kan vrijgeven.
+            $timeSlotItems = $order->orderedItems()->whereNotNull('time_slot_id')->with('timeSlot')->get();
+            foreach ($timeSlotItems as $item) {
+                if ($item->timeSlot && $item->timeSlot->reserved_until) {
+                    $item->timeSlot->reserved_until = null;
+                    $item->timeSlot->save();
+                }
+            }
+
             // Kamerbevestigingsmail pas versturen nu het online te betalen bedrag betaald is
-            $timeSlotItem = $order->orderedItems()->whereNotNull('time_slot_id')->with('timeSlot')->first();
+            $timeSlotItem = $timeSlotItems->first();
             if ($timeSlotItem && $timeSlotItem->timeSlot) {
                 $timeSlotItem->timeSlot->loadMissing(['room.escaperoomAddress.country']);
                 $order->loadMissing('customer');

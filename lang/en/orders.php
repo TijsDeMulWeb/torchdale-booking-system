@@ -151,6 +151,15 @@ return [
     'room_modal_date_label' => 'Date',
     'room_modal_players_label' => 'Number of players',
     'room_modal_price_label' => 'Price',
+    'custom_item_button' => 'Custom payment',
+    'custom_item_modal_title' => 'Add custom payment',
+    'custom_item_modal_description' => 'Add an item with your own description and amount.',
+    'label_description' => 'Description',
+    'placeholder_description' => 'E.g. Additional service or fee',
+    'label_price_incl_vat' => 'Price (VAT incl.)',
+    'label_vat_percentage' => 'VAT percentage',
+    'label_quantity' => 'Quantity',
+    'custom_item_required_fields_error' => 'Please enter a description and a price.',
 
     // checkout.blade.php — JS-embedded strings
     'js_no_customers_found' => 'No customers found.',

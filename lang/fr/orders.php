@@ -151,6 +151,15 @@ return [
     'room_modal_date_label' => 'Date',
     'room_modal_players_label' => 'Nombre de joueurs',
     'room_modal_price_label' => 'Prix',
+    'custom_item_button' => 'Paiement libre',
+    'custom_item_modal_title' => 'Ajouter un paiement libre',
+    'custom_item_modal_description' => 'Ajoutez un article avec votre propre description et montant.',
+    'label_description' => 'Description',
+    'placeholder_description' => 'P.ex. Service supplémentaire ou indemnité',
+    'label_price_incl_vat' => 'Prix (TVA incl.)',
+    'label_vat_percentage' => 'Pourcentage de TVA',
+    'label_quantity' => 'Quantité',
+    'custom_item_required_fields_error' => 'Veuillez indiquer une description et un prix.',
 
     // checkout.blade.php — JS-embedded strings
     'js_no_customers_found' => 'Aucun client trouvé.',

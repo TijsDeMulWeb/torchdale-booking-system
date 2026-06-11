@@ -151,6 +151,15 @@ return [
     'room_modal_date_label' => 'Datum',
     'room_modal_players_label' => 'Aantal spelers',
     'room_modal_price_label' => 'Prijs',
+    'custom_item_button' => 'Losse betaling',
+    'custom_item_modal_title' => 'Losse betaling toevoegen',
+    'custom_item_modal_description' => 'Voeg een item toe met een eigen omschrijving en bedrag.',
+    'label_description' => 'Omschrijving',
+    'placeholder_description' => 'Bijv. Extra dienst of vergoeding',
+    'label_price_incl_vat' => 'Prijs (incl. BTW)',
+    'label_vat_percentage' => 'BTW-percentage',
+    'label_quantity' => 'Aantal',
+    'custom_item_required_fields_error' => 'Vul een omschrijving en een prijs in.',
 
     // checkout.blade.php — JS-embedded strings
     'js_no_customers_found' => 'Geen klanten gevonden.',

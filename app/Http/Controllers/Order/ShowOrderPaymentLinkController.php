@@ -26,7 +26,7 @@ class ShowOrderPaymentLinkController extends Controller
 
         $invoice = $mollie->salesInvoices->get($order->mollie_id);
 
-        $paymentLink = $invoice->_links->paymentLink->href ?? null;
+        $paymentLink = $invoice->_links->invoicePayment->href ?? null;
 
         abort_if(!$paymentLink, 404);
 

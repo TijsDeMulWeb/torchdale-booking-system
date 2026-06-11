@@ -149,6 +149,21 @@
             <div class="border-t border-gray-100 dark:border-white/10">
                 <dl class="divide-y divide-gray-100 dark:divide-white/10">
                     <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                        <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_notify_new_order') }}
+                        </dt>
+                        <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
+                            @if($escaperoom->escaperoomSetting->notify_new_order ?? true)
+                                <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 inset-ring inset-ring-green-600/20 dark:bg-green-500/15 dark:text-green-400 dark:inset-ring-green-500/20">{{ __('settings.status_enabled') }}</span>
+                            @else
+                                <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 inset-ring inset-ring-gray-500/10 dark:bg-gray-400/10 dark:text-gray-400 dark:inset-ring-gray-400/20">{{ __('settings.status_disabled') }}</span>
+                            @endif
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+            <div class="border-t border-gray-100 dark:border-white/10">
+                <dl class="divide-y divide-gray-100 dark:divide-white/10">
+                    <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                         <dt class="text-sm/6 font-medium text-gray-900 dark:text-gray-100">{{ __('settings.label_mollie_key') }}</dt>
                         <dd class="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 dark:text-gray-400">
                             {{ $escaperoom->escaperoomSetting->mollie_api_key ?: __('settings.not_set') }}

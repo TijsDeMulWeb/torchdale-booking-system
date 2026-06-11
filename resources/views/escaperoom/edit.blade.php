@@ -154,6 +154,22 @@
                             </div>
                         </div>
                         <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
+                            <label for="notifyNewOrder"
+                                class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_notify_new_order') }}</label>
+                            <div class="mt-2 sm:col-span-2 sm:mt-0">
+                                <div class="flex items-start gap-3">
+                                    <input id="notifyNewOrder" type="checkbox" name="notify_new_order" value="1"
+                                        {{ old('notify_new_order', $escaperoom->escaperoomSetting->notify_new_order ?? true) ? 'checked' : '' }}
+                                        class="mt-1 size-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 dark:border-white/10 dark:bg-white/5" />
+                                    <label for="notifyNewOrder" class="text-sm text-gray-700 dark:text-gray-300">
+                                        {{ __('settings.notify_new_order_checkbox_label') }}
+                                    </label>
+                                </div>
+                                <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400">{{ __('settings.helper_notify_new_order') }}</p>
+                                <x-form.error name="notify_new_order" />
+                            </div>
+                        </div>
+                        <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
                             <label for="mollie_api_key"
                                 class="block text-sm/6 font-medium text-gray-900 sm:pt-1.5 dark:text-white">{{ __('settings.label_mollie_key') }}</label>
                             <div class="mt-2 sm:col-span-2 sm:mt-0">

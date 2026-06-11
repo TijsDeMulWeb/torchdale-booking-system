@@ -116,6 +116,7 @@
                                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_time') }}</th>
                                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_amount') }}</th>
                                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_status') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 dark:text-white"><span class="sr-only">{{ __('orders.table_header_actions') }}</span></th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
@@ -168,7 +169,17 @@
                                                             {!! $statusBadge($order->status) !!}
                                                         @endif
                                                     </td>
+                                                    <td class="py-4 pl-3 pr-4 text-right text-sm whitespace-nowrap sm:pr-6 lg:pr-8">
+                                                        <button type="button" onclick="openOrderModal({{ $order->id }})"
+                                                            class="text-indigo-600 dark:text-indigo-400 hover:underline">
+                                                            {{ __('orders.view_order_button') }}
+                                                            <span class="sr-only">{{ __('orders.view_order_sr') }}</span>
+                                                        </button>
+                                                    </td>
                                                 </tr>
+                                                <template id="order-template-{{ $order->id }}">
+                                                    <x-order.detail-content :order="$order" />
+                                                </template>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -200,6 +211,7 @@
                                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_date') }}</th>
                                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_amount') }}</th>
                                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">{{ __('orders.table_header_status') }}</th>
+                                                <th scope="col" class="px-3 py-3.5 text-right text-sm font-semibold text-gray-900 dark:text-white"><span class="sr-only">{{ __('orders.table_header_actions') }}</span></th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 dark:divide-white/10 bg-white dark:bg-gray-900">
@@ -252,7 +264,17 @@
                                                             {!! $statusBadge($order->status) !!}
                                                         @endif
                                                     </td>
+                                                    <td class="py-4 pl-3 pr-4 text-right text-sm whitespace-nowrap sm:pr-6 lg:pr-8">
+                                                        <button type="button" onclick="openOrderModal({{ $order->id }})"
+                                                            class="text-indigo-600 dark:text-indigo-400 hover:underline">
+                                                            {{ __('orders.view_order_button') }}
+                                                            <span class="sr-only">{{ __('orders.view_order_sr') }}</span>
+                                                        </button>
+                                                    </td>
                                                 </tr>
+                                                <template id="order-template-{{ $order->id }}">
+                                                    <x-order.detail-content :order="$order" />
+                                                </template>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -333,6 +355,21 @@
         </div>
     </div>
 
+    {{-- Order detail modal --}}
+    <div id="order-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+         onclick="closeOrderModal(event)">
+        <div class="relative w-full max-w-2xl max-h-[85vh] bg-white dark:bg-gray-900 rounded-xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="flex items-center justify-end px-4 py-3 border-b border-gray-200 dark:border-white/10">
+                <button onclick="closeOrderModal()" class="rounded-lg p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div id="order-modal-content" class="flex-1 overflow-y-auto px-6 py-4"></div>
+        </div>
+    </div>
+
     <script>
         function openPdfModal(url) {
             document.getElementById('pdf-frame').src = url;
@@ -352,8 +389,30 @@
             document.body.style.overflow = '';
         }
 
+        function openOrderModal(orderId) {
+            var template = document.getElementById('order-template-' + orderId);
+            if (!template) return;
+            document.getElementById('order-modal-content').innerHTML = template.innerHTML;
+            var modal = document.getElementById('order-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeOrderModal(e) {
+            if (e && e.target !== document.getElementById('order-modal')) return;
+            var modal = document.getElementById('order-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('order-modal-content').innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closePdfModal();
+            if (e.key === 'Escape') {
+                closePdfModal();
+                closeOrderModal();
+            }
         });
     </script>
 </x-layouts.app>

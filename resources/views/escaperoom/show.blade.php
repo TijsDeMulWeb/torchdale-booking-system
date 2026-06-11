@@ -12,6 +12,10 @@
                     <x-last-updated :model="$escaperoom" />
                 </div>
                 <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none flex gap-3">
+                    <a href="{{ route('legalDocuments.index') }}"
+                        class="mt-4 sm:mt-0 block rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-gray-500">
+                        {{ __('settings.legal_documents_button') }}
+                    </a>
                     <a href="{{ route('apiKeys.index') }}"
                         class="mt-4 sm:mt-0 block rounded-md bg-gray-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-gray-500">
                         {{ __('settings.api_keys_button') }}

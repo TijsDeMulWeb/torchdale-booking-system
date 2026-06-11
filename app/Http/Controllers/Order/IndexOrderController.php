@@ -12,13 +12,13 @@ class IndexOrderController extends Controller
     {
         $escaperoomId = auth()->user()->escaperoom_id;
 
-        $todayOrders = Order::with(['customer', 'orderedItems', 'invoice'])
+        $todayOrders = Order::with(['customer', 'orderedItems', 'invoice', 'privacyPolicyDocument', 'termsConditionsDocument'])
             ->where('escaperoom_id', $escaperoomId)
             ->whereDate('created_at', today())
             ->latest()
             ->paginate(20);
 
-        $orders = Order::with(['customer', 'orderedItems', 'invoice'])
+        $orders = Order::with(['customer', 'orderedItems', 'invoice', 'privacyPolicyDocument', 'termsConditionsDocument'])
             ->where('escaperoom_id', $escaperoomId)
             ->whereDate('created_at', '!=', today())
             ->latest()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Order;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\LegalDocument;
 use App\Models\Order;
 use App\Models\OrderedItem;
 use App\Models\Product;
@@ -80,6 +81,11 @@ class StoreOrderController extends Controller
             $order->company_name = $business['company_name'] ?? null;
             $order->vat_number = $business['vat_number'] ?? null;
             $order->registration_number = $business['registration_number'] ?? null;
+
+            $escaperoom = auth()->user()->escaperoom;
+            $order->privacy_policy_legal_document_id = $escaperoom?->latestLegalDocument(LegalDocument::TYPE_PRIVACY_POLICY)?->id;
+            $order->terms_conditions_legal_document_id = $escaperoom?->latestLegalDocument(LegalDocument::TYPE_TERMS_CONDITIONS)?->id;
+
             $order->save();
 
             foreach ($cart as $item) {
